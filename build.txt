@@ -1,0 +1,3 @@
+displayName = Lobotomy Corporation
+author = Kerubii
+version = 0.0.3

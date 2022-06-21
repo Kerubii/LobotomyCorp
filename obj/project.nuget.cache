@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "kzyDv9HWrR04GztkRM5aqo7aPa9IGc5Pk3LPBaDCEbtm5+3hpjCSfPixVgiO7MCROJ/F13+vzVhHtrzExw0tTA==",
+  "success": true,
+  "projectFilePath": "D:\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\LobotomyCorp\\LobotomyCorp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Lenovo\\.nuget\\packages\\tmodloader.codeassist\\0.1.3\\tmodloader.codeassist.0.1.3.nupkg.sha512"
+  ],
+  "logs": []
+}
