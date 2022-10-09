@@ -7,15 +7,15 @@ namespace LobotomyCorp.Misc.Dusts
 {
 	public class ElecDust : ModDust
 	{
-		public override void OnSpawn(Dust dust)
+        public override void OnSpawn(Dust dust)
 		{
             dust.noLight = false;
 			dust.noGravity = true;
             //dust.fadeIn = 1f;
 			dust.frame = new Rectangle(0, Main.rand.Next(4) * 8, 8, 8);
             dust.rotation = Main.rand.NextFloat(6.28f);
-			//If our texture had 2 different dust on top of each other (a 30x60 pixel image), we might do this:
-			//dust.frame = new Rectangle(0, Main.rand.Next(2) * 30, 30, 30);
+            //If our texture had 2 different dust on top of each other (a 30x60 pixel image), we might do this:
+            //dust.frame = new Rectangle(0, Main.rand.Next(2) * 30, 30, 30);
 		}
 
         public override bool Update(Dust dust)

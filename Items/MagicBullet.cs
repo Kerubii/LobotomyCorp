@@ -14,12 +14,12 @@ namespace LobotomyCorp.Items
         }
 
 		public override void SetDefaults() {
-			Item.damage = 38; // Sets the Item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage damageed together.
+			Item.damage = 76; // Sets the Item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage damageed together.
 			Item.DamageType = DamageClass.Ranged; // sets the damage type to ranged
 			Item.width = 40; // hitbox width of the Item
 			Item.height = 42; // hitbox height of the Item
-			Item.useTime = 24; // The Item's use time in ticks (60 ticks == 1 second.)
-			Item.useAnimation = 24; // The length of the Item's use animation in ticks (60 ticks == 1 second.)
+			Item.useTime = 48; // The Item's use time in ticks (60 ticks == 1 second.)
+			Item.useAnimation = 48; // The length of the Item's use animation in ticks (60 ticks == 1 second.)
 			Item.useStyle = ItemUseStyleID.Shoot; // how you use the Item (swinging, holding out, etc)
 			Item.noMelee = true; //so the Item's animation doesn't do damage
 			Item.knockBack = 4; // Sets the Item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback damageed together.
@@ -46,12 +46,6 @@ namespace LobotomyCorp.Items
 
         public override void AddRecipes()
         {
-            CreateRecipe()
-            .AddIngredient(ItemID.Sapphire, 3)
-            .AddIngredient(ItemID.ShadowScale, 20)
-            .AddIngredient(ItemID.DemoniteBar, 5)
-            .AddTile(Mod, "BlackBox2")
-            .Register();
         }
     }
 }

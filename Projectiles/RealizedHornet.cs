@@ -49,7 +49,7 @@ namespace LobotomyCorp.Projectiles
             projOwner.itemTime = projOwner.itemAnimation;
             projOwner.itemAnimation = projOwner.itemAnimationMax;
             Vector2 positionShake = new Vector2(0, 0);
-            if (projOwner.HeldItem.type == ModContent.ItemType<Items.Ruina.History.HornetS>() && projOwner.channel)
+            if (projOwner.HeldItem.type == ModContent.ItemType<Items.Ruina.History.HornetR>() && projOwner.channel)
             {
                 Projectile.ai[0] += 0.26f;
                 if (Projectile.ai[0] > 16)

@@ -12,7 +12,8 @@ namespace LobotomyCorp.Projectiles.Realized
 {
 	public class RegretR : ModProjectile
 	{
-		public override void SetDefaults() {
+
+        public override void SetDefaults() {
 			Projectile.width = 24;
 			Projectile.height = 24;
 			Projectile.aiStyle = -1;
@@ -39,155 +40,41 @@ namespace LobotomyCorp.Projectiles.Realized
 			//This only happens while the use is "channeling", when the player stops channeling the flail is then retracted
 			//If the third hit hits an enemy, it applies the debuff and also lingers for half a second before forcing channeling to stop and retracts the flail
 			float attackSpeed = owner.GetAttackSpeed(DamageClass.Melee);
-			float Accel = 1.2f * attackSpeed;
-			float SpeedMax = 12f * attackSpeed;
+			float Accel = 6f * attackSpeed;
+			float SpeedMax = 24f * attackSpeed;
 
 			Vector2 targetPosition = Projectile.Center;
+			Vector2 projectilePosition = Projectile.Center;
 			//Check if owner channeling
 			if (owner.channel)
             {
 				//If it hits or hits a tile on third swing, force cancel player channeling
 				if (Projectile.ai[0] < 0)
                 {
-					owner.channel = false;
-                }				
+					//owner.channel = false;
+                }
 
 				if (Main.myPlayer == Projectile.owner)
 				{
-					Vector2 deltaMouse = Main.MouseWorld - mountedCenter;
-					float distance = deltaMouse.Length();
-					if (distance > 260 * attackSpeed)
-						distance = 260 * attackSpeed;
-					float angle = deltaMouse.ToRotation();
 
-					float prog = Projectile.ai[0] / 20f;
-					if (prog > 1)
-						prog = 1;
-
-					//targetPosition = mountedCenter + new Vector2(distance * prog, 0).RotatedBy(angle);
-
-					
-
-					//45, 45, 30 swing times, 5 rest frames
-					int swingInterval = 45;
-					int rest = 5;
-					int finalSwing = 30;
-
-					//First Swing
-					if (Projectile.ai[0] <= swingInterval)
-					{
-						float progress = Projectile.ai[0] / swingInterval;
-						angle += (MathHelper.ToRadians(-60) + MathHelper.ToRadians(120) * progress) * owner.direction;
-						distance *= 0.25f + 0.75f * (float)Math.Sin(progress * 3.14f);
-						targetPosition = mountedCenter + new Vector2(distance, 0).RotatedBy(angle);
-					}
-					//Rest / Ready
-					else if (Projectile.ai[0] <= swingInterval + rest)
-					{
-						angle += (MathHelper.ToRadians(60)) * owner.direction;
-						distance *= 0.25f;
-						targetPosition = mountedCenter + new Vector2(distance, 0).RotatedBy(angle);
-					}
-					//SecondSwing
-					else if (Projectile.ai[0] > swingInterval + rest && Projectile.ai[0] <= swingInterval * 2 + rest)
-                    {
-						float progress = (Projectile.ai[0] - (swingInterval + rest)) / swingInterval;
-						angle -= (MathHelper.ToRadians(-60) + MathHelper.ToRadians(120) * progress) * owner.direction;
-						distance *= 0.25f + 0.75f * (float)Math.Sin(progress * 3.14f);
-						targetPosition = mountedCenter + new Vector2(distance, 0).RotatedBy(angle);
-					}
-					//Rest / Ready
-					else if (Projectile.ai[0] <= swingInterval * 2 + rest * 2)
-					{
-						angle -= (MathHelper.ToRadians(60)) * owner.direction;
-						targetPosition = mountedCenter + new Vector2(distance, 0).RotatedBy(angle);
-					}
-					else if (Projectile.ai[0] > swingInterval * 2 + rest * 2 && Projectile.ai[0] <= swingInterval * 2 + rest * 2 + finalSwing)
-					{
-
-                    }
-					else
-					{
-						Projectile.velocity *= 0.95f;
-					}
-
-					
 				}
             }
 			else //Otherwise Retract the flail
             {
 				targetPosition = owner.Center;
 				float distance = (targetPosition - Projectile.Center).Length();
+
 				//Kill when within 1 tile
 				if (distance <= 16f)
 					Projectile.Kill();
             }
 
+			Dust.NewDustPerfect(targetPosition, 66).noGravity = true;
+
 			Vector2 delta = targetPosition - Projectile.Center;
-			float deltaDist = delta.Length();
-			delta.Normalize();
-
-			if (deltaDist > 0)
-			{
-				if (deltaDist < SpeedMax)
-				{
-					//Projectile.velocity = delta * deltaDist;
-				}
-				else
-				{
-					Vector2 vectAccel = delta * Accel;
-					delta *= SpeedMax;
-
-					Projectile.velocity.X += vectAccel.X;
-					if (delta.X > 0 && Projectile.velocity.X < delta.X)
-					{
-						if (Projectile.velocity.X < 0)
-						{
-							Projectile.velocity.X *= 0.5f;
-							//Projectile.velocity.X += vectAccel.X * 2;
-						}
-
-						if (Projectile.velocity.X > delta.X)
-							Projectile.velocity.X = delta.X;
-					}
-					else if (delta.X < 0 && Projectile.velocity.X > delta.X)
-					{
-						if (Projectile.velocity.X > 0)
-						{
-							Projectile.velocity.X *= 0.5f;
-							//Projectile.velocity.X += vectAccel.X * 2;
-						}
-
-						if (Projectile.velocity.X < delta.X)
-							Projectile.velocity.X = delta.X;
-					}
-
-					Projectile.velocity.Y += vectAccel.Y;
-					if (delta.Y > 0 && Projectile.velocity.Y < delta.Y)
-					{
-						if (Projectile.velocity.Y < 0)
-						{
-							Projectile.velocity.Y *= 0.5f;
-							//Projectile.velocity.Y += vectAccel.Y;
-						}
-
-						if (Projectile.velocity.Y > delta.Y)
-							Projectile.velocity.Y = delta.Y;
-					}
-					else if (delta.Y < 0 && Projectile.velocity.Y > delta.Y)
-					{
-						if (Projectile.velocity.Y > 0)
-						{
-							Projectile.velocity.Y *= 0.5f;
-							//Projectile.velocity.Y += vectAccel.Y;
-						}
-
-						if (Projectile.velocity.Y < delta.Y)
-							Projectile.velocity.Y = delta.Y;
-					}
-				}
-			}
-
+			Projectile.Center = targetPosition;
+			targetPosition = Projectile.Center + delta * 4;
+			
 			Projectile.ai[0] += 1f * attackSpeed;
 			owner.itemTime = 24;
 			owner.itemAnimation = 24;
@@ -198,7 +85,7 @@ namespace LobotomyCorp.Projectiles.Realized
 				chainBezier = new Bezier(Projectile.Center, mountedCenter);				
 			}
 
-			chainBezier.SetStartEnd(Projectile.Center + Projectile.velocity, mountedCenter);
+			chainBezier.SetStartEnd(Projectile.Center, mountedCenter);
 
 			Vector2 chainDelta = targetPosition - mountedCenter;
 			Vector2 cOffset1 = chainDelta / 3;
@@ -210,11 +97,88 @@ namespace LobotomyCorp.Projectiles.Realized
 			Vector2 cOffset2 = targetPosition;
 			chainBezier.CPoint1Move(cOffset2, 24f);
 
-			chainBezier.DustTest();
-			Projectile.rotation = (chainBezier.Control2 - Projectile.Center).ToRotation() + MathHelper.ToRadians(225);
+			//chainBezier.DustTest();
+			Projectile.rotation = (chainBezier.BezierPoint(0f) - chainBezier.BezierPoint(0.05f)).ToRotation() + MathHelper.ToRadians(225);
+			//Dust.NewDustPerfect(chainBezier.BezierPoint(1f), 66).noGravity = true;
+			//Dust.NewDustPerfect(chainBezier.BezierPoint(0.9f), 66).noGravity = true;
 		}
 
-        public override bool PreDraw(ref Color lightColor)
+        public override bool ShouldUpdatePosition()
+        {
+            return false;
+        }
+
+        private Vector2 Where(float ai0, float attackSpeed)
+        {
+			Player owner = Main.player[Projectile.owner];
+			Vector2 mountedCenter = owner.RotatedRelativePoint(owner.MountedCenter);
+
+			Vector2 targetPosition = Projectile.Center;
+
+			float distance = Projectile.velocity.Length();
+			if (distance > 400 * attackSpeed)
+				distance = 400 * attackSpeed;
+			float angle = Projectile.velocity.ToRotation();
+
+			//targetPosition = mountedCenter + new Vector2(distance * prog, 0).RotatedBy(angle);
+
+
+
+			//45, 45, 30 swing times, 5 rest frames
+			int swingInterval = 60;
+			int rest = 20;
+			int finalSwing = 30;
+
+			//First Swing
+			if (ai0 <= swingInterval)
+			{
+				float progress = ai0 / swingInterval;
+				angle -= MathHelper.ToRadians(120) + (float)Math.Sin(progress * 3.14f) * MathHelper.ToRadians(240);
+				float x = (float)Math.Cos(angle) * distance;
+				float y = (float)Math.Sin(angle) * 16f;
+				targetPosition = mountedCenter + new Vector2(x, y);
+			}
+			//Rest / Ready
+			else if (ai0 <= swingInterval + rest)
+			{
+				float progress = (ai0 - swingInterval) / rest;
+				angle += MathHelper.ToRadians(120) + MathHelper.ToRadians(10) * progress;
+
+				float x = (float)Math.Cos(angle) * distance;
+				float y = (float)Math.Sin(angle) * 16f;
+				targetPosition = mountedCenter + new Vector2(x, y);
+			}
+			//SecondSwing
+			else if (ai0 > swingInterval + rest && ai0 <= swingInterval * 2 + rest)
+			{
+				float progress = (ai0 - (swingInterval + rest)) / swingInterval;
+				angle += MathHelper.ToRadians(130) - (float)Math.Sin(progress * 3.14f) * MathHelper.ToRadians(250);
+				float x = (float)Math.Cos(angle) * distance;
+				float y = (float)Math.Sin(angle) * 16f;
+				targetPosition = mountedCenter + new Vector2(x, y);
+			}
+			//Rest / Ready
+			else if (ai0 <= swingInterval * 2 + rest * 2)
+			{
+				float progress = (ai0 - (swingInterval * 2 + rest)) / swingInterval;
+				angle -= MathHelper.ToRadians(120) - MathHelper.ToRadians(10) * progress; targetPosition = mountedCenter + new Vector2(distance, 0).RotatedBy(angle);
+				float x = (float)Math.Cos(angle) * distance;
+				float y = (float)Math.Sin(angle) * 16f;
+				targetPosition = mountedCenter + new Vector2(x, y);
+			}
+			else if (ai0 > swingInterval * 2 + rest * 2 && ai0 <= swingInterval * 2 + rest * 2 + finalSwing)
+			{
+
+			}
+			else
+			{
+
+			}
+
+			return targetPosition;
+		}
+
+		public override bool PreDraw(ref Color lightColor)
         {
 			if (chainBezier != null)
 			{

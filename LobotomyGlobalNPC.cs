@@ -166,11 +166,15 @@ namespace LobotomyCorp
                     }
                 }
             }
+
+            if (npc.HasBuff(ModContent.BuffType<Buffs.CrookedNotes>()) && Main.rand.NextBool(3))
+            {
+                Main.dust[Dust.NewDust(npc.position, npc.width, npc.height, ModContent.DustType<Misc.Dusts.NoteDust>())].velocity.Y -= 1f;
+            }
         }
 
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
-            
             if (WingbeatFairyMeal)
             {
                 Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/WingbeatFairy").Value;
@@ -223,6 +227,18 @@ namespace LobotomyCorp
                     }
                 }
                 
+                if (LobotomyModPlayer.ModPlayer(Main.LocalPlayer).MagicBulletRequest == npc.whoAmI)
+                {
+                    Texture2D texture = Mod.Assets.Request<Texture2D>("Misc/MagicBulletCircle").Value;
+                    Vector2 position = npc.Center + new Vector2(0, npc.gfxOffY) - Main.screenPosition;
+                    float scale = npc.width > npc.height ? npc.width / 122f : npc.height / 122f;
+                    if (scale > 0.5f)
+                        scale = 0.5f;
+
+                    float rotation = MathHelper.ToRadians((5 + 20f * scale) * (float)Main.timeForVisualEffects);
+
+                    spriteBatch.Draw(texture, position, null, Color.White * 0.7f, rotation, texture.Size() / 2, scale, 0, 0);
+                }
             }
         }
 
@@ -233,6 +249,14 @@ namespace LobotomyCorp
                 SpawnHornet(npc);
             }
             return true;
+        }
+
+        public override void OnKill(NPC npc)
+        {
+            if (LobotomyModPlayer.ModPlayer(Main.LocalPlayer).MagicBulletRequest == npc.whoAmI)
+            {
+                LobotomyModPlayer.ModPlayer(Main.LocalPlayer).MagicBulletRequest = -1;
+            }
         }
 
         public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
@@ -277,7 +301,7 @@ namespace LobotomyCorp
 
         public bool WingbeatNear(NPC npc)
         {
-            if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<Items.Ruina.History.WingbeatS>())
+            if (Main.LocalPlayer.HeldItem.type == ModContent.ItemType<Items.Ruina.History.WingbeatR>())
                 return Vector2.Distance(npc.Center, Main.LocalPlayer.Center) - (npc.width < npc.height ? npc.height/2 : npc.width/2) < 200;
             return false;
         }
@@ -297,7 +321,7 @@ namespace LobotomyCorp
                     for (int i = 0; i < Main.maxPlayers; i++)
                     {
                         Player p = Main.player[i];
-                        if (p.active && !p.dead && p.HeldItem.type == ModContent.ItemType<Items.Ruina.History.HornetS>())
+                        if (p.active && !p.dead && p.HeldItem.type == ModContent.ItemType<Items.Ruina.History.HornetR>())
                         {
                             Item item = p.HeldItem;
                             player = i;

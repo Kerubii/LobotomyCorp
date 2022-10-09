@@ -82,6 +82,32 @@ namespace LobotomyCorp.Utils
 			DrawSpecific(position, rotation, Vector2.Zero, shader);
 		}
 
+		/// <summary>
+		/// Automatically reduces amount of angles to provide the same smoothness as desired from DrawCircle but with fewer actual angles
+		/// </summary>
+		/// <param name="center"></param>
+		/// <param name="startingRotation"></param>
+		/// <param name="endAngle"></param>
+		/// <param name="direction"></param>
+		/// <param name="radius"></param>
+		/// <param name="angles"></param>
+		/// <param name="shader"></param>
+		public void DrawPartCircle(Vector2 center, float startingRotation, float endAngle, int direction, float radius, int angles, CustomShaderData shader)
+		{
+			float percentage = endAngle / 6.14f;
+			angles = (int)(angles * percentage);
+
+			Vector2[] position = new Vector2[angles + 1];
+			float[] rotation = new float[angles + 1];
+
+			for (int i = 0; i < angles + 1; i++)
+			{
+				rotation[i] = (startingRotation - endAngle * ((float)i / (float)angles) * direction);
+				position[i] = center + new Vector2(radius, 0).RotatedBy(rotation[i]);
+			}
+			DrawSpecific(position, rotation, Vector2.Zero, shader);
+		}
+
 		public void DrawEllipse(Vector2 center, float offsetRotation, float startingRotation,int direction, float radius1, float radius2, int angles, CustomShaderData shader)
 		{
 			Radius1 = radius1;
@@ -93,6 +119,52 @@ namespace LobotomyCorp.Utils
 			for (int i = 0; i < angles + 1; i++)
 			{
 				rotation[i] = (-3.14f + startingRotation + 6.28f * ((float)i / (float)angles) * direction);
+
+				position[i].X = radius1 * (float)Math.Cos(rotation[i]);
+				position[i].Y = radius2 * (float)Math.Sin(rotation[i]);
+				position[i] = position[i].RotatedBy(offsetRotation);
+				//rotation[i] = position[i].ToRotation();
+				position[i] += center;
+
+				position2[i].X = (radius1 - StartingWidth) * (float)Math.Cos(rotation[i]);
+				position2[i].Y = (radius2 - EndingWidth) * (float)Math.Sin(rotation[i]);
+				position2[i] = position2[i].RotatedBy(offsetRotation);
+				//rotation[i] = position[i].ToRotation();
+				position2[i] += center;
+			}
+
+			shader.Apply();
+			_vertexStrip.PrepareEllipse(position, position2, StripColors, -Main.screenPosition, RotationOffset, position.Length, includeBacksides: true);
+			_vertexStrip.DrawTrail();
+			Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+		}
+
+		/// <summary>
+		/// Automatically reduces amount of angles to provide the same smoothness as desired from DrawEllipse but with fewer actual angles
+		/// </summary>
+		/// <param name="center"></param>
+		/// <param name="offsetRotation"></param>
+		/// <param name="endAngle"></param>
+		/// <param name="startingRotation"></param>
+		/// <param name="direction"></param>
+		/// <param name="radius1"></param>
+		/// <param name="radius2"></param>
+		/// <param name="angles"></param>
+		/// <param name="shader"></param>
+		public void DrawPartEllipse(Vector2 center, float offsetRotation, float endAngle, float startingRotation, int direction, float radius1, float radius2, int angles, CustomShaderData shader)
+		{
+			float percentage = endAngle / 6.14f;
+			angles = (int)(angles * percentage);
+
+			Radius1 = radius1;
+			Radius2 = radius2;
+
+			Vector2[] position = new Vector2[angles + 1];
+			Vector2[] position2 = new Vector2[angles + 1];
+			float[] rotation = new float[angles + 1];
+			for (int i = 0; i < angles + 1; i++)
+			{
+				rotation[i] = (-3.14f + startingRotation + endAngle * ((float)i / (float)angles) * direction);
 
 				position[i].X = radius1 * (float)Math.Cos(rotation[i]);
 				position[i].Y = radius2 * (float)Math.Sin(rotation[i]);

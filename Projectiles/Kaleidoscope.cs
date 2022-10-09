@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -30,6 +31,11 @@ namespace LobotomyCorp.Projectiles
 
         public override void AI()
         {
+            if (Projectile.localAI[0] <= 0)
+            {
+                Projectile.localAI[0] = 1 + Main.rand.Next(2);
+            }
+
             if (Projectile.ai[1] < 30)
             {
                 Projectile.ai[1]++;
@@ -83,9 +89,16 @@ namespace LobotomyCorp.Projectiles
                 }
                 else
                     Projectile.ai[0] = -1;
-            }            
+            }
+            if (Projectile.ai[0] < -1 && Projectile.type != (int)Projectile.ai[0] * -1)
+            {
+                AIType = (int)Projectile.ai[0];
+            }
 
-            Projectile.rotation = (Projectile.velocity.X / 6f) * (float)MathHelper.ToRadians(60);
+            float limit = Projectile.velocity.X;
+            if (limit > 6f)
+                limit = 6f;
+            Projectile.rotation = (limit / 6f) * (float)MathHelper.ToRadians(60);
             Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
 
             if (Projectile.frameCounter <= 24)
@@ -98,6 +111,21 @@ namespace LobotomyCorp.Projectiles
             }
             else
                 Projectile.frameCounter = 0;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
+            if (Projectile.localAI[0] == 1)
+                tex = Mod.Assets.Request<Texture2D>("Projectiles/Kaleidoscope2").Value;
+            Vector2 position = Projectile.Center + Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
+            Rectangle frame = tex.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
+
+            Vector2 origin = frame.Size() / 2;
+
+            Main.EntitySpriteDraw(tex, position, frame, lightColor, Projectile.rotation, origin, Projectile.scale, Projectile.spriteDirection > 0 ? 0 : SpriteEffects.FlipHorizontally, 0);
+
+            return false;
         }
     }
 }

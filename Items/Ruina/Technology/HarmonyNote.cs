@@ -25,12 +25,12 @@ namespace LobotomyCorp.Items.Ruina.Technology
             Item.maxStack = 999;
             frameY = Main.rand.Next(4);
             rotationR = Main.rand.NextFloat(-0.785f, 0.785f);
-            Item.direction = Main.rand.Next(2) == 0 ? 1 : -1;
+            Item.direction = Main.rand.NextBool(2)?1:-1;
         }
 
         public override void GrabRange(Player player, ref int grabRange)
         {
-            grabRange = 80;
+            grabRange = 16;
         }
 
         public override bool ItemSpace(Player player)
@@ -46,6 +46,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
                 Item.TurnToAir();
                 Item.active = !Item.active;
             }
+            Item.velocity.Y *= 0.95f;
             gravity = 0;
             maxFallSpeed = 16f;
         }

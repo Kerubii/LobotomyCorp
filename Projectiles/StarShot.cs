@@ -76,6 +76,9 @@ namespace LobotomyCorp.Projectiles
                 case 3:
                     color = LobotomyCorp.PaleDamage;
                     break;
+                case 4:
+                    color = Color.White;
+                    break;
             }
             color.A = (byte)(color.A * (float)(1f - Projectile.alpha / 255f));
             return color;

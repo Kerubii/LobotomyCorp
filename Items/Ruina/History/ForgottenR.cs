@@ -4,6 +4,7 @@ using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static Terraria.Localization.Language;
 
 namespace LobotomyCorp.Items.Ruina.History
 {
@@ -15,17 +16,18 @@ namespace LobotomyCorp.Items.Ruina.History
         {
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
             DisplayName.SetDefault("Forgotten");
-            Tooltip.SetDefault("A Realized E.G.O.\n" +
-                               "\"Its memories began with a warm hug.\"");
+            
+            Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 
 		{
             //Why doesnt this work on StaticDefaults now :V
-            PassiveText = "Display of Affection - Attacking the same enemy three times in a row marks them, unmarks enemies when far away\n" +
+            //Passive Text at Localization files now like omg its so good wtf
+            /*PassiveText = "Display of Affection - Attacking the same enemy three times in a row marks them, unmarks enemies when far away\n" +
                           "Happy Memories - Attacking the same enemy in a row gives 1% increased contact damage resistance against them, up to 40%. Lost when switching targets\n" +
                           "Nostalgic Embrace - Alternate attack to hug a marked enemy for a short while based on Happy Memories, become invincible if Happy Memories is max." +
-                          "|Unattended - After marking an enemy, Unable to hit any other enemies other than the marked enemy";
+                          "|Unattended - After marking an enemy, Unable to hit any other enemies other than the marked enemy";*/
 
             EgoColor = LobotomyCorp.TethRarity;
 

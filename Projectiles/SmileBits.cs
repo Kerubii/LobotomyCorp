@@ -47,6 +47,11 @@ namespace LobotomyCorp.Projectiles
                 Projectile.scale -= 0.05f;
         }
 
+        public override void OnHitPlayer(Player target, int damage, bool crit)
+        {
+            target.AddBuff(ModContent.BuffType<Buffs.Vomit>(), 300);
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LobotomyCorp.Utils;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
@@ -42,8 +43,8 @@ namespace LobotomyCorp.Projectiles
             }
             else
             {
-                if (Projectile.ai[0] < 60)
-                    Projectile.ai[0] += 0.5f;
+                if (Projectile.ai[0] < 40)
+                    Projectile.ai[0] += 5f;
             }
             player.itemAnimation = 2;
             player.itemTime = 2;
@@ -66,6 +67,7 @@ namespace LobotomyCorp.Projectiles
             }
 
             Projectile.localAI[0]--;
+            Projectile.ai[1]--;
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -116,6 +118,77 @@ namespace LobotomyCorp.Projectiles
                 Projectile.localAI[0] = 60 - 30 * (Projectile.ai[0] / 60);
             }
 
+            if (Projectile.ai[0] > 30 && Projectile.ai[1] <= 0 && LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).HarmonyAddiction)
+            {
+                Projectile.ai[1] = 15;
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<HarmonyBloodEffect>(), Projectile.damage, 0, Projectile.owner, Projectile.whoAmI, Main.rand.NextFloat(0.6f , 0.8f) * Projectile.ai[0] / 60f);
+            }
+
+            if (Projectile.ai[0] < 60)
+                Projectile.ai[0] += 2f;
+        }
+    }
+
+    public class HarmonyBloodEffect : ModProjectile
+    {
+        public override string Texture => "LobotomyCorp/Projectiles/HarmonyS";
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 46;
+            Projectile.height = 46;
+            Projectile.aiStyle = -1;
+            Projectile.penetrate = -1;
+            Projectile.scale = 1f;
+
+            Projectile.timeLeft = 30;
+            Projectile.DamageType = DamageClass.Melee;
+            Projectile.tileCollide = false;
+            Projectile.friendly = true;
+
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = 30;
+        }
+
+        public override void AI()
+        {
+            if (Projectile.localAI[0] == 0)
+            {
+                Projectile.rotation = Main.rand.NextFloat(6.28f);
+                Projectile.spriteDirection = Main.rand.NextBool(2) ? 1 : -1;
+                Projectile.localAI[0]++;
+            }
+            Projectile.rotation += Projectile.ai[1] * Projectile.spriteDirection;
+
+            if (Main.projectile[(int)Projectile.ai[0]].active)
+                Projectile.Center = Main.projectile[(int)Projectile.ai[0]].Center;
+        }
+
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        {
+            float prog = 1f - Projectile.timeLeft / 30f;
+            hitbox.Width = (int)(prog * 180);
+            hitbox.Height = (int)(prog * 180);
+            hitbox.X = (int)Projectile.Center.X - hitbox.Width / 2;
+            hitbox.Y = (int)Projectile.Center.Y - hitbox.Height / 2;
+            base.ModifyDamageHitbox(ref hitbox);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            float prog = 1f - Projectile.timeLeft / 30f;
+            CustomShaderData shader = LobotomyCorp.LobcorpShaders["TextureTrail"].UseOpacity(0.5f + 0.5f * (prog));
+            shader.UseImage1(Mod, "Misc/BloodTrail");
+            shader.UseImage2(Mod, "Misc/BloodTrail");
+
+            SlashTrail trail = new SlashTrail(16, 1.57f);
+            trail.color = Color.DarkRed;
+
+            float rot = Projectile.rotation;
+            //trail.DrawCircle(Projectile.Center, rot, Projectile.spriteDirection, 90 * prog, 64, shader);
+            trail.DrawPartCircle(Projectile.Center, rot, 4.71f, Projectile.spriteDirection, 90 * prog, 48, shader);
+
+            return false;
         }
     }
 }

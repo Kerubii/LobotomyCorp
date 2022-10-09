@@ -8,13 +8,18 @@ namespace LobotomyCorp.Buffs
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Crooked Notes");
-			Description.SetDefault("I was born just to listen to this music");
+			Description.SetDefault("...What is that noise?");
 		}
 
         public override void Update(Player player, ref int buffIndex)
         {
             player.GetDamage(DamageClass.Generic) += 0.08f;
             LobotomyModPlayer.ModPlayer(player).HarmonyConnected = true;
+        }
+
+        public override void Update(NPC npc, ref int buffIndex)
+        {
+            npc.defense -= 16;
         }
     }
 }

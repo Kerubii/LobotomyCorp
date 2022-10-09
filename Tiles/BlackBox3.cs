@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -27,9 +28,65 @@ namespace LobotomyCorp.Tiles
 			AdjTiles = new int[] { ModContent.TileType<BlackBox>() , ModContent.TileType<BlackBox2>() };
 		}
 
+		public override bool RightClick(int i, int j)
+		{
+			HitWire(i, j);
+			return true;
+		}
+				
+		public override void HitWire(int i, int j)
+		{
+			int x = i - Main.tile[i, j].TileFrameX / 18 % 2;
+			int y = j - Main.tile[i, j].TileFrameY / 18 % 3;
+			for (int l = x; l < x + 2; l++)
+			{
+				for (int m = y; m < y + 3; m++)
+				{
+					if (Main.tile[l, m].HasTile && Main.tile[l, m].TileType == Type)
+					{
+						if (Main.tile[l, m].TileFrameY < 54)
+						{
+							Main.tile[l, m].TileFrameY += 54;
+						}
+						else
+						{
+							Main.tile[l, m].TileFrameY -= 54;
+						}
+					}
+				}
+			}
+			if (Wiring.running)
+			{
+				Wiring.SkipWire(x, y);
+				Wiring.SkipWire(x, y + 1);
+				Wiring.SkipWire(x, y + 2);
+				Wiring.SkipWire(x + 1, y);
+				Wiring.SkipWire(x + 1, y + 1);
+				Wiring.SkipWire(x + 1, y + 2);
+			}
+			NetMessage.SendTileSquare(-1, x, y + 1, 3);
+		}
+
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
 			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BlackBox3>());
 		}
-	}
+
+        public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+        {
+			Tile tile = Main.tile[i, j];
+			if (tile.TileFrameY < 54)
+				return;
+			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			if (Main.drawToScreen)
+			{
+				zero = Vector2.Zero;
+			}
+			spriteBatch.Draw(
+				TextureAssets.Tile[tile.TileType].Value, 
+				new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+				new Rectangle(tile.TileFrameX + 36, tile.TileFrameY, 16, 16),
+				Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+		}
+    }
 }

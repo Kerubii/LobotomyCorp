@@ -97,7 +97,7 @@ namespace LobotomyCorp.Projectiles
             }
             else if (Projectile.ai[1] == 2)
             {
-                if (projOwner.whoAmI == Main.LocalPlayer.whoAmI)
+                if (projOwner.whoAmI == Main.myPlayer)
                 {
                     Items.FeatherOfHonor ModItem = (Items.FeatherOfHonor)projOwner.HeldItem.ModItem;
                     if (ModItem.FeatherShoot == 0)

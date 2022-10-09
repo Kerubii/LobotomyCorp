@@ -26,25 +26,25 @@ namespace LobotomyCorp.Utils
         {
             int i = 0;
             Gebura = new Dictionary<int, string>();
-            //0 - 4
+            //0 - 3
             Gebura[i++] = "I'll destroy a shoddy place like this with my own hands.";
             Gebura[i++] = "What's left for me, the one who failed to protect them?";
             Gebura[i++] = "Do you really think feeble cowards like you can stop me?";
             Gebura[i++] = "Let me show you how to actually wield E.G.O.";
-            //5 - 6
+            //4 - 5
             Gebura[i++] = "I'm back; the Red Mist has walked out from a sea of pain.";
             Gebura[i++] = "I'm no longer weak like I used to be; I can replace any body part even if it gets cut off, and I can be repaired even if I'm broken.";
-            //7 - 8
+            //6 - 7
             Gebura[i++] = "Some things simply couldn't be forgotten, no matter how much time has passed.";
             Gebura[i++] = "Hatred is a poison that eviscerates me, and yet it makes me open my eyes once more.";
-            //9 - 10
+            //8 - 9
             Gebura[i++] = "Some things just wouldn't cool down, no matter how long they were left in the cold.";
             Gebura[i++] = "Those monsters always kill people, there is no end to this sin; I have descended to bring about their reckoning.";
-            //11
+            //10
             Gebura[i++] = "The right path is too far away, and I have too far to go. My heart is pulsing with anger, and I must keep pushing.";
-            //12 - 13
-            Gebura[i++] = "Ah… I'm breaking… I won't drop my sword, even if I turn to dust...";
-            Gebura[i++] = "Even after all this, I can’t do a single thing with this power...";
+            //11 - 12
+            Gebura[i++] = "Ah... I'm breaking... I won't drop my sword, even if I turn to dust...";
+            Gebura[i++] = "Even after all this, I can't do a single thing with this power...";
 
             GeburaBark = new Dictionary<string, string>();
             GeburaBark["RedEyes"] = "Red Eyes";
@@ -77,7 +77,7 @@ namespace LobotomyCorp.Utils
             GeburaBark["Justitia2"] = "Judgement";
 
             GeburaBark["Shift3"] = "Let's put an end to this";
-            GeburaBark["Shift4"] = "The apocalypse is here…";
+            GeburaBark["Shift4"] = "The apocalypse is here...";
 
             GeburaBark["Pass1"] = "Beat it, coward";
             GeburaBark["Pass2"] = "Don't try and stop me";

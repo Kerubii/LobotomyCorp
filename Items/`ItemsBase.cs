@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Localization;
 
 namespace LobotomyCorp.Items
 {
@@ -22,6 +23,11 @@ namespace LobotomyCorp.Items
 		/// Use the thing you setup on the Mod cs pls. 
 		/// </summary>
         public Color EgoColor = LobotomyCorp.ZayinRarity;
+
+        public override void SetStaticDefaults()
+        {
+            Tooltip.SetDefault(GetTooltip());
+        }
 
         public sealed override bool CanUseItem(Player player)
         {
@@ -52,7 +58,7 @@ namespace LobotomyCorp.Items
 
         private string PassiveInitialize(bool Extra, bool Negative = false)
         {
-            string[] Passive = PassiveText.Split('|');
+            string[] Passive = GetPassiveList().Split('|');// PassiveText.Split('|');
             string result = "Voided";
             if (!Negative)
             {
@@ -76,16 +82,37 @@ namespace LobotomyCorp.Items
             result = string.Join("\n", Passive);
             if (result.EndsWith("\n"))
                 result = result.Substring(0, result.Length - 1);
+            
+            /*
             if (Negative)
             {
                 result += "\nThese Items are incomplete";
-            }
+            }*/
             return result;
         }
 
         public virtual bool SafeCanUseItem(Player player)
         {
             return true;
+        }
+
+        public string ItemName()
+        {
+            return Name.Remove(Name.Length - 1);
+        }
+
+        public string GetTooltip()
+        {
+            return Language.GetTextValue("Mods.LobotomyMod.EgoItemTooltip.RealizedEgo") + "\n\"" + Language.GetTextValue("Mods.LobotomyMod.EgoItemTooltip." + ItemName() + ".ItemTooltip") + "\"";
+        }
+
+        public virtual string GetPassiveList()
+        {
+            string key = "Mods.LobotomyMod.EgoItemTooltip." + ItemName() + ".PassiveList";
+            string list = Language.GetTextValue(key);
+            if (list == key)
+                list = PassiveText;
+            return list;
         }
     }
 

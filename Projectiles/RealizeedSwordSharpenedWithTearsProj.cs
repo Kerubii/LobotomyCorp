@@ -82,7 +82,7 @@ namespace LobotomyCorp.Projectiles
                 Projectile.velocity = delta;
                 Projectile.timeLeft = 300;
 
-                if (player.HeldItem.type != ModContent.ItemType<Items.Ruina.Natural.SwordSharpenedWithTearsS>())
+                if (player.HeldItem.type != ModContent.ItemType<Items.Ruina.Natural.SwordSharpenedWithTearsR>())
                     Projectile.Kill();
 
                 Projectile.localAI[0]++;

@@ -62,7 +62,7 @@ namespace LobotomyCorp.Projectiles
             }
             else if (progress < 0.66f)
             {
-                if (Main.LocalPlayer.whoAmI == projOwner.whoAmI)
+                if (Main.myPlayer == projOwner.whoAmI)
                 {
                     Projectile.velocity = Vector2.Normalize(Main.MouseWorld - ownerMountedCenter);
                 }

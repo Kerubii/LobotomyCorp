@@ -75,6 +75,8 @@ namespace LobotomyCorp.NPCs.RedMist
         private Projectile HeldProjectile => Main.projectile[(int)NPC.ai[3]];
 
         public int GoldRushCount = 0;
+        public const float GOLDRUSH4SPEED = 22f;
+        public const int GOLDRUSH4DELAY = 20;
 
         public override void AI()
         {
@@ -107,18 +109,19 @@ namespace LobotomyCorp.NPCs.RedMist
             float healthPercent = NPC.life / (float)NPC.lifeMax;
             
             //NPC.spriteDirection = 1;
-            //ChangeAnimation(AnimationState.Phase3Transition);
+            //ChangeAnimation(AnimationState.TwilightChase);
             //return;
             //return;
-            /*if (NPC.ai[0] == 0)
+            if (NPC.ai[0] == -1)
             {
                 NPC.ai[0] = 2;
                 NPC.ai[1] = 10;
                 NPC.ai[3] = -1;
                 NPC.localAI[1] = 2;
                 ChangeAnimation(AnimationState.Phase4Transition);
+                Talk("Shift3", NPC.spriteDirection);
                 //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<RedMistEye>(), 0, 0, 0, NPC.whoAmI);
-            }*/
+            }
 
             //First Phase - Lobcorp Phase
             if (NPC.ai[0] == 0)
@@ -161,13 +164,13 @@ namespace LobotomyCorp.NPCs.RedMist
                                 switch (atk)
                                 {
                                     case 0:
-                                        Talk("RedEyes");
+                                        Talk("RedEyes", NPC.spriteDirection);
                                         break;
                                     case 1:
-                                        Talk("Penitence");
+                                        Talk("Penitence", NPC.spriteDirection);
                                         break;
                                     case 2:
-                                        Talk("Both");
+                                        Talk("Both", NPC.spriteDirection);
                                         break;
                                 }
 
@@ -186,7 +189,7 @@ namespace LobotomyCorp.NPCs.RedMist
                     {
                         NPC.ai[1] = 4;
                         NPC.ai[2] = 0;
-                        Talk("GoldRush1");
+                        Talk("GoldRush1", NPC.spriteDirection);
                     }
 
                     if (healthPercent <= .75f && GoldRushCount >= 3)
@@ -239,7 +242,7 @@ namespace LobotomyCorp.NPCs.RedMist
                     ChangeAnimation(AnimationState.GoldRushIntro);
                     NPC.noGravity = true;
                     NPC.noTileCollide = true;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.GoldRushPortal>(), 0, 0, 0, -1, 5);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, -1, 5);
                 }
                 //GoldRush Charging
                 else if (NPC.ai[1] == 5)
@@ -293,8 +296,8 @@ namespace LobotomyCorp.NPCs.RedMist
                     ChangeAnimation(AnimationState.GoldRushIntro);
                     NPC.noGravity = true;
                     NPC.noTileCollide = true;
-                    int i = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(400 * NPC.spriteDirection, Main.LocalPlayer.height / 2 - 50), new Vector2(-22f * NPC.spriteDirection, 0), ModContent.ProjectileType<Projectiles.KingPortal.GoldRushPortal>(), 0, 0, 0, -2);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.GoldRushPortal>(), 0, 0, 0, i);
+                    int i = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(400 * NPC.spriteDirection, Main.LocalPlayer.height / 2 - 50), new Vector2(-22f * NPC.spriteDirection, 0), ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, -2);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, i);
                 }
                 //Mini GoldRush Charge
                 else if (NPC.ai[1] == 9)
@@ -306,6 +309,7 @@ namespace LobotomyCorp.NPCs.RedMist
                         NPC.ai[1] = 6;
                         NPC.velocity.X = 24f * NPC.spriteDirection;
                     }
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Teleport_Start") with { Volume = 0.25f }, NPC.position);
                 }
 
                 //Transition to Phase 2
@@ -364,14 +368,14 @@ namespace LobotomyCorp.NPCs.RedMist
                         {
                             if (Main.rand.Next(2) == 0)
                             {
-                                Talk("Mimicry" + (1 + Main.rand.Next(2)));
+                                Talk("Mimicry" + (1 + Main.rand.Next(2)), NPC.spriteDirection);
                                 NPC.ai[1] = 1;
                                 ChangeAnimation(AnimationState.SwingMimicry);
                                 NPC.velocity.X = 0;
                             }
                             else if (NPC.ai[3] < 0)
                             {
-                                Talk("DaCapo" + (1 + Main.rand.Next(2)));
+                                Talk("DaCapo" + (1 + Main.rand.Next(2)), NPC.spriteDirection);
                                 NPC.ai[1] = 2;
                                 ChangeAnimation(AnimationState.SwingDaCapo);
                                 NPC.velocity.X = 0;
@@ -384,7 +388,7 @@ namespace LobotomyCorp.NPCs.RedMist
                         {
                             NPC.ai[1] = 4;
                             ChangeAnimation(AnimationState.HeavenThrow);
-                            Talk("Heaven");
+                            Talk("Heaven", NPC.spriteDirection);
                             NPC.velocity.X = 0;
                         }
                     }
@@ -421,12 +425,12 @@ namespace LobotomyCorp.NPCs.RedMist
                         if (healthPercent <= .50f)
                         {
                             NPC.ai[1] = 10;
-                            Talk("Shift1");
+                            Talk("Shift1", NPC.spriteDirection);
                         }
                         else
                         {
                             GoldRushCount++;
-                            Talk("Teleport1");
+                            Talk("Teleport1", NPC.spriteDirection);
                         }
                     }
                 }
@@ -445,7 +449,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
                     if (NPC.ai[2] == 60)
                     {
-                        SoundEngine.PlaySound(SoundID.Item1, NPC.Center);
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Atk1") with { Volume = 0.5f }, NPC.position);
                     }
 
                     if (NPC.ai[2] > 90)
@@ -518,7 +522,7 @@ namespace LobotomyCorp.NPCs.RedMist
                             delta = new Vector2(1 * NPC.spriteDirection, 0);
                         }
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -13), Vector2.Normalize(delta) * 12f, ModContent.ProjectileType<HeavenBoss>(), 25, 2, 0, NPC.whoAmI);
-                        SoundEngine.PlaySound(SoundID.Item19, NPC.Center);
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Spear") with { Volume = 0.5f }, NPC.position);
                     }
                     if (NPC.ai[2] > 80)
                     {
@@ -581,13 +585,17 @@ namespace LobotomyCorp.NPCs.RedMist
                         NPC.ai[1] = 8;
                         NPC.ai[2] = 0;
                         skelly.Weapon1.Visible = true;
-                        Talk("Teleport2");
+                        Talk("Teleport2", NPC.spriteDirection);
                     }
                 }
                 //Mimicry Prepare
                 else if (NPC.ai[1] == 8)
                 {
                     ChangeAnimation(AnimationState.MimicryPrepare);
+                    if (NPC.ai[2] == 0)
+                    {
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Cast") with { Volume = 0.5f }, NPC.position);
+                    }
                     NPC.ai[2]++;
                     if (NPC.ai[2] >= 120)
                     {
@@ -597,12 +605,17 @@ namespace LobotomyCorp.NPCs.RedMist
                         NPC.Center = p.Center;// + new Vector2(200, 0).RotateRandom(6.28f);
                         p.Kill();
                         NPC.ai[3] = -1;
-                        Talk("Teleport3");
+                        Talk("Teleport3", NPC.spriteDirection);
                     }
                 }
                 //Mimicry GreaterSplit!
                 else if (NPC.ai[1] == 9)
                 {
+                    if (NPC.ai[2] == 0)
+                    {
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_CastAtk") with { Volume = 0.5f }, NPC.position);
+                    }
+
                     NPC.velocity *= 0;
                     NPC.noGravity = true;
                     ChangeAnimation(AnimationState.MimicryGreaterSplitV);
@@ -622,13 +635,14 @@ namespace LobotomyCorp.NPCs.RedMist
                     NPC.ai[2]++;
                     if (NPC.ai[2] == 60)
                     {
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Change") with { Volume = 0.5f }, NPC.position);
                         //Shoot Mimicry forwards and Dacapo backwards
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(6 * NPC.spriteDirection, 0), ModContent.ProjectileType<SwitchMimicryThrow>(), 20, 0);
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(-6 * NPC.spriteDirection, 0), ModContent.ProjectileType<SwitchDaCapoThrow>(), 20, 0);
                     }
                     if (NPC.ai[2] == 130)
                     {
-                        Talk("Shift2");
+                        Talk("Shift2", NPC.spriteDirection);
                     }
                     if (NPC.ai[2] > 160)
                     {
@@ -679,7 +693,7 @@ namespace LobotomyCorp.NPCs.RedMist
                             NPC.ai[2] = 0;
                             ChangeAnimation(AnimationState.JustitiaSwing);
 
-                            Talk("Justitia" + Main.rand.Next(1, 3));
+                            Talk("Justitia" + Main.rand.Next(1, 3), NPC.spriteDirection);
                         }
                         else
                         {
@@ -688,7 +702,7 @@ namespace LobotomyCorp.NPCs.RedMist
                             NPC.ai[1] = 4;
                             NPC.ai[2] = 0;
                             ChangeAnimation(AnimationState.SmileSwing);
-                            Talk("Smile" + Main.rand.Next(1, 3));
+                            Talk("Smile" + Main.rand.Next(1, 3), NPC.spriteDirection);
                         }
 
                         //Heaven Attack
@@ -698,7 +712,7 @@ namespace LobotomyCorp.NPCs.RedMist
                         {
                             NPC.ai[1] = 4;
                             ChangeAnimation(AnimationState.HeavenThrow);
-                            Talk("Heaven");
+                            Talk("Heaven", NPC.spriteDirection);
                             NPC.velocity.X = 0;
                         }
                     }
@@ -712,7 +726,7 @@ namespace LobotomyCorp.NPCs.RedMist
                         NPC.ai[2] = 0;
                         NPC.velocity *= 0;
                         GoldRushCount++;
-                        Talk("GoldRush1");
+                        Talk("GoldRush1", NPC.spriteDirection);
                         ChangeAnimation(AnimationState.GoldRushIntro);
                     }
 
@@ -721,7 +735,7 @@ namespace LobotomyCorp.NPCs.RedMist
                         NPC.ai[1] = 10;
                         NPC.ai[2] = 0;
                         GoldRushCount++;
-                        Talk("Shift3");
+                        Talk("Shift3", NPC.spriteDirection);
                         ChangeAnimation(AnimationState.Phase4Transition);
                     }
                 }
@@ -737,6 +751,8 @@ namespace LobotomyCorp.NPCs.RedMist
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, 8 * delta, ModContent.ProjectileType<JustitiaSlashBoss>(), 15, 0);
                         if (NPC.ai[1] > 1)
                             NPC.ai[1]--;
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Atk3") with { Volume = 0.5f }, NPC.position);
+
                     }
                     if (NPC.ai[1] == 1)
                     {
@@ -765,6 +781,8 @@ namespace LobotomyCorp.NPCs.RedMist
 
                     if (NPC.ai[2] == 70)
                     {
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Atk1") with { Volume = 0.5f }, NPC.position);
+
                         Vector2 hammerPos = skelly.Weapon2.Position(NPC.spriteDirection) + new Vector2(70, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
                         foreach (Player p in Main.player)
                         {
@@ -784,6 +802,9 @@ namespace LobotomyCorp.NPCs.RedMist
                     }
                     else if (NPC.ai[2] >= 160 && NPC.ai[2] < 240)
                     {
+                        if (NPC.ai[2] == 160)
+                            SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Atk3") with { Volume = 0.5f }, NPC.position);
+
                         Vector2 hammerPos = skelly.Weapon2.Position(NPC.spriteDirection) + new Vector2(70, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
                         /*if (NPC.ai[2] % 10 == 0)
                         {
@@ -799,14 +820,27 @@ namespace LobotomyCorp.NPCs.RedMist
                             float random = Main.rand.NextFloat(1.00f);
                             for (int i = 0; i < 28; i++)
                             {
-                                /*Vector2 vel = new Vector2(16, 0).RotatedBy(random + MathHelper.ToRadians(11.25f * i));
+                                Vector2 vel = new Vector2(16, 0).RotatedBy(random + MathHelper.ToRadians(11.25f * i));
                                 Vector2 dustPos = new Vector2(70, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
                                 Dust d = Dust.NewDustPerfect(hammerPos, DustID.Wraith, vel);
-                                d.noGravity = true;*/
+                                d.noGravity = true;
+                            }
+                            int dir = (int)(NPC.ai[2] % 40) / 5;
+                            for (int i = -3; i <= 3; i++)
+                            {
+                                float angle = MathHelper.ToRadians(dir * 45f + i * (45f / 7f));
+                                Vector2 vel = new Vector2(8, 0).RotatedBy(angle);
 
-                                Vector2 vel = new Vector2(8, 0).RotatedBy(random + MathHelper.ToRadians(11.25f * i));
                                 Projectile.NewProjectile(NPC.GetSource_FromThis(), hammerPos, vel, ModContent.ProjectileType<Projectiles.SmileBits>(), 16, 0, 255, Main.rand.NextFloat(0.26f));
                             }
+
+                            /*
+                            float random = Main.rand.NextFloat(1.00f);
+                            for (int i = 0; i < 28; i++)
+                            {
+                                Vector2 vel = new Vector2(8, 0).RotatedBy(random + MathHelper.ToRadians(11.25f * i));
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), hammerPos, vel, ModContent.ProjectileType<Projectiles.SmileBits>(), 16, 0, 255, Main.rand.NextFloat(0.26f));
+                            }*/
                         }
                     }
 
@@ -830,7 +864,7 @@ namespace LobotomyCorp.NPCs.RedMist
                             delta = new Vector2(1 * NPC.spriteDirection, 0);
                         }
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -13), Vector2.Normalize(delta) * 12f, ModContent.ProjectileType<HeavenBoss>(), 25, 2, 0, NPC.whoAmI);
-                        SoundEngine.PlaySound(SoundID.Item19, NPC.Center);
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Spear") with { Volume = 0.5f }, NPC.position);
                     }
                     if (NPC.ai[2] > 80)
                     {
@@ -888,7 +922,8 @@ namespace LobotomyCorp.NPCs.RedMist
                     Projectile.NewProjectile(NPC.GetSource_FromAI(), targetPos + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
                     */
                     //Default
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.GoldRushPortal>(), 0, 0, 0, -3, 8);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, -3, 8);
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Teleport_Start") with { Volume = 0.5f }, NPC.position);
                 }
                 //GoldRush Charging
                 else if (NPC.ai[1] == 7)
@@ -948,14 +983,18 @@ namespace LobotomyCorp.NPCs.RedMist
                     NPC.ai[2]++;
                     if (NPC.ai[2] == 120)
                     {
-                        Talk("Shift4");
+                        Talk("Shift4", NPC.spriteDirection);
                     }
-                    if (NPC.ai[2] > 130)
+                    if (NPC.ai[2] > 160)
                     {
                         NPC.ai[0] = 3;
-                        NPC.ai[1] = 0;
+                        NPC.ai[1] = 0;// -60;
                         NPC.ai[2] = 0;
-                    }    
+                    }
+                    if (NPC.ai[2] == 30)
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Change") with { Volume = 0.5f }, NPC.position);
+                    else if (NPC.ai[2] == 120)
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Change_justice") with { Volume = 0.5f }, NPC.position);
                 }
             }
             //Instead of using Gold Rush a third time before transitioning, begins transition immediently
@@ -970,7 +1009,237 @@ namespace LobotomyCorp.NPCs.RedMist
             //After 25 seconds, she stops, falls to the ground, and lays motionless for 10 seconds with increased damage taken, before attacking again
             else if (NPC.ai[0] == 3)
             {
+                if (NPC.ai[1] < 0)
+                {
+                    NPC.ai[1]++;
+                }
+                else
+                {
+                    //Idle
+                    if (NPC.ai[1] == 0)
+                    {
+                        ChangeAnimation(AnimationState.Idle4);
+                        NPC.ai[2]++;
+                        if (NPC.ai[2] > 60)
+                        {
+                            NPC.ai[2] = 0;
+                            NPC.ai[1] = 6;
+                            if (Main.rand.Next(2) == 0)
+                                NPC.ai[1] = 1;
+                        }
+                    }
+                    //GoldRush Follow Start
+                    else if (NPC.ai[1] == 1)
+                    {
+                        NPC.velocity.X = 0;
 
+                        ChangeAnimation(AnimationState.GoldRushThrow);
+                        if (NPC.ai[2] == 0)
+                        {
+                            Talk("GoldRush" + Main.rand.Next(2, 4), NPC.spriteDirection);
+
+                            Vector2 velocity = new Vector2(GOLDRUSH4SPEED * NPC.spriteDirection, 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + velocity * GOLDRUSH4DELAY, velocity, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfKing>(), 0, 0, 0, -1, 170 - GOLDRUSH4DELAY);
+                        }
+
+                        NPC.ai[2]++;
+
+                        if (NPC.ai[2] == 160)
+                        {
+                            Vector2 velocity = new Vector2(GOLDRUSH4SPEED * NPC.spriteDirection, 0);
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<Projectiles.KingPortal.GoldRushRedMist>(), 45, 1f, 0 , 10);
+                        }
+
+                        if (NPC.ai[2] > 200)
+                        {
+                            NPC.ai[2] = 0;
+                            NPC.ai[1]++;
+                            NPC.velocity = new Vector2(GOLDRUSH4SPEED * NPC.spriteDirection, 0);
+                        }
+                    }
+
+                    //GoldRush Follow
+                    else if (NPC.ai[1] == 2)
+                    {
+                        NPC.noTileCollide = true;
+                        NPC.noGravity = true;
+                        NPC.spriteDirection = Math.Sign(NPC.velocity.X);
+                        NPC.ai[2]++;
+
+                        ChangeAnimation(AnimationState.TwilightChase);
+
+                        NPC.TargetClosest();
+                        Rectangle targetRect = new Rectangle((int)NPC.GetTargetData().Position.X, (int)NPC.GetTargetData().Position.Y, NPC.GetTargetData().Width, NPC.GetTargetData().Height);
+
+                        if (WillHitTarget(targetRect, 10))//Collision.CheckAABBvLineCollision(NPC.GetTargetData().Position, NPC.GetTargetData().Size, NPC.Center, NPC.Center + NPC.velocity * 8))
+                        {
+                            Talk("Pass" + (1 + Main.rand.Next(3)), NPC.spriteDirection);
+
+                            NPC.ai[1] = 5;
+                            NPC.ai[2] = 0;
+                        }
+
+                        if (NPC.ai[2] > 300)
+                        {
+                            NPC.ai[2] = 0;
+                            NPC.ai[1] = 4;
+                        }
+                    }
+                    
+                    //Twilight JumpSlash Finisher
+                    else if (NPC.ai[1] == 3)
+                    {
+                        ChangeAnimation(AnimationState.TwilightFinisher);
+                        NPC.velocity *= 0.95f;
+                        if (NPC.velocity.X > -1 && NPC.velocity.X < 1)
+                            NPC.velocity.X = 0;
+                        NPC.ai[2]++;
+
+                        if (NPC.ai[2] == 25)
+                        {
+                            Talk("Arrive", NPC.spriteDirection);
+                        }
+
+                        if (NPC.ai[2] > 20 && NPC.ai[2] < 60)
+                        {
+                            for (int i = 0; i < 2; i++)
+                            {
+                                Vector2 SlashPosition = NPC.Center + new Vector2(Main.rand.Next(-260, 261), Main.rand.Next(-10, 51));
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), SlashPosition, Vector2.Zero, ModContent.ProjectileType<Projectiles.RedMistSlashes>(), 43, 0);
+                            }
+                        }
+
+                        if (NPC.ai[2] > 100)
+                        {
+                            NPC.ai[2] = 0;
+                            NPC.ai[1]++;
+                        }
+                    }
+
+                    //KNEEL
+                    else if (NPC.ai[1] == 4)
+                    {
+                        NPC.noTileCollide = false;
+                        NPC.noGravity = false;
+
+                        if (NPC.ai[2] % 30 == 0)
+                        {
+                            Talk("Tired" + (Main.rand.Next(5) + 1), NPC.ai[2] % 60 == 30 ? 1 : -1);
+                        }
+
+                        ChangeAnimation(AnimationState.TwilightEnd);
+                        NPC.ai[2]++;
+                        if (NPC.ai[2] > 120)
+                        {
+                            NPC.ai[2] = 0;
+                            NPC.ai[1] = 0;
+                        }
+                    }
+                    
+                    //Twilight DashSlash
+                    else if (NPC.ai[1] == 5)
+                    {
+                        NPC.noTileCollide = true;
+                        NPC.noGravity = true;
+                        NPC.spriteDirection = Math.Sign(NPC.velocity.X);
+                        ChangeAnimation(AnimationState.TwilightDashSlash);
+                        NPC.ai[2]++;
+
+                        if (NPC.ai[2] % 3 == 0)
+                        {
+                            Vector2 SlashPosition = NPC.Center + new Vector2(Main.rand.Next(-10, 10), Main.rand.Next(-100, 101));
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), SlashPosition, Vector2.Zero, ModContent.ProjectileType<Projectiles.RedMistSlashes>(), 43, 0);
+                        }
+
+                        if (NPC.ai[2] > 20)
+                        {
+                            NPC.ai[1] = 2;
+                        }
+                    }
+
+                    //Twilight Normal Attack
+                    else if (NPC.ai[1] == 6)
+                    {
+                        if (NPC.ai[2] == 0)
+                        {
+                            NPC.TargetClosest(true);
+                            NPC.spriteDirection = NPC.direction;
+                        }                      
+
+                        ChangeAnimation(AnimationState.TwilightDashSlash);
+                        NPC.ai[2]++;
+
+                        if (NPC.ai[2] == 10)
+                        {
+                            Vector2 velocity = (NPC.GetTargetData().Center - NPC.Center);
+                            velocity.Normalize();
+                            velocity *= 32;
+
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<Projectiles.RedMistSlashSpawner>(), 43, 0);
+                        }
+
+                        if (NPC.ai[2] > 45)
+                        {
+                            NPC.ai[2] = 0;
+                            NPC.ai[1] = 0;
+                            if (Main.rand.Next(3) == 0)
+                                NPC.ai[1] = 7;
+                        }
+                    }
+
+                    //Twilight Normal Attack 2
+                    else if (NPC.ai[1] == 7)
+                    {
+                        if (NPC.ai[2] == 0)
+                        {
+                            NPC.TargetClosest(true);
+                            NPC.spriteDirection = NPC.direction;
+                        }
+
+                        ChangeAnimation(AnimationState.TwilightDashSlash2);
+                        NPC.ai[2]++;
+
+                        if (NPC.ai[2] == 10)
+                        {
+                            Vector2 velocity = (NPC.GetTargetData().Center - NPC.Center);
+                            velocity.Normalize();
+                            velocity *= 32;
+
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<Projectiles.RedMistSlashSpawner>(), 43, 0);
+                        }
+
+                        if (NPC.ai[2] > 45)
+                        {
+                            NPC.ai[2] = 0;
+                            NPC.ai[1] = 0;
+                            if (Main.rand.Next(3) == 0)
+                                NPC.ai[1] = 3;
+                        }
+                    }
+
+
+                    /*
+                    if (NPC.ai[2] == 0)
+                    {
+                        NPC.velocity.X = 4f;
+                    }
+                    else
+                        NPC.velocity.X *= 0.9f;
+                    */
+                    /*
+                    if (NPC.velocity.Y == 0)
+                    {
+                        if (NPC.velocity.X == 0)
+                            ChangeAnimation(AnimationState.Idle4);
+                        else
+                            ChangeAnimation(AnimationState.TwilightChase);
+                    }
+                    else
+                        ChangeAnimation(AnimationState.MidAir);
+
+                    fighterAI(NPC.GetTargetData(), 16f, 0.8f, 10f);
+                    */
+                }
             }
             //Hidden Red Mist Phase??
             //Hold Apocalypse up high, envelopes the area in darkness as it dissipates, red mist suddenly gets a burst of red mist, as Mimicry is summoned and blazes of red flames replaces her hair and gains a burning red cloak
@@ -1009,25 +1278,52 @@ namespace LobotomyCorp.NPCs.RedMist
 
                 else if (NPC.ai[0] == 1)
                 {
+                    possibleText.Add(SuppressionTextData.Gebura[6]);
                     possibleText.Add(SuppressionTextData.Gebura[7]);
-                    possibleText.Add(SuppressionTextData.Gebura[8]);
                 }
 
                 else if (NPC.ai[0] == 2)
                 {
+                    possibleText.Add(SuppressionTextData.Gebura[8]);
                     possibleText.Add(SuppressionTextData.Gebura[9]);
-                    possibleText.Add(SuppressionTextData.Gebura[10]);
                 }
 
                 else if (NPC.ai[0] == 3)
                 {
-                    possibleText.Add(SuppressionTextData.Gebura[11]);
+                    possibleText.Add(SuppressionTextData.Gebura[10]);
                 }
                 Vector2 offsetRandom = new Vector2(Main.rand.Next(-1000, 1000), Main.rand.Next(-1000, 1000));
                 Color textColor = Color.Red;
                 textColor *= 0.5f;
                 SuppressionText.AddText(possibleText[Main.rand.Next(possibleText.Count)], NPC.Center + offsetRandom, Main.rand.NextFloat(-0.5000f, 0.5000f), 2f, textColor, 0.2f, 240, Main.rand.Next(-1, 2), Main.rand.NextFloat(1.000f));
             }
+        }
+
+        public void TeleportP4(int Entrance, int Exit, Vector2 position, Vector2 velocity)
+        {
+            NPC.Center = position;
+            NPC.velocity = velocity;
+            NPC.ai[2] = 0;
+            bool isExitLast = Main.projectile[Exit].ai[0] == -4;
+            if (isExitLast)
+            {
+                NPC.ai[1] = 3;
+            }
+            NPC.netUpdate = true;
+        }
+
+        public bool WillHitTarget(Rectangle Target, float Time)
+        {
+            for (int i = 0; i <= Time; i++)
+            {
+                Rectangle npcHitbox = NPC.getRect();
+                npcHitbox.X += (int)(i * NPC.velocity.X);
+                npcHitbox.Y += (int)(i * NPC.velocity.Y);
+
+                if (npcHitbox.Intersects(Target))
+                    return true;
+            }
+            return false;
         }
 
         public override void FindFrame(int frameHeight)
@@ -2180,11 +2476,301 @@ namespace LobotomyCorp.NPCs.RedMist
                     skelly.CalculateHandIK();
                     skelly.CalculateLegIK();
                 }
+                else if (animState == AnimationState.Idle4)
+                {
+                    float animSpeedMult = 8;
+                    skelly.Weapon1.Visible = true;
+                    skelly.Weapon2.Visible = true;
+                    skelly.Gauntlet.Visible = false;
+
+                    skelly.FeetLIK.ChangeBoneOffset(new Vector2(-36, -5));
+                    skelly.FeetRIK.ChangeBoneOffset(new Vector2(18, -5));
+
+                    skelly.CalculateLegIK();
+
+                    skelly.HandLIK.ChangeBoneOffset(new Vector2(-4, skelly.ArmLength() - 1));
+                    skelly.Weapon1.rotation = skelly.LowerArmL.rotation + MathHelper.ToRadians(-60);// * NPC.spriteDirection);
+                    skelly.HandRIK.ChangeBoneOffset(new Vector2(4, skelly.ArmLength() - 1));
+                    skelly.Weapon2.rotation = skelly.LowerArmR.rotation + MathHelper.ToRadians(-45);// * NPC.spriteDirection);
+
+                    skelly.CalculateHandIK();
+
+                    skelly.Pelvis.ChangeBoneOffset(new Vector2(0, -52 + 0.25f * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult))));
+                    skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-80 + 6 * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult))));
+
+                    skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(100));
+
+                    skelly.Weapon1.ChangeBoneScale(1.3f);
+                }
+                else if (animState == AnimationState.TwilightDashSlash)
+                {
+                    float prog = (float)NPC.frameCounter / 15f;
+                    if (prog > 1f)
+                        prog = 1f;
+                    prog = (float)Math.Sin(prog * 1.57f);
+                    skelly.HandLIK.ChangeBoneOffset(new Vector2(skelly.ArmLength(), 0).RotatedBy(MathHelper.ToRadians(150 - 270 * prog)), 16);
+
+                    skelly.CalculateHandIK();
+
+                    skelly.Weapon1.rotation = skelly.LowerArmL.rotation;
+
+                    skelly.FeetLIK.ChangeBoneOffset(new Vector2(-36, 0), 12f);
+                    skelly.FeetRIK.ChangeBoneOffset(new Vector2(36, 0), 12f);
+
+                    skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-50));
+                    skelly.Pelvis.ChangeBoneOffset(new Vector2(14, -40));
+
+                    skelly.CalculateLegIK();
+
+                    skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(140));
+                }
+                else if (animState == AnimationState.TwilightDashSlash2)
+                {
+                    float prog = (float)NPC.frameCounter / 15f;
+                    if (prog > 1f)
+                        prog = 1f;
+                    prog = (float)Math.Sin(prog * 1.57f);
+                    skelly.HandLIK.ChangeBoneOffset(new Vector2(skelly.ArmLength(), 0).RotatedBy(MathHelper.ToRadians(-120 + 270 * prog)), 16);
+
+                    skelly.CalculateHandIK();
+
+                    skelly.Weapon1.rotation = skelly.LowerArmL.rotation;
+
+                    skelly.FeetLIK.ChangeBoneOffset(new Vector2(-36, 0), 12f);
+                    skelly.FeetRIK.ChangeBoneOffset(new Vector2(36, 0), 12f);
+
+                    skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-50));
+                    skelly.Pelvis.ChangeBoneOffset(new Vector2(14, -40));
+
+                    skelly.CalculateLegIK();
+
+                    skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(140));
+                }
+                else if (animState == AnimationState.TwilightFinisher)
+                {
+                    if (NPC.frameCounter < 20)
+                    {
+                        float prog = (float)NPC.frameCounter / 15f;
+                        if (prog > 1f)
+                            prog = 1f;
+                        prog = (float)Math.Sin(prog * 1.57f);
+
+                        skelly.HandLIK.ChangeBoneOffset(new Vector2(skelly.ArmLength() - 8f, 0).RotatedBy(MathHelper.ToRadians(150 - 270 * prog)), 16);
+                        skelly.CalculateHandIK();
+
+                        skelly.FeetLIK.ChangeBoneOffset(new Vector2(-48, -48 * prog), 12f);
+                        skelly.FeetRIK.ChangeBoneOffset(new Vector2(8, -56 * prog), 12f);
+                        skelly.CalculateLegIK();
+
+                        skelly.Weapon1.rotation = skelly.LowerArmL.rotation - MathHelper.ToRadians(45);
+
+                        prog = (float)NPC.frameCounter / 20f;
+                        if (prog > 1f)
+                            prog = 1f;
+                        prog = (float)Math.Sin(prog * 1.57f);
+
+                        skelly.Pelvis.ChangeBoneOffset(new Vector2(0, -40 - 80 * prog), 16f);
+                        skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-50 - 65 * prog));
+
+                        skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(100));
+                    }
+                    else
+                    {
+                        float prog = (float)(NPC.frameCounter - 15f) / 5f;
+                        if (prog > 1f)
+                            prog = 1f;
+                        //prog = 1f + (float)Math.Sin(prog * 1.57f - 1.57f);
+
+                        skelly.HandLIK.ChangeBoneOffset(new Vector2(skelly.ArmLength(), 0).RotatedBy(MathHelper.ToRadians(-120 + 165 * prog)), 16);
+                        skelly.CalculateHandIK();
+
+                        skelly.FeetLIK.ChangeBoneOffset(new Vector2(-48, -4), 12f);
+                        skelly.FeetRIK.ChangeBoneOffset(new Vector2(16, -4), 12f);
+                        skelly.CalculateLegIK();
+
+                        skelly.Weapon1.rotation = skelly.LowerArmL.rotation - MathHelper.ToRadians(20);
+
+                        skelly.Pelvis.ChangeBoneOffset(new Vector2(0, -40), 16f);
+                        skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-50), 0.18f);
+
+                        skelly.Weapon1.ChangeBoneScale(1.5f);
+
+                        skelly.Head.rotation = NPC.spriteDirection == 1 ? -0.79f : -2.35f;
+                        LookAtPlayer = false;
+
+                        if (NPC.frameCounter < 25f)
+                            skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(250), 0.12f);
+                        else
+                            skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(140));
+                    }
+                }
+                else if (animState == AnimationState.TwilightEnd) //I KNEEL
+                {
+                    float prog = MathHelper.ToRadians((float)NPC.frameCounter);
+                    prog = (float)Math.Sin(prog * 4);
+                    skelly.HandLIK.ChangeBoneOffset(new Vector2(skelly.ArmLength() - 4, 0).RotatedBy(MathHelper.ToRadians(-200)), 16);
+
+                    skelly.CalculateHandIK();
+
+                    skelly.Weapon1.ChangeBoneRotation(skelly.LowerArmL.rotation - MathHelper.ToRadians(45), 0.14f);
+
+                    skelly.FeetLIK.ChangeBoneOffset(new Vector2(-skelly.LowerLegL.length, -4), 12f);
+                    skelly.FeetRIK.ChangeBoneOffset(new Vector2(skelly.UpperLegR.length + 12, -4), 12f);
+
+                    skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-50 + 8 * prog));
+                    skelly.Pelvis.ChangeBoneOffset(new Vector2(14, -skelly.UpperLegL.length));
+
+                    skelly.CalculateLegIK();
+
+                    skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(140));
+
+                    skelly.Head.rotation = NPC.spriteDirection == 1 ? -0.79f : -2.35f;
+                    LookAtPlayer = false;
+
+                    skelly.Weapon1.ChangeBoneScale(1.3f);
+                }
+                else if (animState == AnimationState.TwilightChase)
+                {
+                    float animSpeedMult = 20;
+                    float x = 16 * 3 * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult));// * NPC.spriteDirection;
+                    float y = 16 * (float)Math.Cos(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult));
+                    if (y < 0)
+                        y = 0;
+                    skelly.FeetLIK.BoneOffset = new Vector2(-12 + x, y * -1); //.ChangeBoneOffset(new Vector2(-12 + x, y * -1), 30);
+                    y = 16 * (float)Math.Cos(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult));
+                    if (y > 0)
+                        y = 0;
+                    skelly.FeetRIK.BoneOffset = new Vector2(0 - x, y);//.ChangeBoneOffset(, 30);
+
+                    float velocityRotation = 0;// (float)Math.Atan2(NPC.velocity.Y * NPC.spriteDirection, NPC.velocity.X * NPC.spriteDirection);
+                    skelly.HandLIK.ChangeBoneOffset(new Vector2(skelly.ArmLength() - 2, 0).RotatedBy(MathHelper.ToRadians(150) + velocityRotation));
+                    skelly.Weapon1.rotation = skelly.LowerArmL.rotation + MathHelper.ToRadians(10);// * NPC.spriteDirection);
+                    skelly.HandRIK.ChangeBoneOffset(new Vector2(skelly.ArmLength() , 0).RotatedBy(MathHelper.ToRadians(150) + velocityRotation));
+                    skelly.Weapon2.rotation = skelly.LowerArmR.rotation + MathHelper.ToRadians(-45);// * NPC.spriteDirection);
+
+                    skelly.CalculateHandIK();
+
+                    skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-50));
+                    skelly.Pelvis.ChangeBoneOffset(new Vector2(14, -40 + 0.6f * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult))));
+
+                    skelly.CalculateLegIK();
+                    skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(160));
+
+                    skelly.Weapon1.ChangeBoneScale(1.3f);
+                }
+                else if (animState == AnimationState.GoldRushThrow)
+                {
+                    float animSpeedMult = 8;
+                    Vector2 twilightPlacement = skelly.Origin.Position() + new Vector2(-36, -90);
+
+                    if (NPC.frameCounter < 10)
+                    {
+                        skelly.HandLIK.ChangeBoneOffset(twilightPlacement - skelly.UpperArmL.Position(), 12f);
+                        skelly.Weapon1.ChangeBoneRotation(MathHelper.ToRadians(120), 1.4f);
+
+                        skelly.FeetLIK.ChangeBoneOffset(new Vector2(-36, -5));
+                        skelly.FeetRIK.ChangeBoneOffset(new Vector2(24, -5));
+
+                        skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(90));
+                    }
+                    else if (NPC.frameCounter < 45)
+                    {
+                        float prog = (float)(NPC.frameCounter - 10) / 35;
+                        skelly.Gauntlet.Visible = true;
+                        skelly.Gauntlet.scale = 1f;
+
+                        skelly.HandLIK.ChangeBoneOffset(new Vector2(skelly.ArmLength() - 4, 0).RotatedBy(MathHelper.ToRadians(120 - 210 * prog)), 16);
+
+                        skelly.FeetLIK.ChangeBoneOffset(new Vector2(-36, -5));
+                        skelly.FeetRIK.ChangeBoneOffset(new Vector2(24, -5));
+
+                        skelly.Pelvis.ChangeBoneOffset(new Vector2(0, -62 + 0.5f * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult))));
+                        skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-90));
+                    }
+                    else if (NPC.frameCounter < 105)
+                    {
+                        skelly.Gauntlet.ChangeBoneScale(2f, .01f);
+
+                        skelly.HandLIK.ChangeBoneOffset(new Vector2(skelly.ArmLength() - 4 + Main.rand.NextFloat(-1, 1), Main.rand.NextFloat(-1, 1)).RotatedBy(MathHelper.ToRadians(-90)));
+
+                        skelly.FeetLIK.ChangeBoneOffset(new Vector2(-36, -5));
+                        skelly.FeetRIK.ChangeBoneOffset(new Vector2(24, -5));
+
+                        skelly.Pelvis.ChangeBoneOffset(new Vector2(0, -62 + 0.5f * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult))));
+                        skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-90));
+                    }
+                    else if (NPC.frameCounter < 155)
+                    {
+                        float prog = (float)(NPC.frameCounter - 105) / 50f;
+
+                        skelly.HandLIK.ChangeBoneOffset(new Vector2(skelly.ArmLength() - 4, 0).RotatedBy(MathHelper.ToRadians(-90 + 270 * prog)), 16);
+
+                        skelly.Pelvis.ChangeBoneOffset(new Vector2(0, -52 + 0.5f * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult))));
+                        skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-75));
+
+                        skelly.FeetLIK.ChangeBoneOffset(new Vector2(-36, -5));
+                        skelly.FeetRIK.ChangeBoneOffset(new Vector2(24, -5));
+
+                        skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(110));
+
+                    }
+                    else if (NPC.frameCounter < 165)
+                    {
+                        float prog = (float)(NPC.frameCounter - 155) / 10f;
+
+                        skelly.HandLIK.ChangeBoneOffset(new Vector2((skelly.ArmLength() - 4) + skelly.ArmLength() * prog, 4), 16);
+                        skelly.Pelvis.ChangeBoneOffset(new Vector2(0, -52 + 0.5f * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult))));
+
+                        skelly.FeetLIK.ChangeBoneOffset(new Vector2(24, -5), 16);
+                        skelly.FeetRIK.ChangeBoneOffset(new Vector2(-36, -5), 16);
+
+                        skelly.Pelvis.ChangeBoneOffset(new Vector2(10, -57 + 0.5f * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult))));
+                        skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-90));
+
+                        skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(130));
+
+                        if (prog > 0.5f)
+                        {
+                            skelly.Gauntlet.Visible = false;
+                            skelly.Gauntlet.scale = 1f;
+                        }
+                    }
+                    else if (NPC.frameCounter < 195)
+                    {
+                        skelly.Gauntlet.Visible = false;
+                        skelly.Gauntlet.scale = 1f;
+
+                        skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(110));
+                    }
+                    else
+                    {
+                        skelly.HandLIK.ChangeBoneOffset(twilightPlacement - skelly.UpperArmL.Position(), 12f);
+
+                        skelly.FeetLIK.ChangeBoneOffset(new Vector2(-36, -5));
+                        skelly.FeetRIK.ChangeBoneOffset(new Vector2(18, -5));
+
+                        skelly.Pelvis.ChangeBoneOffset(new Vector2(0, -52 + 0.5f * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult))));
+                        skelly.Pelvis.ChangeBoneRotation(MathHelper.ToRadians(-80 + 6 * (float)Math.Sin(MathHelper.ToRadians((float)NPC.frameCounter * animSpeedMult))));
+
+                        skelly.Hair.ChangeBoneRotation(MathHelper.ToRadians(90));
+
+                    }
+
+                    skelly.CalculateHandIK();
+                    skelly.CalculateLegIK();
+
+                    if (NPC.frameCounter >= 10)
+                        skelly.Weapon1.BoneOffset = (twilightPlacement - skelly.LowerArmL.EndPoint()).RotatedBy(-skelly.LowerArmL.GetRotation());
+                    else if (NPC.frameCounter > 135)
+                        skelly.Weapon1.BoneOffset = Vector2.Zero;
+                }
 
                 //Draw Afterimages
                 if (animState == AnimationState.GoldRushLoop ||
                     animState == AnimationState.Dash ||
-                    animState == AnimationState.MimicryGreaterSplitV)
+                    animState == AnimationState.MimicryGreaterSplitV ||
+                    (animState == AnimationState.TwilightChase && NPC.ai[1] == 2) ||
+                    (animState == AnimationState.TwilightDashSlash && NPC.ai[1] == 5))
                     NPC.localAI[2] = 1f;
                 else if (NPC.localAI[2] > 0f)
                     NPC.localAI[2] -= 0.1f;
@@ -2230,8 +2816,8 @@ namespace LobotomyCorp.NPCs.RedMist
 
                 //LookingAt(skelly.Weapon2.Position(), 6);
 
-                //LookingAt(skelly.FeetLIK.Position(), 6);
-                //LookingAt(skelly.FeetRIK.Position(), 15);
+                LookingAt(skelly.FeetLIK.Position(), 6);
+                LookingAt(skelly.FeetRIK.Position(), 15);
             }
         }
 
@@ -2309,16 +2895,16 @@ namespace LobotomyCorp.NPCs.RedMist
 
         private enum AnimationState
         {
-            Idle1,
+            Idle1,//Phase1
             Walk1,
             SwingRedEyes,
             SwingPenitence,
             SwingBoth,
-            GoldRushIntro,
+            GoldRushIntro,//GoldRushAnimations
             GoldRushLoop,
             GoldRushLoopFall,
             GoldRushEnd,
-            Phase2Transition,
+            Phase2Transition,//Phase2
             Idle2,
             Walk2,
             Dash,
@@ -2330,19 +2916,20 @@ namespace LobotomyCorp.NPCs.RedMist
             MimicryGreaterSplitV,
             MidAir,
             HeavenThrow,
-            Phase3Transition,
+            Phase3Transition,//Phase3
             Walk3,
             Idle3,
             JustitiaSwing,
             SmileSwing,
-            Phase4Transition,
+            Phase4Transition,//Phase4
             Idle4,
             GoldRushThrow,
             TwilightChase,
             TwilightDashSlash,
+            TwilightDashSlash2,
             TwilightFinisher,
             TwilightDrift,
-            TwilightEnd
+            TwilightEnd //KNEEL
         }
 
         private void ChangeAnimation(AnimationState i)
@@ -2384,10 +2971,10 @@ namespace LobotomyCorp.NPCs.RedMist
             return null;
         }
 
-        public void Talk(string id)
+        public void Talk(string id, int dir)
         {
             string text = SuppressionTextData.GeburaBark[id];
-            int dir = NPC.spriteDirection;
+            //int dir = NPC.spriteDirection;
             Vector2 pos = new Vector2(NPC.Center.X, NPC.position.Y - NPC.height / 2);
             if (dir < 0)
                 pos.X = NPC.position.X + NPC.width * 0.25f;
@@ -2408,8 +2995,10 @@ namespace LobotomyCorp.NPCs.RedMist
                 int Factor = (int)(10 * (NPC.localAI[2] / 1f));
                 for (int i = 0; i < Factor; i++)
                 {
-                    Color color = drawColor * (0.3f * (1f - (float)i / (float)Factor));
-                    DrawRedMist(spriteBatch, color, i);
+                    Color trailColor = Color.Red;
+                    trailColor.A = 178;
+                    trailColor *= (0.3f * (1f - (float)i / (float)Factor));
+                    DrawRedMist(spriteBatch, trailColor, i);
                 }
             }
             DrawRedMist(spriteBatch, drawColor);
@@ -2536,12 +3125,12 @@ namespace LobotomyCorp.NPCs.RedMist
                 if (NPC.localAI[1] == 2)
                 {
                     weapon = Mod.Assets.Request<Texture2D>("Items/Justitia").Value;
-                    weaponOrigin = new Vector2(15, weapon.Height - 15);
+                    weaponOrigin = new Vector2(12, weapon.Height - 12);
                 }
                 if (NPC.localAI[1] == 3)
                 {
                     weapon = Mod.Assets.Request<Texture2D>("Items/Twilight").Value;
-                    weaponOrigin = new Vector2(15, weapon.Height - 15);
+                    weaponOrigin = new Vector2(12, weapon.Height - 12);
                 }
                 if (animState == AnimationState.HeavenThrow)
                 {

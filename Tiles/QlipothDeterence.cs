@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
@@ -16,7 +17,7 @@ namespace LobotomyCorp.Tiles
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style2xX);
 			TileObjectData.newTile.Height = 3;
 			TileObjectData.newTile.Origin = new Point16(1, 2);
-			TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 18 };
+			TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
 			//TileObjectData.newTile.HookPostPlaceMyPlayer = new PlacementHook(ModContent.GetInstance<TEQlipothDeterence>().Hook_AfterPlacement, -1, 0, false);
 			TileObjectData.addTile(Type);
 			ModTranslation name = CreateMapEntryName();
@@ -30,18 +31,6 @@ namespace LobotomyCorp.Tiles
 		{
 			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 48, ModContent.ItemType<Items.QlipothDetterenceField>());
 			//ModContent.GetInstance<TEQlipothDeterence>().Kill(i, j);
-		}
-
-		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
-		{
-			Tile tile = Main.tile[i, j];
-			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
-			if (Main.drawToScreen)
-			{
-				zero = Vector2.Zero;
-			}
-			int height = tile.TileFrameY == 36 ? 18 : 16;
-			//Main.spriteBatch.Draw(mod.GetTexture("Tiles/ElementalPurge_Glow"), new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero, new Rectangle(tile.TileFrameX, tile.TileFrameY, 16, height), Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 		}
 
         public override bool RightClick(int i, int j)
@@ -60,13 +49,13 @@ namespace LobotomyCorp.Tiles
 				{
 					if (Main.tile[l, m].HasTile && Main.tile[l, m].TileType == Type)
 					{
-						if (Main.tile[l, m].TileFrameY < 56)
+						if (Main.tile[l, m].TileFrameY < 54)
 						{
-							Main.tile[l, m].TileFrameY += 56;
+							Main.tile[l, m].TileFrameY += 54;
 						}
 						else
 						{
-							Main.tile[l, m].TileFrameY -= 56;
+							Main.tile[l, m].TileFrameY -= 54;
 						}
 					}
 				}
@@ -88,6 +77,22 @@ namespace LobotomyCorp.Tiles
             return base.AutoSelect(i, j, item);
         }
 
+		public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
+		{
+			Tile tile = Main.tile[i, j];
+			if (tile.TileFrameY < 54)
+				return;
+			Vector2 zero = new Vector2(Main.offScreenRange, Main.offScreenRange);
+			if (Main.drawToScreen)
+			{
+				zero = Vector2.Zero;
+			}
+			spriteBatch.Draw(
+				TextureAssets.Tile[tile.TileType].Value,
+				new Vector2(i * 16 - (int)Main.screenPosition.X, j * 16 - (int)Main.screenPosition.Y) + zero,
+				new Rectangle(tile.TileFrameX + 36, tile.TileFrameY, 16, 16),
+				Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+		}
 	}
 	/*
 	public class TEQlipothDeterence : ModTileEntity

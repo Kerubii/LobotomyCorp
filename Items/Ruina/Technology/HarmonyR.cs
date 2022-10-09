@@ -1,0 +1,89 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace LobotomyCorp.Items.Ruina.Technology
+{
+	public class HarmonyR : SEgoItem
+	{
+		public override void SetStaticDefaults() 
+		{
+			DisplayName.SetDefault("Harmony"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			Tooltip.SetDefault(GetTooltip());
+
+		}
+
+		public override void SetDefaults() 
+		{
+			EgoColor = LobotomyCorp.HeRarity;
+
+            Item.damage = 34;
+			Item.DamageType = DamageClass.Melee;
+			Item.width = 40;
+			Item.height = 40;
+
+			Item.useTime = 22;
+			Item.useAnimation = 20;
+
+			Item.useStyle = ItemUseStyleID.Shoot;
+			Item.knockBack = 6;
+			Item.value = 10000;
+			Item.rare = 3;
+            Item.shootSpeed = 3.7f;
+            Item.shoot = ModContent.ProjectileType<Projectiles.HarmonyS>();
+
+            Item.noUseGraphic = true;
+			Item.UseSound = SoundID.Item1;
+            Item.noMelee = true;
+			Item.autoReuse = true;
+            Item.channel = true;
+		}
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+			if (type == ModContent.ProjectileType<Projectiles.HarmonyShotR>() && LobotomyModPlayer.ModPlayer(player).HarmonyAddiction)
+            {
+				for (int i = -1; i < 2; i += 2)
+				{
+					Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, i);
+				}
+			}
+            return base.Shoot(player, source, position, velocity, type, damage, knockback);
+        }
+
+        public override bool SafeCanUseItem(Player player)
+        {
+			if (player.altFunctionUse == 2)
+			{
+				Item.shootSpeed = 16;
+				Item.shoot = ModContent.ProjectileType<Projectiles.HarmonyShotR>();
+				Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/Singing_Shot") with { Volume = 0.5f };
+				Item.useStyle = ItemUseStyleID.Guitar;
+				Item.noUseGraphic = false;
+				return true;
+			}
+			else
+			{
+				Item.shootSpeed = 3.7f;
+				Item.shoot = ModContent.ProjectileType<Projectiles.HarmonyS>();
+				Item.UseSound = SoundID.Item1;
+				Item.useStyle = ItemUseStyleID.Shoot;
+				Item.noUseGraphic = true;
+			}
+			return player.ownedProjectileCounts[Item.shoot] < 1;
+		}
+
+        public override bool AltFunctionUse(Player player)
+        {
+			return true;
+        }
+
+        public override void AddRecipes() 
+		{
+		}
+	}
+}

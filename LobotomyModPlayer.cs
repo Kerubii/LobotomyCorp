@@ -49,6 +49,9 @@ namespace LobotomyCorp
         public int TwilightSpecial = 10;
 
         public int BlackSwanParryChance = 0;
+        public float BlackSwanNettleClothing = 0;
+        public static int BlackSwanNettleClothingMax = 6;
+        public bool BlackSwanBrokenDream = false;
 
         public float FaintAromaPetal = 0;
         public int FaintAromaPetalMax = 60;
@@ -68,22 +71,36 @@ namespace LobotomyCorp
 
         public bool PleasureDebuff = false;
 
-        public int GrinderMk2Order = 0;
-        public static int GrinderMk2BatteryMax = 5600;
-        public int GrinderMk2Battery = GrinderMk2BatteryMax;
+        public bool GrinderMk2Active = false;
+        public int GrinderMk2Dash = 0;
+        public int GrinderMk2BatteryMax = 1400;
+        public int GrinderMk2Battery = 1400;
         public bool GrinderMk2Recharging = false;
 
         public int LoveAndHateHysteria = 0;
 
         public int LuminousGreed = 0;
 
+        public int MagicBulletNthShot = 0;
+        public int MagicBulletRequest = -1;
+        public bool MagicBulletDarkFlame = false;
+
+        public bool NihilActive = false;
+        public int NihilMode = 0;
+
         public bool SmileDebuff = false;
 
         public bool SolemnSwitch = false;
-        public int SolemnCooldown = 0;
+        public int SolemnLamentDisable = 0;
+        public int SolemnLamentCooldown = 0;
 
         public int RealizedSword = 0;
         public bool RealizedSwordShoot = false;
+
+        public int TodaysExpressionFace = 0;
+        public int TodaysExpressionTimer = 0;
+        public int TodaysExpressionTimerMax = 180;
+        public bool TodaysExpressionActive = false;
 
         public bool WristCutterScars = false;
 
@@ -120,6 +137,7 @@ namespace LobotomyCorp
                 BeakPunish--;
 
             BlackSwanParryChance = 0;
+            BlackSwanBrokenDream = false;
 
             if (FaintAromaPetal > 0)
             {
@@ -135,12 +153,21 @@ namespace LobotomyCorp
                 }
             }
 
+            GrinderMk2Active = false;
+
             giftFourthMatchFlame = false;
             MatchstickBurn = false;
+
+            MagicBulletDarkFlame = false;
+
+            NihilActive = false;
 
             PleasureDebuff = false;
 
             SmileDebuff = false;
+
+            TodaysExpressionTimerMax = 300;
+            TodaysExpressionActive = false;
 
             RealizedSwordShoot = false;
             if (RealizedWingbeatMeal >= 0 && (!Main.npc[RealizedWingbeatMeal].active || Main.npc[RealizedWingbeatMeal].life <= 0))
@@ -170,10 +197,14 @@ namespace LobotomyCorp
             ForgottenAffection = -1;
             ForgottenAffectionResistance = 0;
 
+            GrinderMk2Recharging = false;
+
             HarmonyTime = 0;
             HarmonyAddiction = false;
             LuminousGreed = 0;
             FaintAromaPetal = 0;
+
+            NihilActive = false;
         }
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
@@ -195,16 +226,21 @@ namespace LobotomyCorp
             {
                 BeakParry--;
             }
-
+            //GrinderBatteryHandler
             if (GrinderMk2Recharging)
-            {
+            {                
                 if (GrinderMk2Battery < 0)
                     GrinderMk2Battery = 0;
-                GrinderMk2Battery += 32;
+                GrinderMk2Battery += 8;
                 if (GrinderMk2Battery > GrinderMk2BatteryMax)
                 {
                     GrinderMk2Battery = GrinderMk2BatteryMax;
                     GrinderMk2Recharging = !GrinderMk2Recharging;
+                }
+
+                if (Main.rand.Next(8) == 0)
+                {
+                    Projectiles.Realized.GrinderMk2Cleaner2.SpawnTrailDust(Player.position, Player.width, Player.height, ModContent.DustType<Misc.Dusts.ElectricTrail>(), new Vector2(Main.rand.Next(-2,3), -1f), 0.5f, 5);
                 }
             }
 
@@ -263,9 +299,12 @@ namespace LobotomyCorp
                 Player.controlLeft = false;
                 Player.controlRight = false;
                 Player.controlUp = false;
+            }
 
-                if (Main.rand.Next(120) == 0)
-                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Helper_Charge") with {Volume = 0.5f}, Player.Center);
+            if (GrinderMk2Active && GrinderMk2Dash > 0 && 
+                Player.HeldItem.type != ModContent.ItemType<Items.Ruina.Technology.GrinderMk52R>())
+            {
+                Player.controlUseItem = false;
             }
         }
 
@@ -273,6 +312,116 @@ namespace LobotomyCorp
         {
             if (statSanity > statSanityMax)
                 statSanity = statSanityMax;
+
+            if (TodaysExpressionActive)
+            {
+                TodaysExpressionTimer--;
+                if (TodaysExpressionTimer <= 0)
+                {
+                    TodayExpressionChangeFace(Main.rand.Next(5));
+                }
+            }
+        }
+
+        public override void PostUpdateMiscEffects()
+        {
+            if (Player.pulley)
+                DashMovement();
+            else if (Player.grappling[0] == -1 && !Player.tongued)
+            {
+                DashMovement();
+            }
+        }
+
+        private void DashMovement()
+        {
+            if (GrinderMk2Active)
+            {
+                float grinderSpeed = 16f;
+
+                if (GrinderMk2Dash > 0)
+                {
+                    int dir = Math.Sign(Player.velocity.X);
+                    Player.dashDelay = 20;
+
+                    Player.velocity.X = grinderSpeed * dir;
+
+                    int Distance = 54;
+                    if (Collision.SolidTiles(Player.position + Vector2.UnitY * Player.height, Player.width, Distance + 8, true))
+                    {
+                        Player.gravity = 0;
+                        Player.velocity.Y = 0.00001f;
+                        if (Collision.SolidTiles(Player.position + Vector2.UnitY * Player.height, Player.width, Distance, true))
+                        {
+                            Player.velocity.Y = -4f;
+                        }
+                    }
+                }
+                if (Player.dashDelay > 0)
+                {
+                    Player.velocity.X *= 0.98f;
+                    GrinderMk2Dash--;
+                }
+                else if (!Player.mount.Active)
+                {
+                    int dir = 0;
+                    bool dashing = false;
+                    if (Player.dashTime > 0)
+                    {
+                        Player.dashTime--;
+                    }
+                    if (Player.dashTime < 0)
+                    {
+                        Player.dashTime++;
+                    }
+                    if (Player.controlRight && Player.releaseRight)
+                    {
+                        if (Player.dashTime > 0)
+                        {
+                            dir = 1;
+                            dashing = true;
+                            Player.dashTime = 0;
+                            Player.timeSinceLastDashStarted = 0;
+                        }
+                        else
+                        {
+                            Player.dashTime = 15;
+                        }
+                    }
+                    else if (Player.controlLeft && Player.releaseLeft)
+                    {
+                        if (Player.dashTime < 0)
+                        {
+                            dir = -1;
+                            dashing = true;
+                            Player.dashTime = 0;
+                            Player.timeSinceLastDashStarted = 0;
+                        }
+                        else
+                        {
+                            Player.dashTime = -15;
+                        }
+                    }
+
+                    if (dashing)
+                    {
+                        Player.velocity.X = grinderSpeed * dir;
+                        Point point = (Player.Center + new Vector2((float)(dir * Player.width / 2 + 2), Player.gravDir * (float)(-Player.height) / 2f + Player.gravDir * 2f)).ToTileCoordinates();
+                        Point point2 = (Player.Center + new Vector2((float)(dir * Player.width / 2 + 2), 0f)).ToTileCoordinates();
+                        if (WorldGen.SolidOrSlopedTile(point.X, point.Y) || WorldGen.SolidOrSlopedTile(point2.X, point2.Y))
+                        {
+                            Player.velocity.X /= 2f;
+                        }
+                        Player.dashDelay = -1;
+                        Player.direction = dir;
+                        GrinderMk2Dash = 40;
+
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Helper_Atk") with {Volume = 0.25f}, Player.Center);
+                    }
+                }
+            }
+            else
+                GrinderMk2Dash = 0;
         }
 
         public override void UpdateBadLifeRegen()
@@ -367,6 +516,23 @@ namespace LobotomyCorp
             {
                 Player.ApplyDamageToNPC(npc, damage, 0, Player.direction, false);
             }
+
+            OnHitSolemnLament();
+        }
+
+        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
+        {
+            OnHitSolemnLament();
+        }
+
+        private void OnHitSolemnLament()
+        {
+            if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentR>())
+            {
+                Player.AddBuff(ModContent.BuffType<Buffs.Lament>(), 180);
+                if (SolemnLamentDisable == 0)
+                    SolemnLamentDisable = Main.rand.Next(2) + 1;
+            }
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
@@ -405,7 +571,7 @@ namespace LobotomyCorp
             }
         }*/
 
-        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
+        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
         {
             if (damageSource.SourceNPCIndex >= 0)
             {
@@ -427,10 +593,10 @@ namespace LobotomyCorp
                 }
             }
 
-            if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.History.ForgottenR>() &&  damageSource.SourceNPCIndex == ForgottenAffection)
+            if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.History.ForgottenR>() && damageSource.SourceNPCIndex == ForgottenAffection)
             {
                 damage = damage - (int)(damage * ForgottenAffectionResistance);
-                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Teddy_Guard") with { Volume = 0.5f}, Player.Center);
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Teddy_Guard") with { Volume = 0.5f }, Player.Center);
                 playSound = false;
             }
 
@@ -439,7 +605,24 @@ namespace LobotomyCorp
                 damage += (int)(damage * 0.3f);
             }
 
-            return base.PreHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource);
+            //Black Swan Nettle Damage Reduction
+            if (BlackSwanNettleClothing > 0)
+            {
+                BlackSwanNettleClothing = (int)Math.Floor(BlackSwanNettleClothing - 1);
+                if (BlackSwanNettleClothing < 0)
+                {
+                    BlackSwanNettleClothing = 0;
+                    if (Player.HasBuff<Buffs.NettleClothing>())
+                        Player.ClearBuff(ModContent.BuffType<Buffs.NettleClothing>());
+                    Player.AddBuff(ModContent.BuffType<Buffs.BrokenDreams>(), 30 * 60);
+                }
+                else
+                {
+                    damage -= (int)(damage * 0.75f);
+                }
+            }
+
+            return base.PreHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource, ref cooldownCounter);
         }
 
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
@@ -487,6 +670,54 @@ namespace LobotomyCorp
                 Projectile.NewProjectile(Player.GetSource_Misc("ItemUse_FourthMatchFlameExplosion"), Player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.FourthMatchFlameSelfExplosion>(), 500, 10f, Player.whoAmI);
             }
         }
+
+        public void TodayExpressionChangeFace(int face)
+        {
+            TodaysExpressionTimer = TodaysExpressionTimerMax;
+            TodaysExpressionFace = face;
+        }
+
+        public float TodaysExpressionDamage()
+        {
+            switch (TodaysExpressionFace)
+            {
+                case 0://Happy
+                    return 0.25f;
+                case 1://Smile
+                    return 0.5f;
+                default://Neutral
+                    return 1f;
+                case 3://Sad
+                    return 1.2f;
+                case 4://Angry
+                    return 1.5f;
+            }
+        }
+
+        public bool NihilCheckActive()
+        {
+            bool checkActive = false;
+
+            for (int slot = 0; slot < Main.InventorySlotsTotal; slot++)
+            {
+                if (!Player.inventory[slot].IsAir && Player.inventory[slot].type != ModContent.ItemType<Items.Ruina.Natural.NihilR>())
+                {
+                    checkActive = true;
+                }
+            }
+
+            for (int slot = 0; slot < 8 + Player.extraAccessorySlots; slot++)
+            {
+                if (!Player.armor[slot].IsAir && Player.armor[slot].type != ModContent.ItemType<Items.Ruina.Natural.NihilR>())
+                {
+                    checkActive = true;
+                }
+            }
+
+            NihilActive = checkActive;
+            return NihilActive;
+        }
+
         /*
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
@@ -683,13 +914,13 @@ namespace LobotomyCorp
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {
             Player player = drawInfo.drawPlayer;
-            return player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentS>() || player.HeldItem.type == ModContent.ItemType<Items.ParadiseLost>();
+            return player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentR>() || player.HeldItem.type == ModContent.ItemType<Items.ParadiseLost>();
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player Player = drawInfo.drawPlayer;
-            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType< Items.Ruina.Technology.SolemnLamentS >())
+            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType< Items.Ruina.Technology.SolemnLamentR >())
             {
                 LobotomyGlobalItem item = Player.HeldItem.GetGlobalItem<LobotomyGlobalItem>();
 
@@ -778,7 +1009,7 @@ namespace LobotomyCorp
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player Player = drawInfo.drawPlayer;
-            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentS>())
+            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentR>())
             {
                 LobotomyGlobalItem item = Player.HeldItem.GetGlobalItem<LobotomyGlobalItem>();
 
@@ -857,51 +1088,120 @@ namespace LobotomyCorp
         }
     }
 
-    public class DrawFaintAromaPetal : PlayerDrawLayer
+    public class DrawFrontMiscellaneous : PlayerDrawLayer
     {
-        private Asset<Texture2D> AlriunePetal;
+        private static Asset<Texture2D> AlriunePetal;
+        private static Asset<Texture2D> MusicalAddiction;
+        private static Asset<Texture2D> TodaysLook;
+        private static Asset<Texture2D> BlackSwan;
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {
             LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(drawInfo.drawPlayer);
-            return ModPlayer.FaintAromaPetal > 0;
+            return !drawInfo.drawPlayer.dead && (
+                ModPlayer.FaintAromaPetal > 0 || 
+                ModPlayer.HarmonyAddiction || 
+                ModPlayer.TodaysExpressionActive ||
+                ModPlayer.BlackSwanNettleClothing > 0);
         }
 
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FrontAccFront);
 
+        public override void Load()
+        {
+            AlriunePetal = Mod.Assets.Request<Texture2D>("Misc/AlriunePetal");
+            MusicalAddiction = Mod.Assets.Request<Texture2D>("Misc/MusicalAddiction");
+            TodaysLook = Mod.Assets.Request<Texture2D>("Misc/TodaysExpression");
+            BlackSwan = Mod.Assets.Request<Texture2D>("Misc/Nettle");
+        }
+
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
+            /*
             if (AlriunePetal == null)
             {
                 AlriunePetal = Mod.Assets.Request<Texture2D>("Misc/AlriunePetal");
             }
+            if ()*/
 
             Player Player = drawInfo.drawPlayer;
             LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(Player);
-            for (int i = 0; i < 3; i++)
+            if (ModPlayer.FaintAromaPetal > 0)
             {
-                if (ModPlayer.FaintAromaPetal <= ModPlayer.FaintAromaPetalMax * i)
-                    continue;
+                for (int i = 0; i < 3; i++)
+                {
+                    if (ModPlayer.FaintAromaPetal <= ModPlayer.FaintAromaPetalMax * i)
+                        continue;
 
-                Texture2D texture = AlriunePetal.Value;
+                    Texture2D texture = AlriunePetal.Value;
+                    int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
+                    int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y);
+
+                    float rot = 0f;
+                    if (i == 1)
+                        rot += 90;
+                    else if (i == 2)
+                        rot += 45;
+                    Vector2 Offset = new Vector2(-24 * Player.direction, 0).RotatedBy(MathHelper.ToRadians(rot * Player.direction));
+                    Offset.Y -= 14;
+
+                    rot = MathHelper.ToRadians(rot * Player.direction + (Player.direction == 1 ? 0 : 180)) - MathHelper.ToRadians(135);
+
+                    float alpha = Terraria.Utils.GetLerpValue(0, 1f, ((ModPlayer.FaintAromaPetal - ModPlayer.FaintAromaPetalMax * i) / ModPlayer.FaintAromaPetalMax));
+                    Color color = Lighting.GetColor((int)(Player.position.X / 16), (int)(Player.position.Y / 16)) * alpha;
+
+                    DrawData data = new DrawData(texture, new Vector2(drawX, drawY) + Offset, null, color, rot, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
+                    drawInfo.DrawDataCache.Add(data);
+                }
+            }
+
+            if (ModPlayer.HarmonyAddiction)
+            {
+                Texture2D texture = MusicalAddiction.Value;
+                int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X) + Main.rand.Next(2);
+                int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y) - 32;
+
+                Color color = Color.White;
+
+                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), null, color, 0, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
+                drawInfo.DrawDataCache.Add(data);
+            }
+
+            if (ModPlayer.TodaysExpressionActive)
+            {
+                Texture2D texture = TodaysLook.Value;
+                int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
+                int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y) - 56;
+
+                Color color = Color.White;
+
+                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), texture.Frame(5, 1, ModPlayer.TodaysExpressionFace), color, 0, new Vector2(texture.Width / 10f, texture.Height / 2f), 0.75f, 0, 0);
+                drawInfo.DrawDataCache.Add(data);
+            }
+        
+            if (ModPlayer.BlackSwanNettleClothing > 0)
+            {
+                float clothing = ModPlayer.BlackSwanNettleClothing;
+                int currentActive = (int)Math.Ceiling(clothing);
+                Texture2D texture = BlackSwan.Value;
                 int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
                 int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y);
+                for (int i = 0; i < currentActive; i++)
+                {
+                    Vector2 pos = new Vector2(drawX, drawY) + new Vector2(30 + 3 * (float)Math.Sin(MathHelper.ToRadians(5 * (float)Main.timeForVisualEffects)), 0).RotatedBy(MathHelper.ToRadians(120 + 60 * i));
 
-                float rot = 0f;
-                if (i == 1)
-                    rot += 90;
-                else if (i == 2)
-                    rot += 45;
-                Vector2 Offset = new Vector2(-24 * Player.direction, 0).RotatedBy(MathHelper.ToRadians(rot * Player.direction));
-                Offset.Y -= 14;
+                    float rotation = (float)Math.Atan2(pos.Y - drawY, pos.X - drawX) + 2.35619f;
 
-                rot = MathHelper.ToRadians(rot * Player.direction + (Player.direction == 1 ? 0 : 180)) - MathHelper.ToRadians(135);
+                    Color color = Color.White;
+                    if (clothing - i < 1f)
+                    {
+                        float opacity = clothing - i / 1f;
+                        color *= 0.5f * opacity;
+                    }
 
-                float alpha = Terraria.Utils.GetLerpValue(0, 1f, ((ModPlayer.FaintAromaPetal - ModPlayer.FaintAromaPetalMax * i) / ModPlayer.FaintAromaPetalMax));
-                Color color = Lighting.GetColor((int)(Player.position.X / 16), (int)(Player.position.Y / 16)) * alpha;
-
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY) + Offset, null, color, rot, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
-                drawInfo.DrawDataCache.Add(data);
+                    DrawData data = new DrawData(texture, pos, null, color, rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
+                    drawInfo.DrawDataCache.Add(data);
+                }
             }
         }
     }

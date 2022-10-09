@@ -36,7 +36,7 @@ namespace LobotomyCorp.Projectiles
 			Projectile.direction = projOwner.direction;
 			Projectile.position.X = ownerMountedCenter.X - (float)(Projectile.width / 2);
             Projectile.position.Y = ownerMountedCenter.Y - (float)(Projectile.height / 2) + projOwner.height / 2;
-            if (projOwner.channel && projOwner.HeldItem.type == ModContent.ItemType<Items.Ruina.History.GreenStemS>())
+            if (projOwner.channel && projOwner.HeldItem.type == ModContent.ItemType<Items.Ruina.History.GreenStemR>())
             {
                 if (Projectile.ai[0] <= 240f * 6)
                 {

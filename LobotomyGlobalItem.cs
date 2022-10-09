@@ -38,5 +38,19 @@ namespace LobotomyCorp
                     player.QuickSpawnItem(player.GetSource_OpenItem(arg), ModContent.ItemType < Items.Christmas>());
             }
         }
+
+        public override void ModifyHitNPC(Item item, Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
+        {
+            LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
+            if (modPlayer.TodaysExpressionActive)
+                damage = (int)(damage * modPlayer.TodaysExpressionDamage());
+        }
+
+        public override void ModifyHitPvp(Item item, Player player, Player target, ref int damage, ref bool crit)
+        {
+            LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
+            if (modPlayer.TodaysExpressionActive)
+                damage = (int)(damage * modPlayer.TodaysExpressionDamage());
+        }
     }
 }

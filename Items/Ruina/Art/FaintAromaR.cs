@@ -14,17 +14,20 @@ namespace LobotomyCorp.Items.Ruina.Art
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
 			Tooltip.SetDefault("\"Bearing the hope to return to dust, it shall go back to the grave with all that desires to live.\"");
-            PassiveText = "Autumn's Passing - Hitting enemies or charging up grants a petal that dissapears overtime.\n" +
-                          "Spring's Genesis - Each petal enhances your normal attacks and damage\n" +
-                          "Magnificent End - Hitting an enemy with 3 petals removes them deal 300% of your weaponÅ's damage to all enemies around you\n" +
-                          "Doll Fashioned from the Earth - Negate any negative life regen while a petal is active\n" +
-                          "|Winter's Inception - 10% increased damage taken from enemies with increased 10% per petals";
+
             EgoColor = LobotomyCorp.WawRarity;
         }
 
 		public override void SetDefaults() 
 		{
-			Item.damage = 40;
+            PassiveText = "Autumn's Passing - Hitting enemies or charging up grants a petal that dissapears overtime.\n" +
+              "Spring's Genesis - Each petal enhances your normal attacks and damage\n" +
+              "Magnificent End - Hitting an enemy with 3 petals removes them deal 300% of your weaponÅ's damage to all enemies around you\n" +
+              "Doll Fashioned from the Earth - Negate any negative life regen while a petal is active\n" +
+              "|Winter's Inception - 10% increased damage taken from enemies with increased 10% per petals\n" +
+              "This Item is incomplete and unobtainable";
+
+            Item.damage = 40;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;

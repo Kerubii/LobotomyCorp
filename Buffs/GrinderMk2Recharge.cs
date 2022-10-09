@@ -19,7 +19,7 @@ namespace LobotomyCorp.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            LobotomyModPlayer.ModPlayer(player).GrinderMk2Recharging = true;
+            //LobotomyModPlayer.ModPlayer(player).GrinderMk2Recharging = true;
             if (player.buffTime[buffIndex] == 1)
             {
                 SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Helper_FullCharge"), player.Center);

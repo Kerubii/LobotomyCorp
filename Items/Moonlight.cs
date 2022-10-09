@@ -10,7 +10,7 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("The snakeÅfs open mouth represents the endless yearning for music.\n" +
+			Tooltip.SetDefault("The snakeÅ\'s open mouth represents the endless yearning for music.\n" +
                                "It temporarily invites the user to the world of trance.\n" +
                                "25% chance to apply Black Shields to nearby allies when used");
         }
@@ -53,7 +53,7 @@ namespace LobotomyCorp.Items
 			.AddTile(Mod, "BlackBox3")
 			.Register();
 
-			Recipe recipe = Mod.CreateRecipe(ItemID.TaxCollectorsStickOfDoom);
+			Recipe recipe = Recipe.Create(ItemID.TaxCollectorsStickOfDoom);
 			recipe.AddIngredient(ItemID.IronBar, 10);
 			recipe.AddTile(ItemID.Hellforge);
 			recipe.Register();

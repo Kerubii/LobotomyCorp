@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using LobotomyCorp.Utils;
 using Terraria.Audio;
 using Terraria.GameContent;
-
+/*
 namespace LobotomyCorp.Projectiles
 {
     public class GrinderMk2Cleaner : ModProjectile
@@ -87,11 +87,19 @@ namespace LobotomyCorp.Projectiles
                     Projectile.ai[1]++;
                     Vector2 offset = new Vector2(70 * dirX, 70 * dirY).RotatedBy(MathHelper.ToRadians(Projectile.ai[1] * 14 * player.direction));
                     targetPos = ownerMountedCenter + offset;
-                    speed = 24f;
+                    speed = 48;
                     LobotomyModPlayer.ModPlayer(player).GrinderMk2Battery--;
                     player.immune = true;
                     player.immuneNoBlink = true;
                     player.immuneTime = 5;
+
+                    if (order == 0)
+                    {
+                        if (Math.Abs(player.velocity.X) < 14f)
+                            player.velocity.X = player.direction * 14f;
+
+                        LiftPlayer(player, 100, -8f);
+                    }
                 }
                 else
                 {
@@ -133,6 +141,23 @@ namespace LobotomyCorp.Projectiles
             if (LobotomyModPlayer.ModPlayer(player).GrinderMk2Battery <= 0 || LobotomyModPlayer.ModPlayer(player).GrinderMk2Recharging)
             {
                 Projectile.Kill();
+            }
+
+        }
+
+        private void LiftPlayer(Player player, int distance, float speed = -2f)
+        {
+            Vector2 position = player.position;
+            position.Y += player.height;
+            if (Collision.SolidTiles(position, player.width, distance, true))
+            {
+                player.velocity.Y = -2f;
+
+                if (Collision.SolidTiles(position, player.width, distance + 2, true))
+                {
+                    player.velocity.Y -= player.gravity;
+                }
+                //Main.NewText("aeiou");
             }
         }
 
@@ -177,6 +202,9 @@ namespace LobotomyCorp.Projectiles
             frame = new Rectangle(0, 0, texture.Width, texture.Height);
             Main.EntitySpriteDraw(texture, pos, new Rectangle?(frame), lightColor, Projectile.rotation, origin, Projectile.scale, Projectile.direction == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 
+            if (order > 0)
+                return false;
+
             texture = Mod.Assets.Request<Texture2D>("Projectiles/GrinderMk2Battery").Value;
             ownerMountedCenter.Y -= 48;
             pos = ownerMountedCenter - Main.screenPosition;
@@ -197,9 +225,9 @@ namespace LobotomyCorp.Projectiles
             Trail.ColorStart = Color.Blue;
             Trail.ColorEnd = Color.Blue;
             Trail.Draw(Projectile);*/
-
+/*
             return false;
         }
     }
-
 }
+*/

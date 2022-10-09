@@ -1,0 +1,89 @@
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.Audio;
+
+namespace LobotomyCorp.Items.Ruina.Technology
+{
+	public class MagicBulletR : SEgoItem
+	{
+		public override void SetStaticDefaults() 
+		{
+			DisplayName.SetDefault("Magic Bullet"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			Tooltip.SetDefault(GetTooltip());
+		}
+
+		public override void SetDefaults() 
+		{
+			//Magic Bullet - Targets Nearest to Cursor
+			//Inevitable Bullet - Targets 4 nearby enemies except nearest to Cursor
+			//Captivating Bullet - Targets 3 Random enemies
+			//Ruthless Bullet - Targets 5 nearest enemies ignoring defense
+			//Silent Bullet - Targets 5 nearest enemies inflicting debuffs
+			//Flooding Bullets - Target Nearest to Cursor and shoots them 5 times
+			//Bullet of Despair - Targets Town NPCs and yourself
+
+			EgoColor = LobotomyCorp.WawRarity;
+
+			Item.damage = 270;
+			Item.DamageType = DamageClass.Ranged;
+			Item.width = 40;
+			Item.height = 40;
+			Item.useTime = 100;
+			Item.useAnimation = 100;
+			Item.useStyle = ItemUseStyleID.Shoot;
+			Item.knockBack = 6;
+			Item.value = 10000;
+			Item.rare = ItemRarityID.Purple;
+			//Item.UseSound = SoundID.Item11;
+			Item.noMelee = true;
+			Item.noUseGraphic = true;
+			Item.autoReuse = true;
+            Item.channel = true;
+
+			Item.shoot = ModContent.ProjectileType<Projectiles.Realized.MagicBulletRGun>();
+			Item.shootSpeed = 1f;
+		}
+
+        public override bool CanShoot(Player player)
+        {
+			return player.altFunctionUse != 2;
+        }
+
+        public override bool AltFunctionUse(Player player)
+        {
+			return true;
+        }
+
+        public override bool? UseItem(Player player)
+        {
+			if (Main.netMode != 2 && player.whoAmI == Main.myPlayer && player.altFunctionUse == 2)
+            {
+				LobotomyModPlayer.ModPlayer(player).MagicBulletRequest = FindNearest();
+            }
+			return true;
+        }
+
+		private int FindNearest()
+		{
+			int target = -1;
+			float distance = 160;
+			Vector2 compareTo = Main.MouseWorld;
+			foreach (NPC n in Main.npc)
+			{
+				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(compareTo) < distance)// && n.CanBeChasedBy(this))
+				{
+					distance = n.Center.Distance(compareTo);
+					target = n.whoAmI;
+				}
+			}
+
+			return target;
+		}
+
+		public override void AddRecipes() 
+		{
+		}
+	}
+}
