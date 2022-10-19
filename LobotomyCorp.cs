@@ -228,11 +228,11 @@ namespace LobotomyCorp
             float health = (float)t.life / (float)t.lifeMax;
             foreach (NPC n in Main.npc)
             {
-                float health2 = (float)t.life / (float)t.lifeMax;
+                float health2 = (float)n.life / (float)n.lifeMax;
                 if (n.active && !n.dontTakeDamage && !n.friendly && n.life > 0 && n.whoAmI != t.whoAmI && health2 < health && n.chaseable && n.CanBeChasedBy(p) && n.realLife < 0)
                 {
                     valid = false;
-                    Main.NewText(n.type);
+                    //Main.NewText(n.type);
                     break;
                 }
             }

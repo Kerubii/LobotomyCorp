@@ -148,7 +148,14 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
         public override void AddRecipes() 
 		{
-		}
+            CreateRecipe()
+               .AddIngredient(ModContent.ItemType<SolemnLament>())
+               .AddIngredient(ItemID.SoulofNight, 6)
+               .AddIngredient(ItemID.SoulofLight, 6)
+               .AddIngredient(ItemID.Ectoplasm, 8)
+               .AddTile<Tiles.BlackBox3>()
+               .Register();
+        }
 
         public override Vector2? HoldoutOffset()
         {
@@ -293,7 +300,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
     {
         public override void Initialize()
         {
-            Opacity = 0.5f;
+            Opacity = 0.3f;
             FilterTexture = SolemnLamentR.screenWhiteHit;           
         }
 
@@ -309,7 +316,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
     {
         public override void Initialize()
         {
-            Opacity = 0.5f;
+            Opacity = 0.3f;
             FilterTexture = SolemnLamentR.screenBlackHit;
         }
 

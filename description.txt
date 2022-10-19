@@ -1,4 +1,4 @@
-Lobotomy Corporation
+﻿Lobotomy Corporation
 -Adds All, Yes ALL, Lobcorp E.G.O Weapons stuff, from Zayin to Aleph for start of the game to early hardmode
 -Lots of incomplete stuff
 -Not that good for a playthrough, yet
@@ -10,3 +10,6 @@ Lobotomy Corporation
 *Actual roaming abnormalities that shows up under certain circumstances
 *Capturing and Extracting Enkephalin from Abnormalities
 *Ordeal Events
+
+Special Thanks to
+晨芸 - Providing Sprites

@@ -21,7 +21,7 @@ namespace LobotomyCorp.Buffs
             LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
             if (modPlayer.BlackSwanNettleClothing < 6)
             {
-                modPlayer.BlackSwanNettleClothing += 0.0033f;
+                modPlayer.BlackSwanNettleAdd(0.00333f);
             }
             else
                 modPlayer.BlackSwanNettleClothing = 6;

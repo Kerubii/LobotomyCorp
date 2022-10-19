@@ -10,14 +10,14 @@ namespace LobotomyCorp.Items.Ruina.Natural
         public int ArcanaManaCost = 500;
 
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("In the name of Love and Justice~ Here comes Magical Girl!");
+			Tooltip.SetDefault(GetTooltip());
             
             //Item.staff[Item.type] = true;
         }
 
         public override void SetDefaults()
         {
-            EgoColor = LobotomyCorp.WawRarity;
+            EgoColor = LobotomyCorp.AlephRarity;
             Item.damage = 30;
 			Item.DamageType = DamageClass.Generic;
 			Item.width = 20;

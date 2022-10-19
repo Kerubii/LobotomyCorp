@@ -79,6 +79,21 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
         public override void AddRecipes() 
 		{
-		}
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<GrinderMk4>())
+            .AddIngredient(ItemID.SoulofFright, 2)
+            .AddIngredient(ItemID.IronBroadsword, 4)
+            .AddIngredient(ItemID.Wire, 150)
+            .AddTile<Tiles.BlackBox3>()
+            .Register();
+
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<GrinderMk4>())
+            .AddIngredient(ItemID.SoulofFright, 2)
+            .AddIngredient(ItemID.LeadBroadsword, 4)
+            .AddIngredient(ItemID.Wire, 150)
+            .AddTile<Tiles.BlackBox3>()
+            .Register();
+        }
 	}
 }

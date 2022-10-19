@@ -22,7 +22,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			Item.width = 70;
 			Item.height = 70;
 
-			Item.damage = 85;
+			Item.damage = 132;
 			Item.DamageType = DamageClass.Melee;
 			Item.knockBack = 2.3f;
 			Item.useTime = 28;
@@ -50,6 +50,17 @@ namespace LobotomyCorp.Items.Ruina.Literature
         {
 			if (!LobotomyModPlayer.ModPlayer(player).BlackSwanBrokenDream)
 				player.AddBuff(ModContent.BuffType<Buffs.NettleClothing>(), 60);
+			if (player.altFunctionUse == 2)
+            {
+				Item.useStyle = ItemUseStyleID.Swing;
+				Item.shoot = ProjectileID.None;
+			}
+			else
+            {
+				Item.useStyle = ItemUseStyleID.Shoot;
+				Item.shoot = ModContent.ProjectileType<Projectiles.Realized.BlackSwanR>();
+			}
+
             return base.UseItem(player);
         }
 

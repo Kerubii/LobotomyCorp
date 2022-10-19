@@ -64,10 +64,11 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
         public override bool OnPickup(Player player)
         {
+            /*
             LobotomyModPlayer.ModPlayer(player).HarmonyTime += 420;
             if (LobotomyModPlayer.ModPlayer(player).HarmonyTime > 600)
                 LobotomyModPlayer.ModPlayer(player).HarmonyTime = 600;
-            player.AddBuff(ModContent.BuffType<Buffs.MusicalAddiction>(), LobotomyModPlayer.ModPlayer(player).HarmonyTime, true);
+            player.AddBuff(ModContent.BuffType<Buffs.MusicalAddiction>(), LobotomyModPlayer.ModPlayer(player).HarmonyTime, true);*/
             player.AddBuff(ModContent.BuffType<Buffs.Satiated>(), 300, true);
             return false;
         }

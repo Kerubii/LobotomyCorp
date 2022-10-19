@@ -112,6 +112,7 @@ namespace LobotomyCorp.NPCs.RedMist
             //ChangeAnimation(AnimationState.TwilightChase);
             //return;
             //return;
+            /*
             if (NPC.ai[0] == -1)
             {
                 NPC.ai[0] = 2;
@@ -121,7 +122,7 @@ namespace LobotomyCorp.NPCs.RedMist
                 ChangeAnimation(AnimationState.Phase4Transition);
                 Talk("Shift3", NPC.spriteDirection);
                 //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<RedMistEye>(), 0, 0, 0, NPC.whoAmI);
-            }
+            }*/
 
             //First Phase - Lobcorp Phase
             if (NPC.ai[0] == 0)

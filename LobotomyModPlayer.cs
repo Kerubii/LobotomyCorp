@@ -122,7 +122,7 @@ namespace LobotomyCorp
 
             if (Player.itemAnimation == 0)
                 ChargeWeaponHelper = 0;
-            
+
             RedShield = false;
             WhiteShield = false;
             BlackShield = false;
@@ -158,6 +158,8 @@ namespace LobotomyCorp
             giftFourthMatchFlame = false;
             MatchstickBurn = false;
 
+            if (MagicBulletRequest >= 0 && Player.HeldItem.type != ModContent.ItemType<Items.Ruina.Technology.MagicBulletR>())
+                MagicBulletRequest = -1;
             MagicBulletDarkFlame = false;
 
             NihilActive = false;
@@ -228,7 +230,7 @@ namespace LobotomyCorp
             }
             //GrinderBatteryHandler
             if (GrinderMk2Recharging)
-            {                
+            {
                 if (GrinderMk2Battery < 0)
                     GrinderMk2Battery = 0;
                 GrinderMk2Battery += 8;
@@ -240,7 +242,7 @@ namespace LobotomyCorp
 
                 if (Main.rand.Next(8) == 0)
                 {
-                    Projectiles.Realized.GrinderMk2Cleaner2.SpawnTrailDust(Player.position, Player.width, Player.height, ModContent.DustType<Misc.Dusts.ElectricTrail>(), new Vector2(Main.rand.Next(-2,3), -1f), 0.5f, 5);
+                    Projectiles.Realized.GrinderMk2Cleaner2.SpawnTrailDust(Player.position, Player.width, Player.height, ModContent.DustType<Misc.Dusts.ElectricTrail>(), new Vector2(Main.rand.Next(-2, 3), -1f), 0.5f, 5);
                 }
             }
 
@@ -301,7 +303,7 @@ namespace LobotomyCorp
                 Player.controlUp = false;
             }
 
-            if (GrinderMk2Active && GrinderMk2Dash > 0 && 
+            if (GrinderMk2Active && GrinderMk2Dash > 0 &&
                 Player.HeldItem.type != ModContent.ItemType<Items.Ruina.Technology.GrinderMk52R>())
             {
                 Player.controlUseItem = false;
@@ -321,7 +323,12 @@ namespace LobotomyCorp
                     TodayExpressionChangeFace(Main.rand.Next(5));
                 }
             }
-        }
+
+            if (HarmonyAddiction && !HarmonyConnected)
+            {
+                Player.statDefense -= 15;
+            }
+        }   
 
         public override void PostUpdateMiscEffects()
         {
@@ -618,6 +625,8 @@ namespace LobotomyCorp
                 }
                 else
                 {
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Sis_Trans") with { Volume = 0.25f }, Player.Center);
+
                     damage -= (int)(damage * 0.75f);
                 }
             }
@@ -691,6 +700,27 @@ namespace LobotomyCorp
                     return 1.2f;
                 case 4://Angry
                     return 1.5f;
+            }
+        }
+
+        public void BlackSwanNettleAdd(float val)
+        {
+            int nextVal = (int)Math.Ceiling(BlackSwanNettleClothing);
+            float oldVal = BlackSwanNettleClothing;
+            BlackSwanNettleClothing += val;
+            if (nextVal != 0 && BlackSwanNettleClothing > nextVal && oldVal < nextVal)
+            {
+                //SpecialEffects with Nettle Clothing
+                Vector2 dustPos = Player.MountedCenter + new Vector2(30 + 3 * (float)Math.Sin(MathHelper.ToRadians(5 * (float)Main.timeForVisualEffects)), 0).RotatedBy(MathHelper.ToRadians(60 + 60 * nextVal - 1));
+                for (int i = 0; i < 8; i++)
+                {
+                    int dustType = Main.rand.Next(2, 4);
+                    Vector2 dustVel = new Vector2(1f * (float)Math.Cos(6.28f * (i / 8f)), 1f * (float)Math.Sin(6.28f * (i / 8f)));
+
+                    Dust.NewDustPerfect(dustPos, dustType, dustVel).noGravity = true;
+                }
+
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/BlackSwan_Revive") with { Volume = 0.1f }, Player.Center);
             }
         }
 

@@ -94,6 +94,24 @@ namespace LobotomyCorp.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
 		{
+			foreach (Player p in Main.player)
+			{
+				if (p.active && (p.whoAmI == Projectile.owner || p.team == Main.player[Projectile.owner].team) && !p.dead)
+				{
+					LobotomyModPlayer.ModPlayer(p).HarmonyTime += 30;
+					if (LobotomyModPlayer.ModPlayer(p).HarmonyTime > 600)
+						LobotomyModPlayer.ModPlayer(p).HarmonyTime = 600;
+					p.AddBuff(ModContent.BuffType<Buffs.MusicalAddiction>(), LobotomyModPlayer.ModPlayer(p).HarmonyTime, true);
+				}
+			}
+			foreach (NPC n in Main.npc)
+			{
+				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(target.Center) < 500)
+				{
+					n.AddBuff(ModContent.BuffType<Buffs.CrookedNotes>(), 300);
+				}
+			}
+
 			target.AddBuff(ModContent.BuffType<Buffs.CrookedNotes>(), 600);
 
 			for (int i = 0; i < 3; i++)

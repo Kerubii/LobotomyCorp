@@ -28,7 +28,7 @@ Mods: {
 				ItemTooltip: "Its memories began with a warm hug."
 				PassiveList:
 					'''
-					Display of Affection - Attacking the same enemy three times in a row marks them, unmarks enemies when far away
+					Display of Affection - Attacking the same enemy three times in a row marks them, unmarks enemies when far away or switching weapons
 					Happy Memories - Attacking the same enemy in a row gives 1% increased contact damage resistance against them, up to 40%. Lost when switching targets
 					Nostalgic Embrace - Alternate attack to hug a marked enemy for a short while based on Happy Memories, become invincible if Happy Memories is max.
 					|Unattended - After marking an enemy, Unable to hit any other enemies other than the marked enemy
@@ -98,10 +98,10 @@ Mods: {
 				ItemTooltip: "But nothing could compare to the music it makes when it eats a human."
 				PassiveList:
 					'''
-					Harmony of Despair - Hitting enemies produces Harmony Notes that gives "Musical Satiation" buff
-					Let's Make Music! - Hitting an enemy gives all allies and enemies "Musical Addiction" buff
+					Harmony of Despair - Hitting enemies produces Harmony Notes that gives "Satiated" buff, negating negative effects of Musical Addiction
+					Let's Make Music! - Hitting an enemy gives all allies and nearby enemies "Musical Addiction" buff
 					Performance - Alternate attack shoots a soundwave that decreases defense. Shoots three while having "Musical Addiction"
-					|Musical Addiction - 10% increased damage, 8% increased attack speed, -15 defense and decreases life regeneration
+					|Musical Addiction - 12% increased damage, 8% increased attack speed, -15 defense and decreases life regeneration
 					'''
 			}
 
@@ -121,8 +121,8 @@ Mods: {
 				PassiveList:
 					'''
 					Magic Bullet - Each shot has a special damage, target and property. The bullets always hits its mark
-					Request - Mark a target, The bullets only targets the marked target
-					Dark Flame - After the Seventh shot, Gain Dark Flame buff
+					Request - Mark a target, The bullets only targets the marked target. Removed when switching weapons
+					Dark Flame - After the Seventh shot, Gain Dark Flame buff, boosting this weapon's damage by 70%
 					|The Seventh Bullet - The 7th Bullet always targets Town NPCs. If there is none, targets allies. Pierces the user's heart if there are none left
 					'''
 			}
@@ -170,10 +170,11 @@ Mods: {
 				ItemTooltip: "She was so sad that she had to leave her dear friends behind, so she came up with a brilliant idea!"
 				PassiveList:
 					'''
-					Huuuuge Gift!!! - Send out a Huge Gift! Gift contains Friends! Don't tell anyone
-					Friend - Gifts make Friends appear!
-					Funny Prank - Friends sometimes comes out of Gifts on their own
-					|Being Lonely is Sad - If the last Friend despawn, 100% increased damage taken until a new Friend appears
+					Huuuuge Gift!!! - If no enemies have any Gifts, use all Mana to send a Huge Gift that give gifts up to 5 enemies
+					Suprise Gift - Hitting an enemy will mark them with a 
+					Funny Prank - After dealing enough indirect damage (with allies or minions) against enemies with Gift. The Gift explodes and deals damage
+					Friend - Friends spawn from Gift explosion and becomes a minion, after dealing enough damage they explode
+					|Being Lonely is Sad - If the last Friend explodes, 100% increased damage taken until death or a new Friend spawns
 					Incomplete and unobtainable
 					'''
 			}
@@ -182,10 +183,10 @@ Mods: {
 				ItemTooltip: "What happens when the black swan wakes up from dreaming of a white swan?"
 				PassiveList:
 					'''
-					Clothing of Nettle - Gain Nettles overtime. A Nettle reduces incoming damage by 75% and consumes it, Attackers also take damage
+					Clothing of Nettle - Gain a Nettle after 5 seconds, Up to 6. A Nettle reduces incoming damage by 75% and consumes it, Attackers also take damage
 					Shriek of Broken Dreams - While having 5 or more Nettles, or Broken Dream; Alternate Attack transforms to Shriek, damaging enemies around you
 					Gooey Waste - Leave a trail of debuffing waste while having 2 or more Nettles, or Broken Dream. Spreads sporatically while Shrieking
-					Well-worn Parasol - Poking or Swinging this weapon deflects Projectiles when timed correctly, Poking can be held to deflect longer
+					Well-worn Parasol - Poking or Swinging this weapon deflects Projectiles when timed correctly, Poking can be held to deflect for a longer time
 					|Broken Dream - Getting hit without a Nettle disables Clothing of Nettle for 30 seconds and increases damage taken by 30%
 					Incomplete and unobtainable
 					'''
@@ -247,7 +248,7 @@ Mods: {
 					Ever-repeating Performance - Alternate attack to start a Performance, Automatically moves to the next movement
 					Finale - During Finale, all damage done by this weapon during the peformance is distributed to all enemies, Fully heal all allies
 					Fervent Adoration - Enemy Projectiles can hit other Enemies during a Performance
-					|From the Beginning - After performance ends, start again. If the Performance is stopped before reaching Finale, the user gains a debuff
+					|From the Beginning - After performance ends, start again. If the Performance is stopped except during Finale, the user gains a debuff
 					'''
 			}
 			
@@ -302,7 +303,7 @@ Mods: {
 			}
 
 			Nihil: {
-				ItemTooltip: "If you’re confused because there doesn’t seem to be a correct method at the moment, just trust your intuition!"
+				ItemTooltip: "If you're confused because there doesn't seem to be a correct method at the moment, just trust your intuition!"
 				PassiveList:
 					'''
 					All Returns to Nihil - When held or equipped, Grants Flight and major increase to defense, speed, life regeneration, and defense
@@ -327,7 +328,7 @@ Mods: {
 					Prey - First enemy hit by a bullet is marked as Prey and shows its general direction
 					Rudded Welts - Gain increased damage depending on health loss, up to 20% at 25% health
 					Vengeance - Getting hit by Prey temporarily increases damage by 20%
-					|Fury with no Outlet - When a Prey is not killed by the player or despawns
+					|Fury with no Outlet - When a Prey is not killed by the player or despawns, be unable to use any other weapons or items for 1 minute. Can hit allies
 					'''
 			}
 
@@ -336,8 +337,9 @@ Mods: {
 				PassiveList:
 					'''
 					Uncontrollable Instinct - Dealing damage inflicts Scars
+					Scars - Up to 20% Increased damage taken from this weapon, Maximum of 10 Stacks
 					Howl - Alternate attack to Howl, Rupturing all inflicted Scars and deals damage
-					Claws of Savagery - After dealing enough damage with Wounds, temporarily turn into an invincible black mist for 5 seconds and deal contact damage
+					Claws of Savagery - After dealing enough damage by Rupturing Scars, temporarily turn into an invincible black mist for 5 seconds and deal contact damage
 					|Role of the Wolf - After using this weapon, be unable to use any other weapons before activating Claws of Savagery
 					'''
 			}
@@ -359,8 +361,8 @@ Mods: {
 				PassiveList:
 					'''
 					Banquet of Blood - Alternate attack to attack everything currently on screen and consume 20% of your current health, if below 50% health it costs 10% instead
-					Vampirism - All attacks heal you
-					Wine - If there are players on your team, give them Vampirism and Fear of Water
+					Vampirism - All attacks heal you and inflicts Vampirism and Fear of Water
+					Wine - If there are allies, apply Vampirism and Fear of Water to allies when using Banquet of Blood
 					|Fear of Water - Health constantly drains, this weapon's attacks changes under 50% health and returns to normal when reaching 75% health
 					'''
 			}
@@ -372,7 +374,7 @@ Mods: {
 					heLLo? - Shoot a piercing projectile infront of you
 					GoDdByE - deal 200% more damage when hitting enemies on your attack's sweetspot
 					Mimic - Killing an enemy restores 20% of your health and grants A New Shell buff, disabling Shell
-					|Wear Shell - Gain the debuff Craving for 1 minute when using this ewapon. When the debuff times out, the user dies
+					|Wear Shell - Gain the debuff Craving for 1 minute when using this weapon. When the debuff times out, the user dies
 					This Item is incomplete and unobtainable
 					'''
 			}
@@ -402,7 +404,7 @@ Mods: {
 			}
 
 			Dependence: {
-				ItemTooltip: "Can I follow you forever? So I can tear them apart…"
+				ItemTooltip: "Can I follow you forever? So I can tear them apart..."
 				PassiveList:
 					'''
 					Exoneration - While being near an ally, Gain Courage after 5 seconds
@@ -418,7 +420,7 @@ Mods: {
 					'''
 					You... Wicked Wizard! - Drop a house
 					Home - create yellow brick roads, gain buff on it
-					A Road Walked Together - create 3 minions depending on minion slots, only attacks on yellow brick, if a player ally is present with a corresponding ego weapon, buff them instead
+					A Road Walked Together - create 3 minions depending on minion slots, only attacks while on yellow brick, if a player ally is present with a corresponding ego weapon, buff them instead
 					|On the Way Home - gain debuff outside yellow brick road
 					'''
 			}
@@ -456,7 +458,7 @@ Mods: {
 					Watchful Eyes - Mark enemies within the darkness, marked enemies have higher chance to target you
 					Eternally Lit Lamp - This weapon automatically attacks nearby marked enemies when held
 					Salvation - If an non boss enemy is targetting you and is near, has a 5% chance to instantly execute the enemy
-					|Sleepy Eyes - 
+					|Sleepy Eyes - If there is no valid target 
 					'''
 			}
 
@@ -466,7 +468,7 @@ Mods: {
 					'''
 					PUNISHMENT!! - Alternate attack to counter, inflicting 1000% increased damage back
 					Punishing Beak - Mark enemies when being hit and activate punishment mode
-					Small Flutters - When countering an attack, nullify all damage
+					Small Flutters - When countering an attack, nullify all damage while countering
 					|Misdeeds Not Allowed! - Can only hit marked enemies during punishment mode
 					'''
 			}
@@ -511,8 +513,9 @@ Mods: {
 				ItemTooltip: "Silence does not always bring peace."
 				PassiveList:
 					'''
-					Time - Alternate attack to stop time for 5 seconds
-					The Thirteenth Toll - At the thirteenth Time Stop. Gain invincibility, Extra 5 seconds and 
+					Time - Alternate attack to stop time for 5 seconds and gain Silence
+					Inevitable Demise - When hitting an enemy 13 times, reduce Silence by 1
+					The Thirteenth Toll - While having 13 Silence. Gain invincibility, 5 extra time stop seconds and 1300% increased damage on this weapon
 					|Silence - When Time is stopped, reduce 1/13th of your maximum health until death
 					'''
 			}
@@ -521,9 +524,10 @@ Mods: {
 				ItemTooltip: "Let us meet again as stars."
 				PassiveList:
 					'''
-					Martyr - a
-					Penance - a
-					|A Nostalgic Sound - a
+					Into the Star's Embrace - Alternate attack to summon Blue Star temporarily for Mana. It sends shockwaves 3 times before dissapearing, dealing damage
+					Penance - Enemies have a chance to be sucked when damaged by Blue Star 
+					A Nostalgic Sound - All enemies sucked by the Star heals and restores mana
+					|Martyr - The user is vulnerable to Blue Star and reduces its damage by 75%	
 					'''
 			}
 
@@ -532,7 +536,7 @@ Mods: {
 				PassiveList:
 					'''
 					Confession - Heal 100% Health after using this weapon
-					|Penance - This weapon is unusable for 1 minute
+					|Penance - This weapon is unusable for 1 minute after a succesful Confession
 					'''
 			}
 
@@ -550,7 +554,7 @@ Mods: {
 			#General
 
 			WristCutter: {
-				ItemTooltip: a
+				ItemTooltip: "Many hands float in the bath. They are the hands of the people I once loved."
 				PassiveList:
 					'''
 					Sinking - Alternate attack to hit all enemies with a Pale Hand attached
@@ -561,7 +565,7 @@ Mods: {
 			}
 
 			Aspiration: {
-				ItemTooltip: a
+				ItemTooltip: "Excessive aspiration would bring about unwarranted frenzy."
 				PassiveList:
 					'''
 					Beats of Aspiration - Buff all allies with Urging
@@ -576,14 +580,14 @@ Mods: {
 				PassiveList:
 					'''
 					Eliminate Error - Alternate attack to do a Heavy attack, Disables the use of all items for 5 seconds
-					Learning - Damage is changed to the contact damage of enemy hit by Eliminate Error increased by 120%
+					Learning - Damage of this weapon is changed to the contact damage of enemy hit by Eliminate Error increased by 120%
 					Curiosity - a
-					|Lies - a
+					|Lies - After using Eliminate Error, a random weapon in your hotbar gains a randomized stat with a of range 10% - 120% until death which is displayed incorrectly
 					'''
 			}
 
 			FrostSplinter: {
-				ItemTooltip: a
+				ItemTooltip: "The snow is steadily melting... Perhaps because spring is coming, or it might be the palace collapsing."
 				PassiveList:
 					'''
 					Blizzard - Alternate attack to summon a Blizzard

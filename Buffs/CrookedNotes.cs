@@ -14,12 +14,14 @@ namespace LobotomyCorp.Buffs
         public override void Update(Player player, ref int buffIndex)
         {
             player.GetDamage(DamageClass.Generic) += 0.08f;
+
             LobotomyModPlayer.ModPlayer(player).HarmonyConnected = true;
         }
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.defense -= 16;
+            npc.defense -= 15;
+            npc.GetGlobalNPC<LobotomyGlobalNPC>().HarmonyMusicalAddiction = true;
         }
     }
 }

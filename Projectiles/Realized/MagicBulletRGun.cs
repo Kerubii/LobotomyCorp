@@ -256,7 +256,7 @@ namespace LobotomyCorp.Projectiles.Realized
 		}
 
 		//Magic Bullet - Targets Nearest to Cursor
-		//Inevitable Bullet - Targets 4 nearby enemies except nearest to Cursor
+		//Inevitable Bullet - Targets 4 nearby enemies except nearest to Cursor, when none near target nearest
 		//Captivating Bullet - Targets 3 Random enemies
 		//Ruthless Bullet - Targets 5 nearest enemies ignoring defense
 		//Silent Bullet - Targets 5 nearest enemies inflicting debuffs
@@ -271,7 +271,7 @@ namespace LobotomyCorp.Projectiles.Realized
 			Vector2 compareTo = Main.MouseWorld;
 			foreach (NPC n in Main.npc)
 			{
-				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(compareTo) < distance)// && n.CanBeChasedBy(this))
+				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(compareTo) < distance && n.CanBeChasedBy(this))
 				{
 					distance = n.Center.Distance(compareTo);
 					target = n.whoAmI;
@@ -288,7 +288,7 @@ namespace LobotomyCorp.Projectiles.Realized
 			Vector2 compareTo = Main.MouseWorld;
 			foreach (NPC n in Main.npc)
 			{
-				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(compareTo) < distance)// && n.CanBeChasedBy(this))
+				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(compareTo) < distance && n.CanBeChasedBy(this))
 				{
 					int localDistance = (int)n.Center.Distance(compareTo);
 					validTargetList.Add(n.whoAmI, localDistance);
@@ -307,6 +307,8 @@ namespace LobotomyCorp.Projectiles.Realized
 				else
 					targets[i] = validTargetList.ElementAt(i + 1).Key;
             }
+			if (targets[0] < 0)
+				targets[0] = FirstSixthBullet(player);
 			return targets;
 		}
 
@@ -317,7 +319,7 @@ namespace LobotomyCorp.Projectiles.Realized
 			float distance = EFFECTIVEDISTANCE;
 			foreach (NPC n in Main.npc)
 			{
-				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(player.Center) < distance)// && n.CanBeChasedBy(this))
+				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(player.Center) < distance && n.CanBeChasedBy(this))
 				{
 					validTargetList.Add(n.whoAmI);
 				}
@@ -344,7 +346,7 @@ namespace LobotomyCorp.Projectiles.Realized
 			Vector2 compareTo = Main.MouseWorld;
 			foreach (NPC n in Main.npc)
 			{
-				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(compareTo) < distance)// && n.CanBeChasedBy(this))
+				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(compareTo) < distance && n.CanBeChasedBy(this))
 				{
 					int localDistance = (int)n.Center.Distance(player.Center);
 					validTargetList.Add(n.whoAmI, localDistance);

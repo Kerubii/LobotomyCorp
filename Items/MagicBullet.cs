@@ -46,6 +46,12 @@ namespace LobotomyCorp.Items
 
         public override void AddRecipes()
         {
-        }
+			CreateRecipe()
+			.AddIngredient(ItemID.Sapphire, 3)
+			.AddIngredient(ItemID.ShadowScale, 20)
+			.AddIngredient(ItemID.DemoniteBar, 5)
+			.AddTile(Mod, "BlackBox2")
+			.Register();
+		}
     }
 }

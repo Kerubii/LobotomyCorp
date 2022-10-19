@@ -8,13 +8,13 @@ namespace LobotomyCorp.Buffs
         public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Musical Addiction");
-			Description.SetDefault("I need to listen to that song at any cost");
-		}
+			Description.SetDefault("Never stop performing until the body crumbles to dust");
+        }
 
         public override void Update(Player player, ref int buffIndex)
         {
             player.GetDamage(DamageClass.Generic) += 0.12f;
-            player.endurance -= 0.2f;
+            player.GetAttackSpeed(DamageClass.Generic) += 0.08f;
             LobotomyModPlayer.ModPlayer(player).HarmonyAddiction = true;
         }
     }

@@ -116,8 +116,26 @@ namespace LobotomyCorp.Projectiles.Realized
 						proj.velocity = Projectile.velocity * 3f;
 						proj.friendly = true;
 						proj.owner = Projectile.owner;
-						proj.damage = Projectile.damage;
+						if (proj.damage > Projectile.damage * 2)
+							proj.damage = Projectile.damage * 2;
+						else if (proj.damage < Projectile.damage / 2)
+							proj.damage = Projectile.damage / 2;
 						proj.GetGlobalProjectile<LobotomyGlobalProjectile>().BlackSwanReflected = true;
+
+						for (int i = 0; i < 16; i++)
+                        {
+							int dustType = Main.rand.Next(2, 4);
+							Vector2 dustVel = new Vector2(2f * (float)Math.Cos(6.28f * (i / 16f)), 4f * (float)Math.Sin(6.28f * (i / 16f)));
+							dustVel = dustVel.RotatedBy(Projectile.velocity.ToRotation());
+
+							Dust.NewDustPerfect(Projectile.Center, dustType, dustVel).noGravity = true;
+							if (Main.rand.NextBool(5))
+                            {
+								Dust.NewDustPerfect(proj.Center, dustType, Projectile.velocity / 4f).noGravity = true;
+							}
+						}
+
+						SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Sis_Reflect") with { Volume = 0.25f }, Projectile.Center);
 						if (Projectile.ai[1] == 0)
 						{
 							Projectile.ai[1] = 120;

@@ -26,7 +26,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
 			EgoColor = LobotomyCorp.WawRarity;
 
-			Item.damage = 270;
+			Item.damage = 320;
 			Item.DamageType = DamageClass.Ranged;
 			Item.width = 40;
 			Item.height = 40;
@@ -84,6 +84,13 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
 		public override void AddRecipes() 
 		{
+			CreateRecipe()
+			   .AddIngredient(ModContent.ItemType<MagicBullet>())
+			   .AddIngredient(ItemID.SniperRifle, 1)
+			   .AddIngredient(ItemID.SoulofSight, 2)
+			   .AddIngredient(ItemID.Teleporter, 2)
+			   .AddTile<Tiles.BlackBox3>()
+			   .Register();
 		}
 	}
 }

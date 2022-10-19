@@ -21,7 +21,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 		{
 			EgoColor = LobotomyCorp.HeRarity;
 
-            Item.damage = 34;
+            Item.damage = 42;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
@@ -42,6 +42,12 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			Item.autoReuse = true;
             Item.channel = true;
 		}
+
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+			if (player.altFunctionUse == 2)
+				damage = (int)(damage * 0.7f);
+        }
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
@@ -84,6 +90,13 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
         public override void AddRecipes() 
 		{
+			CreateRecipe()
+			.AddIngredient(ModContent.ItemType<Harmony>())
+			.AddIngredient(ItemID.HallowedBar, 5)
+			.AddIngredient(ItemID.CarbonGuitar)
+			.AddIngredient(ItemID.Chain, 12)
+			.AddTile<Tiles.BlackBox3>()
+			.Register();
 		}
 	}
 }

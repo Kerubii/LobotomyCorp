@@ -21,6 +21,8 @@ namespace LobotomyCorp
         public int BeakTarget = 0;
 		public bool BODExecute = false;
 
+        public bool HarmonyMusicalAddiction = false;
+
         public bool MatchstickBurn = false;
         public int MatchstickBurnTime = 0;
 
@@ -47,6 +49,8 @@ namespace LobotomyCorp
         {
             if (BeakTarget > 0)
                 BeakTarget--;
+
+            HarmonyMusicalAddiction = false;
 
             MatchstickBurn = false;
 
@@ -118,6 +122,12 @@ namespace LobotomyCorp
 
         public override void UpdateLifeRegen(NPC npc, ref int damage)
         {
+            if (HarmonyMusicalAddiction)
+            {
+                npc.lifeRegen = -12;
+                damage += 5;
+            }
+
             if (MatchstickBurn)
             {
                 npc.lifeRegen -= MatchstickBurnTime * 2;
@@ -139,6 +149,16 @@ namespace LobotomyCorp
                 npc.lifeRegen -= 10;
                 damage += 2;
             }
+        }
+
+        public override void ModifyHitPlayer(NPC npc, Player target, ref int damage, ref bool crit)
+        {
+            if (HarmonyMusicalAddiction)
+            {
+                damage = (int)(damage * 1.1f);
+            }
+
+            base.ModifyHitPlayer(npc, target, ref damage, ref crit);
         }
 
         public override void DrawEffects(NPC npc, ref Color drawColor)

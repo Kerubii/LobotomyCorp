@@ -29,14 +29,14 @@ namespace LobotomyCorp.Items.Ruina.History
                           "Nostalgic Embrace - Alternate attack to hug a marked enemy for a short while based on Happy Memories, become invincible if Happy Memories is max." +
                           "|Unattended - After marking an enemy, Unable to hit any other enemies other than the marked enemy";*/
 
-            EgoColor = LobotomyCorp.TethRarity;
+            EgoColor = LobotomyCorp.HeRarity;
 
-            Item.damage = 60;
+            Item.damage = 76;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
-			Item.useTime = 24;
-			Item.useAnimation = 24;
+			Item.useTime = 20;
+			Item.useAnimation = 20;
 			Item.useStyle = -1;
 			Item.knockBack = 6;
 			Item.value = 10000;
@@ -102,6 +102,7 @@ namespace LobotomyCorp.Items.Ruina.History
         {
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<BearPaw>())
+            .AddIngredient(ItemID.SoulofMight, 2)
             .AddIngredient(ItemID.BrownString)
             .AddIngredient(ItemID.AncientCloth, 2)
             .AddTile<Tiles.BlackBox3>()

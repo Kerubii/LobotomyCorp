@@ -98,12 +98,20 @@ namespace LobotomyCorp.Projectiles
             {
                 if (p.active && (p.whoAmI == Projectile.owner || p.team == Main.player[Projectile.owner].team) && !p.dead)
                 {
-                    LobotomyModPlayer.ModPlayer(p).HarmonyTime += 5;
+                    LobotomyModPlayer.ModPlayer(p).HarmonyTime += 90;
                     if (LobotomyModPlayer.ModPlayer(p).HarmonyTime > 600)
                         LobotomyModPlayer.ModPlayer(p).HarmonyTime = 600;
                     p.AddBuff(ModContent.BuffType<Buffs.MusicalAddiction>(), LobotomyModPlayer.ModPlayer(p).HarmonyTime, true);
                 }
             }
+            foreach (NPC n in Main.npc)
+            {
+                if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(target.Center) < 1000)
+                {
+                    n.AddBuff(ModContent.BuffType<Buffs.CrookedNotes>(), 300);
+                }
+            }
+
             target.immune[Projectile.owner] = 15 - (int)(13 * (Projectile.ai[0] / 60f));
             for (int i = 0; i < 3; i++)
             {
