@@ -126,6 +126,18 @@ namespace LobotomyCorp.Items.Ruina.Technology
                     Main.projectile[p].localAI[0] = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? 1 : 2;
                     Main.projectile[p].GetGlobalProjectile<LobotomyGlobalProjectile>().Lament = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? (byte)1 : (byte)2;
                 }
+                for (int i = 0; i < 10; i++)
+                {
+                    int dustType = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? 91 : 109;
+
+                    Vector2 tempVel = velocity;
+                    tempVel *= Main.rand.NextFloat(4f);
+                    tempVel = tempVel.RotatedByRandom(MathHelper.ToRadians(15));
+
+                    Dust d = Dust.NewDustPerfect(position, dustType, tempVel);
+                    d.noGravity = true;
+                    d.fadeIn = 1.2f;
+                }
             }    
 
             player.itemRotation = (float)Math.Atan2(velocity.Y * player.direction, velocity.X * player.direction) - player.fullRotation;

@@ -296,6 +296,7 @@ namespace LobotomyCorp
                 Player.controlMount = false;
                 Player.controlHook = false;
                 Player.controlUseItem = false;
+                Player.controlRight = false;
                 Player.controlJump = false;
                 Player.controlDown = false;
                 Player.controlLeft = false;
@@ -1012,7 +1013,11 @@ namespace LobotomyCorp
                 Texture2D tex = TextureAssets.Item[Player.HeldItem.type].Value;
 
                 float OffsetY = -46;
-                Vector2 position = Player.MountedCenter - Main.screenPosition + new Vector2(10 * Player.direction, OffsetY + Player.gfxOffY);
+                Vector2 position = Player.MountedCenter - Main.screenPosition + new Vector2(5 * Player.direction, OffsetY + Player.gfxOffY);
+                Vector2 origin = new Vector2(23, 65);
+                if (Player.direction < 0)
+                    origin.X = 39;
+
 
                 Color color = Lighting.GetColor((int)(Player.Center.X / 16f), (int)(Player.Center.Y / 16f));
 
@@ -1022,7 +1027,7 @@ namespace LobotomyCorp
                         position,
                         tex.Frame(),
                         color,
-                        MathHelper.ToRadians(-45 * Player.direction),
+                        MathHelper.ToRadians(-30 * Player.direction),
                         tex.Size() / 2,
                         Player.HeldItem.scale,
                         drawInfo.playerEffect,

@@ -72,9 +72,9 @@ namespace LobotomyCorp.Projectiles
         public override bool PreDraw(ref Color lightColor)
         {
 			Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
-			Vector2 origin = new Vector2(25, 11);
+			Vector2 origin = new Vector2(18, 12);
 
-			Main.EntitySpriteDraw(TextureAssets.Projectile[Projectile.type].Value, position, TextureAssets.Projectile[Projectile.type].Frame(), lightColor * (1f - Projectile.alpha / 255f), Projectile.rotation, origin, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
+			Main.EntitySpriteDraw(TextureAssets.Projectile[Projectile.type].Value, position, TextureAssets.Projectile[Projectile.type].Frame(), lightColor * (1f - Projectile.alpha / 255f), Projectile.rotation + 0.785f * Projectile.spriteDirection, origin, Projectile.scale, Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally, 0);
 			return false;
         }
     }

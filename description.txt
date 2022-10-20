@@ -1,5 +1,6 @@
 ﻿Lobotomy Corporation
 -Adds All, Yes ALL, Lobcorp E.G.O Weapons stuff, from Zayin to Aleph for start of the game to early hardmode
+-History and Technology EGO (except for Regret)
 -Lots of incomplete stuff
 -Not that good for a playthrough, yet
 

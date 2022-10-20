@@ -18,7 +18,7 @@ namespace LobotomyCorp.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            player.moveSpeed += 0.15f;
+            player.moveSpeed += 0.40f;
             player.dashType = -1;
 
             LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);

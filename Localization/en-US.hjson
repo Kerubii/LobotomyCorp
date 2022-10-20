@@ -87,7 +87,7 @@ Mods: {
 				ItemTooltip: "Blood covers the whole floor, screams echo, people are running away..."
 				PassiveList:
 					'''
-					Disable Limiter - 15% increased movement speed while blades are active, Blades have extra reach while at high charge
+					Disable Limiter - 40% increased movement speed while blades are active, Blades have extra reach while at high charge
 					Clean - Allows the player to dash through enemies, spinning the blades
 					Repetitive Pattern Recognition - Hitting an enemy increases charge, killing an enemy refills the charge
 					|Recharge - Using the weapon, getting hit and dashing decreases charge, Become immobilized after draining your charge
@@ -171,7 +171,7 @@ Mods: {
 				PassiveList:
 					'''
 					Huuuuge Gift!!! - If no enemies have any Gifts, use all Mana to send a Huge Gift that give gifts up to 5 enemies
-					Suprise Gift - Hitting an enemy will mark them with a 
+					Suprise Gift - Hitting an enemy will mark them with a Gift
 					Funny Prank - After dealing enough indirect damage (with allies or minions) against enemies with Gift. The Gift explodes and deals damage
 					Friend - Friends spawn from Gift explosion and becomes a minion, after dealing enough damage they explode
 					|Being Lonely is Sad - If the last Friend explodes, 100% increased damage taken until death or a new Friend spawns
@@ -357,7 +357,7 @@ Mods: {
 			}
 
 			Dipsia: {
-				ItemTooltip: "…And the thirst would never truly be quenched."
+				ItemTooltip: "...And the thirst would never truly be quenched."
 				PassiveList:
 					'''
 					Banquet of Blood - Alternate attack to attack everything currently on screen and consume 20% of your current health, if below 50% health it costs 10% instead

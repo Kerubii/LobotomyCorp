@@ -21,7 +21,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 		{
 			EgoColor = LobotomyCorp.HeRarity;
 
-            Item.damage = 42;
+            Item.damage = 38;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;

@@ -22,38 +22,60 @@ namespace LobotomyCorp.Projectiles
 			Projectile.DamageType = DamageClass.Melee;
 			Projectile.tileCollide = false;
 			Projectile.friendly = true;
+
+            SawRotation = 0f;
 		}
+
+        private float SawRotation;
 
 		public override void AI() {
             
             Player player = Main.player[Projectile.owner];
             Vector2 mountedCenter = player.RotatedRelativePoint(player.MountedCenter, true);
-            if (Main.myPlayer == Projectile.owner)
-            {
-                Projectile.velocity = Main.MouseWorld - mountedCenter;
-            }
-            Vector2 center = new Vector2(93, 0).RotatedBy(Projectile.velocity.ToRotation());
-            Projectile.Center = mountedCenter + center;
-            if (!player.channel)
+
+            if (!player.channel) //If Player stops holding m1 slow down the saw and slash infront 
             {
                 if (Projectile.ai[0] > 0)
                     Projectile.ai[0] -= 2;
                 if (Projectile.ai[0] <= 0)
-                    Projectile.Kill();
+                    Projectile.ai[0] = 0;
+
+                SawRotation = Projectile.velocity.ToRotation();
+                float prog = Projectile.timeLeft / 30f;
+                if (prog > .75f)
+                {
+                    prog = 1f - (prog - .75f) / .25f;
+                    SawRotation -= MathHelper.ToRadians(120) * prog * player.direction;
+                }
+                else
+                {
+                    prog = 1f - prog / 0.75f;
+                    SawRotation -= (MathHelper.ToRadians(120) - MathHelper.ToRadians(300) * (float)Math.Sin(1.57f * prog)) * player.direction;
+                }
             }
-            else
+            else //Sawblade goes faster and faster, on OnHit goes up to 60
             {
                 if (Projectile.ai[0] < 40)
                     Projectile.ai[0] += 5f;
+                Projectile.timeLeft = 30;
+                if (Main.myPlayer == Projectile.owner)//Hold out on direction of cursor
+                {
+                    Projectile.velocity = Main.MouseWorld - mountedCenter;
+                    SawRotation = Projectile.velocity.ToRotation();
+                }
             }
+
+            Vector2 center = new Vector2(93, 0).RotatedBy(SawRotation);
+            Projectile.Center = mountedCenter + center;
+
             player.itemAnimation = 2;
             player.itemTime = 2;
 
-            player.direction = center.X >= 0 ? 1 : -1;
+            if (player.channel)
+                player.direction = center.X >= 0 ? 1 : -1;
             Projectile.direction = player.direction;
             player.itemRotation = (float)Math.Atan2(Projectile.velocity.Y * player.direction, Projectile.velocity.X * player.direction);
 
-            Projectile.timeLeft = 60;
             Projectile.rotation += (MathHelper.ToRadians(20) * (Projectile.ai[0] / 60)) * player.direction;
             if (Main.rand.Next((int)(30 - 30 * (Projectile.ai[0] / 60))) == 0)
             {
@@ -75,7 +97,7 @@ namespace LobotomyCorp.Projectiles
             Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
             Vector2 position = Projectile.Center - Main.screenPosition + new Vector2(0, Projectile.gfxOffY);
             Vector2 origin = new Vector2(Projectile.direction > 1 ? 93 : 23, 23);
-            float rot = Projectile.velocity.ToRotation() + (Projectile.direction > 1 ? 0 : 3.14f);
+            float rot = SawRotation + (Projectile.direction > 1 ? 0 : 3.14f);
 
             Main.EntitySpriteDraw(tex, position, tex.Frame(), lightColor, rot, origin, Projectile.scale, (SpriteEffects)Projectile.direction, 0);
 
@@ -134,6 +156,13 @@ namespace LobotomyCorp.Projectiles
 
             if (Projectile.ai[0] < 60)
                 Projectile.ai[0] += 2f;
+        }
+
+        public override void ModifyDamageScaling(ref float damageScale)
+        {
+            if (!Main.player[Projectile.owner].channel)
+                damageScale *= 2f;
+            base.ModifyDamageScaling(ref damageScale);
         }
     }
 
