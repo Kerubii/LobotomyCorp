@@ -34,7 +34,7 @@ namespace LobotomyCorp.Items
             Item.shoot = ModContent.ProjectileType<Projectiles.Gaze>();
 
             Item.noUseGraphic = true;
-			Item.UseSound = SoundID.Item23;
+			Item.UseSound = LobotomyCorp.WeaponSound("DontWatch");
             Item.noMelee = true;
 			Item.autoReuse = true;
 		}

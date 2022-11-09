@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -25,7 +26,7 @@ namespace LobotomyCorp.Items
 			Item.knockBack = 4; // Sets the Item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback damageed together.
 			Item.value = 10000; // how much the Item sells for (measured in copper)
 			Item.rare = ItemRarityID.Red; // the color that the Item's name will be in-game
-			Item.UseSound = SoundID.Item11; // The sound that this Item plays when used.
+			Item.UseSound = LobotomyCorp.WeaponSounds.Rifle; // The sound that this Item plays when used.
 			Item.autoReuse = true; // if you can hold click to automatically use it again
 			Item.shoot = 10; //idk why but all the guns in the vanilla source have this
 			Item.shootSpeed = 16f; // the speed of the projectile (measured in pixels per frame)
@@ -35,6 +36,14 @@ namespace LobotomyCorp.Items
         public override bool CanUseItem(Player player)
         {
             return player.velocity.X == 0 && player.velocity.Y == 0;
+        }
+
+        public override void UseStyle(Player player, Rectangle heldItemFrame)
+        {
+            if (player.itemAnimation == 2 * player.itemAnimationMax / 3)
+                SoundEngine.PlaySound(LobotomyCorp.WeaponSound("PinkArmy2", false), player.Center);
+
+            base.UseStyle(player, heldItemFrame);
         }
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)

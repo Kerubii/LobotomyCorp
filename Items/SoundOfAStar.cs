@@ -32,7 +32,7 @@ namespace LobotomyCorp.Items
 			Item.knockBack = 2.4f;
 			Item.value = 5000;
 			Item.rare = ItemRarityID.Red;
-			Item.UseSound = SoundID.Item9;
+			Item.UseSound = LobotomyCorp.WeaponSound("blueStar");
 			Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.SoundOfAStar>();
             Item.shootSpeed = 4f;

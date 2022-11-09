@@ -30,7 +30,7 @@ namespace LobotomyCorp.Items
 			Item.knockBack = 2.4f;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Blue;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = LobotomyCorp.WeaponSound("sakura");
 			Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.CherryBlossomsPetal>();
             Item.shootSpeed = 14f;

@@ -51,6 +51,7 @@ namespace LobotomyCorp.Items
 				Item.useTime = 28;
 				Item.useAnimation = 28;
 				Item.shootSpeed = 4f;
+				Item.UseSound = LobotomyCorp.WeaponSound("greed2");
 				Item.shoot = ModContent.ProjectileType<Projectiles.GoldRushPunch>();
 			}
 			else
@@ -58,6 +59,7 @@ namespace LobotomyCorp.Items
 				Item.useTime = 5;
 				Item.useAnimation = 16;
 				Item.shootSpeed = 7f;
+				Item.UseSound = LobotomyCorp.WeaponSound("greed1_", false, 2);
 				Item.shoot = ModContent.ProjectileType<Projectiles.GoldRushPunches>();
 			}
 			return true;

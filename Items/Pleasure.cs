@@ -33,7 +33,7 @@ namespace LobotomyCorp.Items
             Item.shoot = ModContent.ProjectileType<Projectiles.PleasureSpear>();
 
             Item.noUseGraphic = true;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = LobotomyCorp.WeaponSound("Porccu");
             Item.noMelee = true;
 			Item.autoReuse = true;
 		}

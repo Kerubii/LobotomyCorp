@@ -23,6 +23,9 @@ namespace LobotomyCorp
 
         public bool HarmonyMusicalAddiction = false;
 
+        public int LaetitiaGiftDamage = 0;
+        public int LaetitiaGiftOwner = -1;
+
         public bool MatchstickBurn = false;
         public int MatchstickBurnTime = 0;
 
@@ -161,6 +164,29 @@ namespace LobotomyCorp
             base.ModifyHitPlayer(npc, target, ref damage, ref crit);
         }
 
+        public override void OnHitByProjectile(NPC npc, Projectile projectile, int damage, float knockback, bool crit)
+        {
+            if (LaetitiaGiftOwner >= 0)
+            {
+                LaetitiaGiftDamage += damage;
+                if (LaetitiaGiftDamage > 1700f)
+                {
+                    Main.player[LaetitiaGiftOwner].ApplyDamageToNPC(npc, LaetitiaGiftDamage, 0f, 1, false);
+                    Projectile.NewProjectile(Main.player[LaetitiaGiftOwner].GetSource_FromThis(), npc.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LaetitiaFriend>(), 60, 3.5f, LaetitiaGiftOwner);
+
+                    for (int i = 0; i < 16; i++)
+                    {
+                        Vector2 velocity = (Vector2.UnitX * Main.rand.Next(5)).RotateRandom(6.28f);
+
+                        Dust.NewDustPerfect(npc.Center, 69, velocity).noGravity = true;
+                    }
+
+                    LaetitiaGiftDamage = 0;
+                    LaetitiaGiftOwner = -1;
+                }
+            }
+        }
+
         public override void DrawEffects(NPC npc, ref Color drawColor)
         {
             if (BeakTarget > 0)
@@ -260,6 +286,20 @@ namespace LobotomyCorp
                     spriteBatch.Draw(texture, position, null, Color.White * 0.7f, rotation, texture.Size() / 2, scale, 0, 0);
                 }
             }
+        
+            if (LaetitiaGiftOwner >= 0)
+            {
+                float progress = Math.Clamp(LaetitiaGiftDamage / 1600f, 0f, 1f);
+
+                Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/Realized/LaetitiaR").Value;
+                Vector2 position = npc.Center - Main.screenPosition + new Vector2(0, -npc.height / 2 - 30);
+                float scale = 1f + 0.2f * (float)Math.Sin(6.28f * ((Main.timeForVisualEffects * (8 * progress)) / 60));
+                if (scale < 1f)
+                    scale = 1f;
+                Rectangle frame = texture.Frame();
+
+                spriteBatch.Draw(texture, position, frame, drawColor, 0f, frame.Size()/2, scale, SpriteEffects.None, 0f);
+            }
         }
 
         public override bool CheckDead(NPC npc)
@@ -271,9 +311,9 @@ namespace LobotomyCorp
             return true;
         }
 
-        public override void OnKill(NPC npc)
+        public override void HitEffect(NPC npc, int hitDirection, double damage)
         {
-            if (LobotomyModPlayer.ModPlayer(Main.LocalPlayer).MagicBulletRequest == npc.whoAmI)
+            if (npc.life <= 0 && LobotomyModPlayer.ModPlayer(Main.LocalPlayer).MagicBulletRequest == npc.whoAmI)
             {
                 LobotomyModPlayer.ModPlayer(Main.LocalPlayer).MagicBulletRequest = -1;
             }

@@ -196,6 +196,8 @@ namespace LobotomyCorp
             SynchronizedEGO = -1;
             Desync = false;
 
+            BlackSwanNettleClothing = 0;
+
             ForgottenAffection = -1;
             ForgottenAffectionResistance = 0;
 
@@ -581,6 +583,8 @@ namespace LobotomyCorp
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
         {
+            bool takeDamage = true;
+
             if (damageSource.SourceNPCIndex >= 0)
             {
                 if (RedShield || BlackShield && !Player.immune)
@@ -616,19 +620,48 @@ namespace LobotomyCorp
             //Black Swan Nettle Damage Reduction
             if (BlackSwanNettleClothing > 0)
             {
-                BlackSwanNettleClothing = (int)Math.Floor(BlackSwanNettleClothing - 1);
+                BlackSwanNettleRemove(1);
                 if (BlackSwanNettleClothing < 0)
                 {
                     BlackSwanNettleClothing = 0;
                     if (Player.HasBuff<Buffs.NettleClothing>())
                         Player.ClearBuff(ModContent.BuffType<Buffs.NettleClothing>());
                     Player.AddBuff(ModContent.BuffType<Buffs.BrokenDreams>(), 30 * 60);
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Sis_Trans") with { Volume = 0.25f }, Player.Center);
                 }
                 else
                 {
-                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Sis_Trans") with { Volume = 0.25f }, Player.Center);
+                    for (int i = 0; i < 8; i++)
+                    {
+                        int dustType = Main.rand.Next(2, 4);
+                        Vector2 dustVel = new Vector2(3f * (float)Math.Cos(6.28f * (i / 8f)), 3f * (float)Math.Sin(6.28f * (i / 8f)));
 
-                    damage -= (int)(damage * 0.75f);
+                        Dust.NewDustPerfect(Player.MountedCenter, dustType, dustVel, 0, default, 1.5f).noGravity = true;
+                    }
+
+                    int reflectDamage = damage;
+
+                    if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Literature.BlackSwanR>())
+                    {
+                        if (BlackSwanNettleClothing >= 3 - 1)
+                        {
+                            reflectDamage = (int)(reflectDamage * 1.2f);
+                        }
+                        if (BlackSwanNettleClothing >= 6 - 1)
+                        {
+                            Player.immune = true;
+                            Player.immuneTime = 30;
+                            takeDamage = false;
+                        }
+                    }
+
+                    if (damageSource.SourceNPCIndex >= 0)
+                    {                        
+                        Player.ApplyDamageToNPC(Main.npc[damageSource.SourceNPCIndex], reflectDamage, 0f, Player.direction, false);
+                    }
+                    if (!takeDamage)
+                        return takeDamage;
+                    damage = (int)(damage * 0.25f);
                 }
             }
 
@@ -723,6 +756,11 @@ namespace LobotomyCorp
 
                 SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/BlackSwan_Revive") with { Volume = 0.1f }, Player.Center);
             }
+        }
+
+        public void BlackSwanNettleRemove(int val)
+        {
+            BlackSwanNettleClothing = (int)Math.Floor(BlackSwanNettleClothing - val);
         }
 
         public bool NihilCheckActive()

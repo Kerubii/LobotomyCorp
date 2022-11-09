@@ -22,6 +22,7 @@ namespace LobotomyCorp.Items
             Item.useTime = 12;
             Item.autoReuse = true;
             Item.rare = ItemRarityID.Blue;
+            Item.UseSound = LobotomyCorp.WeaponSounds.Fist;
 
         }
         /*

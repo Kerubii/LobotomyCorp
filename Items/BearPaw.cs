@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -20,6 +21,7 @@ namespace LobotomyCorp.Items
             Item.useAnimation = 12;
             Item.useTime = 12;
             Item.autoReuse = true;
+            Item.UseSound = LobotomyCorp.WeaponSounds.Fist;
             Item.rare = ItemRarityID.Blue;
 		}
         /*

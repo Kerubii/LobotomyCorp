@@ -35,6 +35,8 @@ namespace LobotomyCorp
 
         public static Asset<Texture2D> MagicBulletBullet = null;
 
+        public static Asset<Texture2D> CircleGlow = null;
+
         public static Color PositivePE => new Color(18, 255, 86);
         public static Color NegativePE => new Color(239, 77, 61);
 
@@ -53,6 +55,22 @@ namespace LobotomyCorp
         public static ModKeybind PassiveShow;
         public static bool ExtraPassiveShow = true;
 
+        public class WeaponSounds
+        {
+            public static SoundStyle Axe;
+            public static SoundStyle BowGun;
+            public static SoundStyle Cannon;
+            public static SoundStyle Dagger;
+            public static SoundStyle Fist;
+            public static SoundStyle Gun;
+            public static SoundStyle Hammer;
+            public static SoundStyle Mace;
+            public static SoundStyle Rapier;
+            public static SoundStyle Revolver;
+            public static SoundStyle Rifle;
+            public static SoundStyle Spear;
+        }
+
         public static Dictionary<string, CustomShaderData> LobcorpShaders = new Dictionary<string, CustomShaderData>();
 
         public static void RiskLevelResist(ref int damage, RiskLevel ego, RiskLevel risk)
@@ -66,7 +84,7 @@ namespace LobotomyCorp
 
             if (!Main.dedServ)
             {
-                ExtraPassiveShow = false;
+                ExtraPassiveShow = true;
                 PassiveShow = KeybindLoader.RegisterKeybind(this, "Extend Passive", "F");
 
                 if (Main.netMode != NetmodeID.Server)
@@ -79,6 +97,8 @@ namespace LobotomyCorp
 
                     MagicBulletBullet = Assets.Request<Texture2D>("Projectiles/MagicBulletBullet");
 
+                    CircleGlow = Assets.Request<Texture2D>("Misc/CircleGlow", AssetRequestMode.ImmediateLoad);
+
                     Main.QueueMainThreadAction(() =>
                     {
                         PremultiplyTexture(ArcanaSlaveLaser.Value);
@@ -89,6 +109,8 @@ namespace LobotomyCorp
                         PremultiplyTexture(KingPortal3.Value);
 
                         PremultiplyTexture(MagicBulletBullet.Value);
+
+                        PremultiplyTexture(CircleGlow.Value);
                     });
 
                     //Ref<Effect> punishingRef = new Ref<Effect>(GetEffect("Effects/PunishingBird"));
@@ -140,6 +162,19 @@ namespace LobotomyCorp
                     shader = new CustomShaderData(TrailRef, "Trail");
                     LobcorpShaders["TextureTrail"] = shader;
                     //TextureManager.BlankTexture = blankTexture;
+
+                    WeaponSounds.Axe = WeaponSound("axe", true, 2);
+                    WeaponSounds.BowGun = WeaponSound("bowGun");
+                    WeaponSounds.Cannon = WeaponSound("cannon");
+                    WeaponSounds.Dagger = WeaponSound("dagger", true, 2);
+                    WeaponSounds.Fist = WeaponSound("fist", true, 2);
+                    WeaponSounds.Gun = WeaponSound("gun");
+                    WeaponSounds.Hammer = WeaponSound("hammer");
+                    WeaponSounds.Mace = WeaponSound("mace", true, 2);
+                    WeaponSounds.Rapier = WeaponSound("rapier", true, 2);
+                    WeaponSounds.Revolver = WeaponSound("revolver");
+                    WeaponSounds.Rifle = WeaponSound("rifle");
+                    WeaponSounds.Spear = WeaponSound("spear", true, 2);
                 }
             }
         }
@@ -186,42 +221,6 @@ namespace LobotomyCorp
             base.Close();
         }*/
 
-        public override void AddRecipeGroups()/* tModPorter Note: Removed. Use ModSystem.AddRecipeGroups */
-        {
-            RecipeGroup rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "EvilPowder", new[]
-            {
-                (int)ItemID.ViciousPowder,
-                (int)ItemID.VilePowder
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:EvilPowder", rec);
-
-            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Butterflies", new[]
-            {
-                (int)ItemID.GoldButterfly,
-                (int)ItemID.JuliaButterfly,
-                ItemID.MonarchButterfly,
-                ItemID.PurpleEmperorButterfly,
-                ItemID.RedAdmiralButterfly,
-                ItemID.SulphurButterfly,
-                ItemID.TreeNymphButterfly,
-                ItemID.UlyssesButterfly,
-                ItemID.ZebraSwallowtailButterfly
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:Butterflies", rec);
-
-            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Dungeon Lanterns", new[]
-            {
-                (int)ItemID.AlchemyLantern,
-                (int)ItemID.BrassLantern,
-                ItemID.CagedLantern,
-                ItemID.CarriageLantern,
-                ItemID.AlchemyLantern,
-                ItemID.DiablostLamp,
-                ItemID.OilRagSconse
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:DungeonLantern", rec);
-        }
-
         public static bool LamentValid(NPC t, Projectile p)
         {
             bool valid = true;
@@ -267,6 +266,63 @@ namespace LobotomyCorp
             float sin = (float)Math.Sin(6.28f * progress);
             float cos = (float)Math.Cos(6.28f * progress);
             return new Vector4(sin, cos, 0f, 0f);
+        }
+        
+        public static SoundStyle WeaponSound(string name, bool PitchVariance = true, int Variance = 1)
+        {
+            if (PitchVariance)
+            {
+                if (Variance > 1)
+                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name, Variance) with { Volume = 0.5f, MaxInstances = 2,PitchVariance = 0.1f };
+                else
+                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name) with { Volume = 0.5f, MaxInstances = 2, PitchVariance = 0.1f };
+            }
+            else
+            {
+                if (Variance > 1)
+                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name, Variance) with { Volume = 0.5f, MaxInstances = 2 };
+                else
+                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name) with { Volume = 0.5f, MaxInstances = 2 };
+            }
+        }
+    }
+
+    class LobSystem : ModSystem
+    {
+        public override void AddRecipeGroups()
+        {
+            RecipeGroup rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "EvilPowder", new[]
+            {
+                (int)ItemID.ViciousPowder,
+                (int)ItemID.VilePowder
+            });
+            RecipeGroup.RegisterGroup("LobotomyCorp:EvilPowder", rec);
+
+            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Butterflies", new[]
+            {
+                (int)ItemID.JuliaButterfly,
+                ItemID.MonarchButterfly,
+                ItemID.PurpleEmperorButterfly,
+                ItemID.RedAdmiralButterfly,
+                ItemID.SulphurButterfly,
+                ItemID.TreeNymphButterfly,
+                ItemID.UlyssesButterfly,
+                ItemID.ZebraSwallowtailButterfly,
+                ItemID.GoldButterfly
+            });
+            RecipeGroup.RegisterGroup("LobotomyCorp:Butterflies", rec);
+
+            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Dungeon Lanterns", new[]
+            {
+                (int)ItemID.AlchemyLantern,
+                (int)ItemID.BrassLantern,
+                ItemID.CagedLantern,
+                ItemID.CarriageLantern,
+                ItemID.AlchemyLantern,
+                ItemID.DiablostLamp,
+                ItemID.OilRagSconse
+            });
+            RecipeGroup.RegisterGroup("LobotomyCorp:DungeonLantern", rec);
         }
     }
 

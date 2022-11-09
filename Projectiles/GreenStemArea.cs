@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -38,12 +39,12 @@ namespace LobotomyCorp.Projectiles
             Projectile.position.Y = ownerMountedCenter.Y - (float)(Projectile.height / 2) + projOwner.height / 2;
             if (projOwner.channel && projOwner.HeldItem.type == ModContent.ItemType<Items.Ruina.History.GreenStemR>())
             {
-                if (Projectile.ai[0] <= 240f * 6)
+                if (Projectile.ai[0] <= 240f * 9)
                 {
-                    Projectile.ai[0] += 2;
+                    Projectile.ai[0] += 3;
                     Projectile.rotation += 0.005f;
-                    if (Projectile.ai[0] > 240 * 6)
-                        Projectile.ai[0] = 240 * 6;
+                    if (Projectile.ai[0] > 240 * 9)
+                        Projectile.ai[0] = 240 * 9;
                 }
 
                 projOwner.itemAnimation = projOwner.itemAnimationMax;
@@ -51,8 +52,8 @@ namespace LobotomyCorp.Projectiles
             }
             else
             {
-                Projectile.ai[0] -= 1;
-                if (Projectile.ai[0] == 0)
+                Projectile.ai[0] -= 0.25f;
+                if (Projectile.ai[0] <= 0)
                 {
                     Projectile.Kill();
                     return;
@@ -66,10 +67,13 @@ namespace LobotomyCorp.Projectiles
 
             if (Projectile.ai[1] <= 0 && Projectile.ai[1] % 5 == 0)
             {
-                int attack = -1;
+                //int attack = -1;
                 float extraRange = 0;
                 float distance = 60f * Projectile.scale + extraRange;
 
+                int[] targets = FindNearest(projOwner, distance);
+
+                /*
                 foreach (NPC n in Main.npc)
                 {
                     if (n.active && n.chaseable && n.CanBeChasedBy(this))
@@ -82,8 +86,50 @@ namespace LobotomyCorp.Projectiles
                             attack = n.whoAmI;
                         }
                     }
+                }*/
+
+                for (int i = 0; i < targets.Length; i++)
+                {
+                    if (targets[i] >= 0)
+                    {
+                        Vector2 targetCenter = Main.npc[targets[i]].Center;
+
+                        float angle = (targetCenter - Projectile.Center).ToRotation();
+                        int intAngle = (int)(angle / 0.392f);
+                        if (Main.myPlayer == Projectile.owner)
+                        {
+                            //for (int i = 0; i < 1; i++)
+                            //{
+                            float vineAngle;
+                            float vineDist;
+                            Vector2 vineSpawn;
+
+                            bool valid;
+                            int tries = 0;
+                            do
+                            {
+                                vineAngle = (intAngle + Main.rand.Next(-2, 3)) * 0.392f;
+                                vineDist = Main.rand.NextFloat(60f * Projectile.scale);
+                                vineSpawn = Projectile.Center + new Vector2(vineDist, 0).RotatedBy(vineAngle);
+                                valid = (targetCenter - vineSpawn).Length() < 128f;
+                                tries++;
+                            } while (!(valid || tries > 100));
+
+
+                            Vector2 vel = Vector2.Normalize(targetCenter - vineSpawn) * 32;
+
+                            int damage = Projectile.damage + (int)(Projectile.damage * 0.5f * (1f - projOwner.statLife / (float)projOwner.statLifeMax2));
+                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), vineSpawn, vel, ModContent.ProjectileType<Projectiles.GreenStemVine>(), damage, 0, Projectile.owner, vineDist, vineAngle);
+
+                            SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/SnowWhite_NormalAtk") with { Volume = 0.25f }, vineSpawn);
+
+                        }
+                        if (Projectile.ai[1] == 0)
+                            Projectile.ai[1]--;
+                    }
                 }
 
+                /*
                 if (attack >= 0)
                 {
                     Vector2 targetCenter = Main.npc[attack].Center;
@@ -117,15 +163,11 @@ namespace LobotomyCorp.Projectiles
 
                             SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/SnowWhite_NormalAtk") with { Volume = 0.25f }, vineSpawn);
                      
-                    }
-
-                    if (Projectile.ai[1] == 0)
-                        Projectile.ai[1]--;
-                }
+                    }*/
             }
-            else if (Projectile.ai[1] < -16)
+            else if (Projectile.ai[1] <= -15)
             {
-                Projectile.ai[1] = 20;
+                Projectile.ai[1] = 30;
             }
             
             if (Projectile.ai[1] != 0)
@@ -183,6 +225,34 @@ namespace LobotomyCorp.Projectiles
             }
 
             return false;
+        }
+
+        private int[] FindNearest(Player player, float distance)
+        {
+            Dictionary<int, int> validTargetList = new Dictionary<int, int>();
+            Vector2 compareTo = player.Center;
+            foreach (NPC n in Main.npc)
+            {
+                if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(compareTo) < distance && n.CanBeChasedBy(this))
+                {
+                    int localDistance = (int)n.Center.Distance(player.Center);
+                    validTargetList.Add(n.whoAmI, localDistance);
+                }
+            }
+            if (validTargetList.Count > 1)
+            {
+                var SortedList = from x in validTargetList orderby x.Value ascending select x;
+                validTargetList = SortedList.ToDictionary(x => x.Key, x => x.Value);
+            }
+            int[] targets = new int[3] { -1, -1, -1 };
+            for (int i = 0; i < targets.Length; i++)
+            {
+                if (i > validTargetList.Count - 1)
+                    targets[i] = -1;
+                else
+                    targets[i] = validTargetList.ElementAt(i).Key;
+            }
+            return targets;
         }
 
         public override bool? CanHitNPC(NPC target)

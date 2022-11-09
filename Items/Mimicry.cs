@@ -6,7 +6,7 @@ using Terraria.Audio;
 
 namespace LobotomyCorp.Items
 {
-	public class Mimicry : ModItem
+	public class Mimicry : LobCorpLight
 	{
 		public override void SetStaticDefaults() 
 		{
@@ -19,13 +19,13 @@ namespace LobotomyCorp.Items
 
 		public override void SetDefaults() 
 		{
-			Item.damage = 32;
+			Item.damage = 43;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
 			Item.useTime = 28;
 			Item.useAnimation = 28;
-			Item.useStyle = 1;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 10000;
 			Item.channel = true;
@@ -40,32 +40,46 @@ namespace LobotomyCorp.Items
 			return true;
         }
 
-        public override void UseStyle(Player player, Rectangle heldItemFrame)
-        {
-            if (player.channel)
+        public override void UseStyleAlt(Player player, Rectangle heldItemFrame)
+		{
+			LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
+			if (player.channel)
             {
-				LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
-				player.itemAnimation = (int)(Item.useAnimation * ItemLoader.UseSpeedMultiplier(Item, player));
+				player.itemAnimation = player.itemAnimationMax;//(int)(Item.useAnimation * ItemLoader.UseSpeedMultiplier(Item, player)) - 1;
 				player.itemRotation += Main.rand.NextFloat(-0.06f, 0.06f);
 				if (modPlayer.ChargeWeaponHelper < 1f)
-					modPlayer.ChargeWeaponHelper += 0.0166f;
+					modPlayer.ChargeWeaponHelper += 0.0166f * player.GetAttackSpeed(DamageClass.Melee);
 				else
 				{
 					modPlayer.ChargeWeaponHelper = 1f;
 					player.channel = false;
 				}
-				Item.scale = 1f + 0.5f * modPlayer.ChargeWeaponHelper;
+				//Item.scale = 1f + 0.5f * modPlayer.ChargeWeaponHelper;
 			}
-			if (player.itemAnimation == (int)(Item.useAnimation * ItemLoader.UseSpeedMultiplier(Item, player)) - 1)
-				SoundEngine.PlaySound(SoundID.Item1, player.Center);
+			if (player.itemAnimation == player.itemAnimationMax - 1)
+			{
+				SoundStyle swingSound;
+				if (modPlayer.ChargeWeaponHelper >= 0.9f)
+					swingSound = new SoundStyle("LobotomyCorp/Sounds/Item/Nullthing_Skill3_Finish") with { Volume = 0.5f };
+				else
+					swingSound = new SoundStyle("LobotomyCorp/Sounds/Item/Nullthing_Attack1") with { Volume = 0.5f };
+
+				SoundEngine.PlaySound(swingSound, player.Center);
+			}
+        }
+
+        public override void ModifyItemScale(Player player, ref float scale)
+        {
+			scale += 1f * LobotomyModPlayer.ModPlayer(player).ChargeWeaponHelper;
+			base.ModifyItemScale(player, ref scale);
         }
 
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
-            damage += 2f * LobotomyModPlayer.ModPlayer(player).ChargeWeaponHelper;
+            damage += 3f * LobotomyModPlayer.ModPlayer(player).ChargeWeaponHelper;
         }
 
-        public override void UseItemHitbox(Player player, ref Rectangle hitbox, ref bool noHitbox)
+        public override void UseItemHitboxAlt(Player player, ref Rectangle hitbox, ref bool noHitbox)
         {
             noHitbox = player.channel;
         }
@@ -75,7 +89,9 @@ namespace LobotomyCorp.Items
 			int heal = (int)(damage * 0.25f);
 			player.HealEffect(heal);
 			player.statLife += heal;
-        }
+			if (Main.myPlayer == player.whoAmI && LobotomyModPlayer.ModPlayer(player).ChargeWeaponHelper >= 0.9f)
+				Projectile.NewProjectile(Item.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.MimicrySEffect>(), 0, 0, player.whoAmI, player.direction);
+		}
 
         public override void AddRecipes() 
 		{

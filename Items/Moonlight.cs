@@ -5,12 +5,12 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class Moonlight : ModItem
+	public class Moonlight : LobCorpLight
 	{
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("The snakeÅ\'s open mouth represents the endless yearning for music.\n" +
+			Tooltip.SetDefault("The snake\'s open mouth represents the endless yearning for music.\n" +
                                "It temporarily invites the user to the world of trance.\n" +
                                "25% chance to apply Black Shields to nearby allies when used");
         }
@@ -23,11 +23,11 @@ namespace LobotomyCorp.Items
 			Item.height = 40;
 			Item.useTime = 26;
 			Item.useAnimation = 20;
-			Item.useStyle = 1;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Purple;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = LobotomyCorp.WeaponSound("blackSwan1");
 			Item.autoReuse = true;
 		}
 

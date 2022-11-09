@@ -20,7 +20,7 @@ namespace LobotomyCorp.Projectiles
             Projectile.width = 126;
             Projectile.height = 126;
             Projectile.aiStyle = -1;
-            Projectile.penetrate = -1;
+            Projectile.penetrate = 31;
             Projectile.scale = 1f;
             Projectile.timeLeft = 100;
 
@@ -66,6 +66,13 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
+        public override bool? CanHitNPC(NPC target)
+        {
+            if (Projectile.penetrate <= 1)
+                return false;
+            return base.CanHitNPC(target);
+        }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             /*
@@ -73,7 +80,6 @@ namespace LobotomyCorp.Projectiles
                 target.buffTime[target.FindBuffIndex(ModContent.BuffType<Buffs.Matchstick>())] += 300;
             else
                 target.AddBuff(ModContent.BuffType<Buffs.Matchstick>(), 300);*/
-
             target.AddBuff(BuffID.OnFire, 300); 
         }
 

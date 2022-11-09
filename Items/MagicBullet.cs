@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -25,7 +26,7 @@ namespace LobotomyCorp.Items
 			Item.knockBack = 4; // Sets the Item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback damageed together.
 			Item.value = 10000; // how much the Item sells for (measured in copper)
 			Item.rare = ItemRarityID.Purple; // the color that the Item's name will be in-game
-			Item.UseSound = SoundID.Item11; // The sound that this Item plays when used.
+			Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/Freischutz_Shot") with { Volume = 0.5f}; // The sound that this Item plays when used.
 			Item.autoReuse = true; // if you can hold click to automatically use it again
 			Item.shoot = 10; //idk why but all the guns in the vanilla source have this
 			Item.shootSpeed = 8f; // the speed of the projectile (measured in pixels per frame)

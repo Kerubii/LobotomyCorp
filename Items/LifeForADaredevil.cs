@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class LifeForADaredevil : ModItem
+	public class LifeForADaredevil : LobCorpLight
 	{
         public override void SetStaticDefaults()
         {
@@ -15,9 +15,11 @@ namespace LobotomyCorp.Items
 
         public override void SetDefaults() {
 			Item.CloneDefaults(ItemID.Katana);
+            Item.useStyle = 15;
 			Item.damage = 32;
             Item.DamageType = DamageClass.Generic;
             Item.rare = ItemRarityID.Yellow;
+            Item.UseSound = LobotomyCorp.WeaponSound("katana");
 		}
 
         public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)

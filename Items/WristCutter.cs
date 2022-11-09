@@ -18,6 +18,7 @@ namespace LobotomyCorp.Items
             Item.shoot = ModContent.ProjectileType<Projectiles.WristCutter>();
 			Item.damage = 16;
             Item.rare = ItemRarityID.Blue;
+            Item.UseSound = LobotomyCorp.WeaponSounds.Dagger;
         }
 
         public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)

@@ -30,7 +30,7 @@ namespace LobotomyCorp.Items
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.autoReuse = true;
             Item.DamageType = DamageClass.Ranged;
-            Item.UseSound = SoundID.Item11;
+            Item.UseSound = LobotomyCorp.WeaponSounds.Gun;
         }
 
         public override bool AltFunctionUse(Player player)

@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class Diffraction : ModItem
+	public class Diffraction : LobCorpLight
 	{
 		public override void SetStaticDefaults() 
 		{
@@ -14,17 +14,17 @@ namespace LobotomyCorp.Items
 
 		public override void SetDefaults() 
 		{
-			Item.damage = 6;
+			Item.damage = 46;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
 			Item.useTime = 26;
-			Item.useAnimation = 20;
-			Item.useStyle = 1;
+			Item.useAnimation = 22;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 5000;
 			Item.rare = ItemRarityID.Purple;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = LobotomyCorp.WeaponSounds.Mace;
 			Item.autoReuse = true;
 		}
 

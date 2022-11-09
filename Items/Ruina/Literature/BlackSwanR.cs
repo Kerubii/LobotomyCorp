@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using System;
 
 namespace LobotomyCorp.Items.Ruina.Literature
 {
@@ -46,14 +47,50 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			return base.SafeCanUseItem(player);
         }
 
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+			if (player.altFunctionUse == 2)
+			{
+				bool shriek = false;
+				if (LobotomyModPlayer.ModPlayer(player).BlackSwanNettleClothing >= 4)
+				{
+					damage = (int)(damage * 0.75f);
+					LobotomyModPlayer.ModPlayer(player).BlackSwanNettleRemove(1);
+					shriek = true;
+				}
+				else if (LobotomyModPlayer.ModPlayer(player).BlackSwanBrokenDream)
+				{
+					damage = (int)(damage * 0.4f);
+					shriek = true;
+				}
+
+				if (shriek)
+				{
+					type = ModContent.ProjectileType<Projectiles.Realized.BlackSwanScream>();
+				}
+				else
+					type = 0;
+			}
+            base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+			if (player.altFunctionUse != 2)
+            {
+				//Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<Projectiles.Realized.BlackSwanRExtended>(), damage, knockback, player.whoAmI);
+			}
+
+            return base.Shoot(player, source, position, velocity, type, damage, knockback);
+        }
+
         public override bool? UseItem(Player player)
         {
 			if (!LobotomyModPlayer.ModPlayer(player).BlackSwanBrokenDream)
 				player.AddBuff(ModContent.BuffType<Buffs.NettleClothing>(), 60);
 			if (player.altFunctionUse == 2)
             {
-				Item.useStyle = ItemUseStyleID.Swing;
-				Item.shoot = ProjectileID.None;
+				Item.useStyle = ItemUseStyleID.Shoot;
 			}
 			else
             {
@@ -62,6 +99,13 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			}
 
             return base.UseItem(player);
+        }
+
+        public override float UseSpeedMultiplier(Player player)
+        {
+			if (LobotomyModPlayer.ModPlayer(player).BlackSwanNettleClothing >= 1)
+				return 1.15f;
+            return base.UseSpeedMultiplier(player);
         }
 
         public override bool AltFunctionUse(Player player)

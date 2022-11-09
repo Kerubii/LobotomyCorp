@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -16,12 +17,12 @@ namespace LobotomyCorp.Items
 
 		public override void SetDefaults() 
 		{
-			Item.damage = 36;
+			Item.damage = 32;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
 
-			Item.useTime = 22;
+			Item.useTime = 16;
 			Item.useAnimation = 16;
 
 			Item.useStyle = ItemUseStyleID.Shoot;
@@ -37,11 +38,36 @@ namespace LobotomyCorp.Items
 			Item.autoReuse = true;
 		}
 
-        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        /*public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
             velocity = velocity.RotatedByRandom((float)MathHelper.ToRadians(player.altFunctionUse == 2 ? 30 : 15));
             if (player.altFunctionUse == 2)
+            {
+                knockback = 6f;
                 damage = (int)(damage * 0.75f);
+            }
+        }*/
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                knockback = 6f;
+                damage = (int)(damage * 0.4f);
+                if (player.itemAnimation != player.itemAnimationMax)
+                {
+                    type = ModContent.ProjectileType<Projectiles.SpearExtender>();
+                    velocity *= 6f;
+                    if (Main.myPlayer == player.whoAmI)
+                    {
+                        Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, 2, -4);
+                    }
+                    return false;
+                }
+                return true;
+            }
+
+            return base.Shoot(player, source, position, velocity, type, damage, knockback);
         }
 
         public override bool AltFunctionUse(Player player)
@@ -53,18 +79,34 @@ namespace LobotomyCorp.Items
         {
             if (player.altFunctionUse == 2)
             {
-                Item.knockBack = 6;
-                Item.useTime = 7;
-                Item.reuseDelay = 25;
+                Item.UseSound = LobotomyCorp.WeaponSound("rapier1", false);
+                Item.reuseDelay = 4;
             }
             else
             {
-                Item.knockBack = 2.4f;
-                Item.useTime = 16;
+                Item.UseSound = LobotomyCorp.WeaponSound("rapier2", false);
                 Item.reuseDelay = 0;
             }
 
             return base.CanUseItem(player);
+        }
+
+        public override float UseSpeedMultiplier(Player player)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                return 16 / 30f;
+            }
+            return base.UseSpeedMultiplier(player);
+        }
+
+        public override float UseTimeMultiplier(Player player)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                return 2 / 16f;
+            }
+            return base.UseTimeMultiplier(player);
         }
 
         public override void AddRecipes() 

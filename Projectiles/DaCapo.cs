@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -11,7 +12,9 @@ namespace LobotomyCorp.Projectiles
 {
 	public class DaCapo : ModProjectile
 	{
-		public override void SetStaticDefaults() {
+        public override string Texture => "LobotomyCorp/Items/DaCapo";
+
+        public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 10;
@@ -47,17 +50,34 @@ namespace LobotomyCorp.Projectiles
 
             if (projOwner.itemAnimation > AnimationMax * 2)
             {
+                if (Projectile.ai[1] < 1)
+                {
+                    Projectile.ai[1]++;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction * -1);
+                }
                 float progress = ((float)projOwner.itemAnimation - ((float)AnimationMax * 2)) / ((float)AnimationMax - AnimationRest) - 0.5f;
                 rot += MathHelper.ToRadians(Lerp(-90, 90, progress, Projectile.spriteDirection == 1));
             }
             else if (projOwner.itemAnimation > AnimationMax)
             {
+                if (Projectile.ai[1] < 2)
+                {
+                    Projectile.ai[1] = 2;
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/silent2_2") with { Volume = 0.5f });
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction);
+                }
                 float progress = ((float)projOwner.itemAnimation - ((float)AnimationMax)) / ((float)AnimationMax - AnimationRest) - 0.5f;
                 rot += MathHelper.ToRadians(Lerp(90, -110, progress, Projectile.spriteDirection == 1));
                 Projectile.spriteDirection *= -1;
             }
             else
             {
+                if (Projectile.ai[1] < 3)
+                {
+                    Projectile.ai[1] = 3;
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/silent2_3") with { Volume = 0.5f });
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction * -1);
+                }
                 float progress = ((float)projOwner.itemAnimation) / ((float)AnimationMax - AnimationRest) - 0.5f;
                 rot += MathHelper.ToRadians(Lerp(-110, 120, progress, Projectile.spriteDirection == 1));
             }
@@ -82,7 +102,7 @@ namespace LobotomyCorp.Projectiles
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
         {
             Player projOwner = Main.player[Projectile.owner];
-            damage = Main.DamageVar(projOwner.GetWeaponDamage(projOwner.HeldItem) * 0.75f);
+            damage = (int)(damage * 1.2f);
             if (projOwner.itemAnimation > projOwner.itemAnimationMax / 3)
                 knockback *= 0.1f;
         }

@@ -7,7 +7,7 @@ using Terraria.Audio;
 
 namespace LobotomyCorp.Items
 {
-	public class Twilight : ModItem
+	public class Twilight : LobCorpLight
 	{
 		public override void SetStaticDefaults() 
 		{
@@ -20,14 +20,14 @@ namespace LobotomyCorp.Items
 
 		public override void SetDefaults() 
 		{
-			Item.damage = 47;
+			Item.damage = 62;
 			Item.scale = 1.3f;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
 			Item.useTime = 90;
 			Item.useAnimation = 90;
-			Item.useStyle = 1;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Red;
@@ -56,6 +56,7 @@ namespace LobotomyCorp.Items
 			if (player.altFunctionUse == 2)
 			{
 				LobotomyModPlayer.ModPlayer(player).TwilightSpecial = 0;
+				Item.UseSound = LobotomyCorp.WeaponSound("judgement2_1");
 				Item.useTime = 90;
 				Item.useAnimation = 90;
 				Item.useStyle = ItemUseStyleID.Shoot;
@@ -66,22 +67,36 @@ namespace LobotomyCorp.Items
 			}
 			else
 			{
+				Item.UseSound = LobotomyCorp.WeaponSound("judgement1");
 				Item.useTime = 26;
 				Item.useAnimation = 26;
-				Item.useStyle = ItemUseStyleID.Swing;
-				Item.shoot = 0;
+				Item.useStyle = 15;
+				Item.shoot = 0;// ModContent.ProjectileType<Projectiles.TwilightSlash>();
+				Item.shootSpeed = 1f;
 				//Item.noUseGraphic = false;
 				Item.noMelee = false;
 			}
 			return true;
         }
 
-        public override void UseStyle(Player player, Rectangle heldItemFrame)
+        public override void UseStyleAlt(Player player, Rectangle heldItemFrame)
         {
-			
-		}
+			ResetPlayerAttackCooldown(player);
+			/*
+			if (Main.myPlayer == player.whoAmI && player.itemAnimation > (int)(player.itemAnimationMax * 0.7f))
+			{
+				int amount = 1 + Main.rand.Next(3);
+				for (int i = 0; i < amount; i++)
+				{
+					float dist = 56f + 200 / (amount + 1) * (i + 1);
+					Vector2 vel = new Vector2(dist, Main.rand.NextFloat(-32, 32)).RotatedBy(MathHelper.ToRadians(ItemRotation(player) - 90));
+					Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, vel, ModContent.ProjectileType<Projectiles.TwilightEye>(), 0, 0, player.whoAmI, MathHelper.ToRadians(5) * player.direction);
+				}
+			}*/
+            base.UseStyleAlt(player, heldItemFrame);
+        }
 
-        public override bool? UseItem(Player player)
+        public override bool? UseItemAlt(Player player)
         {
 			if (player.altFunctionUse == 2)
 			{
@@ -91,7 +106,7 @@ namespace LobotomyCorp.Items
 			else
 			{
 				Item.noUseGraphic = false;
-				Item.useStyle = ItemUseStyleID.Swing;
+				Item.useStyle = 15;
 			}
 			return true;
         }

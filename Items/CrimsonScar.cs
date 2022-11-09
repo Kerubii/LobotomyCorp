@@ -5,10 +5,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.DataStructures;
+using Terraria.Audio;
 
 namespace LobotomyCorp.Items
 {
-	public class CrimsonScar : ModItem
+	public class CrimsonScar : LobCorpLight
 	{
         public override void SetStaticDefaults()
         {
@@ -21,7 +22,7 @@ namespace LobotomyCorp.Items
             Item.height = 32;
             Item.value = 3000;
             Item.rare = ItemRarityID.Purple;
-			Item.damage = 32;
+			Item.damage = 58;
             Item.shootSpeed = 12f;
             Item.shoot = 10;
             Item.useAmmo = AmmoID.Bullet;
@@ -44,6 +45,15 @@ namespace LobotomyCorp.Items
             return true;
         }
 
+        public override float UseSpeedMultiplier(Player player)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                return 1.2f;
+            }
+            return base.UseSpeedMultiplier(player);
+        }
+
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
@@ -55,7 +65,7 @@ namespace LobotomyCorp.Items
                 Item.useStyle = ItemUseStyleID.Shoot;
                 TextureAssets.Item[Item.type] = Mod.Assets.Request<Texture2D>("Items/CrimsonScarGun");
                 Item.noMelee = true;
-                Item.UseSound = SoundID.Item11;
+                Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/RedHood_Gun") with { Volume = 0.5f, PitchVariance = 0.1f };
             }
             else
             {   
@@ -63,12 +73,20 @@ namespace LobotomyCorp.Items
                 Item.shoot = 0;
                 Item.useTime = 18;
                 Item.useAnimation = 18;
-                Item.useStyle = ItemUseStyleID.Swing;
+                Item.useStyle = 15;
                 TextureAssets.Item[Item.type] = Mod.Assets.Request<Texture2D>("Items/CrimsonScarScythe");
                 Item.noMelee = false;
                 Item.UseSound = SoundID.Item1;
+                Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/RedHood_Atk1") with { Volume = 0.5f, PitchVariance = 0.1f };
             }
             return base.CanUseItem(player);
+        }
+
+        public override void UseStyleAlt(Player player, Rectangle heldItemFrame)
+        {
+            if (player.altFunctionUse != 2)
+                Item.useStyle = 15;
+            base.UseStyleAlt(player, heldItemFrame);
         }
 
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color ItemColor, Vector2 origin, float scale)
@@ -96,6 +114,12 @@ namespace LobotomyCorp.Items
         public override bool CanShoot(Player player)
         {
             return player.altFunctionUse == 2;
+        }
+
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+            damage = (int)(damage * 0.7f);
+            base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
         }
 
         /*public override bool ConsumeAmmo(Player player)

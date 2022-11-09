@@ -25,17 +25,23 @@ float4 GlowingShader(float4 color : COLOR0, float2 coords : TEXCOORD0) : COLOR0
     float4 color2 = tex2D(uImage1, coords);
     float4 result = color;
 
-    if (1 - color2.r > uOpacity)
-    {   
-        result.rgba *= 0;
+    float top = (1 - uOpacity) * 1.1;
+    if (color2.r < top - 0.1)
+    {
+        result *= 0;
+    }
+    else if (color2.r < top)
+    {
+        result *= ((color2.r - (top - 0.1)) / 0.1);
     }
 
     float4 color3 = tex2D(uImage2, coords);
-    color3.rgb *= uOpacity;
-    if (color3.r < 0.1)
-        color3.rgb *= 0;
+    if (color3.r < top)
+    {
+        color3 *= ((color3.r - (top - 0.1)) / 0.1);
+    }
 
-    result.rgb += color3.rgb;
+    result += color3;
 
 	return result;
 }

@@ -18,13 +18,13 @@ namespace LobotomyCorp.Items
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
-			Item.useTime = 26;
-            Item.useAnimation = 26;
-			Item.useStyle = -1;
+			Item.useTime = 52;
+            Item.useAnimation = 52;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Blue;
-			Item.UseSound = SoundID.Item1;
+			SwingSound = LobotomyCorp.WeaponSounds.Hammer;
 			Item.autoReuse = true;
 		}
 

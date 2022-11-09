@@ -20,7 +20,7 @@ namespace LobotomyCorp.Projectiles
 			Projectile.width = 16;
 			Projectile.height = 16;
 			Projectile.aiStyle = -1;
-			Projectile.penetrate = -1;
+			Projectile.penetrate = 2;
 			Projectile.scale = 1f;
             Projectile.timeLeft = 30;
             
@@ -122,7 +122,15 @@ namespace LobotomyCorp.Projectiles
 				scale.Y *= Projectile.timeLeft / 10f;
             }
 			Main.EntitySpriteDraw(TextureAssets.Projectile[Projectile.type].Value, position, frame, lightColor, Projectile.rotation, origin, scale, 0, 0);
+
             return false;
+        }
+
+        public override bool? CanHitNPC(NPC target)
+        {
+			if (Projectile.penetrate <= 1)
+				return false;
+            return base.CanHitNPC(target);
         }
 
         public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)

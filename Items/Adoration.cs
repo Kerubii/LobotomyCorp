@@ -25,7 +25,7 @@ namespace LobotomyCorp.Items
 			Item.knockBack = 4;
 			Item.value = 8000;
 			Item.rare = ItemRarityID.Red;
-			Item.UseSound = SoundID.Item21;
+			Item.UseSound = LobotomyCorp.WeaponSound("Slime");
 			Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.MeltyLove>();
             Item.shootSpeed = 7.6f;

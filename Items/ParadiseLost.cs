@@ -32,7 +32,7 @@ namespace LobotomyCorp.Items
 			Item.knockBack = 0.8f;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Red;
-			Item.UseSound = SoundID.Item8;
+            Item.UseSound = LobotomyCorp.WeaponSound("DeathAngel1");
 			Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<Projectiles.ParadiseLostBase>();
             Item.shootSpeed = 14f;

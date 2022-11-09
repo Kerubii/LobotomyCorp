@@ -1,5 +1,7 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -24,13 +26,12 @@ namespace LobotomyCorp.Items
 			Item.width = 40;
 			Item.height = 40;
 
-			Item.useTime = 22;
-			Item.useAnimation = 22;
+			Item.useTime = 32;
+			Item.useAnimation = 32;
 			Item.useStyle = 5;
 
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Red;
-			Item.UseSound = SoundID.NPCHit18;
 			Item.autoReuse = true;
 			Item.noMelee = true;
 			Item.noUseGraphic = true;
@@ -43,20 +44,38 @@ namespace LobotomyCorp.Items
 		{
 			// Ensures no more than one spear can be thrown out, use this when using autoReuse
 			if (player.altFunctionUse == 2)
-            {
+			{
+				Item.UseSound = LobotomyCorp.WeaponSound("Censored2_1");
 				Item.shoot = ModContent.ProjectileType<Projectiles.CensoredSpike>();
-				Item.useTime = 56;
-				Item.useAnimation = 56;
 			}
 			else
             {
+				Item.UseSound = LobotomyCorp.WeaponSound("Censored1");
 				Item.shoot = ModContent.ProjectileType<Projectiles.CensoredGrab>();
-				Item.useTime = 22;
-				Item.useAnimation = 22;
 			}
 
 			return player.ownedProjectileCounts[Item.shoot] < 1;
 		}
+
+        public override float UseSpeedMultiplier(Player player)
+        {
+			if (player.altFunctionUse == 2)
+			{
+				return 32f / 42f;
+			}
+			return base.UseSpeedMultiplier(player);
+        }
+
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+			if (player.altFunctionUse != 2)
+			{
+				damage = (int)(damage * 0.6f);
+			}
+			else
+				damage = (int)(damage * 0.8f);
+			base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
+        }
 
         public override bool AltFunctionUse(Player player)
         {

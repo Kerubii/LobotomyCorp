@@ -13,6 +13,8 @@ namespace LobotomyCorp.Projectiles
 {
     public class TwilightSpecial : ModProjectile
     {
+        public override string Texture => "LobotomyCorp/Items/Twilight";
+
         public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
@@ -88,6 +90,12 @@ namespace LobotomyCorp.Projectiles
                 float progress2 = progress % .33f / .33f;
                 if (progress2 < .3f)
                 {
+                    if (Projectile.localAI[0] < 1)
+                    {
+                        SoundEngine.PlaySound(LobotomyCorp.WeaponSound("judgement2_2"), ownerMountedCenter);
+                        Projectile.localAI[0] = 1;
+                    }
+
                     rot += MathHelper.ToRadians(Lerp(180, -75, progress2 % 0.3f / .3f)) * Projectile.spriteDirection;
                     //projOwner.position = PreviousPosition + Projectile.velocity * distance * (float)Math.Sin(1.57f + 1.57f * (progress2 % .3f / .3f));
                     projOwner.velocity -= Projectile.velocity;
@@ -112,10 +120,22 @@ namespace LobotomyCorp.Projectiles
 
                 if (progress2 < 0.5f)
                 {
+                    if (Projectile.localAI[0] < 2)
+                    {
+                        SoundEngine.PlaySound(LobotomyCorp.WeaponSound("judgement2_3"), ownerMountedCenter);
+                        Projectile.localAI[0] = 2;
+                    }
+
                     rot += MathHelper.ToRadians(-80 + 230 * (float)Math.Sin(1.65f * (progress2 % .5f / .5f))) * Projectile.spriteDirection;
                 }
                 else
                 {
+                    if (Projectile.localAI[0] < 3)
+                    {
+                        SoundEngine.PlaySound(LobotomyCorp.WeaponSound("judgement2_4"), ownerMountedCenter);
+                        Projectile.localAI[0] = 3;
+                    }
+
                     rot += MathHelper.ToRadians(180 + 320 * (0.5f * (float)Math.Cos(3.14f * (progress2 % .5f / .5f) + 3.14f) + 0.5f)) * Projectile.spriteDirection;
                 }  
 
@@ -125,13 +145,14 @@ namespace LobotomyCorp.Projectiles
             }
             //Main.NewText(projOwner.itemAnimation);
 
+            /*
             if (((0.33f < progress && progress < 0.4f) ||
                 (0.46f < progress && progress < 0.50f) ||
                 (0.7f < progress && progress < 0.8f)) && Projectile.localAI[0] == 0)
             {
                 SoundEngine.PlaySound(SoundID.Item1, ownerMountedCenter);
                 Projectile.localAI[0]++;
-            }
+            }*/
 
             if (progress < .7f)
             {
@@ -146,6 +167,11 @@ namespace LobotomyCorp.Projectiles
             projOwner.itemRotation = (float)Math.Atan2(velRot.Y * Projectile.direction, velRot.X * Projectile.direction);
             projOwner.direction = Projectile.spriteDirection;
             Projectile.rotation = rot;// + MathHelper.ToRadians(Projectile.spriteDirection == 1 ? 45 : 135);
+            /*
+            if (Main.rand.NextBool(8))
+            {
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, velRot * Main.rand.NextFloat(32f, 82f), ModContent.ProjectileType<TwilightEye>(), 0, 0, Projectile.owner, MathHelper.ToRadians(5));
+            }*/
 
             Projectile.Center = ownerMountedCenter + (80 + Projectile.ai[0]) * velRot;
 
@@ -203,7 +229,7 @@ namespace LobotomyCorp.Projectiles
                 (.30f <= progress && progress < .5f) ||
                 (.60f <= progress && progress < .95f))
             {
-                return true;
+                return null;
             }
             return false;
         }

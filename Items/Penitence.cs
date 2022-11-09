@@ -4,7 +4,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class Penitence : ModItem
+	public class Penitence : LobCorpLight
 	{
 		public override void SetStaticDefaults() 
 		{
@@ -22,11 +22,11 @@ namespace LobotomyCorp.Items
 			Item.height = 40;
 			Item.useTime = 26;
 			Item.useAnimation = 26;
-			Item.useStyle = 1;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Green;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = LobotomyCorp.WeaponSounds.Mace;
 			Item.autoReuse = true;
 		}
 

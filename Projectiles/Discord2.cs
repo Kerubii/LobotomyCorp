@@ -64,6 +64,8 @@ namespace LobotomyCorp.Projectiles
 				}
 				else // Otherwise, increase the movement factor
 				{
+					if ((projOwner.itemAnimationMax - projOwner.itemAnimation) % limit == 0)
+						SoundEngine.PlaySound(LobotomyCorp.WeaponSound("YinYang2"));
 					movementFactor += 2.4f;
 				}
 			}

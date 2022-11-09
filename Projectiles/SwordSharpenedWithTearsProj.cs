@@ -32,7 +32,6 @@ namespace LobotomyCorp.Projectiles
 
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
-
 		}
 
 		// In here the AI uses this example, to make the code more organized and readable
@@ -55,12 +54,15 @@ namespace LobotomyCorp.Projectiles
 			//projOwner.itemTime = projOwner.itemAnimation;
 			Projectile.position.X = ownerMountedCenter.X - (float)(Projectile.width / 2);
 			Projectile.position.Y = ownerMountedCenter.Y - (float)(Projectile.height / 2);
+
 			// As long as the player isn't frozen, the spear can move
 			if (!projOwner.frozen) {
 				if (movementFactor == 0f) // When initially thrown out, the ai0 will be 0f
                 {
                     movementFactor = 3f; // Make sure the spear moves forward when initially thrown out
 					Projectile.netUpdate = true; // Make sure to netUpdate this spear
+					if (Main.myPlayer == Projectile.owner)
+						Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 5.2f, ModContent.ProjectileType<SpearExtender>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 3, -3f);
 				}
 				else // Otherwise, increase the movement factor
 				{
@@ -82,16 +84,14 @@ namespace LobotomyCorp.Projectiles
 			if (Projectile.spriteDirection == -1) {
 				Projectile.rotation -= MathHelper.ToRadians(90);
 			}
-
-			Dust dust;
-			// You need to set position depending on what you are doing. You may need to subtract width/2 and height/2 as well to center the spawn rectangle.
-			Vector2 position = Projectile.Center;
-			dust = Terraria.Dust.NewDustPerfect(position, 172, new Vector2(0f, 0f), 0, new Color(255, 255, 255), 1.5f);
-			dust.noGravity = true;
-			dust.fadeIn = 1.6f;
 		}
 
-		public override bool PreDraw(ref Color lightColor)
+        public override bool? CanHitNPC(NPC target)
+        {
+            return false;
+        }
+
+        public override bool PreDraw(ref Color lightColor)
         {
             Vector2 position = Projectile.Center - Main.screenPosition;
             Main.EntitySpriteDraw(TextureAssets.Projectile[Projectile.type].Value, position, new Microsoft.Xna.Framework.Rectangle?

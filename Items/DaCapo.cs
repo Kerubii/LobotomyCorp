@@ -1,4 +1,7 @@
+using Microsoft.Xna.Framework;
+using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -15,7 +18,7 @@ namespace LobotomyCorp.Items
 
 		public override void SetDefaults() 
 		{
-			Item.damage = 64;
+			Item.damage = 52;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
@@ -27,8 +30,10 @@ namespace LobotomyCorp.Items
 			Item.rare = ItemRarityID.Red;
 			Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true;
+            Item.shoot = ModContent.ProjectileType<Projectiles.DaCapo>();
             Item.shootSpeed = 1f;
             Item.scale = 0.8f;
+            PreviousTarget = -1;
 		}
 
         public override bool AltFunctionUse(Player player)
@@ -36,27 +41,206 @@ namespace LobotomyCorp.Items
             return true;
         }
 
+        private int PreviousTarget = -1;
+
+        public override void UseStyle(Player player, Rectangle heldItemFrame)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                Item.useStyle = 5;
+                Item.noUseGraphic = true;
+            }
+            else
+            {
+                Item.useStyle = 1;
+                Item.noUseGraphic = false;
+            }
+
+            if (Item.useStyle == 1)
+            {
+                float progress = 1f - player.itemAnimation / (float)player.itemAnimationMax;
+                float rotation = ItemRotation(progress, player.direction);
+                LobCorpLight.PseudoUseStyleSwing(player, heldItemFrame, rotation);
+
+                if (progress > 0.5f)
+                {
+                    int distancIn = 66;
+                    if (progress < 0.8f)
+                    {
+                        progress = (progress - 0.5f) / 0.3f;
+                        player.itemLocation.X -= distancIn * (float)Math.Sin(1.57f * progress) * player.direction;
+                    }
+                    else
+                    {
+                        player.itemLocation.X -= distancIn * player.direction;
+                    }
+                }
+            }
+        }
+
+        public override void UseItemFrame(Player player)
+        {
+            if (Item.useStyle == 1)
+            {
+                LobCorpLight.PseudoUseItemFrame(player, ItemRotation(1f - player.itemAnimation / (float)player.itemAnimationMax, player.direction));
+            }
+        }
+
+        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        {
+            PreviousTarget = target.whoAmI;
+        }
+
+        public override float UseSpeedMultiplier(Player player)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                return 0.54f;
+            }
+            return base.UseSpeedMultiplier(player);
+        }
+
+        public override bool CanShoot(Player player)
+        {
+            return player.altFunctionUse == 2;
+        }
+
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+            damage = (int)(damage * 0.6f);
+            base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
+        }
+
         public override bool CanUseItem(Player player)
         {
             if (player.altFunctionUse == 2)
             {
-                Item.useTime = 48;
-                Item.useAnimation = 48;
-                Item.useStyle = 5;
-                Item.shoot = ModContent.ProjectileType<Projectiles.DaCapo>();
-                Item.noUseGraphic = true;
+                Item.UseSound = LobotomyCorp.WeaponSound("silent2_1");
                 Item.noMelee = true;
             }
             else
             {
-                Item.useTime = 26;
-                Item.useAnimation = 26;
-                Item.useStyle = 1;
-                Item.shoot = 0;
-                Item.noUseGraphic = false;
+                Item.UseSound = LobotomyCorp.WeaponSound("silent1");
                 Item.noMelee = false;
             }
             return base.CanUseItem(player);
+        }
+
+        public override bool? UseItem(Player player)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                Item.noMelee = true;
+            }
+            else
+            {
+                Item.noMelee = false;
+            }
+
+            if (Item.useStyle == 1)
+            {
+                //Item.noUseGraphic = false;
+                //Just a way to make this thing hit twice :V
+                if (PreviousTarget >= 0)
+                {
+                    NPC target = Main.npc[PreviousTarget];
+                    int immuneLimit = player.itemAnimationMax / 2 - 2;
+                    if (player.itemAnimation > immuneLimit)
+                        target.immune[player.whoAmI] = player.itemAnimation - immuneLimit;
+                    PreviousTarget = -1;
+                }
+                //This is a jank way of changing item's attack cooldown, thought it would better fit at onhit same as immune but I guess not since that ones before they change the immune time and attackCD
+                int cooldown = Math.Max(1, (int)((double)player.itemAnimationMax * 0.1f));
+                if (player.attackCD > cooldown)
+                    player.attackCD = cooldown;
+            }
+            return base.UseItem(player);
+        }
+
+        public override void ModifyItemScale(Player player, ref float scale)
+        {
+            scale *= 1.2f;
+        }
+
+        public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
+        {
+            if (player.itemAnimation > player.itemAnimationMax / 2)
+                knockBack *= 0.75f;
+        }
+
+        private float ItemRotation(float progress, int direction)
+        {
+            float rotation = 0;
+            if (progress < 0.3f)
+            {
+                progress = progress / 0.3f;
+                rotation = (-45 + 135 * (float)Math.Sin(1.57f * progress)) * direction;
+            }
+            else if (progress > 0.5f && progress < 0.8f)
+            {
+                rotation = (94 + Main.rand.Next(-4, 5)) * direction;
+            }
+            else
+            {
+                rotation = 94 * direction;
+            }
+            return rotation;
+        }
+
+        public override void UseItemHitbox(Player player, ref Rectangle hitbox, ref bool noHitbox)
+        {
+            if (Item.useStyle == 1)
+            {
+                hitbox = new Rectangle((int)player.itemLocation.X, (int)player.itemLocation.Y, 32, 32);
+                if (!Main.dedServ)
+                {
+                    Rectangle hitboxSize = Item.GetDrawHitbox(Item.type, player);
+                    hitbox = new Rectangle((int)player.itemLocation.X, (int)player.itemLocation.Y, hitboxSize.Width, hitboxSize.Height);
+                }
+                float adjustedItemScale = player.GetAdjustedItemScale(Item);
+                hitbox.Width = (int)((float)hitbox.Width * adjustedItemScale);
+                hitbox.Height = (int)((float)hitbox.Height * adjustedItemScale);
+                if (player.direction == -1)
+                {
+                    hitbox.X -= hitbox.Width;
+                }
+                if (player.gravDir == 1f)
+                {
+                    hitbox.Y -= hitbox.Height;
+                }
+
+                float prog = 1f - player.itemAnimation / (float)player.itemAnimationMax;
+                if (prog < .15f)
+                {
+                    if (player.direction == 1)
+                    {
+                        hitbox.X -= (int)(hitbox.Width * 1);
+                    }
+                    hitbox.Width *= 2;
+                    hitbox.Y -= (int)((hitbox.Height * 1.4 - hitbox.Height) * player.gravDir);
+                    hitbox.Height = (int)(hitbox.Height * 1.4);
+                }
+                else
+                {
+                    if (player.direction == -1)
+                    {
+                        hitbox.X -= (int)((double)hitbox.Width * 1.4 - (double)hitbox.Width);
+                    }
+                    hitbox.Width = (int)((double)hitbox.Width * 1.4);
+                    hitbox.Y += (int)((double)hitbox.Height * 0.5 * (double)player.gravDir);
+                    hitbox.Height = (int)((double)hitbox.Height * 1.2);
+                }
+                if (prog > 0.5f)
+                {
+                    hitbox.Y += hitbox.Height / 2;
+                    hitbox.Height /= 2;
+                }
+
+                if ((prog > 0.3f && prog < 0.5f) ||
+                    (prog > 0.8f))
+                    noHitbox = true;
+            }
+            base.UseItemHitbox(player, ref hitbox, ref noHitbox);
         }
 
         public override void AddRecipes() 

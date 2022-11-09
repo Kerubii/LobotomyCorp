@@ -24,7 +24,7 @@ namespace LobotomyCorp.Items
 			Item.knockBack = 4; // Sets the Item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback damageed together.
 			Item.value = 10000; // how much the Item sells for (measured in copper)
 			Item.rare = ItemRarityID.Yellow; // the color that the Item's name will be in-game
-			Item.UseSound = SoundID.Item11; // The sound that this Item plays when used.
+			Item.UseSound = LobotomyCorp.WeaponSounds.Rifle; // The sound that this Item plays when used.
 			Item.autoReuse = true; // if you can hold click to automatically use it again
 			Item.shoot = 10; //idk why but all the guns in the vanilla source have this
 			Item.shootSpeed = 8f; // the speed of the projectile (measured in pixels per frame)
@@ -42,7 +42,7 @@ namespace LobotomyCorp.Items
             .AddIngredient(ItemID.Ruby, 3)
             .AddIngredient(ItemID.TissueSample, 20)
             .AddIngredient(ItemID.CrimtaneBar, 5)
-            .AddTile(TileID.Anvils)
+            .AddTile(Mod, "BlackBox2")
 			.Register();
 		}
     }

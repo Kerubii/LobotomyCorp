@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -66,6 +67,11 @@ namespace LobotomyCorp.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+            if (Projectile.localAI[0] == 0)
+            {
+                Projectile.localAI[0]++;
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Porccu_Atk1") with { Volume = 0.5f , MaxInstances = 0});
+            }
             target.AddBuff(ModContent.BuffType<Buffs.Pleasure>(), 300);
         }
 
@@ -81,32 +87,20 @@ namespace LobotomyCorp.Projectiles
             Vector2 ownerMountedCenter = projOwner.RotatedRelativePoint(projOwner.MountedCenter, true);
             //Dust.NewDustPerfect(ownerMountedCenter, 14, Vector2.Zero);
             Vector2 position = ownerMountedCenter - Main.screenPosition;
-            Vector2 origin = new Vector2((Projectile.spriteDirection == 1 ? 2 : 41), 5);
+            Vector2 origin = new Vector2((Projectile.spriteDirection == 1 ? 2 : tex.Width - 2), tex.Height / 2);
             float rotation = Projectile.rotation + (Projectile.spriteDirection == 1 ? 0 : 3.14f);
             SpriteEffects spriteEffect = Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Main.EntitySpriteDraw(tex, position, new Microsoft.Xna.Framework.Rectangle?
-                                    (
-                                        new Rectangle
-                                        (
-                                            0, 0, tex.Width, tex.Height
-                                        )
-                                    ),
+            Main.EntitySpriteDraw(tex, position, tex.Frame(),
                 lightColor * ((float)(255 - Projectile.alpha) / 255f), rotation, origin, Projectile.scale, spriteEffect, 0);
 
             position += new Vector2(tex.Width + 2, 0).RotatedBy(Projectile.rotation);
             tex = TextureAssets.Projectile[Projectile.type].Value;
-            origin = new Vector2((Projectile.spriteDirection == 1 ? 0 : 62), 15);
+            origin = new Vector2((Projectile.spriteDirection == 1 ? 0 : tex.Width), tex.Height/2);
             float minScale = 0.2f;
-            float maxScale = (Projectile.velocity.Length() * 10) / 62f;
+            float maxScale = (Projectile.velocity.Length() * 10) / (float)tex.Width;
             float progress = 1f - (float)projOwner.itemAnimation / (float)projOwner.itemAnimationMax;
             Vector2 scale = new Vector2(minScale + (maxScale - minScale) * (float)Math.Sin(progress * 3.14f), 1) * Projectile.scale;
-            Main.EntitySpriteDraw(tex, position, new Microsoft.Xna.Framework.Rectangle?
-                                    (
-                                        new Rectangle
-                                        (
-                                            0, 0, tex.Width, tex.Height
-                                        )
-                                    ),
+            Main.EntitySpriteDraw(tex, position, tex.Frame(),
                 lightColor * ((float)(255 - Projectile.alpha) / 255f), rotation, origin, scale, spriteEffect, 0);
             return false;
         }

@@ -62,6 +62,7 @@ namespace LobotomyCorp.Items
 				Item.shootSpeed = 10.2f;
 				Item.useTime = 62;
 				Item.useAnimation = 58;
+				Item.UseSound = LobotomyCorp.WeaponSound("YinYang2");
 				//Item.noUseGraphic = true;
 				//Item.noMelee = true;
 			}
@@ -71,6 +72,7 @@ namespace LobotomyCorp.Items
 				Item.shootSpeed = 1f;
 				Item.useTime = 26;
 				Item.useAnimation = 26;
+				Item.UseSound = LobotomyCorp.WeaponSound("YinYang1");
 				//Item.noUseGraphic = false;
 				//Item.noMelee = false;
 			}

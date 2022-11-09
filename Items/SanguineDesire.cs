@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class SanguineDesire : ModItem
+	public class SanguineDesire : LobCorpLight
 	{
 		public override void SetStaticDefaults() 
 		{
@@ -20,11 +20,11 @@ namespace LobotomyCorp.Items
 			Item.height = 40;
 			Item.useTime = 12;
 			Item.useAnimation = 12;
-			Item.useStyle = 1;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Yellow;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = LobotomyCorp.WeaponSounds.Axe;
 			Item.autoReuse = true;
             Item.scale = 0.7f;
 		}

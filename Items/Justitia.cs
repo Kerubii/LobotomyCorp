@@ -1,69 +1,131 @@
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class Justitia : ModItem
+    public class Justitia : LobCorpLight
 	{
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
 			Tooltip.SetDefault("It remembers the balance of the Long Bird that never forgot others' sins.\n" +
-                               "This weapon may be able to not only cut flesh but trace of sins as well.\n" +
-							   "Special attack ignores immunity frames");
+                               "This weapon may be able to not only cut flesh but trace of sins as well.");
 		}
 
 		public override void SetDefaults() 
 		{
-			Item.damage = 36;
+			Item.damage = 30;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
-			Item.useTime = 80;
-			Item.useAnimation = 80;
-			Item.useStyle = 5;
-			Item.knockBack = 6;
+			Item.useTime = 26;
+			Item.useAnimation = 26;
+			Item.useStyle = 15;
+			Item.knockBack = 3;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Red;
 			Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true;
-			Item.shootSpeed = 1f;
-			Item.scale = 1.3f;	
+			Item.shootSpeed = 16f;
+			Item.shoot = ModContent.ProjectileType<Projectiles.JustitiaExtended>();
+			Item.scale = 1.3f;
+			AlternateAttack = false;
+			PreviouslyHitNPC = -1;
 		}
+
+		private bool AlternateAttack;
+		private int PreviouslyHitNPC;
+
+        public override float UseSpeedMultiplier(Player player)
+        {
+			if (AlternateAttack)
+				return 0.35f;
+            return base.UseSpeedMultiplier(player);
+        }
 
         public override bool CanUseItem(Player player)
         {
-
-			if (Main.rand.Next(3) == 0)
-            {
-				Item.useTime = 80;
-				Item.useAnimation = 80;
-				Item.useStyle = 5;
+			if (Main.rand.NextBool(3))
+			{
+				Item.UseSound = null;
+				AlternateAttack = true;
 				Item.noMelee = true;
-				Item.shoot = ModContent.ProjectileType<Projectiles.JustitiaAlt>();
 			}
 			else
-            {
-				Item.useTime = 22;
-				Item.useAnimation = 22;
-				Item.useStyle = 1;
+			{
+				Item.UseSound = LobotomyCorp.WeaponSound("judgement1");
+				AlternateAttack = false;
 				Item.noMelee = false;
-				Item.shoot = 0;
 			}
-            return base.CanUseItem(player);
+			return base.CanUseItem(player);
         }
 
-        public override bool? UseItem(Player player)
+        public override bool? UseItemAlt(Player player)
         {
-			Item.noUseGraphic = Item.noMelee;
+			if (AlternateAttack)
+			{
+				Item.noMelee = true;
+			}
+			else
+			{
+				Item.noMelee = false;
+			}
+			Item.noUseGraphic = AlternateAttack;
+			//Jank way of ignoring IFrames
 			return true;
+		}
+
+		public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+		{
+			PreviouslyHitNPC = target.whoAmI;
+		}
+
+        public override void UpdateInventory(Player player)
+        {
+			if (PreviouslyHitNPC >= 0)
+			{
+				Main.npc[PreviouslyHitNPC].immune[player.whoAmI] = 3;
+				player.attackCD = 1;
+				PreviouslyHitNPC = -1;
+			}
+		}
+
+        public override void UseStyleAlt(Player player, Rectangle heldItemFrame)
+		{
+			if (AlternateAttack)
+			{
+				Item.useStyle = 5;
+				Item.noUseGraphic = true;
+			}
+			else
+			{
+				Item.useStyle = 15;
+				Item.noUseGraphic = false;
+			}
+			base.UseStyleAlt(player, heldItemFrame);
+        }
+
+        public override void UseItemHitboxAlt(Player player, ref Rectangle hitbox, ref bool noHitbox)
+        {
+			noHitbox = false;
         }
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-			damage /= 2;
+			if (!AlternateAttack)
+			{
+				velocity.Y = 0;
+				velocity.X = Item.shootSpeed * Math.Sign(velocity.X);
+				damage /= 3;
+			}
+			else
+			{
+				type = ModContent.ProjectileType<Projectiles.JustitiaAlt>();
+				velocity.Normalize();
+			}
 		}
 
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
@@ -74,7 +136,8 @@ namespace LobotomyCorp.Items
 
         public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
         {
-			target.immune[player.whoAmI] = 3;
+			damage /= 2;
+			int x = 0;
 		}
 
         public override void AddRecipes() 

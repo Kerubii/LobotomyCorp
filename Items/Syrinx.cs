@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -23,7 +24,7 @@ namespace LobotomyCorp.Items
 			Item.knockBack = 4;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Yellow;
-			Item.UseSound = SoundID.Item11;
+			Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/fetus", 3) with { Volume = 0.5f, MaxInstances = 0};
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<Projectiles.SyrinxShot>();
 			Item.shootSpeed = 14f;

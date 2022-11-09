@@ -34,7 +34,7 @@ namespace LobotomyCorp.Items
             Item.shoot = ModContent.ProjectileType<Projectiles.FragmentsFromSomewhere>();
 
             Item.noUseGraphic = true;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = LobotomyCorp.WeaponSounds.Spear;
             Item.noMelee = true;
 			Item.autoReuse = true;
 		}

@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -27,7 +28,7 @@ namespace LobotomyCorp.Items
 			Item.noMelee = true;
 			Item.value = 7500;
 			Item.rare = ItemRarityID.Blue;
-			Item.UseSound = SoundID.Item11;
+			Item.UseSound = LobotomyCorp.WeaponSounds.Gun;
 			Item.autoReuse = true;
 
 			Item.shoot = 10;

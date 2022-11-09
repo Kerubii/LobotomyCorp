@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class OurGalaxy : ModItem
+	public class OurGalaxy : LobCorpLight
 	{
 		public override void SetStaticDefaults() 
 		{
@@ -21,13 +21,13 @@ namespace LobotomyCorp.Items
 			Item.height = 40;
 			Item.useTime = 26;
 			Item.useAnimation = 26;
-			Item.useStyle = 1;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Yellow;
             Item.shoot = ModContent.ProjectileType<Projectiles.OurGalaxySparkle>();
             Item.shootSpeed = 10f;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = LobotomyCorp.WeaponSound("Galaxy");
 			Item.autoReuse = true;
 		}
 

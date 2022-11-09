@@ -1,9 +1,10 @@
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class Lumber : ModItem
+	public class Lumber : LobCorpHeavy
     {
 		public override void SetStaticDefaults() 
 		{
@@ -14,17 +15,17 @@ namespace LobotomyCorp.Items
 
 		public override void SetDefaults() 
 		{
-			Item.damage = 26;
+			Item.damage = 92;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
-			Item.useTime = 24;
-			Item.useAnimation = 24;
-			Item.useStyle = 1;
+			Item.useTime = 52;
+			Item.useAnimation = 52;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Yellow;
-			Item.UseSound = SoundID.Item1;
+			SwingSound = new SoundStyle("LobotomyCorp/Sounds/Item/Lumberjack_Atk2") with { Volume = 0.5f, PitchVariance = 0.1f }; ;
 			Item.autoReuse = true;
 		}
 

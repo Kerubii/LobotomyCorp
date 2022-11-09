@@ -25,7 +25,7 @@ namespace LobotomyCorp.Items
 			Item.knockBack = 0;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Blue;
-			Item.UseSound = SoundID.Item11;
+			Item.UseSound = LobotomyCorp.WeaponSound("Dreamy", false, 2);
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<Projectiles.EngulfingDreamCall>();
 			Item.shootSpeed = 0.1f;

@@ -1,11 +1,12 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class Christmas : ModItem
+	public class Christmas : LobCorpLight
 	{
 		public override void SetStaticDefaults() 
 		{
@@ -23,11 +24,11 @@ namespace LobotomyCorp.Items
 			Item.height = 40;
 			Item.useTime = 20;
 			Item.useAnimation = 20;
-			Item.useStyle = 1;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 5000;
 			Item.rare = ItemRarityID.Yellow;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = LobotomyCorp.WeaponSounds.Mace;
 			Item.autoReuse = true;
 		}
 

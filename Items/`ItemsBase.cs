@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
+using Terraria.Audio;
 
 namespace LobotomyCorp.Items
 {
@@ -116,66 +117,642 @@ namespace LobotomyCorp.Items
         }
     }
 
-    //Old Heavy
-    public abstract class LobCorpHeavyOld : ModItem
+    /// <summary>
+    /// Use useStyle = 15 to use the light animation :)
+    /// </summary>
+    public abstract class LobCorpLight : ModItem
     {
-        public sealed override bool CanUseItem(Player player)
+        public sealed override void UseStyle(Player player, Rectangle heldItemFrame)
         {
-            LobotomyModPlayer.ModPlayer(player).HeavyWeaponHelper = (int)(player.GetAttackSpeed(DamageClass.Melee) * Item.useAnimation * 3);// TotalMeleeTime((float)Item.useAnimation * player.meleeSpeed, player, Item) * 3;
-            Item.noUseGraphic = true;
-
-            return SafeCanUseItem(player);
-        }
-
-        public virtual bool SafeCanUseItem(Player player)
-        {
-            return true;
-        }
-
-        public override void UseStyle(Player player, Rectangle heldItemFrame)
-        {
-            if (player.altFunctionUse != 2)
+            if (Item.useStyle == 15)
             {
-                float anim = player.itemAnimationMax;
-                int helper = LobotomyModPlayer.ModPlayer(player).HeavyWeaponHelper;
-                if (helper <= 2)
+                float rotation = ItemRotation(player);
+                PseudoUseStyleSwing(player, heldItemFrame, rotation);
+            }
+            UseStyleAlt(player, heldItemFrame);
+            base.UseStyle(player, heldItemFrame);
+        }
+
+        /// <summary>
+        /// Just to use as a base for other weapons for a smoother time, Use Degrees for rotation just to maintain my SP
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="heldItemFrame"></param>
+        /// <param name="rotation"></param>
+        public static void PseudoUseStyleSwing(Player player, Rectangle heldItemFrame, float rotation)
+        {
+            if ((player.direction == 1 && rotation < 0) ||
+                    (player.direction == -1 && rotation > 0))
+            {
+                float num33 = 6f;
+                if (heldItemFrame.Width > 32)
                 {
-                    player.itemAnimation = helper;
-                    return;
+                    num33 = 14f;
                 }
-                if (helper > anim)
+                if (heldItemFrame.Width >= 48)
                 {
-                    player.itemAnimation = (int)(player.itemAnimationMax * ((0.5f * Math.Cos((float)Math.PI * (((float)helper - anim) / (anim * 2))) + 0.5f) / 1f));
+                    num33 = 18f;
+                }
+                if (heldItemFrame.Width >= 52)
+                {
+                    num33 = 24f;
+                }
+                if (heldItemFrame.Width >= 64)
+                {
+                    num33 = 28f;
+                }
+                if (heldItemFrame.Width >= 92)
+                {
+                    num33 = 38f;
+                }
+                player.itemLocation.X = player.position.X + (float)player.width * 0.5f - ((float)heldItemFrame.Width * 0.5f - num33) * (float)player.direction;
+                num33 = 10f;
+                if (heldItemFrame.Height > 32)
+                {
+                    num33 = 10f;
+                }
+                if (heldItemFrame.Height > 52)
+                {
+                    num33 = 12f;
+                }
+                if (heldItemFrame.Height > 64)
+                {
+                    num33 = 14f;
+                }
+                player.itemLocation.Y = player.position.Y + num33 + player.HeightOffsetHitboxCenter;
+            }
+            else if ((player.direction == 1 && rotation < 90) ||
+                     (player.direction == -1 && rotation > -90))
+            {
+                float num32 = 10f;
+                if (heldItemFrame.Width > 32)
+                {
+                    num32 = 18f;
+                }
+                if (heldItemFrame.Width >= 52)
+                {
+                    num32 = 24f;
+                }
+                if (heldItemFrame.Width >= 64)
+                {
+                    num32 = 28f;
+                }
+                if (heldItemFrame.Width >= 92)
+                {
+                    num32 = 38f;
+                }
+                player.itemLocation.X = player.position.X + (float)player.width * 0.5f + ((float)heldItemFrame.Width * 0.5f - num32) * (float)player.direction;
+                num32 = 10f;
+                if (heldItemFrame.Height > 32)
+                {
+                    num32 = 8f;
+                }
+                if (heldItemFrame.Height > 52)
+                {
+                    num32 = 12f;
+                }
+                if (heldItemFrame.Height > 64)
+                {
+                    num32 = 14f;
+                }
+                player.itemLocation.Y = player.position.Y + num32 + player.HeightOffsetHitboxCenter;
+            }
+            else if ((player.direction == 1 && rotation < 180) ||
+                    (player.direction == -1 && rotation > -180))
+            {
+                float num31 = 14f;
+                if (heldItemFrame.Width > 32)
+                {
+                    num31 = 18f;
+                }
+                if (heldItemFrame.Width >= 52)
+                {
+                    num31 = 28f;
+                }
+                if (heldItemFrame.Width >= 64)
+                {
+                    num31 = 32f;
+                }
+                if (heldItemFrame.Width >= 92)
+                {
+                    num31 = 42f;
+                }
+                player.itemLocation.X = player.position.X + (float)player.width * 0.5f + ((float)heldItemFrame.Width * 0.5f - num31) * (float)player.direction;
+                player.itemLocation.Y = player.position.Y + 26f + player.HeightOffsetHitboxCenter;
+            }
+            else
+            {
+                float num33 = 6f;
+                if (heldItemFrame.Width > 32)
+                {
+                    num33 = 14f;
+                }
+                if (heldItemFrame.Width >= 48)
+                {
+                    num33 = 18f;
+                }
+                if (heldItemFrame.Width >= 52)
+                {
+                    num33 = 24f;
+                }
+                if (heldItemFrame.Width >= 64)
+                {
+                    num33 = 28f;
+                }
+                if (heldItemFrame.Width >= 92)
+                {
+                    num33 = 38f;
+                }
+                player.itemLocation.X = player.position.X + (float)player.width * 0.5f - ((float)heldItemFrame.Width * 0.5f - num33) * (float)player.direction;
+                player.itemLocation.Y = player.position.Y + 24f + player.HeightOffsetHitboxCenter;
+            }
+
+            player.itemRotation = MathHelper.ToRadians(rotation - 45 * player.direction);
+        }
+
+        public virtual void UseStyleAlt(Player player, Rectangle heldItemFrame)
+        {
+        }
+
+        public sealed override void UseItemFrame(Player player)
+        {
+            if (Item.useStyle == 15)
+            {
+                float rotation = ItemRotation(player);
+                PseudoUseItemFrame(player, rotation);
+            }
+            base.UseItemFrame(player);
+        }
+
+        /// <summary>
+        /// Just to use as a base for other weapons for a smoother time, Use Degrees for rotation just to maintain my SP
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="rotation"></param>
+        public static void PseudoUseItemFrame(Player player, float rotation)
+        {
+            if ((player.direction == 1 && rotation < 0) ||
+                    (player.direction == -1 && rotation > 0))
+            {
+                player.bodyFrame.Y = player.bodyFrame.Height * 1;
+            }
+            else if ((player.direction == 1 && rotation < 90) ||
+                     (player.direction == -1 && rotation > -90))
+            {
+                player.bodyFrame.Y = player.bodyFrame.Height * 2;
+            }
+            else if ((player.direction == 1 && rotation < 180) ||
+                     (player.direction == -1 && rotation > -180))
+            {
+                player.bodyFrame.Y = player.bodyFrame.Height * 4;
+            }
+            else
+            {
+                player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, 90);
+            }
+        }
+
+        public sealed override void UseItemHitbox(Player player, ref Rectangle hitbox, ref bool noHitbox)
+        {
+            if (Item.useStyle == 15)
+            {
+                hitbox = new Rectangle((int)player.itemLocation.X, (int)player.itemLocation.Y, 32, 32);
+                if (!Main.dedServ)
+                {
+                    Rectangle hitboxSize = Item.GetDrawHitbox(Item.type, player);
+                    hitbox = new Rectangle((int)player.itemLocation.X, (int)player.itemLocation.Y, hitboxSize.Width, hitboxSize.Height);
+                }
+                float adjustedItemScale = player.GetAdjustedItemScale(Item);
+                hitbox.Width = (int)((float)hitbox.Width * adjustedItemScale);
+                hitbox.Height = (int)((float)hitbox.Height * adjustedItemScale);
+                if (player.direction == -1)
+                {
+                    hitbox.X -= hitbox.Width;
+                }
+                if (player.gravDir == 1f)
+                {
+                    hitbox.Y -= hitbox.Height;
+                }
+
+                float prog = 1f - player.itemAnimation / (float)player.itemAnimationMax;
+                if (prog < .2f)
+                {
+                    if (player.direction == 1)
+                    {
+                        hitbox.X -= (int)(hitbox.Width * 1);
+                    }
+                    hitbox.Width *= 2;
+                    hitbox.Y -= (int)((hitbox.Height * 1.4 - hitbox.Height) * player.gravDir);
+                    hitbox.Height = (int)(hitbox.Height * 1.4);
+                }
+                else if (prog < .4f)
+                {
+                    if (player.direction == -1)
+                    {
+                        hitbox.X -= (int)((double)hitbox.Width * 1.4 - (double)hitbox.Width);
+                    }
+                    hitbox.Width = (int)((double)hitbox.Width * 1.4);
+                    hitbox.Y += (int)((double)hitbox.Height * 0.5 * (double)player.gravDir);
+                    hitbox.Height = (int)((double)hitbox.Height * 1.4);
                 }
                 else
-                {
-                    player.itemAnimation = (int)(player.itemAnimationMax * ((float)helper / anim));
-                }
-                if (player.itemAnimation <= 2)
-                    player.itemAnimation = 3;
-                if (helper < player.itemAnimationMax * 3)
-                    Item.noUseGraphic = false;
+                    noHitbox = true;
             }
-        }
-        
-        public override bool? CanHitNPC(Player player, NPC target)
-        {
-            if (LobotomyModPlayer.ModPlayer(player).HeavyWeaponHelper <= player.itemAnimationMax)
-            {
-                return base.CanHitNPC(player, target);
-            }
-            else
-                return false;
+            UseItemHitboxAlt(player, ref hitbox, ref noHitbox);
+            base.UseItemHitbox(player, ref hitbox, ref noHitbox);
         }
 
-        public override bool CanHitPvp(Player player, Player target)
+        public virtual void UseItemHitboxAlt(Player player, ref Rectangle hitbox, ref bool noHitbox)
         {
-            if (LobotomyModPlayer.ModPlayer(player).HeavyWeaponHelper <= player.itemAnimationMax)
+        }
+
+        public override bool? UseItem(Player player)
+        {
+            if (Item.useStyle == 15)
             {
-                return base.CanHitPvp(player, target);
+                //This is a jank way of changing item's attack cooldown, thought it would better fit at onhit same as immune but I guess not since that ones before they change the immune time and attackCD
+                ResetPlayerAttackCooldown(player);
+            }
+            return UseItemAlt(player);
+        }
+
+        /// <summary>
+        /// Use when overriding UseItem since its there :(, shouldn't really be used... unless
+        /// Put it on UseStyleAlt
+        /// </summary>
+        /// <param name="player"></param>
+        public void ResetPlayerAttackCooldown(Player player)
+        {
+            int cooldown = Math.Max(1, (int)((double)player.itemAnimationMax * 0.1));
+            if (player.attackCD > cooldown)
+                player.attackCD = cooldown;
+        }
+
+        public virtual bool? UseItemAlt(Player player)
+        {
+            return null;
+        }
+
+        public float ItemRotation(Player player)
+        {
+            float prog = 1f - player.itemAnimation / (float)player.itemAnimationMax;
+            float rotation = 0;
+            
+            if (prog < 0.4f)
+            {
+                prog = prog / 0.4f;
+                rotation = (-60 + 200 * (float)Math.Sin(1.57f * prog)) * player.direction;
+            }
+            else if (prog < 0.5f)
+            {
+                rotation = 140 * player.direction;
             }
             else
-                return false;
+            {
+                prog = (prog - 0.5f) / 0.5f;
+                rotation = (140 - 45 * prog) * player.direction;
+            }
+
+            /*
+            if (prog < 0.45f)
+            {
+                prog = prog / 0.45f;
+                rotation = (45 - 130 * prog) * player.direction;
+            }
+            else if (prog < 0.6f)
+            {
+                prog = (prog - 0.45f) / 0.2f;
+                rotation = (-45 + 195 * (float)Math.Sin(1.57f * prog)) * player.direction;
+            }
+            else
+            {
+                rotation = 105 * player.direction;
+            }*/
+            return rotation;
+        }
+
+        public override void ModifyItemScale(Player player, ref float scale)
+        {
+
+            base.ModifyItemScale(player, ref scale);
+        }
+    }
+
+    /// <summary>
+    /// Use useStyle = 15 to use the animation :)
+    /// </summary>
+    public abstract class LobCorpHeavy : ModItem
+    {
+        public SoundStyle? SwingSound = null;
+
+        public sealed override void UseStyle(Player player, Rectangle heldItemFrame)
+        {
+            if (Item.useStyle == 15)
+            {
+                if (player.itemAnimation == (int)(player.itemAnimationMax * 0.6f) && SwingSound != null)
+                    SoundEngine.PlaySound(SwingSound, player.Center);
+                float rotation = ItemRotation(player);
+                PseudoUseStyleSwing(player, heldItemFrame, rotation);
+            }
+            UseStyleAlt(player, heldItemFrame);
+            base.UseStyle(player, heldItemFrame);
+        }
+
+        /// <summary>
+        /// Just to use as a base for other weapons for a smoother time, Use Degrees for rotation just to maintain my SP
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="heldItemFrame"></param>
+        /// <param name="rotation"></param>
+        public static void PseudoUseStyleSwing(Player player, Rectangle heldItemFrame, float rotation)
+        {
+            if ((player.direction == 1 && rotation < 0) ||
+                    (player.direction == -1 && rotation > 0))
+            {
+                float num33 = 6f;
+                if (heldItemFrame.Width > 32)
+                {
+                    num33 = 14f;
+                }
+                if (heldItemFrame.Width >= 48)
+                {
+                    num33 = 18f;
+                }
+                if (heldItemFrame.Width >= 52)
+                {
+                    num33 = 24f;
+                }
+                if (heldItemFrame.Width >= 64)
+                {
+                    num33 = 28f;
+                }
+                if (heldItemFrame.Width >= 92)
+                {
+                    num33 = 38f;
+                }
+                player.itemLocation.X = player.position.X + (float)player.width * 0.5f - ((float)heldItemFrame.Width * 0.5f - num33) * (float)player.direction;
+                num33 = 10f;
+                if (heldItemFrame.Height > 32)
+                {
+                    num33 = 10f;
+                }
+                if (heldItemFrame.Height > 52)
+                {
+                    num33 = 12f;
+                }
+                if (heldItemFrame.Height > 64)
+                {
+                    num33 = 14f;
+                }
+                player.itemLocation.Y = player.position.Y + num33 + player.HeightOffsetHitboxCenter;
+            }
+            else if ((player.direction == 1 && rotation < 90) ||
+                     (player.direction == -1 && rotation > -90))
+            {
+                float num32 = 10f;
+                if (heldItemFrame.Width > 32)
+                {
+                    num32 = 18f;
+                }
+                if (heldItemFrame.Width >= 52)
+                {
+                    num32 = 24f;
+                }
+                if (heldItemFrame.Width >= 64)
+                {
+                    num32 = 28f;
+                }
+                if (heldItemFrame.Width >= 92)
+                {
+                    num32 = 38f;
+                }
+                player.itemLocation.X = player.position.X + (float)player.width * 0.5f + ((float)heldItemFrame.Width * 0.5f - num32) * (float)player.direction;
+                num32 = 10f;
+                if (heldItemFrame.Height > 32)
+                {
+                    num32 = 8f;
+                }
+                if (heldItemFrame.Height > 52)
+                {
+                    num32 = 12f;
+                }
+                if (heldItemFrame.Height > 64)
+                {
+                    num32 = 14f;
+                }
+                player.itemLocation.Y = player.position.Y + num32 + player.HeightOffsetHitboxCenter;
+            }
+            else if ((player.direction == 1 && rotation < 180) ||
+                    (player.direction == -1 && rotation > -180))
+            {
+                float num31 = 14f;
+                if (heldItemFrame.Width > 32)
+                {
+                    num31 = 18f;
+                }
+                if (heldItemFrame.Width >= 52)
+                {
+                    num31 = 28f;
+                }
+                if (heldItemFrame.Width >= 64)
+                {
+                    num31 = 32f;
+                }
+                if (heldItemFrame.Width >= 92)
+                {
+                    num31 = 42f;
+                }
+                player.itemLocation.X = player.position.X + (float)player.width * 0.5f + ((float)heldItemFrame.Width * 0.5f - num31) * (float)player.direction;
+                player.itemLocation.Y = player.position.Y + 26f + player.HeightOffsetHitboxCenter;
+            }
+            else
+            {
+                float num33 = 6f;
+                if (heldItemFrame.Width > 32)
+                {
+                    num33 = 14f;
+                }
+                if (heldItemFrame.Width >= 48)
+                {
+                    num33 = 18f;
+                }
+                if (heldItemFrame.Width >= 52)
+                {
+                    num33 = 24f;
+                }
+                if (heldItemFrame.Width >= 64)
+                {
+                    num33 = 28f;
+                }
+                if (heldItemFrame.Width >= 92)
+                {
+                    num33 = 38f;
+                }
+                player.itemLocation.X = player.position.X + (float)player.width * 0.5f - ((float)heldItemFrame.Width * 0.5f - num33) * (float)player.direction;
+                player.itemLocation.Y = player.position.Y + 24f + player.HeightOffsetHitboxCenter;
+            }
+
+            player.itemRotation = MathHelper.ToRadians(rotation - 45 * player.direction);
+        }
+
+        public virtual void UseStyleAlt(Player player, Rectangle heldItemFrame)
+        {
+        }
+
+        public sealed override void UseItemFrame(Player player)
+        {
+            if (Item.useStyle == 15)
+            {
+                float rotation = ItemRotation(player);
+                PseudoUseItemFrame(player, rotation);
+            }
+            base.UseItemFrame(player);
+        }
+
+        /// <summary>
+        /// Just to use as a base for other weapons for a smoother time, Use Degrees for rotation just to maintain my SP
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="rotation"></param>
+        public static void PseudoUseItemFrame(Player player, float rotation)
+        {
+            if ((player.direction == 1 && rotation < 0) ||
+                    (player.direction == -1 && rotation > 0))
+            {
+                player.bodyFrame.Y = player.bodyFrame.Height * 1;
+            }
+            else if ((player.direction == 1 && rotation < 90) ||
+                     (player.direction == -1 && rotation > -90))
+            {
+                player.bodyFrame.Y = player.bodyFrame.Height * 2;
+            }
+            else if ((player.direction == 1 && rotation < 180) ||
+                     (player.direction == -1 && rotation > -180))
+            {
+                player.bodyFrame.Y = player.bodyFrame.Height * 4;
+            }
+            else
+            {
+                player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, 90);
+            }
+        }
+
+        public sealed override void UseItemHitbox(Player player, ref Rectangle hitbox, ref bool noHitbox)
+        {
+            if (Item.useStyle == 15)
+            {
+                hitbox = new Rectangle((int)player.itemLocation.X, (int)player.itemLocation.Y, 32, 32);
+                if (!Main.dedServ)
+                {
+                    Rectangle hitboxSize = Item.GetDrawHitbox(Item.type, player);
+                    hitbox = new Rectangle((int)player.itemLocation.X, (int)player.itemLocation.Y, hitboxSize.Width, hitboxSize.Height);
+                }
+                float adjustedItemScale = player.GetAdjustedItemScale(Item);
+                hitbox.Width = (int)((float)hitbox.Width * adjustedItemScale);
+                hitbox.Height = (int)((float)hitbox.Height * adjustedItemScale);
+                if (player.direction == -1)
+                {
+                    hitbox.X -= hitbox.Width;
+                }
+                if (player.gravDir == 1f)
+                {
+                    hitbox.Y -= hitbox.Height;
+                }
+
+                float prog = 1f - player.itemAnimation / (float)player.itemAnimationMax;
+                if (prog > 0.4f && prog < 0.7f)
+                {
+                    if (prog < .5f)
+                    {
+                        if (player.direction == 1)
+                        {
+                            hitbox.X -= (int)(hitbox.Width * 1);
+                        }
+                        hitbox.Width *= 2;
+                        hitbox.Y -= (int)((hitbox.Height * 1.4 - hitbox.Height) * player.gravDir);
+                        hitbox.Height = (int)(hitbox.Height * 1.4);
+                    }
+                    else if (prog < .6f)
+                    {
+                        if (player.direction == -1)
+                        {
+                            hitbox.X -= (int)((double)hitbox.Width * 1.4 - (double)hitbox.Width);
+                        }
+                        hitbox.Width = (int)((double)hitbox.Width * 1.4);
+                        hitbox.Y += (int)((double)hitbox.Height * 0.5 * (double)player.gravDir);
+                        hitbox.Height = (int)((double)hitbox.Height * 1.4);
+                    }
+                }
+                else
+                    noHitbox = true;
+            }
+            UseItemHitboxAlt(player, ref hitbox, ref noHitbox);
+            base.UseItemHitbox(player, ref hitbox, ref noHitbox);
+        }
+
+        public virtual void UseItemHitboxAlt(Player player, ref Rectangle hitbox, ref bool noHitbox)
+        {
+        }
+
+        public override bool? UseItem(Player player)
+        {
+            if (Item.useStyle == 15)
+            {
+                //This is a jank way of changing item's attack cooldown, thought it would better fit at onhit same as immune but I guess not since that ones before they change the immune time and attackCD
+                ResetPlayerAttackCooldown(player);
+            }
+            return UseItemAlt(player);
+        }
+
+        /// <summary>
+        /// Use when overriding UseItem since its there :(, shouldn't really be used... unless
+        /// Put it on UseStyleAlt
+        /// </summary>
+        /// <param name="player"></param>
+        public void ResetPlayerAttackCooldown(Player player)
+        {
+            int cooldown = Math.Max(1, (int)((double)player.itemAnimationMax * 0.05f));
+            if (player.attackCD > cooldown)
+                player.attackCD = cooldown;
+        }
+
+        public virtual bool? UseItemAlt(Player player)
+        {
+            return null;
+        }
+
+        public float ItemRotation(Player player)
+        {
+            float prog = 1f - player.itemAnimation / (float)player.itemAnimationMax;
+            float rotation = 0;
+
+            if (prog < 0.4f)
+            {
+                prog = prog / 0.4f;
+                rotation = (90 - 150 * prog) * player.direction;
+            }
+            else if (prog < 0.6f)
+            {
+                prog = (prog - 0.4f) / 0.2f;
+                rotation = (-60 + 200 * (float)Math.Sin(1.57f * prog)) * player.direction;
+            }
+            else if (prog < 0.7f)
+            {
+                rotation = 140 * player.direction;
+            }
+            else
+            {
+                prog = (prog - 0.7f) / 0.3f;
+                rotation = (140 - 45 * prog) * player.direction;
+            }
+
+            return rotation;
+        }
+
+        public override void ModifyItemScale(Player player, ref float scale)
+        {
+
+            base.ModifyItemScale(player, ref scale);
         }
     }
 }

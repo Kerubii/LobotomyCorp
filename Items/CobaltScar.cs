@@ -1,11 +1,12 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class CobaltScar : ModItem
+	public class CobaltScar : LobCorpLight
 	{
         public override void SetStaticDefaults()
         {
@@ -15,10 +16,14 @@ namespace LobotomyCorp.Items
 
         public override void SetDefaults() {
 			Item.CloneDefaults(ItemID.FetidBaghnakhs);
-			Item.damage = 32;
+			Item.damage = 56;
+            Item.useTime = 26;
+            Item.useAnimation = 26;
+            Item.useStyle = 15;
             Item.rare = ItemRarityID.Purple;
-            Item.scale = 0.60f;
-		}
+            Item.scale = 1.2f;
+            Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/Wolf_Scratch") with { Volume = 0.5f, PitchVariance = 0.1f };
+        }
 
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
@@ -30,14 +35,14 @@ namespace LobotomyCorp.Items
 
         public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
         {
-            if (Main.rand.Next(10) == 0)
-                player.AddBuff(ModContent.BuffType<Buffs.WillBeBad>(), 120);
+            if (Main.rand.NextBool(3))
+                player.AddBuff(ModContent.BuffType<Buffs.WillBeBad>(), 180);
         }
 
         public override void OnHitPvp(Player player, Player target, int damage, bool crit)
         {
-            if (Main.rand.Next(10) == 0)
-                player.AddBuff(ModContent.BuffType<Buffs.WillBeBad>(), 120);
+            if (Main.rand.NextBool(3))
+                player.AddBuff(ModContent.BuffType<Buffs.WillBeBad>(), 180);
         }
 
         public override void AddRecipes() {

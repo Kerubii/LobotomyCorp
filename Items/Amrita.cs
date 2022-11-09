@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -33,7 +34,7 @@ namespace LobotomyCorp.Items
             Item.shoot = ModContent.ProjectileType<Projectiles.Amrita>();
 
             Item.noUseGraphic = true;
-			Item.UseSound = SoundID.Item1;
+            Item.UseSound = LobotomyCorp.WeaponSound("Templer");
             Item.noMelee = true;
 			Item.autoReuse = true;
 		}

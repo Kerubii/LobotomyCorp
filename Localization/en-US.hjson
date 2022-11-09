@@ -148,7 +148,7 @@ Mods: {
 					I CANT RESIST IT!!! - Deal increased damage and increased Attack Speed against enemies with Extensive Bleeding
 					Axe - Inflict Extensive Bleeding, Dealing damage to enemies after they deal contact damage
 					Obsession - Alternate Attack to deal a heavy short range attack with increased damage against Extensive Bleeding
-					|Glitter - Enemies are more likely to target you, Can only hit enemies targeting you. Periodically forces enemies to target you
+					|Glitter - Enemies are more likely to target you, Can only hit enemies targeting you. Periodically attempts to force enemies to target you
 					Incomplete and unobtainable
 					'''
 			}
@@ -183,8 +183,8 @@ Mods: {
 				ItemTooltip: "What happens when the black swan wakes up from dreaming of a white swan?"
 				PassiveList:
 					'''
-					Clothing of Nettle - Gain a Nettle after 5 seconds, Up to 6. A Nettle reduces incoming damage by 75% and consumes it, Attackers also take damage
-					Shriek of Broken Dreams - While having 5 or more Nettles, or Broken Dream; Alternate Attack transforms to Shriek, damaging enemies around you
+					Clothing of Nettle - Gain a Nettle after 5 seconds, Up to 6. A Nettle upgrades Black Swan, reduces incoming damage by 75% and consumes it, and Attackers also take damage
+					Shriek of Broken Dreams - While having 4 or more Nettles, or Broken Dream; Alternate Attack transforms to Shriek, damaging enemies around you
 					Gooey Waste - Leave a trail of debuffing waste while having 2 or more Nettles, or Broken Dream. Spreads sporatically while Shrieking
 					Well-worn Parasol - Poking or Swinging this weapon deflects Projectiles when timed correctly, Poking can be held to deflect for a longer time
 					|Broken Dream - Getting hit without a Nettle disables Clothing of Nettle for 30 seconds and increases damage taken by 30%

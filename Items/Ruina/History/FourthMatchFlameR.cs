@@ -38,8 +38,7 @@ namespace LobotomyCorp.Items.Ruina.History
             Item.shootSpeed = 1f;
             Item.noUseGraphic = true;
             Item.noMelee = true;
-			Item.autoReuse = true;
-            
+			Item.autoReuse = true;            
 		}
 
         public override bool SafeCanUseItem(Player player)

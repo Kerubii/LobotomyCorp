@@ -39,6 +39,10 @@ namespace LobotomyCorp.Projectiles.Realized
 			set => Projectile.ai[0] = value;
 		}
 
+		private float shaderProgress;
+		private Vector2[] shaderPosition;
+		private Vector2[] shaderRotation;
+
 		// It appears that for this AI, only the ai0 field is used!
 		public override void AI() {
 			// Since we access the owner player instance so much, it's useful to create a helper local variable for this
@@ -59,6 +63,9 @@ namespace LobotomyCorp.Projectiles.Realized
 					SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 					movementFactor = 6f; // Make sure the spear moves forward when initially thrown out
 					Projectile.netUpdate = true; // Make sure to netUpdate this spear
+					
+					if (Main.myPlayer == Projectile.owner)
+						Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<BlackSwanRExtended>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
 				}
 				if (projOwner.itemAnimation > limit / 2)
 				{
@@ -156,7 +163,23 @@ namespace LobotomyCorp.Projectiles.Realized
             return base.CanHitNPC(target);
         }
 
-        public override bool PreDraw(ref Color lightColor)
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+			if (LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).BlackSwanNettleClothing >= 4)
+				damage *= 2;
+			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+			if (LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).BlackSwanNettleClothing >= 5)
+			{
+				target.AddBuff(BuffID.Ichor, 300);
+			}
+			base.OnHitNPC(target, damage, knockback, crit);
+        }
+
+		public override bool PreDraw(ref Color lightColor)
         {
 			Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
 			Vector2 pos = Projectile.Center - Main.screenPosition + Vector2.UnitY * Projectile.gfxOffY;

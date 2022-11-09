@@ -1,10 +1,11 @@
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class BlackSwan : ModItem
+	public class BlackSwan : LobCorpLight
 	{
 		public override void SetStaticDefaults() 
 		{
@@ -25,11 +26,11 @@ namespace LobotomyCorp.Items
 
 			Item.useTime = 26;
 			Item.useAnimation = 26;
-			Item.useStyle = 1;
+			Item.useStyle = 15;
 
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Purple;
-			Item.UseSound = SoundID.Item1;
+			Item.UseSound = LobotomyCorp.WeaponSound("blackSwan", false, 2);
 			Item.autoReuse = true;
 		}
 

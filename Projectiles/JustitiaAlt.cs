@@ -12,6 +12,8 @@ namespace LobotomyCorp.Projectiles
 {
     public class JustitiaAlt : ModProjectile
     {
+        public override string Texture => "LobotomyCorp/Items/Justitia";
+
         public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
@@ -40,13 +42,22 @@ namespace LobotomyCorp.Projectiles
             Vector2 ownerMountedCenter = projOwner.RotatedRelativePoint(projOwner.MountedCenter, true);
             Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
             projOwner.heldProj = Projectile.whoAmI;
-            projOwner.itemTime = projOwner.itemAnimation;
+            //projOwner.itemTime = projOwner.itemAnimation;
 
             float rot = Projectile.velocity.ToRotation();
 
             float progress = 1f - (float)projOwner.itemAnimation / (float)projOwner.itemAnimationMax;
             if (progress < 0.33f)
             {
+                if (Projectile.ai[1] < 1)
+                {
+                    Projectile.ai[1] = 1;
+                    SoundEngine.PlaySound(LobotomyCorp.WeaponSound("judgement2_1"));
+                    if (Main.myPlayer == Projectile.owner)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 22, ModContent.ProjectileType<JustitiaExtended>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 1);
+                    }
+                }
                 if (progress < 0.05f)
                     rot += MathHelper.ToRadians(-160) * Projectile.spriteDirection;
                 else if (progress < 0.2f)
@@ -55,40 +66,80 @@ namespace LobotomyCorp.Projectiles
                     rot += MathHelper.ToRadians(45) * Projectile.spriteDirection;
                 else if (progress < 0.3f)
                 {
+                    if (Main.myPlayer == projOwner.whoAmI)
+                    {
+                        Projectile.velocity = Vector2.Normalize(Main.MouseWorld - ownerMountedCenter);
+                    }
+
                     rot += MathHelper.ToRadians(Lerp(45, 0, progress % 0.05f / 0.05f)) * Projectile.spriteDirection;
                     Projectile.ai[0] = Lerp(0, -30, progress % 0.05f / 0.05f);
                 }
-                Projectile.ai[1] = Main.rand.Next(-10, 10);
+                Projectile.localAI[1] = Main.rand.Next(-10, 10);
             }
             else if (progress < 0.66f)
             {
-                if (Main.myPlayer == projOwner.whoAmI)
-                {
-                    Projectile.velocity = Vector2.Normalize(Main.MouseWorld - ownerMountedCenter);
-                }
-
                 if (progress < 0.43f)
                     Projectile.ai[0] = Lerp(-30, 10, (progress - 0.03f) % 0.1f / 0.1f);
                 else if (progress < 0.46f)
+                {
+                    if (Main.myPlayer == projOwner.whoAmI)
+                    {
+                        Projectile.velocity = Vector2.Normalize(Main.MouseWorld - ownerMountedCenter);
+                    }
                     Projectile.ai[0] = Lerp(10, -30, (progress - 0.01f) % 0.03f / 0.03f);
+                }
                 else if (progress < 0.56f)
                 {
-                    rot += MathHelper.ToRadians(Projectile.ai[1]) * Projectile.spriteDirection;
+                    rot += MathHelper.ToRadians(Projectile.localAI[1]) * Projectile.spriteDirection;
                     Projectile.ai[0] = Lerp(-30, 10, (progress - 0.06f) % 0.1f / 0.1f);
                 }
                 else if (progress < 0.60f)
                 {
-                    rot += MathHelper.ToRadians(Projectile.ai[1]) * Projectile.spriteDirection;
+                    rot += MathHelper.ToRadians(Projectile.localAI[1]) * Projectile.spriteDirection;
                     Projectile.ai[0] = 10;
                 }
                 else
                 {
-                    rot += MathHelper.ToRadians(Lerp(Projectile.ai[1], -160, progress % 0.06f / 0.06f)) * Projectile.spriteDirection;
+                    if (Main.myPlayer == projOwner.whoAmI)
+                    {
+                        Projectile.velocity = Vector2.Normalize(Main.MouseWorld - ownerMountedCenter);
+                    }
+
+                    rot += MathHelper.ToRadians(Lerp(Projectile.localAI[1], -160, progress % 0.06f / 0.06f)) * Projectile.spriteDirection;
                     Projectile.ai[0] = Lerp(10, 0, progress % 0.06f / 0.06f);
+                }
+
+                if (Projectile.ai[1] < 2)
+                {
+                    Projectile.ai[1] = 2;
+                    if (Main.myPlayer == Projectile.owner)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, new Vector2(20f, 0).RotatedBy(rot), ModContent.ProjectileType<SpearExtender>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 1, 3);
+                    }
+                    SoundEngine.PlaySound(LobotomyCorp.WeaponSound("judgement2_2"));
+                }
+                if (Projectile.ai[1] < 3 && progress > 0.46f)
+                {
+                    Projectile.ai[1] = 3;
+                    if (Main.myPlayer == Projectile.owner)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, new Vector2(20f, 0).RotatedBy(rot), ModContent.ProjectileType<SpearExtender>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 1, 3);
+                    }
+                    SoundEngine.PlaySound(LobotomyCorp.WeaponSound("judgement2_3"));
                 }
             }
             else
             {
+                if (Projectile.ai[1] < 4)
+                {
+                    Projectile.ai[1] = 4;
+                    if (Main.myPlayer == Projectile.owner)
+                    {
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 16, ModContent.ProjectileType<JustitiaExtended>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 2);
+                    }
+                    SoundEngine.PlaySound(LobotomyCorp.WeaponSound("judgement2_2"));
+                }
+
                 if (progress < 0.7f)
                 {
                     Projectile.ai[0] = 0;
@@ -96,14 +147,15 @@ namespace LobotomyCorp.Projectiles
                 }
                 else if (progress < 0.95f)
                 {
-                    rot += MathHelper.ToRadians(Lerp(-160, 45, (progress - 0.19f) % 0.25f / 0.25f)) * Projectile.spriteDirection;
+                    rot += MathHelper.ToRadians(Lerp(-160, 45, (float)Math.Sin(1.57f * (progress - 0.7f) / 0.25f))) * Projectile.spriteDirection;
                 }
                 else
                 {
-                    rot += 45 * Projectile.spriteDirection;
+                    rot += MathHelper.ToRadians(45) * Projectile.spriteDirection;
                 }
             }
 
+            /*
             if (((0.33f < progress && progress < 0.4f) ||
                 (0.46f < progress && progress < 0.50f) ||
                 (0.7f < progress && progress < 0.8f)) && Projectile.localAI[0] == 0)
@@ -115,6 +167,7 @@ namespace LobotomyCorp.Projectiles
                 (0.46f < progress && progress < 0.50f) ||
                 (0.7f < progress && progress < 0.8f)))
                 Projectile.localAI[0] = 0;
+            */
 
             Vector2 velRot = new Vector2(1, 0).RotatedBy(rot);
             projOwner.itemRotation = (float)Math.Atan2(velRot.Y * Projectile.direction, velRot.X * Projectile.direction);
@@ -159,18 +212,44 @@ namespace LobotomyCorp.Projectiles
         public override bool? CanHitNPC(NPC target)
         {
             float progress = 1f - (float)Main.player[Projectile.owner].itemAnimation / (float)Main.player[Projectile.owner].itemAnimationMax;
-            return (!(0.25f < progress && progress < 0.33f) ||
-                    !(0.56f < progress && progress < 0.7f));
+            if (!(0.25f < progress && progress < 0.33f) ||
+                    !(0.56f < progress && progress < 0.7f))
+                return null;    
+            else
+                return false;
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            target.immune[Projectile.owner] = 5;
+            Player projOwner = Main.player[Projectile.owner];
+            float progress = 1f - (float)projOwner.itemAnimation / (float)projOwner.itemAnimationMax;
+            if (progress < 0.66f)
+            {
+                if (progress < 0.33f)
+                {
+                    target.immune[Projectile.owner] = projOwner.itemAnimation - (int)(projOwner.itemAnimationMax * 0.666f);
+                }
+                else
+                {
+                    target.immune[Projectile.owner] = 6;
+                }
+            }
+            else
+                target.immune[Projectile.owner] = 5;
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            Main.player[Projectile.owner].itemRotation = 0;
+            Main.player[Projectile.owner].heldProj = -1;
         }
 
         public override bool PreDraw(ref Color lightColor)
         {
             Player projOwner = Main.player[Projectile.owner];
+            if (projOwner.itemAnimation == 3)
+                return false;
+
             Vector2 ownerMountedCenter = projOwner.RotatedRelativePoint(projOwner.MountedCenter, true);
             //Dust.NewDustPerfect(ownerMountedCenter, 14, Vector2.Zero);
             Vector2 position = ownerMountedCenter - Main.screenPosition;

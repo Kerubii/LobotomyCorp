@@ -19,17 +19,17 @@ namespace LobotomyCorp.Items
 		{
 			Item.damage = 24;
 			Item.DamageType = DamageClass.Magic;;
-            Item.mana = 8;
+            Item.mana = 6;
 			Item.width = 40;
 			Item.height = 40;
-			Item.useTime = 26;
-			Item.useAnimation = 26;
+			Item.useTime = 22;
+			Item.useAnimation = 22;
 			Item.useStyle = 5;
             Item.noMelee = true;
 			Item.knockBack = 2.4f;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Purple;
-			Item.UseSound = SoundID.Item85;
+			Item.UseSound = LobotomyCorp.WeaponSound("Shark");
 			Item.autoReuse = true;
 			Item.shoot = ModContent.ProjectileType<Projectiles.Candy>();
             Item.shootSpeed = 8f;

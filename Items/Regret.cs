@@ -15,17 +15,17 @@ namespace LobotomyCorp.Items
 
 		public override void SetDefaults() 
 		{
-			Item.damage = 72;
+			Item.damage = 42;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
-			Item.useTime = 32;
-            Item.useAnimation = 32;
-			Item.useStyle = -1;
+			Item.useTime = 56;
+            Item.useAnimation = 56;
+			Item.useStyle = 15;
 			Item.knockBack = 6;
 			Item.value = 10000;
 			Item.rare = ItemRarityID.Blue;
-			Item.UseSound = SoundID.Item1;
+			SwingSound = LobotomyCorp.WeaponSounds.Hammer;
 			Item.autoReuse = true;
 		}
 
