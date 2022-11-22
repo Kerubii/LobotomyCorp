@@ -268,13 +268,12 @@ namespace LobotomyCorp.Projectiles
             else
             {
                 //Im a fucking idiot wtf is this code, too diferent than circle >:V
-
                 SlashTrail trail = new SlashTrail(36, 12, 0);
                 trail.color = new Color(158, 255, 249);
 
-                float rot = MathHelper.ToRadians(210);
-                float rotationOffset = -1.57f * (float)Math.Sin(prog * 1.57f) * dir;
-                trail.DrawEllipse(player.Center, Projectile.velocity.ToRotation(), rot + rotationOffset, dir, 102, 40, 128, shader);
+                float rot = MathHelper.ToRadians(30);
+                float rotationOffset = -1.57f * (float)Math.Sin(prog * 1.57f);
+                trail.DrawEllipse(player.Center, Projectile.velocity.ToRotation(), (rot + rotationOffset) * dir, dir * -1, 102, 40, 128, shader);
             }
 
             return false;

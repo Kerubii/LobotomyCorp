@@ -74,16 +74,6 @@ namespace LobotomyCorp.Items.Ruina.Literature
             base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
         }
 
-        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
-        {
-			if (player.altFunctionUse != 2)
-            {
-				//Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity, ModContent.ProjectileType<Projectiles.Realized.BlackSwanRExtended>(), damage, knockback, player.whoAmI);
-			}
-
-            return base.Shoot(player, source, position, velocity, type, damage, knockback);
-        }
-
         public override bool? UseItem(Player player)
         {
 			if (!LobotomyModPlayer.ModPlayer(player).BlackSwanBrokenDream)

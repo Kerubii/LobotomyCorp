@@ -119,6 +119,7 @@ namespace LobotomyCorp
                     Ref<Effect> ArcanaSlaveRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ArcanaSlave", AssetRequestMode.ImmediateLoad).Value);
                     Ref<Effect> FourthMatchFlame = new Ref<Effect>(Assets.Request<Effect>("Effects/FourthMatchFlame", AssetRequestMode.ImmediateLoad).Value);
                     Ref<Effect> GenericTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/GenericTrail", AssetRequestMode.ImmediateLoad).Value);
+                    Ref<Effect> BladeTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/BladeTrail", AssetRequestMode.ImmediateLoad).Value);
 
                     //GameShaders.Misc["Punish"] = new MiscShaderData(punishingRef, "PunishingBird");
 
@@ -162,6 +163,15 @@ namespace LobotomyCorp
                     shader = new CustomShaderData(TrailRef, "Trail");
                     LobcorpShaders["TextureTrail"] = shader;
                     //TextureManager.BlankTexture = blankTexture;
+
+                    shader = new CustomShaderData(BladeTrail, "BlaidTrail");
+                    LobcorpShaders["SwingTrail"] = shader;
+
+                    shader = new CustomShaderData(BladeTrail, "BlaidTrail");
+                    shader.UseImage1(this, "Projectiles/Realized/RedEyesSlash");
+                    shader.UseImage2(this, "Projectiles/Realized/RedEyesSlashA");
+                    shader.UseImage3(this, "Misc/FX_Tex_Noise_Plasma1");
+                    LobcorpShaders["RedEyesTrail"] = shader;
 
                     WeaponSounds.Axe = WeaponSound("axe", true, 2);
                     WeaponSounds.BowGun = WeaponSound("bowGun");
@@ -285,6 +295,26 @@ namespace LobotomyCorp
                     return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name) with { Volume = 0.5f, MaxInstances = 2 };
             }
         }
+
+        /// <summary>
+        /// NameLocation as FolderName/FileName
+        /// </summary>
+        /// <param name="NameLocation"></param>
+        /// <param name="instances"></param>
+        /// <param name="Variance"></param>
+        /// <param name="Pitch"></param>
+        /// <returns></returns>
+        public static SoundStyle ItemLobSound(string NameLocation, int instances = 1, int Variance = 1, float Pitch = 0f, float Volume = 1f)
+        {
+            if (Variance == 1)
+            {
+                return new SoundStyle("LobotomyCorp/Sounds/Item/" + NameLocation) with { Volume = 0.5f * Volume, MaxInstances = instances, PitchVariance = Pitch };
+            }
+            else
+            {
+                return new SoundStyle("LobotomyCorp/Sounds/Item/" + NameLocation, Variance) with { Volume = 0.5f, MaxInstances = instances, PitchVariance = Pitch };
+            }
+        }
     }
 
     class LobSystem : ModSystem
@@ -323,6 +353,33 @@ namespace LobotomyCorp
                 ItemID.OilRagSconse
             });
             RecipeGroup.RegisterGroup("LobotomyCorp:DungeonLantern", rec);
+        }
+
+        public override void ModifyScreenPosition()
+        {
+            if (modifiedCamera)
+            {
+                Main.screenPosition = modifiedScreenPosition;
+                modifiedCamera = false;
+            }
+            base.ModifyScreenPosition();
+        }
+
+        private bool modifiedCamera;
+        private Vector2 modifiedScreenPosition;
+
+        public Vector2 RedEyesSpecialCamera(Vector2 cameraCenter, Vector2? lerpTo = null, float lerp = 0f)
+        {
+            modifiedCamera = true;
+            Vector2 position = cameraCenter + Vector2.UnitY * (Main.player[Main.myPlayer].gfxOffY - 1);
+            if (lerpTo != null)
+            {
+                position = Vector2.Lerp(position, (Vector2)lerpTo, lerp);
+            }
+            modifiedScreenPosition.X = position.X - Main.screenWidth / 2;
+            modifiedScreenPosition.Y = position.Y - Main.screenHeight / 2;
+            Main.SetCameraLerp(0.1f, 15);
+            return position;
         }
     }
 

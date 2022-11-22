@@ -34,6 +34,17 @@ namespace LobotomyCorp
         public bool QueenBeeSpore = false;
         public bool QueenBeeLarva = true;
 
+        public bool RedEyesCocoon = false;
+        private int RedEyesMeal = 0;
+        private int RedEyesMealDecay = 0;
+        public int RedEyesCocoonPlayer = -1;
+        public int RedEyesCocoonCooldown = 0;
+
+        public bool SanguineDesireGlitter = false;
+        public int SanguineDesireGlitterTarget = -1;
+        public bool SanguineDesireExtensiveBleeding = false;
+        public float SanguineDesireExtensiveBleedAmount = 0;
+
         public bool WingbeatFairyMeal = false;
         public int WingbeatFairyHeal = 0;
         public int WingbeatRotation = Main.rand.Next(360);
@@ -60,6 +71,25 @@ namespace LobotomyCorp
             PleasureDebuff = false;
 
             QueenBeeSpore = false;
+
+            if (!RedEyesCocoon)
+                RedEyesCocoonPlayer = -1;
+            RedEyesCocoon = false;
+            if (RedEyesMealDecay <= 0)
+            {
+                if (RedEyesMeal > 0)
+                    RedEyesMeal--;
+            }
+            else
+                RedEyesMealDecay--;
+
+            if (!SanguineDesireGlitter)
+                SanguineDesireGlitterTarget = -1;
+            SanguineDesireGlitter = false;
+            SanguineDesireExtensiveBleeding = false;
+
+            if (RedEyesCocoonCooldown > 0)
+                RedEyesCocoonCooldown--;
 
             if (!WingbeatFairyMeal)
             {
@@ -164,6 +194,44 @@ namespace LobotomyCorp
             base.ModifyHitPlayer(npc, target, ref damage, ref crit);
         }
 
+        public override void OnHitPlayer(NPC npc, Player target, int damage, bool crit)
+        {
+            if (SanguineDesireExtensiveBleeding && !npc.immortal)
+            {
+                int bleedDamage = (int)SanguineDesireExtensiveBleedAmount;
+                
+                CombatText.NewText(new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height), CombatText.DamagedHostile, (int)bleedDamage, false);
+                if (npc.realLife >= 0)
+                {
+                    Main.npc[npc.realLife].life -= (int)bleedDamage;
+                    npc.life = Main.npc[npc.realLife].life;
+                    npc.lifeMax = Main.npc[npc.realLife].lifeMax;
+                }
+                else
+                {
+                    npc.life -= (int)bleedDamage;
+                }
+                npc.HitEffect(0, bleedDamage);
+
+                for (int i = 0; i < bleedDamage / 2; i++)
+                {
+                    Dust.NewDust(npc.position, npc.width, npc.height, DustID.Blood);
+                }
+
+                SanguineDesireExtensiveBleedAmount /= 3;
+                if (SanguineDesireExtensiveBleedAmount < 1f)
+                {
+                    int type = ModContent.BuffType<Buffs.ExtensiveBleeding>();
+                    if (npc.HasBuff<Buffs.ExtensiveBleeding>())
+                    {
+                        int i = npc.FindBuffIndex(type);
+                        npc.DelBuff(i);
+                    }
+                }
+            }
+            base.OnHitPlayer(npc, target, damage, crit);
+        }
+
         public override void OnHitByProjectile(NPC npc, Projectile projectile, int damage, float knockback, bool crit)
         {
             if (LaetitiaGiftOwner >= 0)
@@ -216,6 +284,27 @@ namespace LobotomyCorp
             if (npc.HasBuff(ModContent.BuffType<Buffs.CrookedNotes>()) && Main.rand.NextBool(3))
             {
                 Main.dust[Dust.NewDust(npc.position, npc.width, npc.height, ModContent.DustType<Misc.Dusts.NoteDust>())].velocity.Y -= 1f;
+            }
+
+            if (Main.netMode != NetmodeID.Server)
+            {
+                if (RedEyesMealAmount > 0 && Main.LocalPlayer.HeldItem.type == ModContent.ItemType<Items.Ruina.Literature.RedEyesR>())
+                {
+                    int RedEyesMax = LobotomyModPlayer.ModPlayer(Main.LocalPlayer).RedEyesMealMax;
+                    if (RedEyesMealAmount > RedEyesMax)
+                    {
+                        drawColor = Color.Lerp(Color.Red, Color.Pink, (float)Math.Sin(6.28f * ((float)Main.timeForVisualEffects % 30) / 30f));
+                    }
+                    else
+                    {
+                        float amount = (float)RedEyesMealAmount / RedEyesMax;
+                        if (amount > 1)
+                            amount = 1;
+                        Color red = Color.Red * 0.8f;
+                        red.A = drawColor.A;
+                        drawColor = Color.Lerp(drawColor, red, amount);
+                    }
+                }
             }
         }
 
@@ -403,6 +492,36 @@ namespace LobotomyCorp
                 }
                 LNPC(npc).QueenBeeLarva = false;
             }
+        }
+    
+        public void RedEyesApplyMeal(int amount, int decayTimer = 600)
+        {
+            if (RedEyesCocoon)
+            {
+                RedEyesMeal = 0;
+                RedEyesMealDecay = 0;
+                return;
+            }
+            RedEyesMeal += amount;
+            RedEyesMealDecay = decayTimer;
+        }
+        public int RedEyesMealAmount { get { return RedEyesMeal; } }
+
+        public static void SanguineDesireApplyBleed(NPC npc, float amount, int amountMax, int time, int timeMax)
+        {
+            LNPC(npc).SanguineDesireExtensiveBleedAmount += amount;
+            if (LNPC(npc).SanguineDesireExtensiveBleedAmount > amountMax)
+                LNPC(npc).SanguineDesireExtensiveBleedAmount = amountMax;
+            if (npc.HasBuff<Buffs.ExtensiveBleeding>())
+            {
+                int i = npc.FindBuffIndex(ModContent.BuffType<Buffs.ExtensiveBleeding>());
+                int buffTime = npc.buffTime[i] += time;
+                if (buffTime > timeMax)
+                    buffTime = timeMax;
+                npc.AddBuff(ModContent.BuffType<Buffs.ExtensiveBleeding>(), buffTime);
+            }
+            else
+                npc.AddBuff(ModContent.BuffType<Buffs.ExtensiveBleeding>(), time);
         }
     }
 }

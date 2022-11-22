@@ -29,12 +29,14 @@ namespace LobotomyCorp.Utils
 
 		public SlashTrail(float width = 8, float rotationOffset = 0)
         {
+			color = Color.White;
 			Width = width;
 			RotationOffset = rotationOffset;
         }
 
 		public SlashTrail(float startingWidth = 8, float endingWidth = 8, float rotationOffset = 0)
 		{
+			color = Color.White;
 			StartingWidth = startingWidth;
 			EndingWidth = endingWidth;
 			RotationOffset = rotationOffset;
@@ -70,6 +72,15 @@ namespace LobotomyCorp.Utils
 			Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 		}
 
+		/// <summary>
+		/// Draws a circle and shades it with a shader
+		/// </summary>
+		/// <param name="center">Automatically reduced by Main.ScreenPosition</param>
+		/// <param name="startingRotation">Angle where the most left side of the texture begins</param>
+		/// <param name="direction">Texture counter-clockwise(1), or clockwise(-1)</param>
+		/// <param name="radius">Distance of the circle from its center</param>
+		/// <param name="angles">How many slices the circle will have, Fewer the better</param>
+		/// <param name="shader"></param>
 		public void DrawCircle(Vector2 center, float startingRotation, int direction, float radius, int angles, CustomShaderData shader)
         {
 			Vector2[] position = new Vector2[angles + 1];
@@ -83,14 +94,19 @@ namespace LobotomyCorp.Utils
 		}
 
 		/// <summary>
+		/// Center is automatically reduced by Main.ScreenPosition
+		/// StartingRotation is the angle where the most left side of the texture begins
+		/// EndAngle is the length where the texture ends relative to StartingRotation (StartingRotation + EndAngle = True EndAngle)
+		/// Direction is making the texture counter-clockwise(1), or clockwise(-1)
+		/// Radius is the distance of the circle from its center
 		/// Automatically reduces amount of angles to provide the same smoothness as desired from DrawCircle but with fewer actual angles
 		/// </summary>
-		/// <param name="center"></param>
-		/// <param name="startingRotation"></param>
-		/// <param name="endAngle"></param>
-		/// <param name="direction"></param>
-		/// <param name="radius"></param>
-		/// <param name="angles"></param>
+		/// <param name="center">Automatically reduced by Main.ScreenPosition</param>
+		/// <param name="startingRotation">Angle where the most left side of the texture begins</param>
+		/// <param name="endAngle">Length where the texture ends relative to StartingRotation (StartingRotation + EndAngle = True EndAngle)</param>
+		/// <param name="direction">Texture counter-clockwise(1), or clockwise(-1)</param>
+		/// <param name="radius">Distance of the circle from its center</param>
+		/// <param name="angles">How many slices the circle will have, Fewer the better</param>
 		/// <param name="shader"></param>
 		public void DrawPartCircle(Vector2 center, float startingRotation, float endAngle, int direction, float radius, int angles, CustomShaderData shader)
 		{
@@ -108,28 +124,43 @@ namespace LobotomyCorp.Utils
 			DrawSpecific(position, rotation, Vector2.Zero, shader);
 		}
 
-		public void DrawEllipse(Vector2 center, float offsetRotation, float startingRotation,int direction, float radius1, float radius2, int angles, CustomShaderData shader)
+		/// <summary>
+		/// Center is automatically reduced by Main.ScreenPosition
+		/// OffsetRotation is the angle of the Ellipse itself
+		/// StartingRotation is the angle where the most left side of the texture begins relative to OffsetRotation
+		/// Direction is making the texture counter-clockwise(1), or clockwise(-1)
+		/// Radius1 is the X distance of the circle from its center, StartingWidth is the subtrahend for the SecondPosition
+		/// Radius2 is the Y distance of the circle from its center, EndingWidth is the subtrahend for the SecondPosition
+		/// Angles dictates how many slices the circle will have, Fewer the better
+		/// </summary>
+		/// <param name="center">Automatically reduced by Main.ScreenPosition</param>
+		/// <param name="offsetRotation">Angle of the Ellipse itself</param>
+		/// <param name="startingRotation">Angle where the most left side of the texture begins</param>
+		/// <param name="direction">Texture counter-clockwise(1), or clockwise(-1)</param>
+		/// <param name="radius1">X distance of the circle from its center</param>
+		/// <param name="radius2">Y distance of the circle from its center</param>
+		/// <param name="angles">How many slices the circle will have, Fewer the better</param>
+		/// <param name="shader"></param>
+		public void DrawEllipse(Vector2 center, float offsetRotation, float startingRotation, int direction, float radius1, float radius2, int angles, CustomShaderData shader)
 		{
 			Radius1 = radius1;
 			Radius2 = radius2;
-
+			if (direction == 0)
+				direction = 1;
 			Vector2[] position = new Vector2[angles + 1];
 			Vector2[] position2 = new Vector2[angles + 1];
-			float[] rotation = new float[angles + 1];
 			for (int i = 0; i < angles + 1; i++)
 			{
-				rotation[i] = (-3.14f + startingRotation + 6.28f * ((float)i / (float)angles) * direction);
+				float rotation = (startingRotation - 6.28f * ((float)i / (float)angles) * direction);
 
-				position[i].X = radius1 * (float)Math.Cos(rotation[i]);
-				position[i].Y = radius2 * (float)Math.Sin(rotation[i]);
+				position[i].X = radius1 * (float)Math.Cos(rotation);
+				position[i].Y = radius2 * (float)Math.Sin(rotation);
 				position[i] = position[i].RotatedBy(offsetRotation);
-				//rotation[i] = position[i].ToRotation();
 				position[i] += center;
 
-				position2[i].X = (radius1 - StartingWidth) * (float)Math.Cos(rotation[i]);
-				position2[i].Y = (radius2 - EndingWidth) * (float)Math.Sin(rotation[i]);
+				position2[i].X = (radius1 - StartingWidth) * (float)Math.Cos(rotation);
+				position2[i].Y = (radius2 - EndingWidth) * (float)Math.Sin(rotation);
 				position2[i] = position2[i].RotatedBy(offsetRotation);
-				//rotation[i] = position[i].ToRotation();
 				position2[i] += center;
 			}
 
@@ -140,18 +171,19 @@ namespace LobotomyCorp.Utils
 		}
 
 		/// <summary>
+		/// StartingWidth is the subtrahend for the SecondPosition, EndingWidth is the subtrahend for the SecondPosition. 
 		/// Automatically reduces amount of angles to provide the same smoothness as desired from DrawEllipse but with fewer actual angles
 		/// </summary>
-		/// <param name="center"></param>
-		/// <param name="offsetRotation"></param>
-		/// <param name="endAngle"></param>
-		/// <param name="startingRotation"></param>
-		/// <param name="direction"></param>
-		/// <param name="radius1"></param>
-		/// <param name="radius2"></param>
-		/// <param name="angles"></param>
+		/// <param name="center">Automatically reduced by Main.ScreenPosition</param>
+		/// <param name="offsetRotation">Angle of the Ellipse itself</param>
+		/// <param name="startingRotation">Angle where the most left side of the texture begins</param>
+		/// <param name="endAngle">Length where the texture ends relative to StartingRotation (StartingRotation + EndAngle = True EndAngle)</param>
+		/// <param name="direction">Texture counter-clockwise(1), or clockwise(-1)</param>
+		/// <param name="radius1">X distance of the circle from its center</param>
+		/// <param name="radius2">Y distance of the circle from its center</param>
+		/// <param name="angles">How many slices the circle will have, Fewer the better</param>
 		/// <param name="shader"></param>
-		public void DrawPartEllipse(Vector2 center, float offsetRotation, float endAngle, float startingRotation, int direction, float radius1, float radius2, int angles, CustomShaderData shader)
+		public void DrawPartEllipse(Vector2 center, float offsetRotation, float startingRotation, float endAngle, int direction, float radius1, float radius2, int angles, CustomShaderData shader)
 		{
 			float percentage = endAngle / 6.14f;
 			angles = (int)(angles * percentage);
@@ -161,26 +193,34 @@ namespace LobotomyCorp.Utils
 
 			Vector2[] position = new Vector2[angles + 1];
 			Vector2[] position2 = new Vector2[angles + 1];
-			float[] rotation = new float[angles + 1];
 			for (int i = 0; i < angles + 1; i++)
 			{
-				rotation[i] = (-3.14f + startingRotation + endAngle * ((float)i / (float)angles) * direction);
+				float rotation = (startingRotation - endAngle * ((float)i / (float)angles) * direction);
 
-				position[i].X = radius1 * (float)Math.Cos(rotation[i]);
-				position[i].Y = radius2 * (float)Math.Sin(rotation[i]);
+				position[i].X = radius1 * (float)Math.Cos(rotation);
+				position[i].Y = radius2 * (float)Math.Sin(rotation);
 				position[i] = position[i].RotatedBy(offsetRotation);
-				//rotation[i] = position[i].ToRotation();
 				position[i] += center;
 
-				position2[i].X = (radius1 - StartingWidth) * (float)Math.Cos(rotation[i]);
-				position2[i].Y = (radius2 - EndingWidth) * (float)Math.Sin(rotation[i]);
+				position2[i].X = (radius1 - StartingWidth) * (float)Math.Cos(rotation);
+				position2[i].Y = (radius2 - EndingWidth) * (float)Math.Sin(rotation);
 				position2[i] = position2[i].RotatedBy(offsetRotation);
-				//rotation[i] = position[i].ToRotation();
 				position2[i] += center;
 			}
 
 			shader.Apply();
 			_vertexStrip.PrepareEllipse(position, position2, StripColors, -Main.screenPosition, RotationOffset, position.Length, includeBacksides: true);
+			_vertexStrip.DrawTrail();
+			Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+		}
+
+		/// <summary>
+		/// THEY COME IN PAIRS, First array is top of the texture, Second array is the lower part of the texture, Its not complex though. Subtract Position with Main screenposition
+		/// </summary>
+		public void DrawManual(Vector2[] TopPosition, Vector2[] BottomPosition, CustomShaderData shader, float progOffset = 0f)
+        {
+			shader.Apply();
+			_vertexStrip.PrepareManual(TopPosition, BottomPosition, StripColors, TopPosition.Length, includeBacksides: true, progOffset);
 			_vertexStrip.DrawTrail();
 			Main.pixelShader.CurrentTechnique.Passes[0].Apply();
 		}

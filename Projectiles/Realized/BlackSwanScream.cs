@@ -57,6 +57,12 @@ namespace LobotomyCorp.Projectiles.Realized
 				Dust d = Dust.NewDustPerfect(Projectile.Center, type, vel);
 				d.noGravity = true;
 				d.fadeIn = 1.2f;
+
+				if (Main.rand.NextBool(3))
+                {
+					vel = new Vector2(Main.rand.Next(36), 0).RotateRandom(6.28f);
+					Dust.NewDustPerfect(Projectile.Center, ModContent.DustType<Misc.Dusts.BlackFeather>(), vel);
+				}
 			}
 
 			Projectile.ai[0]++;

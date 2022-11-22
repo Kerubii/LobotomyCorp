@@ -55,7 +55,7 @@ namespace LobotomyCorp.Items
 			.AddIngredient(ItemID.MagicMissile)
 			.AddIngredient(ItemID.Amethyst)
 			.AddIngredient(ItemID.FallenStar, 15)
-			.AddTile(Mod, "BlackBox")
+			.AddTile(Mod, "BlackBox3")
 			.Register();
 		}
 	}

@@ -221,10 +221,32 @@ namespace LobotomyCorp.UI
             return -1;
         }
 
-            /// <summary>
-            /// So yeah lol
-            /// </summary>
-            /// <param name="mod"></param>
+        /// <summary>
+        /// Get Sephirah text from Localization files
+        /// </summary>
+        /// <param name="Sephirah"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static string GetSephirahText(string Sephirah, int id)
+        {
+            return Language.GetTextValue("Mods.LobotomyCorp.SuppressionTexts." + Sephirah + "." + id);
+        }
+
+        /// <summary>
+        /// Get Sephirah text from Localization files
+        /// </summary>
+        /// <param name="Sephirah"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static string GetSephirahText(string Sephirah, string id)
+        {
+            return Language.GetTextValue("Mods.LobotomyCorp.SuppressionTexts." + Sephirah + "." + id);
+        }
+
+        /// <summary>
+        /// So yeah lol
+        /// </summary>
+        /// <param name="mod"></param>
         public static void Clear()
         {
             SuppressionTextSystem System = ModContent.GetInstance<SuppressionTextSystem>();

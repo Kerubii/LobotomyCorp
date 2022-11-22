@@ -54,10 +54,11 @@ namespace LobotomyCorp.Projectiles.Realized
             float rot = Projectile.velocity.ToRotation() - MathHelper.ToRadians(145) * projOwner.direction;
 
             float progress = 1f - (float)projOwner.itemAnimation / (float)projOwner.itemAnimationMax;
-            if (progress < 0.3f)
+            
+            /*if (progress < 0.3f)
             {
                 float swing = progress / 0.3f;
-                rot += MathHelper.ToRadians(290) * swing * projOwner.direction;
+                rot += MathHelper.ToRadians(290) * (float)Math.Sin(1.57f * swing) * projOwner.direction;
                 Projectile.scale = 1f + 0.2f * (float)Math.Sin(3.14f * swing);
             }
             else if (progress < 0.5f)
@@ -67,15 +68,45 @@ namespace LobotomyCorp.Projectiles.Realized
             else if (progress < 0.8f)
             {
                 float swing = 1f - ((progress - 0.5f) / 0.3f);
-                rot += MathHelper.ToRadians(290) * swing * projOwner.direction;
+                rot += MathHelper.ToRadians(290) * (float)Math.Sin(1.57f * swing) * projOwner.direction;
                 Projectile.scale = 1f + 0.2f * (float)Math.Sin(3.14f * swing);
+            }*/
+
+            if (progress < 0.3f)
+            {
+                progress = (progress) / 0.3f;
+                rot += MathHelper.ToRadians(190) * (float)Math.Sin(1.57f * progress) * projOwner.direction;
+                Projectile.scale = 1f + 0.2f * (float)Math.Sin(3.14f * progress);
+            }
+            else if (progress < 0.4f)
+            {
+                progress = (progress - 0.3f) / 0.1f;
+                rot += MathHelper.ToRadians(190 + 10 * progress) * projOwner.direction;
+            }
+            else if (progress < 0.5f)
+            {
+                progress = (progress - 0.4f) / 0.1f;
+                rot += MathHelper.ToRadians(200 - 200 * progress) * projOwner.direction;
+            }
+            else if (progress < 0.8f)
+            {
+                progress = (progress - 0.5f) / 0.3f;
+                rot += MathHelper.ToRadians(190) * (float)Math.Sin(1.57f * progress) * projOwner.direction;
+                Projectile.scale = 1f + 0.2f * (float)Math.Sin(3.14f * progress);
+            }
+            else
+            {
+                progress = (progress - 0.8f) / 0.2f;
+                rot += MathHelper.ToRadians(190 + 10 * progress) * projOwner.direction;
             }
 
             Vector2 velRot = new Vector2(1, 0).RotatedBy(rot);
             projOwner.itemRotation = (float)Math.Atan2(velRot.Y * Projectile.direction, velRot.X * Projectile.direction);
             projOwner.direction = Projectile.spriteDirection;
             Projectile.rotation = rot;// + MathHelper.ToRadians(Projectile.spriteDirection == 1 ? 45 : 135);
-            projOwner.SetCompositeArmFront(enabled: true, CompositeArmStretchAmount.Full, Projectile.rotation - 1.57f); //- 0.785f);// * owner.direction);
+            //projOwner.SetCompositeArmFront(enabled: true, CompositeArmStretchAmount.Full, Projectile.rotation - 1.57f); //- 0.785f);// * owner.direction);
+
+            Items.LobCorpLight.LobItemFrame(projOwner, rot);
 
             Projectile.Center = ownerMountedCenter + (60 + Projectile.ai[0]) * velRot;
 
@@ -98,6 +129,10 @@ namespace LobotomyCorp.Projectiles.Realized
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Projectile.ai[0] = -1;
+            int maximumDamage = target.damage * 20;
+            if (maximumDamage < Projectile.damage * 20)
+                maximumDamage = Projectile.damage * 20;
+            LobotomyGlobalNPC.SanguineDesireApplyBleed(target, damage / 2f, maximumDamage, 60, 600);
         }
 
         public override bool ShouldUpdatePosition()

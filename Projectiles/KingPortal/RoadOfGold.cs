@@ -219,7 +219,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
                 Projectile.scale += 0.3f;
 
             portalTimer--;
-            if (portalTimer < 0 && portalPair == -1)
+            if (portalTimer < 0 && portalPair == -1 && IsRedMistActive())
             {
                 Player targetPlayer = getNearest();
 
@@ -252,7 +252,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
                     portalPos = portalCenter + velocity * NPCs.RedMist.RedMist.GOLDRUSH4DELAY;
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), portalPos, velocity, Projectile.type, 0, 0, 0, -1, NPCs.RedMist.RedMist.GOLDRUSH4DELAY * 2 + 1);
                 }
-                Main.NewText("Beep boop made new Portal");
+                //Main.NewText("Beep boop made new Portal");
             }
 
             if (portalTimer < 0 && portalPair == -3)
@@ -305,6 +305,11 @@ namespace LobotomyCorp.Projectiles.KingPortal
             portalRedMistEntered = reader.ReadBoolean();
         }
 
+        private bool IsRedMistActive()
+        {
+            return (NPC.AnyNPCs(ModContent.NPCType<NPCs.RedMist.RedMist>()) || NPC.AnyNPCs(ModContent.ProjectileType<GoldRushRedMist>()));
+        }
+
         private void TeleportGoldRush()
         {
             foreach(Projectile p in Main.projectile)
@@ -318,7 +323,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
 
                     portalGoldEntered = true;
 
-                    Main.NewText("Teleport GR Success");
+                    //Main.NewText("Teleport GR Success");
 
                     p.ai[1]++;
                     Projectile.timeLeft = 240;
@@ -348,7 +353,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
 
                     NPCs.RedMist.RedMist redMist = (NPCs.RedMist.RedMist)n.ModNPC;
                     redMist.TeleportP4(Projectile.whoAmI, pair.whoAmI, pair.Center, Vector2.Normalize(pair.velocity) * n.velocity.Length());
-                    Main.NewText("Teleport RM Success");
+                    //Main.NewText("Teleport RM Success");
                     Projectile.timeLeft = 60;
                     pair.timeLeft = 60;
                     return;

@@ -197,7 +197,7 @@ namespace LobotomyCorp.Projectiles
                 float seperation = (float)(40 * Pos);
 
                 float dist = 1500f + (buffActive ? 750 : 0);
-                float currentTarget = -1;
+                int currentTarget = -1;
                 bool priority = false;
                 for (int k = 0; k < Main.maxNPCs; k++)
                 {
@@ -291,6 +291,8 @@ namespace LobotomyCorp.Projectiles
                         collide = true;
                 }
                 bool pBelow = player.Center.Y > Projectile.position.Y + Projectile.height;
+                if (target)
+                    pBelow = Main.npc[(int)currentTarget].position.Y > Projectile.position.Y + Projectile.height;
                 Collision.StepUp(ref Projectile.position, ref Projectile.velocity, Projectile.width, Projectile.height, ref Projectile.stepSpeed, ref Projectile.gfxOffY, 1, false);
                 if (Projectile.velocity.Y == 0f)
                 {
@@ -333,15 +335,17 @@ namespace LobotomyCorp.Projectiles
                             jump = true;
                         }
                     }
-                    if (!pBelow && (Projectile.velocity.X != 0f))
+                    if (pBelow && (Projectile.velocity.X != 0f))
                     {
+                        /*
                         int i = (int)(Projectile.Center.X) / 16;
                         int j = (int)(Projectile.Center.Y) / 16 + 1;
                         if (moveLeft)
                             --i;
                         if (moveRight)
                             ++i;
-                        WorldGen.SolidTile(i, j);
+                        WorldGen.SolidTile(i, j);*/
+                        FallThrough();
                     }
                     if (collide && !jump)
                     {
@@ -581,10 +585,21 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
+        private bool FallThroughPlatforms = false;
+        private void FallThrough()
+        {
+            FallThroughPlatforms = true;
+        }
+
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
-
             fallThrough = false;
+            Player player = Main.player[Projectile.owner];
+            if (FallThroughPlatforms)
+            {
+                fallThrough = true;
+                FallThroughPlatforms = false;
+            }
             return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
         }
 
@@ -720,13 +735,15 @@ namespace LobotomyCorp.Projectiles
                     }
                     if (!pBelow && (Projectile.velocity.X != 0f))
                     {
+                    /*
                         int i = (int)(Projectile.Center.X) / 16;
                         int j = (int)(Projectile.Center.Y) / 16 + 1;
                         if (moveLeft)
                             --i;
                         if (moveRight)
                             ++i;
-                        WorldGen.SolidTile(i, j);
+                        WorldGen.SolidTile(i, j);*/
+                        FallThrough();
                     }
                     if (collide && jump)
                     {
@@ -940,9 +957,20 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
+        private bool FallThroughPlatforms = false;
+        private void FallThrough()
+        {
+            FallThroughPlatforms = true;
+        }
+
         public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
         {
-            fallThrough = false;
+            fallThrough = false;    
+            if (FallThroughPlatforms)
+            {
+                fallThrough = true;
+                FallThroughPlatforms = false;
+            }
             return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
         }
 

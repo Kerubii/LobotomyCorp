@@ -83,12 +83,24 @@ namespace LobotomyCorp.Projectiles.Realized
 				}
 			}
 
+			if (Projectile.timeLeft > 5)
+				Projectile.localAI[0] += Projectile.velocity.Length() * 6;
+			else
+				Projectile.localAI[0] -= Projectile.velocity.Length() * 6;
+
 			for (int i = 0; i < 3; i++)
             {
 				int d = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, Main.rand.Next(2, 4));
 				Main.dust[d].velocity = Projectile.velocity * -0.2f;
 				Main.dust[d].noGravity = true;
-			
+				
+				if (Main.rand.NextBool(6))
+                {
+					Vector2 vel = (-Projectile.velocity).RotatedBy(Main.rand.NextFloat(-0.3f, 0.3f));
+					vel.Normalize();
+					vel *= Main.rand.NextFloat(1f, 8f);
+					Dust.NewDust(Projectile.Center, Projectile.width, Projectile.height, ModContent.DustType<Misc.Dusts.BlackFeather>(), vel.X, vel.Y);
+				}
 			}
 
 			if (projOwner.dead)
@@ -106,6 +118,21 @@ namespace LobotomyCorp.Projectiles.Realized
 
 		public override bool PreDraw(ref Color lightColor)
         {
+			Texture2D pierceTrail = SpearExtender.SpearTrail;
+			Vector2 pos = Projectile.Center - Main.screenPosition + Projectile.gfxOffY * Vector2.UnitY;
+			Rectangle frame = pierceTrail.Frame();
+			Vector2 origin = frame.Size() / 2;
+			origin.X += frame.Width / 4;
+			Vector2 scale = new Vector2((Projectile.localAI[0] / 192f), Projectile.scale * 0.25f);
+			Color BaseColor = new Color(103, 232, 192);
+			Main.EntitySpriteDraw(pierceTrail, pos, frame, BaseColor, Projectile.rotation, origin, scale, 0, 0);
+
+			BaseColor = Color.White;
+			scale.X *= 0.66f;
+			scale.Y *= 0.33f;
+			Main.EntitySpriteDraw(pierceTrail, pos, frame, Color.White, Projectile.rotation, origin, scale, 0, 0);
+
+			return false;
 			SlashTrail trail = new SlashTrail(24, MathHelper.ToRadians(0));//, 0.785f - MathHelper.ToRadians(Projectile.direction == 1 ? 0 : 90));
 			trail.color = new Color(0, 100, 0);
 
@@ -116,15 +143,15 @@ namespace LobotomyCorp.Projectiles.Realized
 			CustomShaderData windTrail = LobotomyCorp.LobcorpShaders["WindTrail"].UseOpacity(prog);
 
 			int max = Projectile.timeLeft > 4 ? 10 - (Projectile.timeLeft - 4) : 10;
-			Vector2[] pos = new Vector2[max];
+			Vector2[] posTrail = new Vector2[max];
 			float[] rot = new float[max];
-			for (int i = 0; i < pos.Length; i++)
+			for (int i = 0; i < posTrail.Length; i++)
             {
-				pos[i] = Projectile.Center - Projectile.velocity * i * 6;
+				posTrail[i] = Projectile.Center - Projectile.velocity * i * 6;
 				rot[i] = Projectile.rotation;
             }
 
-			trail.DrawSpecific(pos, rot, Vector2.Zero, windTrail);
+			trail.DrawSpecific(posTrail, rot, Vector2.Zero, windTrail);
 
 			return false;
         }

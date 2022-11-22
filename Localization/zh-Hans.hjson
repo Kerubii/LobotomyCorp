@@ -1,0 +1,248 @@
+﻿Mods: {
+	LobotomyCorp: {
+		ItemName: {
+			#Zayin
+			Penitence: "忏悔"
+			Wingbeat: "翅振"
+			Soda: "美味苏打"
+
+			#Teth
+			Tough: "谢顶之灾"
+			TodaysExpression: "此刻的神情"
+			SoCute: "超特么可爱！！！"
+			EngulfingDream: "虚空之梦"
+			CherryBlossoms: "落樱"
+			Lantern: "诱捕幻灯"
+			LifeForADaredevil: "决死之心"
+			FragmentsFromSomewhere: "彼方的碎片"
+			WristCutter: "割腕者"
+			Regret: "悔恨"
+		}
+
+		ItemTooltip: {
+			#Zayin
+			Penitence: 
+				'''
+				唯有理解才能获取知识。
+				通过对这个异想体的细心观测，我们成功提取出了它的核心并将其塑造成一把武器。
+				'''
+			Wingbeat:
+				'''
+				这把武器闪耀着和精灵们身上相同的，苍白的光。
+				这把武器并不像精灵的羽翼那样轻薄，而要沉重很多。
+				'''
+			Soda: 
+				'''
+				这把武器由一名十分喜欢皮皮虾的员工提出并提取出来。
+				这是一把带有葡萄紫色涂装的手枪。
+				'''
+			#Teth
+			Tough:
+				'''
+				这是一把屌爆了的洛洛克手枪！能够轻松击落一架直升机！
+				它只能被发型简单，清爽的人士使用...那就是秃子！光头！大吴克！
+				'''
+			TodaysExpression: 
+				'''
+				这件装备上的各种表情都是由布料填塞出来的。
+				人们可能会因为害羞而拒绝展露出自己的面容和表情。
+				'''
+			SoCute: 
+				'''
+				我想，从有着可爱外表的异想体中提取出来的武器应该不会很厉害吧？
+				好吧，我错了，这只爪子不仅结实耐用，还狠可爱！！
+				'''
+			EngulfingDream: 
+				'''
+				我们必须保持清醒。
+				这家残酷的公司甚至不允许人们拥有甜美的梦。
+				这件武器将唤醒那些沉浸在甜美梦境中的人们。
+				'''
+			CherryBlossoms: 
+				'''
+				花般散落开来，在空中飘过，如同展开的粉扇。映照出余晖，令人眷恋着花落前的景色。
+				春风，夹杂着纷飞的花瓣，吹打在人们的脸庞，却不知为何带着一丝冰冷与痛楚。
+				'''
+			Lantern: 
+				'''
+				发光的躯体能够轻而易举地照亮黑暗，闪烁着的淡绿色荧光也十分适合诱捕那些可怜的无
+				知者。
+				'''
+			LifeForADaredevil:
+				'''
+				这是一把古老的武士刀。
+				就同那盔甲一样，如果这把刀落在了懦夫手里，它便一点威力也没有。
+				'''
+			FragmentsFromSomewhere: 
+				'''
+				不要想着去理解它，只是这样握着它就可以了。
+				这支长矛经常试图引导握着它的人进入无尽的精神位面，因此持有者必须小心，决不能被
+				其迷惑。
+				'''
+			WristCutter: 
+				'''
+				沾满血迹的手上握着这把刀，刀刃似乎充盈着流不尽的鲜血。
+				或许是为了减少割腕时的痛苦，刀刃被刻意打磨得锋利无比，能够轻而易举地割断血肉。
+				'''
+			Regret: 
+				'''
+				秘密研究是从一个地下室开始的，而那项研究有着改变人类未来的无限可能。
+				为了一个更远大的目标，他们放下了道德和尊严，虽不人道，可没人会感到后悔...除了他
+				们。看上去连仁慈的Carmen都默许了这一切。
+				'''
+		}
+		
+		#RUINA EGO
+		EgoItemTooltip: {
+			RealizedEgo: A Realized E.G.O
+			
+			#Split Green and Red with |
+			#History
+			FourthMatchFlame: {
+				ItemTooltip: "I am coming to you. You, who will be reduced to ash like me."
+				PassiveList:
+					'''
+					Warmth of a Flame - 400% damage on fourth use
+					Fourth Match - Alternate attack makes you explode on fourth use that deals 4000% increased damage
+					Matchstick - 16% increased damage while on fire
+					|Scorching Embers - Sets self on fire every fourth use
+					'''
+			}
+
+			Forgotten: {
+				ItemTooltip: "Its memories began with a warm hug."
+				PassiveList:
+					'''
+					Display of Affection - Attacking the same enemy three times in a row marks them, unmarks enemies when far away or switching weapons
+					Happy Memories - Attacking the same enemy in a row gives 1% increased contact damage resistance against them, up to 40%. Lost when switching targets
+					Nostalgic Embrace - Alternate attack to hug a marked enemy for a short while based on Happy Memories, become invincible if Happy Memories is max.
+					|Unattended - After marking an enemy, Unable to hit any other enemies other than the marked enemy
+					'''
+			}
+
+			Wingbeat: {
+				ItemTooltip: "Everything will be peaceful while you are under the fairies' care."
+				PassiveList:
+					'''
+					Ravenous Hunger - First enemy hit has a 10% lifesteal
+					Fairies Care - Send a fairy to heal an enemy or ally
+					Prepared Meal - 15% increased damage and 20% increased lifesteal against enemies under Fairies Care
+					|Predation - Your health slowly drains, temporarily stopped after killing an enemy
+					'''
+			}
+
+			Hornet: {
+				ItemTooltip: "If you feel an abdominal pain and a tingling sensation in your neck,\nthe best thing you can do now is look at the great blue sky you'll never get to see again."
+				PassiveList:
+					'''
+					Strike of Retribution - Charge up a forward strike, the distance travelled depends on how long you've charged
+					Loyalty - Summon 2 worker bees at your aide whenever you have no worker bees alive, Worker Bees lasts 60 seconds
+					Spores - Hitting enemies with this weapon marks them with spores that produce more temporary worker bees when killed
+					Pheromones - Release Pheromones that strengthens your worker bees for 30 seconds, -14 defense. Cannot be reused while active
+					|Embrace of Death - Having less that 25% of your maximum health will turn your worker bees hostile
+					'''
+			}
+
+			GreenStem: {
+				ItemTooltip: "The day a ripe apple fell off the tree in the garden where the princess and the king stood, the witch's heart shattered."
+				PassiveList:
+					'''
+					Enroaching Malice - Slowly spread vines around you
+					Vines fraught with Spite - Vines attacks enemies near the spread out vines
+					Malice - Deal extra damage inversely proportional to health
+					|Crumbling Life - 30% decreased damage reduction while vines are active
+					'''
+			}
+
+			#Template - Remove the #
+
+			#ImageFilename(No R): {
+			#	ItemTooltip: 
+			#	PassiveList:
+			#		'''
+			#		
+			#		'''
+			#}
+		}
+
+		SuppressionTexts: {
+			Gebura: {
+				0: 秘密研究是从一个地下室开始的，而那项研究有着改变人类未来的无限可能。
+				1: What's left for me, the one who failed to protect them?
+				2: Do you really think feeble cowards like you can stop me?
+				3: Let me show you how to actually wield E.G.O.
+
+				#Phase1
+				4: I'm back; the Red Mist has walked out from a sea of pain.
+				5: I'm no longer weak like I used to be; I can replace any body part even if it gets cut off, and I can be repaired even if I'm broken.
+				
+				#Phase2
+				6: Some things simply couldn't be forgotten, no matter how much time has passed.
+				7: Hatred is a poison that eviscerates me, and yet it makes me open my eyes once more.
+				
+				#Phase3
+				8: Some things just wouldn't cool down, no matter how long they were left in the cold.
+				9: Those monsters always kill people, there is no end to this sin; I have descended to bring about their reckoning.
+				
+				#Phase4
+				10: The right path is too far away, and I have too far to go. My heart is pulsing with anger, and I must keep pushing.
+				
+				#Death Message
+				11: Ah... I'm breaking... I won't drop my sword, even if I turn to dust...
+				12: Even after all this, I can't do a single thing with this power...
+				
+				#Phase 1 Messages
+				RedEyes: Red Eyes
+				Penitence: Penitence
+				Both: Get blown to pieces
+				GoldRush1: The Road of Gold opens
+				
+				#Phase 2 Messages
+				Heaven: The Burrowing Heaven
+				
+				Mimicry1: Nothing will Remain
+				Mimicry2: I'll mow you down
+				
+				DaCapo1: From the Overture
+				DaCapo2: Adagio e Tranquillo
+				
+				#Not from game
+				Dash1: Stop running
+				Dash2: You can't escape from me
+				
+				Teleport1: Legato
+				Teleport2: Let's do this, partner
+				Teleport3: Only bloody mist remains
+				
+				#Phase 3 Messages
+				Shift1: This isn't enough
+				Shift2: I wasn't slacking off all this time
+				
+				Smile1: Black Laughter
+				Smile2: Be Eaten
+				
+				Justitia1: Justitia
+				Justitia2: Judgement
+				
+				#Phase 4 Messages
+				Shift3: Let's put an end to this
+				Shift4: The apocalypse is here...
+				
+				Pass1: Beat it, coward
+				Pass2: Don't try and stop me
+				Pass3: You're weak
+				
+				Arrive: Be torn apart before my eyes
+				
+				GoldRush2: The hunt begins
+				GoldRush3: The Road of the King opens
+				
+				Tired1: I'm just not as capable as I used to be...
+				Tired2: I'll break it down...
+				Tired3: I'll kill all of you...
+				Tired4: I can't stop
+				Tired5: It just isn't enough
+			}
+		}
+	}
+}

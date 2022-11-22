@@ -115,10 +115,12 @@ namespace LobotomyCorp.Projectiles
             Player player = Main.player[Projectile.owner];
             CustomShaderData shader = LobotomyCorp.LobcorpShaders["FourthMatchFlame"].UseOpacity(0.5f * (float)Math.Cos(3.15f * ((float)player.itemAnimation/(float)player.itemAnimationMax)) + 0.5f);
 
-            int dir = Math.Sign(Projectile.velocity.X);
+            int dir = Math.Sign(player.direction);
             SlashTrail trail = new SlashTrail(180, 45, 0);
             trail.color = Color.Red;
-            trail.DrawEllipse(Projectile.Center, Projectile.velocity.ToRotation(), 1.47f * dir - 0.698132f * (float)Math.Sin(1.57f * (1 - ((float)player.itemAnimation / (float)player.itemAnimationMax))) * dir, dir, 400, 75, 128, shader);
+            float prog = (1 - (player.itemAnimation / (float)player.itemAnimationMax));
+            float offset = MathHelper.ToRadians(-85 - 40 * (float)Math.Sin(1.57f * prog)) * dir;
+            trail.DrawEllipse(Projectile.Center, Projectile.velocity.ToRotation(), offset, dir * -1, 400, 75, 128, shader);
 
             return false;
         }

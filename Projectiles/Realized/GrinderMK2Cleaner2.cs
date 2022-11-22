@@ -312,12 +312,12 @@ namespace LobotomyCorp.Projectiles.Realized
                 {
                     Vector2 dustSpeed = Projectile.velocity;
                     dustSpeed.Normalize();
-                    int d = Dust.NewDust(Projectile.position + HitboxExtension, Projectile.width, Projectile.height, DustID.Blood, dustSpeed.X, dustSpeed.Y);
+                    int d = Dust.NewDust(target.position, target.width, target.height, DustID.Blood, dustSpeed.X, dustSpeed.Y);
                 }
 
                 if (Main.rand.Next(4) == 0)
                 {
-                    SpawnTrailDust(Projectile.position + HitboxExtension, Projectile.width, Projectile.height, ModContent.DustType<Misc.Dusts.ElectricTrail>(), Vector2.Zero, 0.5f, 5);
+                    SpawnTrailDust(target.position, target.width, target.height, ModContent.DustType<Misc.Dusts.ElectricTrail>(), Vector2.Zero, 0.5f, 5);
                 }
             }
 
@@ -404,9 +404,8 @@ namespace LobotomyCorp.Projectiles.Realized
                     float radiusX = 36 + XOFfset * 2;
                     SlashTrail trail = new SlashTrail(radiusX, 12 + 12 * prog, 0);
                     trail.color = Color.DarkRed;// * (float)Math.Sin(prog * 3.14f);
-                    float rotationOffset = 3.14f;
                     //trail.DrawEllipse(player.Center, AttackRotation, rotationOffset + rotation, dir * -1, X - 12 + 28 * (1f - prog), Y, 128, shader);
-                    trail.DrawPartEllipse(player.Center, AttackRotation, 1.5f * (float)Math.Sin(progress * 3.14f), rotationOffset + rotation, dir * -1, X - 36 + radiusX + XOFfset, Y, 128, shader);
+                    trail.DrawPartEllipse(player.Center, AttackRotation, rotation, 1.5f * (float)Math.Sin(progress * 3.14f), dir, X - 36 + radiusX + XOFfset, Y, 128, shader);
                 }
             }
 

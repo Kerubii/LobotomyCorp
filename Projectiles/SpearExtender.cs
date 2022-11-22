@@ -62,6 +62,7 @@ namespace LobotomyCorp.Projectiles
 			None = 1,
 			SSWT,
 			SSWTNoExtra,
+			BlackSwan
         }
 
         public override void AI()
@@ -73,6 +74,7 @@ namespace LobotomyCorp.Projectiles
 			Projectile.direction = projOwner.direction;
 			Projectile.position.X = ownerMountedCenter.X - (float)(Projectile.width / 2);
 			Projectile.position.Y = ownerMountedCenter.Y - (float)(Projectile.height / 2);
+
 			if (Projectile.ai[0] == 2)
 			{
 				Projectile.position.X += ExtraAI[0];
@@ -118,9 +120,26 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
+		//-1 = darker, +1 = lighter
+		private Color GetColor(int range = 0)
+        {
+			if (Projectile.ai[0] == (int)SEExtra.BlackSwan)
+			{
+				if (range == 0)
+					return new Color(125, 239, 156);//CyanLime
+				return range < 0 ? new Color(24, 45, 26) : new Color(84, 212, 51);
+			}
+			else
+			{
+				if (range == 0)
+					return new Color(103, 232, 192);//Pale
+				return range < 0 ? new Color(55, 166, 133) : new Color(72, 180, 206);
+			}
+		}
+
         public override bool PreDraw(ref Color lightColor)
         {
-			Color Pale = new Color(103, 232, 192);
+			Color BaseColor = GetColor();
 			float Opacity = (Projectile.alpha / 255f);
 
 			Texture2D tex = SpearTrail;
@@ -134,11 +153,11 @@ namespace LobotomyCorp.Projectiles
 				scale.Y *= 0.5f;
 			}
 
-			Main.EntitySpriteDraw(tex, pos, frame, Pale * Opacity, Projectile.rotation, origin, scale, 0, 0);
+			Main.EntitySpriteDraw(tex, pos, frame, BaseColor * Opacity, Projectile.rotation, origin, scale, 0, 0);
 
 			Vector2 positionOffset = Vector2.Normalize(Projectile.velocity) * -14;
-			Color UnPale = new Color(72, 180, 206);
-			Color UnPale2 = new Color(55, 166, 133);
+			Color LightColor = GetColor(1);
+			Color DarkColor = GetColor(-1);
 
 			List<DrawData> drawList = new List<DrawData>();
 
@@ -146,9 +165,9 @@ namespace LobotomyCorp.Projectiles
 			if (Projectile.timeLeft < 5)
 				RotationOffset = 30f - 30f * (1f - Projectile.timeLeft / 5);
 
-			DrawSpear(drawList, Projectile.Center, UnPale, MathHelper.ToRadians(RotationOffset), Opacity, Opacity);
-			DrawSpear(drawList, Projectile.Center, UnPale2, -MathHelper.ToRadians(RotationOffset), Opacity, Opacity);
-			DrawSpear(drawList, Projectile.Center, Pale, 0f, Opacity, Opacity);
+			DrawSpear(drawList, Projectile.Center, LightColor, MathHelper.ToRadians(RotationOffset), Opacity, Opacity);
+			DrawSpear(drawList, Projectile.Center, DarkColor, -MathHelper.ToRadians(RotationOffset), Opacity, Opacity);
+			DrawSpear(drawList, Projectile.Center, BaseColor, 0f, Opacity, Opacity);
 
 			for (int i = 0; i < drawList.Count; i++)
             {

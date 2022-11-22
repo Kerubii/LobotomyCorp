@@ -1265,33 +1265,33 @@ namespace LobotomyCorp.NPCs.RedMist
                 List<string> possibleText = new List<string>();
                 if (Main.rand.Next(2) == 0)
                 {
-                    possibleText.Add(SuppressionTextData.Gebura[0]);
-                    possibleText.Add(SuppressionTextData.Gebura[1]);
-                    possibleText.Add(SuppressionTextData.Gebura[2]);
-                    possibleText.Add(SuppressionTextData.Gebura[3]);
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 0));
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 1));
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 2));
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 3));
                 }
 
                 if (NPC.ai[0] == 0)
                 {
-                    possibleText.Add(SuppressionTextData.Gebura[4]);
-                    possibleText.Add(SuppressionTextData.Gebura[5]);
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 4));
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 5));
                 }
 
                 else if (NPC.ai[0] == 1)
                 {
-                    possibleText.Add(SuppressionTextData.Gebura[6]);
-                    possibleText.Add(SuppressionTextData.Gebura[7]);
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 6));
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 7));
                 }
 
                 else if (NPC.ai[0] == 2)
                 {
-                    possibleText.Add(SuppressionTextData.Gebura[8]);
-                    possibleText.Add(SuppressionTextData.Gebura[9]);
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 8));
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 9));
                 }
 
                 else if (NPC.ai[0] == 3)
                 {
-                    possibleText.Add(SuppressionTextData.Gebura[10]);
+                    possibleText.Add(SuppressionText.GetSephirahText("Gebura", 10));
                 }
                 Vector2 offsetRandom = new Vector2(Main.rand.Next(-1000, 1000), Main.rand.Next(-1000, 1000));
                 Color textColor = Color.Red;
@@ -2974,7 +2974,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public void Talk(string id, int dir)
         {
-            string text = SuppressionTextData.GeburaBark[id];
+            string text = SuppressionText.GetSephirahText("Gebura", id);// SuppressionTextData.GeburaBark[id];
             //int dir = NPC.spriteDirection;
             Vector2 pos = new Vector2(NPC.Center.X, NPC.position.Y - NPC.height / 2);
             if (dir < 0)

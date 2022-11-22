@@ -25,8 +25,8 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			Item.damage = 62;
 			Item.DamageType = DamageClass.Melee;
 			Item.knockBack = 2.3f;
-			Item.useTime = 30;
-			Item.useAnimation = 30;
+			Item.useTime = 42;
+			Item.useAnimation = 42;
 			Item.useStyle = ItemUseStyleID.Shoot;
 
 			Item.value = 10000;
@@ -71,5 +71,34 @@ namespace LobotomyCorp.Items.Ruina.Literature
         public override void AddRecipes() 
 		{
 		}
+
+        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        {
+			LobotomyGlobalNPC.SanguineDesireApplyBleed(target, 0.8f, target.damage * 3, 60, 600);
+
+            base.OnHitNPC(player, target, damage, knockBack, crit);
+        }
+
+        /// <summary>
+        /// Returns true if an npc was Glitter'd
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        private bool Glitter(Player player, float chance = 0.8f)
+        {
+			bool GlitterSuccess = false;
+			foreach (NPC n in Main.npc)
+            {
+				if (n.active && n.life > 0 && !n.friendly && Main.rand.NextFloat(1f) < chance)
+                {
+					GlitterSuccess = true;
+					n.AddBuff(ModContent.BuffType<Buffs.Glitter>(), 300);
+					LobotomyGlobalNPC.LNPC(n).SanguineDesireGlitter = true;
+					LobotomyGlobalNPC.LNPC(n).SanguineDesireGlitterTarget = player.whoAmI;
+					n.target = player.whoAmI;
+				}
+            }
+			return GlitterSuccess;
+        }
 	}
 }

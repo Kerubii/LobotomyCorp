@@ -88,6 +88,10 @@ namespace LobotomyCorp
         public bool NihilActive = false;
         public int NihilMode = 0;
 
+        public bool RedEyesActive = false;
+        public float RedEyesOpacity = 0f;
+        public int RedEyesMealMax = 60 * 8;
+
         public bool SmileDebuff = false;
 
         public bool SolemnSwitch = false;
@@ -166,6 +170,9 @@ namespace LobotomyCorp
 
             PleasureDebuff = false;
 
+            RedEyesActive = false;
+            RedEyesOpacity = 0f;
+
             SmileDebuff = false;
 
             TodaysExpressionTimerMax = 300;
@@ -209,6 +216,12 @@ namespace LobotomyCorp
             FaintAromaPetal = 0;
 
             NihilActive = false;
+        }
+
+        public override void OnEnterWorld(Player player)
+        {
+            if (player.HasBuff<Buffs.NettleClothing>())
+                player.ClearBuff(ModContent.BuffType<Buffs.NettleClothing>());
         }
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
@@ -526,13 +539,6 @@ namespace LobotomyCorp
             {
                 Player.ApplyDamageToNPC(npc, damage, 0, Player.direction, false);
             }
-
-            OnHitSolemnLament();
-        }
-
-        public override void OnHitByProjectile(Projectile proj, int damage, bool crit)
-        {
-            OnHitSolemnLament();
         }
 
         private void OnHitSolemnLament()
@@ -553,33 +559,19 @@ namespace LobotomyCorp
             }
         }
 
-        /*public override void DrawEffects(PlayerDrawInfo drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
+        public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
         {
-            if (BeakParry > 0 || BeakPunish > 0)
+            if (RedEyesOpacity > 0f)
             {
-                Color color = Color.Red;
-                Color drawColor = new Color(r, g, b, a);
-                float BeakRed = BeakParry > BeakPunish ? BeakParry : BeakPunish;
-                if (BeakRed <= 10)
-                {
-                    drawColor *= ((10f - (float)BeakRed) / 10f);
-                    color *= ((float)BeakRed / 10f);
-                    color.R += drawColor.R;
-                    color.G += drawColor.G;
-                    color.B += drawColor.B;
-                    color.A += drawColor.A;
-                }
-                r = color.R;
-                g = color.G;
-                b = color.B;
-                a = 255;
-                fullBright = true;
-                if (Main.netMode != NetModeID.Server)
-                {
-
-                }
+                float opacity = 1f - RedEyesOpacity;
+                r *= opacity;
+                g *= opacity;
+                b *= opacity;
+                a *= opacity;
             }
-        }*/
+
+            base.DrawEffects(drawInfo, ref r, ref g, ref b, ref a, ref fullBright);
+        }
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
         {
@@ -666,6 +658,23 @@ namespace LobotomyCorp
             }
 
             return base.PreHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource, ref cooldownCounter);
+        }
+
+        public override void PostHurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+        {
+            OnHitSolemnLament();
+
+            if (Player.HeldItem.type == ModContent.ItemType<Items.Censored>())
+            {
+                float healing = (float)damage * 0.4f;
+                if (damage > 1)
+                {
+                    Player.statLife += (int)healing;
+                    Player.HealEffect((int)healing);
+                }
+            }
+
+            base.PostHurt(pvp, quiet, damage, hitDirection, crit, cooldownCounter);
         }
 
         public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)

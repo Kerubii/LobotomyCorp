@@ -104,12 +104,12 @@ namespace LobotomyCorp.Items
 
         public string GetTooltip()
         {
-            return Language.GetTextValue("Mods.LobotomyMod.EgoItemTooltip.RealizedEgo") + "\n\"" + Language.GetTextValue("Mods.LobotomyMod.EgoItemTooltip." + ItemName() + ".ItemTooltip") + "\"";
+            return Language.GetTextValue("Mods.LobotomyCorp.EgoItemTooltip.RealizedEgo") + "\n\"" + Language.GetTextValue("Mods.LobotomyCorp.EgoItemTooltip." + ItemName() + ".ItemTooltip") + "\"";
         }
 
         public virtual string GetPassiveList()
         {
-            string key = "Mods.LobotomyMod.EgoItemTooltip." + ItemName() + ".PassiveList";
+            string key = "Mods.LobotomyCorp.EgoItemTooltip." + ItemName() + ".PassiveList";
             string list = Language.GetTextValue(key);
             if (list == key)
                 list = PassiveText;
@@ -308,7 +308,36 @@ namespace LobotomyCorp.Items
             }
             else
             {
-                player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, 90);
+                player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, MathHelper.ToRadians(45 - (player.direction < 0 ? 90 : 0)));
+            }
+        }
+
+        /// <summary>
+        /// A Variation of "PseudoUseItemFrame" thats more straightforward, Uses radians because wrapping
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="rotation"></param>
+        public static void LobItemFrame(Player player, float rotation)
+        {
+            rotation = MathHelper.WrapAngle(rotation);
+            if ((player.direction == 1 && rotation < -1.57f) ||
+                (player.direction == -1 && rotation < 0 && rotation > -1.57f))
+            {
+                player.bodyFrame.Y = player.bodyFrame.Height * 1;
+            }
+            else if ((player.direction == 1 && rotation < 0) ||
+                (player.direction == -1 && rotation <= -1.57f))
+            {
+                player.bodyFrame.Y = player.bodyFrame.Height * 2;
+            }
+            else if ((player.direction == 1 && rotation < 1.57f) ||
+                (player.direction == -1 && rotation >= 1.57f))
+            {
+                player.bodyFrame.Y = player.bodyFrame.Height * 4;
+            }
+            else
+            {
+                player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, MathHelper.ToRadians(45 - (player.direction < 0 ? 90 : 0)));
             }
         }
 
@@ -381,9 +410,9 @@ namespace LobotomyCorp.Items
         /// Put it on UseStyleAlt
         /// </summary>
         /// <param name="player"></param>
-        public void ResetPlayerAttackCooldown(Player player)
+        public static void ResetPlayerAttackCooldown(Player player, double percent = 0.1)
         {
-            int cooldown = Math.Max(1, (int)((double)player.itemAnimationMax * 0.1));
+            int cooldown = Math.Max(1, (int)(player.itemAnimationMax * percent));
             if (player.attackCD > cooldown)
                 player.attackCD = cooldown;
         }
@@ -393,7 +422,7 @@ namespace LobotomyCorp.Items
             return null;
         }
 
-        public float ItemRotation(Player player)
+        public static float ItemRotation(Player player)
         {
             float prog = 1f - player.itemAnimation / (float)player.itemAnimationMax;
             float rotation = 0;
@@ -412,22 +441,6 @@ namespace LobotomyCorp.Items
                 prog = (prog - 0.5f) / 0.5f;
                 rotation = (140 - 45 * prog) * player.direction;
             }
-
-            /*
-            if (prog < 0.45f)
-            {
-                prog = prog / 0.45f;
-                rotation = (45 - 130 * prog) * player.direction;
-            }
-            else if (prog < 0.6f)
-            {
-                prog = (prog - 0.45f) / 0.2f;
-                rotation = (-45 + 195 * (float)Math.Sin(1.57f * prog)) * player.direction;
-            }
-            else
-            {
-                rotation = 105 * player.direction;
-            }*/
             return rotation;
         }
 
@@ -635,7 +648,7 @@ namespace LobotomyCorp.Items
             {
                 player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, 90);
             }
-        }
+        }   
 
         public sealed override void UseItemHitbox(Player player, ref Rectangle hitbox, ref bool noHitbox)
         {

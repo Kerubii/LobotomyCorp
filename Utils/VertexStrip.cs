@@ -104,6 +104,51 @@ namespace LobotomyCorp.Utils
 			PrepareIndices(num, includeBacksides);
 		}
 
+		/// <summary>
+		/// New one cuz why not :V I still have no idea how this shit works but who cares
+		/// </summary>
+		/// <param name="UpperVertexes"></param>
+		/// <param name="LowerVertexes"></param>
+		/// <param name="color"></param>
+		/// <param name="expectedVertexPairsAmount"></param>
+		/// <param name="includeBacksides"></param>
+		public void PrepareManual(Vector2[] UpperVertexes, Vector2[] LowerVertexes, StripColorFunction colorFunction, int? expectedVertexPairsAmount = null, bool includeBacksides = false, float texOffset = 0f)
+		{
+			int num = UpperVertexes.Length;
+			int num2 = _vertexAmountCurrentlyMaintained = num * 2;
+			if (_vertices.Length < num2)
+			{
+				Array.Resize(ref _vertices, num2);
+			}
+			int num3 = num;
+			if (expectedVertexPairsAmount.HasValue)
+			{
+				num3 = expectedVertexPairsAmount.Value;
+			}
+			for (int i = 0; i < num; i++)
+			{
+				if (UpperVertexes[i] == Vector2.Zero)
+				{
+					num = i - 1;
+					_vertexAmountCurrentlyMaintained = num * 2;
+					break;
+				}
+				int indexOnVertexArray = i * 2;
+				float progressOnStrip = (float)i / (float)(num3 - 1);
+				progressOnStrip += texOffset;
+				while (progressOnStrip > 1f)
+                {
+					progressOnStrip -= 1f;
+                }
+				while (progressOnStrip < 0f)
+                {
+					progressOnStrip += 1f;
+                }
+				AddVertex2(colorFunction, LowerVertexes[i], UpperVertexes[i], indexOnVertexArray, progressOnStrip);
+			}
+			PrepareIndices(num, includeBacksides);
+		}
+
 		public void PrepareStripWithProceduralPadding(Vector2[] positions, float[] rotations, StripColorFunction colorFunction, StripHalfWidthFunction widthFunction, Vector2 offsetForAllPositions = default(Vector2), bool includeBacksides = false, bool tryStoppingOddBug = true)
 		{
 			int num = positions.Length;

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LobotomyCorp.Utils;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -61,8 +62,9 @@ namespace LobotomyCorp.Projectiles
 					}
                 }
 
-				if (Projectile.timeLeft > 27)
+				if (Projectile.timeLeft > 28)
 				{
+                    /*
 					Vector2 target = Projectile.Center + new Vector2(156 * Projectile.scale, 0).RotatedBy(Projectile.velocity.ToRotation());
 					for (int i = 0; i < 16; i++)
 					{
@@ -77,8 +79,12 @@ namespace LobotomyCorp.Projectiles
 						d.velocity = Offset;
 						d.velocity.Normalize();
 						d.velocity *= 2f;
-					}
-				}
+					}*/
+                    int time = Projectile.timeLeft - 28;
+                    Vector2 target = Projectile.Center + new Vector2(156 * 0.25f * time, 0).RotatedBy(Projectile.velocity.ToRotation());
+                    Vector2 vel = Vector2.Normalize(Projectile.velocity);
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), target, -vel * 0.1f, ModContent.ProjectileType<GreenStemCircle>(), 0, 0, Projectile.owner);
+                }
 
 				for (int i = 0; i < 5; i++)
 				{
@@ -155,6 +161,85 @@ namespace LobotomyCorp.Projectiles
 
         public override bool ShouldUpdatePosition()
         {
+            return false;
+        }
+    }
+
+    class GreenStemCircle : ModProjectile
+    {
+        public override string Texture => "LobotomyCorp/Projectiles/RealizedHornet";
+
+        public override void SetStaticDefaults()
+        {
+            //DisplayName.SetDefault("Spear");
+            //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 32;
+            //ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+        }
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 18;
+            Projectile.height = 18;
+            Projectile.aiStyle = -1;
+            Projectile.penetrate = -1;
+            Projectile.scale = 1f;
+            Projectile.alpha = 255;
+            Projectile.timeLeft = 20;
+
+            //Projectile.hide = true;
+            Projectile.tileCollide = false;
+            Projectile.friendly = true;
+        }
+
+        public override void AI()
+        {
+            Projectile.direction = Math.Sign(Projectile.velocity.X);
+            if (Projectile.direction == 0)
+                Projectile.direction = 1;
+            if (Projectile.ai[0] == 0)
+            {
+                Projectile.ai[0] = 4;
+                Projectile.localAI[1] = 4;
+                Projectile.localAI[0] = Main.rand.NextFloat(1.00f);
+            }
+            else
+            {
+                Projectile.ai[0]++;//Circle Radius
+                Projectile.localAI[1]++;
+            }
+
+            Projectile.rotation = (-Projectile.velocity).ToRotation();
+        }
+
+        /*public override bool ShouldUpdatePosition()
+        {
+            return false;
+        }*/
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            SlashTrail trail = new SlashTrail(10, 1.57f);// MathHelper.ToRadians(45));
+            trail.color = Color.Lime;
+
+            Player projOwner = Main.player[Projectile.owner];
+            float prog = Projectile.timeLeft / 20f;
+            if (prog < 0)
+                prog = 0;
+            CustomShaderData windTrail = LobotomyCorp.LobcorpShaders["WindTrail"].UseOpacity(prog * 0.6f);
+            Vector2[] firstPos = new Vector2[32];
+            Vector2[] secondPos = new Vector2[32];
+            for (int i = 0; i < 32; i++)
+            {
+                float angle = MathHelper.ToRadians(90f - (360f / 32f) * i * Projectile.direction);
+                float radius = Projectile.ai[0];
+                firstPos[i] = Projectile.Center + new Vector2(radius * 0.25f * (float)Math.Cos(angle), radius * (float)Math.Sin(angle)).RotatedBy(Projectile.rotation) - Main.screenPosition;
+                float increase = 1f + .1f * prog;
+                float distance = Projectile.localAI[1];
+                secondPos[i] = Projectile.Center + new Vector2(radius * 0.25f * (float)Math.Cos(angle) - distance, radius * increase * (float)Math.Sin(angle)).RotatedBy(Projectile.rotation) - Main.screenPosition;
+            }
+
+            trail.DrawManual(firstPos, secondPos, windTrail, Projectile.localAI[0] + 1f * prog * Projectile.spriteDirection);
+
             return false;
         }
     }

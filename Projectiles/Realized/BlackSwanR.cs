@@ -63,9 +63,13 @@ namespace LobotomyCorp.Projectiles.Realized
 					SoundEngine.PlaySound(SoundID.Item1, Projectile.Center);
 					movementFactor = 6f; // Make sure the spear moves forward when initially thrown out
 					Projectile.netUpdate = true; // Make sure to netUpdate this spear
-					
-					if (Main.myPlayer == Projectile.owner)
+
+					//If player has Broken Dream or 4 Nettles, Swoosh
+					if (true || Main.myPlayer == Projectile.owner && (LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).BlackSwanNettleClothing >= 4 || LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).BlackSwanBrokenDream))
+					{
+						//Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, new Vector2(20f, 0).RotatedBy(Projectile.rotation), ModContent.ProjectileType<SpearExtender>(), Projectile.damage, Projectile.knockBack, Projectile.owner, 4, 3);
 						Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<BlackSwanRExtended>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+					}
 				}
 				if (projOwner.itemAnimation > limit / 2)
 				{
@@ -139,6 +143,15 @@ namespace LobotomyCorp.Projectiles.Realized
 							if (Main.rand.NextBool(5))
                             {
 								Dust.NewDustPerfect(proj.Center, dustType, Projectile.velocity / 4f).noGravity = true;
+							}
+
+							if (Main.rand.NextBool(3))
+                            {
+								dustType = ModContent.DustType<Misc.Dusts.BlackFeather>();
+								float angle = Main.rand.NextFloat(6.28f);
+								dustVel = new Vector2(4f * (float)Math.Cos(angle), 6f * (float)Math.Sin(angle));
+
+								Dust.NewDustPerfect(Projectile.Center, dustType, dustVel).noGravity = true;
 							}
 						}
 

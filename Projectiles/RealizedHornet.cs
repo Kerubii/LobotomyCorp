@@ -128,6 +128,12 @@ namespace LobotomyCorp.Projectiles
                         d.noGravity = true;
                     }
                 }
+
+                if (Projectile.ai[1] > 9 && Projectile.ai[1] % 4 == 0)
+                {
+                    Vector2 vel = Vector2.Normalize(Projectile.velocity) * 4f;
+                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, -vel, ModContent.ProjectileType<HornetEffectCircle>(), 0, 0, Projectile.owner);
+                }
             }
 
             if (Main.rand.Next(3) == 0)
@@ -155,6 +161,9 @@ namespace LobotomyCorp.Projectiles
                     dust.fadeIn = 1.5f;
                     dust.noGravity = true;
                 }
+
+                //Vector2 vel = Vector2.Normalize(Projectile.velocity) * 4f;
+                //Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, -vel, ModContent.ProjectileType<HornetEffectCircle>(), 0, 0, Projectile.owner);
             }
         }
 
@@ -180,6 +189,7 @@ namespace LobotomyCorp.Projectiles
             }
             if (Projectile.ai[0] < 10)
                 return;
+            /*
             int dustAmount = 16;
             for (int i = 0; i < dustAmount;i++)
             {
@@ -201,7 +211,9 @@ namespace LobotomyCorp.Projectiles
                     d.velocity *= Main.rand.Next(4);
                     d.noGravity = true;
                 }
-            }
+            }*/
+            Vector2 vel = Vector2.Normalize(Projectile.velocity) * 4f;
+            Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, -vel, ModContent.ProjectileType<HornetEffectCircle>(), 0, 0, Projectile.owner);
         }
 
         public override bool ShouldUpdatePosition()
@@ -344,6 +356,83 @@ namespace LobotomyCorp.Projectiles
             CustomShaderData windTrail = LobotomyCorp.LobcorpShaders["WindTrail"].UseOpacity(prog * 0.6f);
             if (trail != null && trailhelp != null)
                 trail.DrawSpecific(trailhelp.TrailPos, trailhelp.TrailRotation, Vector2.Zero, windTrail);
+
+            return false;
+        }
+    }
+
+    public class HornetEffectCircle : ModProjectile
+    {
+        public override string Texture => "LobotomyCorp/Projectiles/RealizedHornet";
+
+        public override void SetStaticDefaults()
+        {
+            //DisplayName.SetDefault("Spear");
+            //ProjectileID.Sets.TrailCacheLength[Projectile.type] = 32;
+            //ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
+        }
+
+        public override void SetDefaults()
+        {
+            Projectile.width = 18;
+            Projectile.height = 18;
+            Projectile.aiStyle = -1;
+            Projectile.penetrate = -1;
+            Projectile.scale = 1f;
+            Projectile.alpha = 255;
+            Projectile.timeLeft = 30;
+
+            //Projectile.hide = true;
+            Projectile.tileCollide = false;
+            Projectile.friendly = true;
+        }
+
+        public override void AI()
+        {
+            Projectile.direction = Math.Sign(Projectile.velocity.X);
+            if (Projectile.ai[0] == 0)
+            {
+                Projectile.ai[0] = 30;
+                Projectile.ai[1] = 16;
+                Projectile.localAI[0] = Main.rand.NextFloat(1.00f);
+            }
+            else
+            {
+                Projectile.ai[0] += 2;//Circle Radius
+                Projectile.ai[1]++;
+            }
+
+            Projectile.rotation = (-Projectile.velocity).ToRotation();
+        }
+
+        /*public override bool ShouldUpdatePosition()
+        {
+            return false;
+        }*/
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+            SlashTrail trail = new SlashTrail(10, 1.57f);// MathHelper.ToRadians(45));
+            trail.color = new Color(255, 255, 89);
+
+            Player projOwner = Main.player[Projectile.owner];
+            float prog = Projectile.timeLeft / 30f;
+            if (prog < 0)
+                prog = 0;
+            CustomShaderData windTrail = LobotomyCorp.LobcorpShaders["WindTrail"].UseOpacity(prog * 0.6f);
+            Vector2[] firstPos = new Vector2[32];
+            Vector2[] secondPos = new Vector2[32];
+            for (int i = 0; i < 32; i++)
+            {
+                float angle = MathHelper.ToRadians(90f - (360f/32f) * i * Projectile.direction);
+                float radius = Projectile.ai[0];
+                firstPos[i] = Projectile.Center + new Vector2(radius * 0.25f * (float)Math.Cos(angle), radius * (float)Math.Sin(angle)).RotatedBy(Projectile.rotation) - Main.screenPosition;
+                float increase = 1f + .1f * prog;
+                float distance = Projectile.ai[1];
+                secondPos[i] = Projectile.Center + new Vector2(radius * 0.25f * (float)Math.Cos(angle) - distance, radius * increase * (float)Math.Sin(angle)).RotatedBy(Projectile.rotation) - Main.screenPosition;
+            }
+
+            trail.DrawManual(firstPos, secondPos, windTrail, Projectile.localAI[0] + 1f * prog * Projectile.spriteDirection);
 
             return false;
         }

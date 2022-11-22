@@ -15,5 +15,10 @@ namespace LobotomyCorp.Buffs
         {
             player.statDefense -= 14;
         }
+
+		public override bool RightClick(int buffIndex)
+        {
+            return false;
+        }
     }
 }

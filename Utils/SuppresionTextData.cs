@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Localization;
 
 namespace LobotomyCorp.Utils
 {
@@ -21,7 +22,7 @@ namespace LobotomyCorp.Utils
             Gebura = null;
             GeburaBark = null;
         }
-
+        
         public static void GeburaInit()
         {
             int i = 0;

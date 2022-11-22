@@ -22,6 +22,13 @@ namespace LobotomyCorp
             if (BlackSwanReflected)
             {
                 projectile.rotation += 0.12f;
+                for (int i = 0; i < 3; i++)
+                {
+                    int type = Main.rand.Next(2, 4);
+                    int d = Dust.NewDust(projectile.position, projectile.width, projectile.height, type);
+                    Main.dust[d].velocity *= 0.2f;
+                    Main.dust[d].noGravity = true;
+                }
                 return false;
             }
             return base.PreAI(projectile);
@@ -29,7 +36,7 @@ namespace LobotomyCorp
 
         public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
         {
-            if (Lament > 0 && LobotomyCorp.LamentValid(target, projectile) && target.CanBeChasedBy(projectile))
+            if (projectile.owner == Main.myPlayer && Lament > 0 && LobotomyCorp.LamentValid(target, projectile) && target.CanBeChasedBy(projectile))
             {
                 int p = Projectile.NewProjectile(projectile.GetSource_FromThis(), Main.player[projectile.owner].Center, new Vector2(6, 0).RotateRandom(6.28f), ModContent.ProjectileType<Projectiles.Kaleidoscope>(), projectile.damage, projectile.knockBack, projectile.owner, target.whoAmI);
                 Main.projectile[p].localAI[0] = Lament;

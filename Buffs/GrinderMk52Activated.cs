@@ -13,7 +13,13 @@ namespace LobotomyCorp.Buffs
         {
 			DisplayName.SetDefault("All Around Helper");
 			Description.SetDefault("Cleaning tools active");
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
+            //BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
+        }
+
+        public override bool RightClick(int buffIndex)
+        {
+            LobotomyModPlayer.ModPlayer(Main.LocalPlayer).GrinderMk2Battery = 0;
+            return base.RightClick(buffIndex);
         }
 
         public override void Update(Player player, ref int buffIndex)

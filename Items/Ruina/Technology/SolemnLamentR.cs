@@ -42,7 +42,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 		{
             EgoColor = LobotomyCorp.WawRarity;
 
-            Item.damage = 33;
+            Item.damage = 62;
 			Item.DamageType = DamageClass.Ranged;
 			Item.width = 40;
 			Item.height = 40;
@@ -111,9 +111,9 @@ namespace LobotomyCorp.Items.Ruina.Technology
                 Main.projectile[Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI)].GetGlobalProjectile<LobotomyGlobalProjectile>().Lament = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? (byte)1 : (byte)2;
             else
             {
-                damage = (int)(damage * 0.7f);
+                damage = (int)(damage * 0.6f);
 
-                int amount = Main.rand.Next(5, 8);
+                int amount = Main.rand.Next(6, 9);
                 for (int i = 0; i < amount; i++)
                 {
                     Vector2 tempVel = velocity;
