@@ -15,7 +15,17 @@ namespace LobotomyCorp.Projectiles
 			AIType = ProjectileID.CopperShortswordStab;
 		}
 
-        public override bool PreDraw(ref Color lightColor)
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+			target.AddBuff(ModContent.BuffType<Buffs.Scars>(), 60);
+		}
+
+        public override void OnHitPvp(Player target, int damage, bool crit)
+		{
+			target.AddBuff(ModContent.BuffType<Buffs.Scars>(), 60);
+		}
+
+		public override bool PreDraw(ref Color lightColor)
         {
 			Vector2 pos = Projectile.Center + Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
 			Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;

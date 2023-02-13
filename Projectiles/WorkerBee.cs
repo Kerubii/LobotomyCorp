@@ -539,7 +539,8 @@ namespace LobotomyCorp.Projectiles
             if (p.statLife < p.statLifeMax * 0.25f)
             {
                 Projectile.Kill();
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<AngryWorkerBee>(), 20, Projectile.knockBack, 255, Projectile.owner);
+                if (p.whoAmI == Main.myPlayer)
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<AngryWorkerBee>(), 20, Projectile.knockBack, 255, Projectile.owner);
             }
         }
 

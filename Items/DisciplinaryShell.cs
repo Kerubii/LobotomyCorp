@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
+	[Autoload(LobotomyCorp.TestMode)]
 	public class DisciplinaryShell : ModItem
 	{
         public override void SetStaticDefaults()

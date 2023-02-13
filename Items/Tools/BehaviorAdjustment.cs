@@ -5,6 +5,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace LobotomyCorp.Items.Tools
 {
+    [Autoload(LobotomyCorp.TestMode)]
     public class BehaviorAdjustment : ModItem
     {
         public override void SetStaticDefaults()
@@ -28,7 +29,7 @@ namespace LobotomyCorp.Items.Tools
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             //player.statLifeMax2 = (int)(player.statLifeMax2 * 1.1f);
-            player.moveSpeed += 18;
+            player.moveSpeed += 0.18f;
             player.GetAttackSpeed(DamageClass.Melee) += 0.18f;
             //LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
         }

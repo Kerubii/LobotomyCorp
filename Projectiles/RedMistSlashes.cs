@@ -88,7 +88,8 @@ namespace LobotomyCorp.Projectiles
             if (Projectile.ai[0] % 2 == 0)
             {
                 Vector2 SlashPosition = Projectile.Center + new Vector2(Main.rand.Next(-16, 17), Main.rand.Next(-16, 17));
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), SlashPosition, Vector2.Zero, ModContent.ProjectileType<Projectiles.RedMistSlashes>(), Projectile.damage, 0);
+                if (Main.myPlayer == Projectile.owner)
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), SlashPosition, Vector2.Zero, ModContent.ProjectileType<Projectiles.RedMistSlashes>(), Projectile.damage, 0);
             }
         }
 

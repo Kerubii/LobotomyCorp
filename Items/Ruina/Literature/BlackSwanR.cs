@@ -40,6 +40,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 
 			Item.shoot = ModContent.ProjectileType<Projectiles.Realized.BlackSwanR>();
 			Item.shootSpeed = 4f;
+			GooeyWasteProduce = 0;
 		}
 
         public override bool SafeCanUseItem(Player player)
@@ -62,6 +63,9 @@ namespace LobotomyCorp.Items.Ruina.Literature
 				{
 					damage = (int)(damage * 0.4f);
 					shriek = true;
+					int bufType = ModContent.BuffType<Buffs.BrokenDreams>();
+					int time = player.buffTime[player.FindBuffIndex(bufType)] + 360;
+					player.AddBuff(bufType, time);
 				}
 
 				if (shriek)
@@ -69,7 +73,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 					type = ModContent.ProjectileType<Projectiles.Realized.BlackSwanScream>();
 				}
 				else
-					type = 0;
+					type = ModContent.ProjectileType<Projectiles.Realized.BlackSwanAlternate>();
 			}
             base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
         }
@@ -93,7 +97,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 
         public override float UseSpeedMultiplier(Player player)
         {
-			if (LobotomyModPlayer.ModPlayer(player).BlackSwanNettleClothing >= 1)
+			if (LobotomyModPlayer.ModPlayer(player).BlackSwanNettleClothing >= 1 || LobotomyModPlayer.ModPlayer(player).BlackSwanBrokenDream)
 				return 1.15f;
             return base.UseSpeedMultiplier(player);
         }
@@ -103,8 +107,28 @@ namespace LobotomyCorp.Items.Ruina.Literature
             return true;
         }
 
+		private int GooeyWasteProduce = 0;
+        public override void HoldItem(Player player)
+        {
+            if (Main.myPlayer == player.whoAmI && LobotomyModPlayer.ModPlayer(player).BlackSwanNettleClothing >= 2 || LobotomyModPlayer.ModPlayer(player).BlackSwanBrokenDream)
+            {
+				if (GooeyWasteProduce <= 0)
+                {
+					Vector2 pos = player.position + new Vector2(Main.rand.Next(player.width), Main.rand.Next(player.height));
+					Projectile.NewProjectile(player.GetSource_FromThis(), pos, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.BlackSwanGooeyWaste>(), 22, 0, player.whoAmI);
+                }
+				GooeyWasteProduce--;
+            }
+        }
+
         public override void AddRecipes() 
 		{
+			CreateRecipe()
+			.AddIngredient(ModContent.ItemType<BlackSwan>())
+			.AddIngredient(ItemID.Feather, 8)
+			.AddIngredient(ItemID.Ectoplasm, 2)
+			.AddTile<Tiles.BlackBox3>()
+			.Register();
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace LobotomyCorp.Items
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
             Tooltip.SetDefault("The gaze from the keyhole is fixed on its target without ever stopping.\n" +
                                "No one knows what it wanted to peep at so dearly.\n" + 
-                               "Can cause damageitional damage over time");
+                               "Can cause additional damage over time");
 
         }
 

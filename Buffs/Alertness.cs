@@ -13,7 +13,7 @@ namespace LobotomyCorp.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
-            LobotomyModPlayer.ModPlayer(player).RedEyesActive = true;
+            LobotomyModPlayer.ModPlayer(player).RedEyesAlerted = true;
         }
 
         public override bool RightClick(int buffIndex)

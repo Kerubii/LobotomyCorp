@@ -63,6 +63,8 @@ namespace LobotomyCorp.Projectiles.Realized
 					vel = new Vector2(Main.rand.Next(36), 0).RotateRandom(6.28f);
 					Dust.NewDustPerfect(Projectile.Center, ModContent.DustType<Misc.Dusts.BlackFeather>(), vel);
 				}
+				vel = new Vector2(Main.rand.Next(36), 0).RotateRandom(6.28f);
+				Projectile.NewProjectile(player.GetSource_FromThis(), player.Center, vel, ModContent.ProjectileType<BlackSwanGooeyWaste>(), 1, 0, player.whoAmI);
 			}
 
 			Projectile.ai[0]++;

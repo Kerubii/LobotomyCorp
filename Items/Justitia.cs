@@ -12,7 +12,9 @@ namespace LobotomyCorp.Items
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
 			Tooltip.SetDefault("It remembers the balance of the Long Bird that never forgot others' sins.\n" +
-                               "This weapon may be able to not only cut flesh but trace of sins as well.");
+                               "This weapon may be able to not only cut flesh but trace of sins as well.\n" +
+							   "Attacks hit multiple times\n" +
+							   "Has a chance to perform a special attack");
 		}
 
 		public override void SetDefaults() 

@@ -21,15 +21,23 @@ namespace LobotomyCorp.Buffs
         {
             player.moveSpeed -= 0.1f;
             player.statDefense -= 20;
+            if (!Main.rand.NextBool(90))
+                return;
             int type = Main.rand.Next(2, 4);
-            Dust.NewDust(player.Center, player.width, player.height, type);
+            int d = Dust.NewDust(player.position, player.width, player.height, type);
+            Main.dust[d].noGravity = true;
         }
 
         public override void Update(NPC npc, ref int buffIndex)
         {
             npc.defense -= 20;
+            if (!npc.boss)
+
+            if (!Main.rand.NextBool(90))
+                return;
             int type = Main.rand.Next(2, 4);
-            Dust.NewDust(npc.Center, npc.width, npc.height, type);
+            int d = Dust.NewDust(npc.position, npc.width, npc.height, type);
+            Main.dust[d].noGravity = true;
         }
     }
 }

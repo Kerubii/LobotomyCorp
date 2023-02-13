@@ -5,7 +5,8 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Natural
 {
-	public class NihilR : SEgoItem
+    [Autoload(LobotomyCorp.TestMode)]
+    public class NihilR : SEgoItem
 	{
         public int ArcanaManaCost = 500;
 
@@ -35,7 +36,7 @@ namespace LobotomyCorp.Items.Ruina.Natural
 
         public override void HoldItem(Player player)
         {
-            if (LobotomyModPlayer.ModPlayer(player).NihilCheckActive())
+            if (Main.myPlayer == player.whoAmI && LobotomyModPlayer.ModPlayer(player).NihilCheckActive())
             {
                 if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.Realized.Nihil.NihilQOH>()] == 0)
                 {

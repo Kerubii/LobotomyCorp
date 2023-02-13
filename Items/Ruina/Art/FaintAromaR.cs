@@ -8,6 +8,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Art
 {
+    [Autoload(LobotomyCorp.TestMode)]
     public class FaintAromaS : SEgoItem
 	{
 		public override void SetStaticDefaults() 
@@ -50,7 +51,8 @@ namespace LobotomyCorp.Items.Ruina.Art
                 if (n.active && n.chaseable && n.CanBeChasedBy(ModContent.ProjectileType<Projectiles.AlriuneDeathAnimation")) && (n.Center - player.Center).Length() < 800)
                     Projectile.NewProjectile(n.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.AlriuneDeathAnimation"), Item.damage, 0, player.whoAmI, n.whoAmI);
             }*/
-            Projectile.NewProjectile(source, position, velocity, type, damage, 0, player.whoAmI, (int)(LobotomyModPlayer.ModPlayer(player).FaintAromaPetal/LobotomyModPlayer.ModPlayer(player).FaintAromaPetalMax) - 1);
+            if (Main.myPlayer == player.whoAmI)
+                Projectile.NewProjectile(source, position, velocity, type, damage, 0, player.whoAmI, (int)(LobotomyModPlayer.ModPlayer(player).FaintAromaPetal/LobotomyModPlayer.ModPlayer(player).FaintAromaPetalMax) - 1);
             return false;
         }
 

@@ -10,5 +10,10 @@ namespace LobotomyCorp.Buffs
 			DisplayName.SetDefault("Festival");
 			Description.SetDefault("Everything will be peaceful");
 		}
+
+        public override void Update(Player player, ref int buffIndex)
+        {
+			LobotomyModPlayer.ModPlayer(player).WingbeatFairyMeal = true;
+        }
     }
 }

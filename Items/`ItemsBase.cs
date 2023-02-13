@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.Audio;
+using LobotomyCorp.Config;
 
 namespace LobotomyCorp.Items
 {
@@ -18,7 +19,8 @@ namespace LobotomyCorp.Items
 		/// </summary>
         public string PassiveText = "Nihil - All starts from nothing" + 
                                     "|Void - ...And all returns to nothing\n" +
-                                    "Test - These are test messages, if these showed up then I fucked up";
+                                    "Test - These are test messages, if these showed up then I fucked up\n" +
+                                    "This Item is incomplete and unobtainable";
 
         /// <summary>
 		/// Use the thing you setup on the Mod cs pls. 
@@ -39,7 +41,7 @@ namespace LobotomyCorp.Items
 
         public sealed override void ModifyTooltips(List<TooltipLine> tooltips)
         {
-            bool ExtraShow = LobotomyCorp.ExtraPassiveShow;
+            bool ExtraShow = ModContent.GetInstance<LobotomyConfig>().ExtraPassivesShow;
             //int tooltipIndex = tooltips.IndexOf()
             var Passive = new TooltipLine(Mod, "PositivePassive", $"{PassiveInitialize(ExtraShow)}"
                 ) { OverrideColor =  LobotomyCorp.PositivePE};
@@ -141,133 +143,156 @@ namespace LobotomyCorp.Items
         /// <param name="rotation"></param>
         public static void PseudoUseStyleSwing(Player player, Rectangle heldItemFrame, float rotation)
         {
-            if ((player.direction == 1 && rotation < 0) ||
-                    (player.direction == -1 && rotation > 0))
+            player.itemLocation = LobItemLocation(player, heldItemFrame, rotation - 90);
+
+            player.itemRotation = MathHelper.ToRadians(rotation - 45) * player.direction;
+        }
+        
+        /// <summary>
+        /// No need for reversed rotation, if using reversed rotation, change Direction
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="heldItemFrame"></param>
+        /// <param name="rotation"></param>
+        /// <returns></returns>
+        public static Vector2 LobItemLocation(Player player, Rectangle heldItemFrame, float rotation, int direction = 1, int Xoffset = 0)
+        {
+            rotation = Math.Clamp(rotation, -180, 180);
+            rotation = MathHelper.ToRadians(rotation);
+            float x = (float)Math.Cos(rotation) * direction;
+            //Main.NewText(x);
+            float y = (float)Math.Sin(rotation);
+
+            Vector2 location = new Vector2();
+            if (y < 0)
             {
-                float num33 = 6f;
-                if (heldItemFrame.Width > 32)
+                if (x < 0)
                 {
-                    num33 = 14f;
-                }
-                if (heldItemFrame.Width >= 48)
-                {
-                    num33 = 18f;
-                }
-                if (heldItemFrame.Width >= 52)
-                {
-                    num33 = 24f;
-                }
-                if (heldItemFrame.Width >= 64)
-                {
-                    num33 = 28f;
-                }
-                if (heldItemFrame.Width >= 92)
-                {
-                    num33 = 38f;
-                }
-                player.itemLocation.X = player.position.X + (float)player.width * 0.5f - ((float)heldItemFrame.Width * 0.5f - num33) * (float)player.direction;
-                num33 = 10f;
-                if (heldItemFrame.Height > 32)
-                {
+                    float num33 = 6f;
+                    if (heldItemFrame.Width > 32)
+                    {
+                        num33 = 14f;
+                    }
+                    if (heldItemFrame.Width >= 48)
+                    {
+                        num33 = 18f;
+                    }
+                    if (heldItemFrame.Width >= 52)
+                    {
+                        num33 = 24f;
+                    }
+                    if (heldItemFrame.Width >= 64)
+                    {
+                        num33 = 28f;
+                    }
+                    if (heldItemFrame.Width >= 92)
+                    {
+                        num33 = 38f;
+                    }
+                    location.X = player.position.X + (float)player.width * 0.5f - ((float)heldItemFrame.Width * 0.5f - (num33 + Xoffset)) * (float)player.direction;
                     num33 = 10f;
+                    if (heldItemFrame.Height > 32)
+                    {
+                        num33 = 10f;
+                    }
+                    if (heldItemFrame.Height > 52)
+                    {
+                        num33 = 12f;
+                    }
+                    if (heldItemFrame.Height > 64)
+                    {
+                        num33 = 14f;
+                    }
+                    location.Y = player.position.Y + num33 + player.HeightOffsetHitboxCenter;
                 }
-                if (heldItemFrame.Height > 52)
+                else
                 {
-                    num33 = 12f;
+                    float num32 = 10f;
+                    if (heldItemFrame.Width > 32)
+                    {
+                        num32 = 18f;
+                    }
+                    if (heldItemFrame.Width >= 52)
+                    {
+                        num32 = 24f;
+                    }
+                    if (heldItemFrame.Width >= 64)
+                    {
+                        num32 = 28f;
+                    }
+                    if (heldItemFrame.Width >= 92)
+                    {
+                        num32 = 38f;
+                    }
+                    location.X = player.position.X + (float)player.width * 0.5f + ((float)heldItemFrame.Width * 0.5f - (num32 + Xoffset)) * (float)player.direction;
+                    num32 = 10f;
+                    if (heldItemFrame.Height > 32)
+                    {
+                        num32 = 8f;
+                    }
+                    if (heldItemFrame.Height > 52)
+                    {
+                        num32 = 12f;
+                    }
+                    if (heldItemFrame.Height > 64)
+                    {
+                        num32 = 14f;
+                    }
+                    location.Y = player.position.Y + num32 + player.HeightOffsetHitboxCenter;
                 }
-                if (heldItemFrame.Height > 64)
-                {
-                    num33 = 14f;
-                }
-                player.itemLocation.Y = player.position.Y + num33 + player.HeightOffsetHitboxCenter;
-            }
-            else if ((player.direction == 1 && rotation < 90) ||
-                     (player.direction == -1 && rotation > -90))
-            {
-                float num32 = 10f;
-                if (heldItemFrame.Width > 32)
-                {
-                    num32 = 18f;
-                }
-                if (heldItemFrame.Width >= 52)
-                {
-                    num32 = 24f;
-                }
-                if (heldItemFrame.Width >= 64)
-                {
-                    num32 = 28f;
-                }
-                if (heldItemFrame.Width >= 92)
-                {
-                    num32 = 38f;
-                }
-                player.itemLocation.X = player.position.X + (float)player.width * 0.5f + ((float)heldItemFrame.Width * 0.5f - num32) * (float)player.direction;
-                num32 = 10f;
-                if (heldItemFrame.Height > 32)
-                {
-                    num32 = 8f;
-                }
-                if (heldItemFrame.Height > 52)
-                {
-                    num32 = 12f;
-                }
-                if (heldItemFrame.Height > 64)
-                {
-                    num32 = 14f;
-                }
-                player.itemLocation.Y = player.position.Y + num32 + player.HeightOffsetHitboxCenter;
-            }
-            else if ((player.direction == 1 && rotation < 180) ||
-                    (player.direction == -1 && rotation > -180))
-            {
-                float num31 = 14f;
-                if (heldItemFrame.Width > 32)
-                {
-                    num31 = 18f;
-                }
-                if (heldItemFrame.Width >= 52)
-                {
-                    num31 = 28f;
-                }
-                if (heldItemFrame.Width >= 64)
-                {
-                    num31 = 32f;
-                }
-                if (heldItemFrame.Width >= 92)
-                {
-                    num31 = 42f;
-                }
-                player.itemLocation.X = player.position.X + (float)player.width * 0.5f + ((float)heldItemFrame.Width * 0.5f - num31) * (float)player.direction;
-                player.itemLocation.Y = player.position.Y + 26f + player.HeightOffsetHitboxCenter;
             }
             else
             {
-                float num33 = 6f;
-                if (heldItemFrame.Width > 32)
+                if (x > 0)
                 {
-                    num33 = 14f;
+                    float num31 = 14f;
+                    if (heldItemFrame.Width > 32)
+                    {
+                        num31 = 18f;
+                    }
+                    if (heldItemFrame.Width >= 52)
+                    {
+                        num31 = 28f;
+                    }
+                    if (heldItemFrame.Width >= 64)
+                    {
+                        num31 = 32f;
+                    }
+                    if (heldItemFrame.Width >= 92)
+                    {
+                        num31 = 42f;
+                    }
+                    location.X = player.position.X + (float)player.width * 0.5f + ((float)heldItemFrame.Width * 0.5f - (num31 + Xoffset)) * (float)player.direction;
+                    location.Y = player.position.Y + 26f + player.HeightOffsetHitboxCenter;
                 }
-                if (heldItemFrame.Width >= 48)
+                else
                 {
-                    num33 = 18f;
+                    float num33 = 6f;
+                    if (heldItemFrame.Width > 32)
+                    {
+                        num33 = 14f;
+                    }
+                    if (heldItemFrame.Width >= 48)
+                    {
+                        num33 = 18f;
+                    }
+                    if (heldItemFrame.Width >= 52)
+                    {
+                        num33 = 24f;
+                    }
+                    if (heldItemFrame.Width >= 64)
+                    {
+                        num33 = 28f;
+                    }
+                    if (heldItemFrame.Width >= 92)
+                    {
+                        num33 = 38f;
+                    }
+                    location.X = player.position.X + (float)player.width * 0.5f - ((float)heldItemFrame.Width * 0.5f - (num33 + Xoffset)) * (float)player.direction;
+                    location.Y = player.position.Y + 24f + player.HeightOffsetHitboxCenter;
                 }
-                if (heldItemFrame.Width >= 52)
-                {
-                    num33 = 24f;
-                }
-                if (heldItemFrame.Width >= 64)
-                {
-                    num33 = 28f;
-                }
-                if (heldItemFrame.Width >= 92)
-                {
-                    num33 = 38f;
-                }
-                player.itemLocation.X = player.position.X + (float)player.width * 0.5f - ((float)heldItemFrame.Width * 0.5f - num33) * (float)player.direction;
-                player.itemLocation.Y = player.position.Y + 24f + player.HeightOffsetHitboxCenter;
             }
-
-            player.itemRotation = MathHelper.ToRadians(rotation - 45 * player.direction);
+            return location;
         }
 
         public virtual void UseStyleAlt(Player player, Rectangle heldItemFrame)
@@ -279,13 +304,13 @@ namespace LobotomyCorp.Items
             if (Item.useStyle == 15)
             {
                 float rotation = ItemRotation(player);
-                PseudoUseItemFrame(player, rotation);
+                LobItemFrame(player, rotation - 90);
             }
             base.UseItemFrame(player);
         }
 
         /// <summary>
-        /// Just to use as a base for other weapons for a smoother time, Use Degrees for rotation just to maintain my SP
+        /// [OLDER VERSION]Just to use as a base for other weapons for a smoother time, Use Degrees for rotation just to maintain my SP
         /// </summary>
         /// <param name="player"></param>
         /// <param name="rotation"></param>
@@ -313,31 +338,39 @@ namespace LobotomyCorp.Items
         }
 
         /// <summary>
-        /// A Variation of "PseudoUseItemFrame" thats more straightforward, Uses radians because wrapping
+        /// Base for other weapons to use, Use Degrees for rotation just to maintain my SP, if using reversed rotation, change Direction
         /// </summary>
         /// <param name="player"></param>
         /// <param name="rotation"></param>
-        public static void LobItemFrame(Player player, float rotation)
+        public static void LobItemFrame(Player player, float rotation, int direction = 1)
         {
-            rotation = MathHelper.WrapAngle(rotation);
-            if ((player.direction == 1 && rotation < -1.57f) ||
-                (player.direction == -1 && rotation < 0 && rotation > -1.57f))
+            rotation = Math.Clamp(rotation, -180, 180);
+            rotation = MathHelper.ToRadians(rotation);
+            float x = (float)Math.Cos(rotation) * direction;
+            //Main.NewText(x);
+            float y = (float)Math.Sin(rotation);
+            
+            if (y < 0)
             {
-                player.bodyFrame.Y = player.bodyFrame.Height * 1;
-            }
-            else if ((player.direction == 1 && rotation < 0) ||
-                (player.direction == -1 && rotation <= -1.57f))
-            {
-                player.bodyFrame.Y = player.bodyFrame.Height * 2;
-            }
-            else if ((player.direction == 1 && rotation < 1.57f) ||
-                (player.direction == -1 && rotation >= 1.57f))
-            {
-                player.bodyFrame.Y = player.bodyFrame.Height * 4;
+                if (x < 0)
+                {
+                    player.bodyFrame.Y = player.bodyFrame.Height * 1;
+                }
+                else
+                {
+                    player.bodyFrame.Y = player.bodyFrame.Height * 2;
+                }
             }
             else
             {
-                player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, MathHelper.ToRadians(45 - (player.direction < 0 ? 90 : 0)));
+                if (x > 0)
+                {
+                    player.bodyFrame.Y = player.bodyFrame.Height * 4;
+                }
+                else
+                {
+                    player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, MathHelper.ToRadians(45 - (player.direction < 0 ? 90 : 0)));
+                }
             }
         }
 
@@ -422,6 +455,11 @@ namespace LobotomyCorp.Items
             return null;
         }
 
+        /// <summary>
+        /// Gives raw rotation in form of degrees, flip when nescessary 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
         public static float ItemRotation(Player player)
         {
             float prog = 1f - player.itemAnimation / (float)player.itemAnimationMax;
@@ -430,16 +468,16 @@ namespace LobotomyCorp.Items
             if (prog < 0.4f)
             {
                 prog = prog / 0.4f;
-                rotation = (-60 + 200 * (float)Math.Sin(1.57f * prog)) * player.direction;
+                rotation = (-60 + 200 * (float)Math.Sin(1.57f * prog));// * player.direction;
             }
             else if (prog < 0.5f)
             {
-                rotation = 140 * player.direction;
+                rotation = 140;// * player.direction;
             }
             else
             {
                 prog = (prog - 0.5f) / 0.5f;
-                rotation = (140 - 45 * prog) * player.direction;
+                rotation = (140 - 45 * prog);// * player.direction;
             }
             return rotation;
         }
@@ -479,133 +517,9 @@ namespace LobotomyCorp.Items
         /// <param name="rotation"></param>
         public static void PseudoUseStyleSwing(Player player, Rectangle heldItemFrame, float rotation)
         {
-            if ((player.direction == 1 && rotation < 0) ||
-                    (player.direction == -1 && rotation > 0))
-            {
-                float num33 = 6f;
-                if (heldItemFrame.Width > 32)
-                {
-                    num33 = 14f;
-                }
-                if (heldItemFrame.Width >= 48)
-                {
-                    num33 = 18f;
-                }
-                if (heldItemFrame.Width >= 52)
-                {
-                    num33 = 24f;
-                }
-                if (heldItemFrame.Width >= 64)
-                {
-                    num33 = 28f;
-                }
-                if (heldItemFrame.Width >= 92)
-                {
-                    num33 = 38f;
-                }
-                player.itemLocation.X = player.position.X + (float)player.width * 0.5f - ((float)heldItemFrame.Width * 0.5f - num33) * (float)player.direction;
-                num33 = 10f;
-                if (heldItemFrame.Height > 32)
-                {
-                    num33 = 10f;
-                }
-                if (heldItemFrame.Height > 52)
-                {
-                    num33 = 12f;
-                }
-                if (heldItemFrame.Height > 64)
-                {
-                    num33 = 14f;
-                }
-                player.itemLocation.Y = player.position.Y + num33 + player.HeightOffsetHitboxCenter;
-            }
-            else if ((player.direction == 1 && rotation < 90) ||
-                     (player.direction == -1 && rotation > -90))
-            {
-                float num32 = 10f;
-                if (heldItemFrame.Width > 32)
-                {
-                    num32 = 18f;
-                }
-                if (heldItemFrame.Width >= 52)
-                {
-                    num32 = 24f;
-                }
-                if (heldItemFrame.Width >= 64)
-                {
-                    num32 = 28f;
-                }
-                if (heldItemFrame.Width >= 92)
-                {
-                    num32 = 38f;
-                }
-                player.itemLocation.X = player.position.X + (float)player.width * 0.5f + ((float)heldItemFrame.Width * 0.5f - num32) * (float)player.direction;
-                num32 = 10f;
-                if (heldItemFrame.Height > 32)
-                {
-                    num32 = 8f;
-                }
-                if (heldItemFrame.Height > 52)
-                {
-                    num32 = 12f;
-                }
-                if (heldItemFrame.Height > 64)
-                {
-                    num32 = 14f;
-                }
-                player.itemLocation.Y = player.position.Y + num32 + player.HeightOffsetHitboxCenter;
-            }
-            else if ((player.direction == 1 && rotation < 180) ||
-                    (player.direction == -1 && rotation > -180))
-            {
-                float num31 = 14f;
-                if (heldItemFrame.Width > 32)
-                {
-                    num31 = 18f;
-                }
-                if (heldItemFrame.Width >= 52)
-                {
-                    num31 = 28f;
-                }
-                if (heldItemFrame.Width >= 64)
-                {
-                    num31 = 32f;
-                }
-                if (heldItemFrame.Width >= 92)
-                {
-                    num31 = 42f;
-                }
-                player.itemLocation.X = player.position.X + (float)player.width * 0.5f + ((float)heldItemFrame.Width * 0.5f - num31) * (float)player.direction;
-                player.itemLocation.Y = player.position.Y + 26f + player.HeightOffsetHitboxCenter;
-            }
-            else
-            {
-                float num33 = 6f;
-                if (heldItemFrame.Width > 32)
-                {
-                    num33 = 14f;
-                }
-                if (heldItemFrame.Width >= 48)
-                {
-                    num33 = 18f;
-                }
-                if (heldItemFrame.Width >= 52)
-                {
-                    num33 = 24f;
-                }
-                if (heldItemFrame.Width >= 64)
-                {
-                    num33 = 28f;
-                }
-                if (heldItemFrame.Width >= 92)
-                {
-                    num33 = 38f;
-                }
-                player.itemLocation.X = player.position.X + (float)player.width * 0.5f - ((float)heldItemFrame.Width * 0.5f - num33) * (float)player.direction;
-                player.itemLocation.Y = player.position.Y + 24f + player.HeightOffsetHitboxCenter;
-            }
+            player.itemLocation = LobCorpLight.LobItemLocation(player, heldItemFrame, rotation - 90);
 
-            player.itemRotation = MathHelper.ToRadians(rotation - 45 * player.direction);
+            player.itemRotation = MathHelper.ToRadians(rotation - 45) * player.direction;
         }
 
         public virtual void UseStyleAlt(Player player, Rectangle heldItemFrame)
@@ -617,13 +531,15 @@ namespace LobotomyCorp.Items
             if (Item.useStyle == 15)
             {
                 float rotation = ItemRotation(player);
-                PseudoUseItemFrame(player, rotation);
+                //PseudoUseItemFrame(player, rotation);
+                LobCorpLight.LobItemFrame(player, rotation - 90);
             }
             base.UseItemFrame(player);
         }
 
+        /*
         /// <summary>
-        /// Just to use as a base for other weapons for a smoother time, Use Degrees for rotation just to maintain my SP
+        /// [Older Version?]Just to use as a base for other weapons for a smoother time, Use Degrees for rotation just to maintain my SP
         /// </summary>
         /// <param name="player"></param>
         /// <param name="rotation"></param>
@@ -648,7 +564,7 @@ namespace LobotomyCorp.Items
             {
                 player.SetCompositeArmFront(enabled: true, Player.CompositeArmStretchAmount.Full, 90);
             }
-        }   
+        }*/
 
         public sealed override void UseItemHitbox(Player player, ref Rectangle hitbox, ref bool noHitbox)
         {
@@ -734,7 +650,7 @@ namespace LobotomyCorp.Items
             return null;
         }
 
-        public float ItemRotation(Player player)
+        public static float ItemRotation(Player player)
         {
             float prog = 1f - player.itemAnimation / (float)player.itemAnimationMax;
             float rotation = 0;
@@ -742,21 +658,21 @@ namespace LobotomyCorp.Items
             if (prog < 0.4f)
             {
                 prog = prog / 0.4f;
-                rotation = (90 - 150 * prog) * player.direction;
+                rotation = (90 - 150 * prog);// * player.direction;
             }
             else if (prog < 0.6f)
             {
                 prog = (prog - 0.4f) / 0.2f;
-                rotation = (-60 + 200 * (float)Math.Sin(1.57f * prog)) * player.direction;
+                rotation = (-60 + 200 * (float)Math.Sin(1.57f * prog));// * player.direction;
             }
             else if (prog < 0.7f)
             {
-                rotation = 140 * player.direction;
+                rotation = 140;// * player.direction;
             }
             else
             {
                 prog = (prog - 0.7f) / 0.3f;
-                rotation = (140 - 45 * prog) * player.direction;
+                rotation = (140 - 45 * prog);// * player.direction;
             }
 
             return rotation;

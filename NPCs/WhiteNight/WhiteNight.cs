@@ -10,7 +10,8 @@ using Terraria.GameContent.ItemDropRules;
 namespace LobotomyCorp.NPCs.WhiteNight
 {
     //[AutoloadBossHead]
-	class WhiteNight : ModNPC
+    [Autoload(LobotomyCorp.TestMode)]
+    class WhiteNight : ModNPC
     {
         public override void SetStaticDefaults()
         {

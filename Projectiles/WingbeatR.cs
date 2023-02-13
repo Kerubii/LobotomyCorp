@@ -223,7 +223,12 @@ namespace LobotomyCorp.Projectiles
                 Dust.NewDust(target.Center, 1, 1, DustID.Blood);
             }
 
-            Projectile.localAI[1]++;
+            if (target.life <= 0)
+            {
+                Main.player[Projectile.owner].AddBuff(ModContent.BuffType<Buffs.Festival>(), 300);
+            }
+
+            ModContent.GetInstance<LobSystem>().ScreenShake(15, 4f, 0, false);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -252,7 +257,13 @@ namespace LobotomyCorp.Projectiles
             float prog = (Projectile.ai[0] - 15f) / 15f;
 
             Player player = Main.player[Projectile.owner];
-            CustomShaderData shader = LobotomyCorp.LobcorpShaders["WingbeatSlash"].UseOpacity(0.5f * prog + 0.5f);
+            float opacity = 1f;
+            if (prog > 0.5f)
+                opacity *= 1f - (prog - 0.5f) / 0.5f;
+            CustomShaderData shader = LobotomyCorp.LobcorpShaders["SwingTrail"].UseOpacity(opacity);
+            shader.UseImage1(Mod, "Misc/FX_Tex_Trail1");
+            shader.UseImage2(Mod, "Misc/FX_Tex_Trail1");
+            shader.UseImage3(Mod, "Misc/Worley");
 
             int dir = player.direction;
 
@@ -262,7 +273,7 @@ namespace LobotomyCorp.Projectiles
                 trail.color = new Color(158, 255, 249);
 
                 float rot = -MathHelper.ToRadians(135f) * dir;
-                float rotationOffset = 3.4f * (float)Math.Sin(prog * 1.57f) * dir;
+                float rotationOffset = 6.8f * (float)Math.Sin(prog * 1.57f) * dir;
                 trail.DrawCircle(player.Center, Projectile.velocity.ToRotation() + rot + rotationOffset, dir, 64, 64, shader);
             }
             else
@@ -272,7 +283,7 @@ namespace LobotomyCorp.Projectiles
                 trail.color = new Color(158, 255, 249);
 
                 float rot = MathHelper.ToRadians(30);
-                float rotationOffset = -1.57f * (float)Math.Sin(prog * 1.57f);
+                float rotationOffset = -3.14f * (float)Math.Sin(prog * 1.57f);
                 trail.DrawEllipse(player.Center, Projectile.velocity.ToRotation(), (rot + rotationOffset) * dir, dir * -1, 102, 40, 128, shader);
             }
 

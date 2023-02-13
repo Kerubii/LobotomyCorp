@@ -10,10 +10,12 @@ using LobotomyCorp;
 using LobotomyCorp.Utils;
 using LobotomyCorp.UI;
 using System.Collections.Generic;
+using Terraria.Graphics.Effects;
 
 namespace LobotomyCorp.NPCs.RedMist
 {
     [AutoloadBossHead]
+    [Autoload(LobotomyCorp.TestMode)]
     class RedMist : ModNPC
     {
         public override void Load()
@@ -78,6 +80,24 @@ namespace LobotomyCorp.NPCs.RedMist
         public const float GOLDRUSH4SPEED = 22f;
         public const int GOLDRUSH4DELAY = 20;
 
+        private float Phase
+        {
+            get { return NPC.ai[0]; }
+            set { NPC.ai[0] = value; }
+        }
+
+        private float AiState
+        {
+            get { return NPC.ai[1]; }
+            set { NPC.ai[1] = value; }
+        }
+
+        private float Timer
+        {
+            get { return NPC.ai[2]; }
+            set { NPC.ai[2] = value; }
+        }
+
         public override void AI()
         {
             if (skelly == null)
@@ -107,7 +127,7 @@ namespace LobotomyCorp.NPCs.RedMist
             }*/
             target = NPC.GetTargetData().Center;
             float healthPercent = NPC.life / (float)NPC.lifeMax;
-            
+
             //NPC.spriteDirection = 1;
             //ChangeAnimation(AnimationState.TwilightChase);
             //return;
@@ -116,7 +136,7 @@ namespace LobotomyCorp.NPCs.RedMist
             if (NPC.ai[0] == -1)
             {
                 NPC.ai[0] = 2;
-                NPC.ai[1] = 10;
+                AiState = 10;
                 NPC.ai[3] = -1;
                 NPC.localAI[1] = 2;
                 ChangeAnimation(AnimationState.Phase4Transition);
@@ -124,216 +144,43 @@ namespace LobotomyCorp.NPCs.RedMist
                 //Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<RedMistEye>(), 0, 0, 0, NPC.whoAmI);
             }*/
 
+
             //First Phase - Lobcorp Phase
-            if (NPC.ai[0] == 0)
+            if (Phase == 0)
             {
-                if (Main.expertMode)
-                    foreach (Player p in Main.player)
-                    {
-                        if (p.active && !p.dead)
-                        {
-                            //p.AddBuff(ModContent.BuffType<Buffs.Hopeless>(), 60, true);
-                        }
-                    }
-
                 //Follow Mode
-                if (NPC.ai[1] == 0) 
+                if (AiState <= FollowState)
                 {
-                    if (NPC.velocity.Y == 0)
-                    {
-                        if (NPC.velocity.X == 0)
-                            ChangeAnimation(AnimationState.Idle1);
-                        else
-                            ChangeAnimation(AnimationState.Walk1);
-                    }
-                    else
-                        ChangeAnimation(AnimationState.MidAir);
-
-                    fighterAI(NPC.GetTargetData(), 64f, 0.08f, 2f);
-                    Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
-
-                    if (NPC.ai[2] > 0)
-                        NPC.ai[2]--;
-
-                    if (NPC.ai[2] <= 0)
-                    {
-                        if (delta.Length() < 128f)
-                        {
-                            if (Main.rand.Next(30) == 0)
-                            {
-                                int atk = Main.rand.Next(3);
-                                switch (atk)
-                                {
-                                    case 0:
-                                        Talk("RedEyes", NPC.spriteDirection);
-                                        break;
-                                    case 1:
-                                        Talk("Penitence", NPC.spriteDirection);
-                                        break;
-                                    case 2:
-                                        Talk("Both", NPC.spriteDirection);
-                                        break;
-                                }
-
-                                NPC.ai[1] = 1 + atk; //Swings takes 50 frames 
-                            }
-                        }
-                        else if (delta.Length() > 2000f && Main.rand.Next(360) == 0)
-                        {
-                            NPC.ai[1] = 8;
-                        }
-                    }
-
-                    if ((healthPercent <= .91f && GoldRushCount <= 0) ||
-                        (healthPercent <= .83f && GoldRushCount <= 1) ||
-                        (healthPercent <= .75f && GoldRushCount <= 2))
-                    {
-                        NPC.ai[1] = 4;
-                        NPC.ai[2] = 0;
-                        Talk("GoldRush1", NPC.spriteDirection);
-                    }
-
-                    if (healthPercent <= .75f && GoldRushCount >= 3)
-                    {
-                        NPC.ai[1] = 10;
-                        NPC.ai[2] = 0;
-                    }
+                    FollowMode1();
                 }
                 //EGO Swing
-                else if (0 < NPC.ai[1] && NPC.ai[1] <= 3)
+                else if (AiState <= SwingBoth)
                 {
-                    NPC.velocity.X *= 0;
-                    switch (NPC.ai[1])
-                    {
-                        case 1:
-                            ChangeAnimation(AnimationState.SwingRedEyes);
-                            break;
-                        case 2:
-                            ChangeAnimation(AnimationState.SwingPenitence);
-                            break;
-                        case 3:
-                            ChangeAnimation(AnimationState.SwingBoth);
-                            break;
-                    }
-                    NPC.ai[2]++;
-                    if (20 < NPC.ai[2] && NPC.ai[2] < 30)
-                    {
-                        if (NPC.ai[1] != 2)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), skelly.Weapon1.EndPoint(NPC.spriteDirection), Vector2.Zero, ModContent.ProjectileType<RedMistMelee>(), 25, 2);
-                        if (NPC.ai[1] != 1)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), skelly.Weapon2.EndPoint(NPC.spriteDirection), Vector2.Zero, ModContent.ProjectileType<RedMistMelee>(), 25, 2);
-                    }
-                    if (NPC.ai[2] >= 50)
-                    {
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 30;
-                    }
-                    if (NPC.ai[2] == 20)
-                    {
-                        SoundEngine.PlaySound(SoundID.Item1, NPC.Center);
-                    }
+                    SwingWeapon();
                 }
-                //GoldRush Start
-                else if (NPC.ai[1] == 4)
-                {
-                    GoldRushCount++;
-                    NPC.velocity *= 0;
-                    NPC.spriteDirection *= -1;
-                    NPC.ai[1]++;
-                    ChangeAnimation(AnimationState.GoldRushIntro);
-                    NPC.noGravity = true;
-                    NPC.noTileCollide = true;
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, -1, 5);
-                }
-                //GoldRush Charging
-                else if (NPC.ai[1] == 5)
-                {
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] > 30)
-                    {
-                        NPC.ai[2] = 30 * 5 + 15;
-                        NPC.ai[1]++;
-                        NPC.velocity.X = 24f * NPC.spriteDirection;
-                        NPC.velocity.Y = 0;
-                    }
-                }
-                //GoldRush Charge
-                else if (NPC.ai[1] == 6)
-                {
-                    NPC.damage = 65;
-                    NPC.ai[2]--;
-                    if (NPC.ai[2] <= 0)
-                    {
-                        ChangeAnimation(AnimationState.GoldRushEnd);
-                        NPC.ai[1]++;
-                        NPC.ai[2] = 0;
-                        NPC.noGravity = false;
-                        NPC.noTileCollide = false;
-                    }
-
-                    Dust d = Dust.NewDustPerfect(new Vector2(Main.rand.NextFloat(NPC.position.X, NPC.position.X + NPC.width), NPC.position.Y + NPC.height), 57);
-                    d.fadeIn = 1.4f;
-                    d.noGravity = true;
-                }
-                //GoldRush End
-                else if (NPC.ai[1] == 7)
-                {
-                    NPC.damage = 0;
-                    NPC.velocity.X *= 0.9f;
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] > 120)
-                    {
-                        ChangeAnimation(AnimationState.Idle1);
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 0;
-                    }
-                }
-            
-                //Mini GoldRush
-                else if (NPC.ai[1] == 8)
-                {
-                    NPC.velocity *= 0;
-                    NPC.ai[1]++;
-                    ChangeAnimation(AnimationState.GoldRushIntro);
-                    NPC.noGravity = true;
-                    NPC.noTileCollide = true;
-                    int i = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(400 * NPC.spriteDirection, Main.LocalPlayer.height / 2 - 50), new Vector2(-22f * NPC.spriteDirection, 0), ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, -2);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, i);
-                }
-                //Mini GoldRush Charge
-                else if (NPC.ai[1] == 9)
-                {
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] > 30)
-                    {
-                        NPC.ai[2] = 45;
-                        NPC.ai[1] = 6;
-                        NPC.velocity.X = 24f * NPC.spriteDirection;
-                    }
-                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Teleport_Start") with { Volume = 0.25f }, NPC.position);
-                }
-
                 //Transition to Phase 2
-                else if (NPC.ai[1] == 10)
+                else if (AiState == 10)
                 {
                     ChangeAnimation(AnimationState.Phase2Transition);
-                    NPC.ai[2]++;
+                    Timer++;
                     NPC.velocity.X = 0;
 
-                    if (NPC.ai[2] == 30)
+                    if (Timer == 30)
                     {
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<RedMistEye>(), 0, 0, 0, NPC.whoAmI);
                     }
 
-                    if (NPC.ai[2] > 60)
+                    if (Timer > 60)
                     {
-                        NPC.ai[0]++;
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 0;
+                        Phase++;
+                        AiState = 0;
+                        Timer = 0;
                         NPC.ai[3] = -1;
                         NPC.netUpdate = true;
                     }
                 }
+                else
+                    GoldRush1Sequence();
             }
             //Second Phase
             //Changes to Mimicry and DaCapo
@@ -343,265 +190,79 @@ namespace LobotomyCorp.NPCs.RedMist
             //Dashes through incoming Projectiles, gaining Projectile invincibility
             //Teleports to DaCapo and unleashes a 180 degree slash depending on player direction
             //Range needed to deal full damage shrinks
-            else if (NPC.ai[0] == 1)
+            else if (Phase == 1)
             {
-                if (NPC.ai[1] == 0)
+                if (AiState == FollowState)
                 {
-                    if (NPC.velocity.Y == 0)
-                    {
-                        if (NPC.velocity.X == 0)
-                            ChangeAnimation(AnimationState.Idle2);
-                        else
-                            ChangeAnimation(AnimationState.Walk2);
-                    }
-                    else
-                        ChangeAnimation(AnimationState.MidAir);
-
-                    fighterAI(NPC.GetTargetData(), 64f, 0.08f, 5f);
-                    Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
-
-                    if (NPC.ai[2] > 0)
-                        NPC.ai[2]--;
-
-                    if (NPC.ai[2] <= 0)
-                    {
-                        if (delta.Length() < 128f && Main.rand.Next(30) == 0)
-                        {
-                            if (Main.rand.Next(2) == 0)
-                            {
-                                Talk("Mimicry" + (1 + Main.rand.Next(2)), NPC.spriteDirection);
-                                NPC.ai[1] = 1;
-                                ChangeAnimation(AnimationState.SwingMimicry);
-                                NPC.velocity.X = 0;
-                            }
-                            else if (NPC.ai[3] < 0)
-                            {
-                                Talk("DaCapo" + (1 + Main.rand.Next(2)), NPC.spriteDirection);
-                                NPC.ai[1] = 2;
-                                ChangeAnimation(AnimationState.SwingDaCapo);
-                                NPC.velocity.X = 0;
-                            }
-                        }
-
-                        if ((delta.Length() > 600 && Main.rand.Next(240) == 0) ||
-                            (Main.rand.Next(2400) == 0) ||
-                            (delta.Y < -150 && Main.rand.Next(200) == 0))
-                        {
-                            NPC.ai[1] = 4;
-                            ChangeAnimation(AnimationState.HeavenThrow);
-                            Talk("Heaven", NPC.spriteDirection);
-                            NPC.velocity.X = 0;
-                        }
-                    }
-
-                    if (delta.Length() > 460)
-                    {
-                        if (delta.Length() < 600 && Main.rand.Next(200) == 0)
-                        {
-                            NPC.ai[1] = 6;
-                            NPC.ai[2] = 30;
-                            NPC.velocity.Y *= 0;
-                            NPC.velocity.X = 18 * NPC.spriteDirection;
-                            ChangeAnimation(AnimationState.Dash);
-                        }
-
-                        if (IncomingProjectile())
-                        {
-                            NPC.ai[1] = 5;
-                            NPC.ai[2] = 30;
-                            NPC.velocity.Y *= 0;
-                            NPC.velocity.X = 18 * NPC.spriteDirection;
-                            ChangeAnimation(AnimationState.Dash);
-                        }
-                    }
-
-                    if (NPC.ai[3] < 0 &&
-                        ((healthPercent <= .66f && GoldRushCount <= 3) ||
-                        (healthPercent <= .58f && GoldRushCount <= 4) ||
-                        (healthPercent <= .50f && GoldRushCount >= 5)))
-                    {
-                        NPC.ai[1] = 7;
-                        NPC.ai[2] = 0;
-                        NPC.velocity *= 0;
-                        if (healthPercent <= .50f)
-                        {
-                            NPC.ai[1] = 10;
-                            Talk("Shift1", NPC.spriteDirection);
-                        }
-                        else
-                        {
-                            GoldRushCount++;
-                            Talk("Teleport1", NPC.spriteDirection);
-                        }
-                    }
+                    FollowMode2();
                 }
-                //Mimicry Swing
-                else if (NPC.ai[1] == 1)
+                else if (AiState == SwingMimicry)
                 {
-                    ChangeAnimation(AnimationState.SwingMimicry);
-                    NPC.velocity.X *= 0.9f;
-                    NPC.ai[2]++;
-                    if (60 < NPC.ai[2] && NPC.ai[2] < 67)
-                    {
-                        Vector2 position = skelly.Weapon1.Position(NPC.spriteDirection) + new Vector2(100, 0).RotatedBy(skelly.Weapon1.GetRotation(NPC.spriteDirection));
-
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), position, Vector2.Zero, ModContent.ProjectileType<RedMistMimicry>(), 50, 2);
-                    }
-
-                    if (NPC.ai[2] == 60)
-                    {
-                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Atk1") with { Volume = 0.5f }, NPC.position);
-                    }
-
-                    if (NPC.ai[2] > 90)
-                    {
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 60;
-                    }
+                    SwingingMimicry();
                 }
-                //DaCapo Swing
-                else if (NPC.ai[1] == 2)
+                else if (AiState == SwingDaCapo)
                 {
-                    NPC.ai[2]++;
-                    NPC.velocity.X *= 0.9f;
-                    if (NPC.ai[2] > 20 && NPC.ai[2] < 90 && NPC.ai[2] % 30 < 10)
-                    {
-                        Vector2 position = skelly.Weapon2.Position(NPC.spriteDirection) + new Vector2(40, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
-
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), position, Vector2.Zero, ModContent.ProjectileType<RedMistDaCapo>(), 15, 0);
-                    }
-                    if (NPC.ai[2] == 90) //Throw DaCapo when enemy is at certain distance
-                    {
-                        Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
-                        if (delta.Length() > 260)
-                        {
-                            NPC.ai[1] = 3;
-                            ChangeAnimation(AnimationState.DaCapoThrow);
-                            NPC.ai[2] = 0;
-                        }
-                    }
-                    if (NPC.ai[2] > 100)
-                    {
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 30;
-                    }
-
-                    if (NPC.ai[2] == 1 || NPC.ai[2] == 30 || NPC.ai[2] == 60)
-                    {
-                        SoundEngine.PlaySound(SoundID.Item1, NPC.Center);
-                    }
+                    SwingingDaCapo();
                 }
-                //DaCapo Normal Throw
-                else if (NPC.ai[1] == 3)
+                else if (AiState == SwingDaCapo + 1)//ThrowDaCapo
                 {
                     NPC.velocity.X *= 0.9f;
                     Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] == 50)
+                    Timer++;
+                    if (Timer == 50)
                     {
                         NPC.ai[3] = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Normalize(delta) * 24f, ModContent.ProjectileType<DaCapoThrow>(), 20, 2, 0, NPC.whoAmI);
                         SoundEngine.PlaySound(SoundID.Item19, NPC.Center);
                     }
-                    if (NPC.ai[2] > 100)
+                    if (Timer > 100)
                     {
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 30;
+                        AiState = FollowState;
+                        Timer = 30;
                         ChangeAnimation(AnimationState.Idle2);
                         skelly.Weapon1.Visible = true;
                     }
                 }
-                //Heaven Throw
-                else if (NPC.ai[1] == 4)
+                else if (AiState == ThrowHeaven)
                 {
-                    NPC.ai[2]++;
-                    NPC.velocity.X *= 0.9f;
-                    if (NPC.ai[2] == 50)
-                    {
-                        Vector2 delta = NPC.GetTargetData().Center - NPC.Center + new Vector2(0, -13);
-                        if (Math.Sign(delta.X) != Math.Sign(NPC.spriteDirection) || delta.Y > 0)
-                        {
-                            delta = new Vector2(1 * NPC.spriteDirection, 0);
-                        }
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -13), Vector2.Normalize(delta) * 12f, ModContent.ProjectileType<HeavenBoss>(), 25, 2, 0, NPC.whoAmI);
-                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Spear") with { Volume = 0.5f }, NPC.position);
-                    }
-                    if (NPC.ai[2] > 80)
-                    {
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 30;
-                    }
+                    ThrowingHeaven();
                 }
-                //Dash
-                else if (NPC.ai[1] == 5)
+                else if (AiState == Dash)
                 {
-                    ChangeAnimation(AnimationState.Dash);
-                    NPC.ai[2]--;
-                    NPC.noTileCollide = true;
-                    NPC.noGravity = true;
-                    if (NPC.ai[2] < 10)
-                    {
-                        NPC.velocity.X *= 0.9f;
-                    }
-                    if (NPC.ai[2] <= 0)
-                    {
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 0;
-
-                        NPC.noTileCollide = false;
-                        NPC.noGravity = false;
-                    }
-                }            
-                //Dash To Mimicry
-                else if (NPC.ai[1] == 6)
+                    DashFront(FollowState);
+                }
+                else if (AiState == DashSwingMimicry)
                 {
-                    ChangeAnimation(AnimationState.Dash);
-                    NPC.ai[2]--;
-                    NPC.noTileCollide = true;
-                    NPC.noGravity = true;
-                    if (NPC.ai[2] < 10)
-                    {
-                        NPC.velocity.X *= 0.9f;
-                    }
-                    if (NPC.ai[2] <= 0)
-                    {
-                        NPC.ai[1] = 1;
-                        NPC.ai[2] = 0;
-
-                        NPC.noTileCollide = false;
-                        NPC.noGravity = false;
-                    }
+                    DashFront(SwingMimicry);
                 }
 
-                //DaCapo Teleport Throw
-                else if (NPC.ai[1] == 7)
+                else if (AiState == SpecialAttackStart)
                 {
                     ChangeAnimation(AnimationState.DaCapoThrow);
                     NPC.velocity.X *= 0.9f;
                     Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] == 50)
+                    Timer++;
+                    if (Timer == 50)
                         NPC.ai[3] = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, delta /= 30, ModContent.ProjectileType<DaCapoLegato>(), 20, 2, 0, NPC.whoAmI);
-                    if (NPC.ai[2] > 100)
+                    if (Timer > 100)
                     {
-                        NPC.ai[1] = 8;
-                        NPC.ai[2] = 0;
+                        AiState = 8;
+                        Timer = 0;
                         skelly.Weapon1.Visible = true;
                         Talk("Teleport2", NPC.spriteDirection);
                     }
                 }
-                //Mimicry Prepare
-                else if (NPC.ai[1] == 8)
+                else if (AiState == SpecialAttackStart + 1)
                 {
                     ChangeAnimation(AnimationState.MimicryPrepare);
-                    if (NPC.ai[2] == 0)
+                    if (Timer == 0)
                     {
                         SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Cast") with { Volume = 0.5f }, NPC.position);
                     }
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] >= 120)
+                    Timer++;
+                    if (Timer >= 120)
                     {
-                        NPC.ai[1] = 9;
-                        NPC.ai[2] = 0;
+                        AiState = 9;
+                        Timer = 0;
                         Projectile p = Main.projectile[(int)NPC.ai[3]];
                         NPC.Center = p.Center;// + new Vector2(200, 0).RotateRandom(6.28f);
                         p.Kill();
@@ -609,10 +270,9 @@ namespace LobotomyCorp.NPCs.RedMist
                         Talk("Teleport3", NPC.spriteDirection);
                     }
                 }
-                //Mimicry GreaterSplit!
-                else if (NPC.ai[1] == 9)
+                else if (AiState == SpecialAttackStart + 2)
                 {
-                    if (NPC.ai[2] == 0)
+                    if (Timer == 0)
                     {
                         SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_CastAtk") with { Volume = 0.5f }, NPC.position);
                     }
@@ -620,36 +280,37 @@ namespace LobotomyCorp.NPCs.RedMist
                     NPC.velocity *= 0;
                     NPC.noGravity = true;
                     ChangeAnimation(AnimationState.MimicryGreaterSplitV);
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] >= 60)
+                    Timer++;
+                    if (Timer >= 60)
                     {
                         NPC.noGravity = false;
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 0;
+                        AiState = 0;
+                        Timer = 0;
                         NPC.velocity.Y = -8f;
                     }
                 }
+
                 //Transition Phase
-                else if (NPC.ai[1] == 10)
+                else if (AiState == SwitchPhase)
                 {
                     ChangeAnimation(AnimationState.Phase3Transition);
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] == 60)
+                    Timer++;
+                    if (Timer == 60)
                     {
                         SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Change") with { Volume = 0.5f }, NPC.position);
                         //Shoot Mimicry forwards and Dacapo backwards
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(6 * NPC.spriteDirection, 0), ModContent.ProjectileType<SwitchMimicryThrow>(), 20, 0);
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, new Vector2(-6 * NPC.spriteDirection, 0), ModContent.ProjectileType<SwitchDaCapoThrow>(), 20, 0);
                     }
-                    if (NPC.ai[2] == 130)
+                    if (Timer == 130)
                     {
                         Talk("Shift2", NPC.spriteDirection);
                     }
-                    if (NPC.ai[2] > 160)
+                    if (Timer > 160)
                     {
-                        NPC.ai[0]++;
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 0;
+                        Phase++;
+                        AiState = FollowState;
+                        Timer = 0;
                     }
                 }
             }
@@ -663,340 +324,9 @@ namespace LobotomyCorp.NPCs.RedMist
             //Justitia Releases Energy Slashes, sometimes two or three hit combos, has a higher end lag when doing three hit combos
             //Gold Rush has random center positions with different angles, ending with a strike from above
             //Range needed to deal full damage expands
-            else if (NPC.ai[0] == 2)
+            else if (Phase == 2)
             {
-                if (NPC.ai[1] == 0)
-                {
-                    if (NPC.velocity.Y == 0)
-                    {
-                        if (NPC.velocity.X == 0)
-                            ChangeAnimation(AnimationState.Idle3);
-                        else
-                            ChangeAnimation(AnimationState.Walk3);
-                    }
-                    else
-                        ChangeAnimation(AnimationState.MidAir);
-
-                    fighterAI(NPC.GetTargetData(), 90, 0.08f, 2f);
-
-                    Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
-
-                    if (NPC.ai[2] > 0)
-                        NPC.ai[2]--;
-
-                    if (NPC.ai[2] <= 0 && Main.rand.Next(60) == 0)
-                    {
-                        if (Main.rand.Next(2) == 0)
-                        {
-                            NPC.velocity.X *= 0;
-                            //Justitia Attack, up to three just to catch people offguard
-                            NPC.ai[1] = 1;
-                            NPC.ai[2] = 0;
-                            ChangeAnimation(AnimationState.JustitiaSwing);
-
-                            Talk("Justitia" + Main.rand.Next(1, 3), NPC.spriteDirection);
-                        }
-                        else
-                        {
-                            //Smile Attack
-                            NPC.velocity.X *= 0;
-                            NPC.ai[1] = 4;
-                            NPC.ai[2] = 0;
-                            ChangeAnimation(AnimationState.SmileSwing);
-                            Talk("Smile" + Main.rand.Next(1, 3), NPC.spriteDirection);
-                        }
-
-                        //Heaven Attack
-                        if ((delta.Length() > 600 && Main.rand.Next(240) == 0) ||
-                            (Main.rand.Next(2400) == 0) ||
-                            (delta.Y < -150 && Main.rand.Next(200) == 0))
-                        {
-                            NPC.ai[1] = 4;
-                            ChangeAnimation(AnimationState.HeavenThrow);
-                            Talk("Heaven", NPC.spriteDirection);
-                            NPC.velocity.X = 0;
-                        }
-                    }
-
-                    //Gold Rush!
-                    
-                    if ((healthPercent <= .42f && GoldRushCount <= 5) ||
-                        (healthPercent <= .33f && GoldRushCount <= 6))
-                    {
-                        NPC.ai[1] = 6;//Gold Rush!
-                        NPC.ai[2] = 0;
-                        NPC.velocity *= 0;
-                        GoldRushCount++;
-                        Talk("GoldRush1", NPC.spriteDirection);
-                        ChangeAnimation(AnimationState.GoldRushIntro);
-                    }
-
-                    if (healthPercent <= .25f && GoldRushCount <= 7)
-                    {
-                        NPC.ai[1] = 10;
-                        NPC.ai[2] = 0;
-                        GoldRushCount++;
-                        Talk("Shift3", NPC.spriteDirection);
-                        ChangeAnimation(AnimationState.Phase4Transition);
-                    }
-                }
-                //Justitia Slashes
-                else if (NPC.ai[1] > 0 && NPC.ai[1] <= 3)
-                {
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] > 30 && NPC.ai[2] % 45 == 0)
-                    {
-                        //Shoot Justitia Slashes
-                        Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
-                        delta.Normalize();
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, 8 * delta, ModContent.ProjectileType<JustitiaSlashBoss>(), 15, 0);
-                        if (NPC.ai[1] > 1)
-                            NPC.ai[1]--;
-                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Atk3") with { Volume = 0.5f }, NPC.position);
-
-                    }
-                    if (NPC.ai[1] == 1)
-                    {
-                        if (NPC.ai[2] % 90 >= 59)
-                        {
-                            NPC.ai[1] = 0;
-                            NPC.ai[2] = 100 * (int)(NPC.ai[2] / 60);
-                        }
-                    }
-                }
-                //Smile Quake
-                else if (NPC.ai[1] == 4)
-                {
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] == 40)
-                    {
-                        //Push down all players and apply debuff
-                    }
-                    else if (NPC.ai[2] > 90)
-                    {
-                        if (NPC.ai[2] % 2 == 0)
-                        {
-                            //Damage Everything Nearby
-                        }
-                    }
-
-                    if (NPC.ai[2] == 70)
-                    {
-                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Atk1") with { Volume = 0.5f }, NPC.position);
-
-                        Vector2 hammerPos = skelly.Weapon2.Position(NPC.spriteDirection) + new Vector2(70, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
-                        foreach (Player p in Main.player)
-                        {
-                            if (p.active && !p.dead && Collision.CanHit(hammerPos, 1, 1, p.position, p.width, p.height))
-                            {
-                                p.AddBuff(ModContent.BuffType<Buffs.Scream>(), 300);
-                                p.velocity.Y = 6;
-                            }
-                        }
-                        
-                        for (int i = 0; i < 24; i++)
-                        {
-                            Vector2 vel = new Vector2(Main.rand.NextFloat(10f, 20f), 0).RotatedBy(Main.rand.NextFloat(0.34f) + MathHelper.ToRadians(-90 + 45 * NPC.spriteDirection));
-                            Dust d = Dust.NewDustPerfect(hammerPos, DustID.Wraith, vel);
-                            d.noGravity = true;
-                        }
-                    }
-                    else if (NPC.ai[2] >= 160 && NPC.ai[2] < 240)
-                    {
-                        if (NPC.ai[2] == 160)
-                            SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Atk3") with { Volume = 0.5f }, NPC.position);
-
-                        Vector2 hammerPos = skelly.Weapon2.Position(NPC.spriteDirection) + new Vector2(70, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
-                        /*if (NPC.ai[2] % 10 == 0)
-                        {
-                            foreach (Player p in Main.player)
-                            {
-                                if (p.active && !p.dead && Collision.CanHit(hammerPos, 1, 1, p.position, p.width, p.height))
-                                    p.AddBuff(ModContent.BuffType<Buffs.Vomit>(), 60);
-                            }
-                        }*/
-
-                        if (NPC.ai[2] % 5 == 0)
-                        {
-                            float random = Main.rand.NextFloat(1.00f);
-                            for (int i = 0; i < 28; i++)
-                            {
-                                Vector2 vel = new Vector2(16, 0).RotatedBy(random + MathHelper.ToRadians(11.25f * i));
-                                Vector2 dustPos = new Vector2(70, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
-                                Dust d = Dust.NewDustPerfect(hammerPos, DustID.Wraith, vel);
-                                d.noGravity = true;
-                            }
-                            int dir = (int)(NPC.ai[2] % 40) / 5;
-                            for (int i = -3; i <= 3; i++)
-                            {
-                                float angle = MathHelper.ToRadians(dir * 45f + i * (45f / 7f));
-                                Vector2 vel = new Vector2(8, 0).RotatedBy(angle);
-
-                                Projectile.NewProjectile(NPC.GetSource_FromThis(), hammerPos, vel, ModContent.ProjectileType<Projectiles.SmileBits>(), 16, 0, 255, Main.rand.NextFloat(0.26f));
-                            }
-
-                            /*
-                            float random = Main.rand.NextFloat(1.00f);
-                            for (int i = 0; i < 28; i++)
-                            {
-                                Vector2 vel = new Vector2(8, 0).RotatedBy(random + MathHelper.ToRadians(11.25f * i));
-                                Projectile.NewProjectile(NPC.GetSource_FromThis(), hammerPos, vel, ModContent.ProjectileType<Projectiles.SmileBits>(), 16, 0, 255, Main.rand.NextFloat(0.26f));
-                            }*/
-                        }
-                    }
-
-                    if (NPC.ai[2] > 270)
-                    {
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 180;
-                    }
-                }
-                //Heaven Throw
-                else if (NPC.ai[1] == 5)
-                {
-                    ChangeAnimation(AnimationState.HeavenThrow);
-                    NPC.ai[2]++;
-                    NPC.velocity.X *= 0.9f;
-                    if (NPC.ai[2] == 50)
-                    {
-                        Vector2 delta = NPC.GetTargetData().Center - NPC.Center + new Vector2(0, -13);
-                        if (Math.Sign(delta.X) != Math.Sign(NPC.spriteDirection) || delta.Y > 0)
-                        {
-                            delta = new Vector2(1 * NPC.spriteDirection, 0);
-                        }
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -13), Vector2.Normalize(delta) * 12f, ModContent.ProjectileType<HeavenBoss>(), 25, 2, 0, NPC.whoAmI);
-                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Spear") with { Volume = 0.5f }, NPC.position);
-                    }
-                    if (NPC.ai[2] > 80)
-                    {
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 30;
-                    }
-                }
-                //GoldRush Start
-                else if (NPC.ai[1] == 6)
-                {
-                    //GoldRushCount++;
-                    NPC.velocity *= 0;
-                    NPC.spriteDirection *= -1;
-                    NPC.ai[1]++;
-                    ChangeAnimation(AnimationState.GoldRushIntro);
-                    NPC.noGravity = true;
-                    NPC.noTileCollide = true;
-                    //Spawn Portals MANUALLY AAAAAA
-                    int portals = 8;
-                    int currentPortal = -1;
-                    float currentRotation = 0;
-                    //Doesnt work because of portal intersecting :(
-                    Vector2 targetPos = NPC.Center;
-                    /*
-                    for (int i = 0; i < portals; i++)
-                    {
-                        if (currentPortal == -1)
-                        {
-                            currentRotation = Main.rand.NextFloat((float)Math.PI * 2);
-                            currentPortal = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(400, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, -1, 5);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), targetPos + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
-                            continue;
-                        }
-                        if (i == portals - 1)
-                        {
-                            int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(-400, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, -2, 5);
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(0, -320), new Vector2(0, -22), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, -2, 5);
-                            Main.Projectile[p].ai[0] = currentPortal;
-                            Main.Projectile[p].netUpdate = true;
-                        }
-                        else
-                        {
-                            int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(-400, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, -2, 5);
-                            currentRotation = Main.rand.NextFloat((float)Math.PI * 2);
-                            currentPortal = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(400, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
-                            Main.Projectile[p].ai[0] = currentPortal;
-                            Main.Projectile[p].netUpdate = true;
-                        }
-                    }*/
-                    //One at a time version
-                    /*
-                    Also Kinda bad
-                    currentRotation = Main.rand.NextFloat((float)Math.PI * 2);
-                    currentPortal = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(320, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), targetPos + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
-                    */
-                    //Default
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, -3, 8);
-                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Teleport_Start") with { Volume = 0.5f }, NPC.position);
-                }
-                //GoldRush Charging
-                else if (NPC.ai[1] == 7)
-                {
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] > 30)
-                    {
-                        NPC.ai[2] = 30 * 8;// + 15;
-                        NPC.ai[1]++;
-                        NPC.velocity.X = 24f * NPC.spriteDirection;
-                        NPC.velocity.Y = 0;
-                    }
-                }
-                //GoldRush Charge
-                else if (NPC.ai[1] == 8)
-                {
-                    NPC.damage = 65;
-                    NPC.ai[2]--;
-                    if (NPC.ai[2] <= 0)
-                    {
-                        ChangeAnimation(AnimationState.GoldRushEnd);
-                        NPC.ai[1]++;
-                        NPC.ai[2] = 0;
-                        NPC.noGravity = false;
-                        NPC.noTileCollide = false;
-                    }
-                    /*
-                    if (NPC.ai[2] % 45 == 0)
-                    {
-                        float currentRotation = Main.rand.NextFloat((float)Math.PI * 2);
-                        int currentPortal = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(600, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, -1, 5);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(400, 0).RotatedBy(NPC.velocity.ToRotation()), new Vector2(-22, 0).RotatedBy(NPC.velocity.ToRotation()), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
-                    }*/
-
-                    Dust d = Dust.NewDustPerfect(new Vector2(Main.rand.NextFloat(NPC.position.X, NPC.position.X + NPC.width), NPC.position.Y + NPC.height), 57);
-                    d.fadeIn = 1.4f;
-                    d.noGravity = true;
-                }
-                //GoldRush End
-                else if (NPC.ai[1] == 9)
-                {
-                    NPC.damage = 0;
-                    NPC.velocity.X *= 0.9f;
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] > 120)
-                    {
-                        ChangeAnimation(AnimationState.Idle1);
-                        NPC.ai[1] = 0;
-                        NPC.ai[2] = 0;
-                    }
-                }
-            
-                //Phase4Transition
-                else if (NPC.ai[1] == 10)
-                {
-                    NPC.velocity.X = 0;
-                    NPC.ai[2]++;
-                    if (NPC.ai[2] == 120)
-                    {
-                        Talk("Shift4", NPC.spriteDirection);
-                    }
-                    if (NPC.ai[2] > 160)
-                    {
-                        NPC.ai[0] = 3;
-                        NPC.ai[1] = 0;// -60;
-                        NPC.ai[2] = 0;
-                    }
-                    if (NPC.ai[2] == 30)
-                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Change") with { Volume = 0.5f }, NPC.position);
-                    else if (NPC.ai[2] == 120)
-                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Change_justice") with { Volume = 0.5f }, NPC.position);
-                }
+                RedMistPhase3();
             }
             //Instead of using Gold Rush a third time before transitioning, begins transition immediently
             //Smile gets used one last time, Justitia transforms into Twilight
@@ -1008,34 +338,34 @@ namespace LobotomyCorp.NPCs.RedMist
             //Red Mist sometimes enters a portal to pass through it
             //Red Mist sometimes stops and redirects her velocity towards the player
             //After 25 seconds, she stops, falls to the ground, and lays motionless for 10 seconds with increased damage taken, before attacking again
-            else if (NPC.ai[0] == 3)
+            else if (Phase == 3)
             {
-                if (NPC.ai[1] < 0)
+                if (AiState < 0)
                 {
-                    NPC.ai[1]++;
+                    AiState++;
                 }
                 else
                 {
                     //Idle
-                    if (NPC.ai[1] == 0)
+                    if (AiState == 0)
                     {
                         ChangeAnimation(AnimationState.Idle4);
-                        NPC.ai[2]++;
-                        if (NPC.ai[2] > 60)
+                        Timer++;
+                        if (Timer > 60)
                         {
-                            NPC.ai[2] = 0;
-                            NPC.ai[1] = 6;
+                            Timer = 0;
+                            AiState = 6;
                             if (Main.rand.Next(2) == 0)
-                                NPC.ai[1] = 1;
+                                AiState = 1;
                         }
                     }
                     //GoldRush Follow Start
-                    else if (NPC.ai[1] == 1)
+                    else if (AiState == 1)
                     {
                         NPC.velocity.X = 0;
 
                         ChangeAnimation(AnimationState.GoldRushThrow);
-                        if (NPC.ai[2] == 0)
+                        if (Timer == 0)
                         {
                             Talk("GoldRush" + Main.rand.Next(2, 4), NPC.spriteDirection);
 
@@ -1043,29 +373,29 @@ namespace LobotomyCorp.NPCs.RedMist
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center + velocity * GOLDRUSH4DELAY, velocity, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfKing>(), 0, 0, 0, -1, 170 - GOLDRUSH4DELAY);
                         }
 
-                        NPC.ai[2]++;
+                        Timer++;
 
-                        if (NPC.ai[2] == 160)
+                        if (Timer == 160)
                         {
                             Vector2 velocity = new Vector2(GOLDRUSH4SPEED * NPC.spriteDirection, 0);
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<Projectiles.KingPortal.GoldRushRedMist>(), 45, 1f, 0 , 10);
                         }
 
-                        if (NPC.ai[2] > 200)
+                        if (Timer > 200)
                         {
-                            NPC.ai[2] = 0;
-                            NPC.ai[1]++;
+                            Timer = 0;
+                            AiState++;
                             NPC.velocity = new Vector2(GOLDRUSH4SPEED * NPC.spriteDirection, 0);
                         }
                     }
 
                     //GoldRush Follow
-                    else if (NPC.ai[1] == 2)
+                    else if (AiState == 2)
                     {
                         NPC.noTileCollide = true;
                         NPC.noGravity = true;
                         NPC.spriteDirection = Math.Sign(NPC.velocity.X);
-                        NPC.ai[2]++;
+                        Timer++;
 
                         ChangeAnimation(AnimationState.TwilightChase);
 
@@ -1076,32 +406,32 @@ namespace LobotomyCorp.NPCs.RedMist
                         {
                             Talk("Pass" + (1 + Main.rand.Next(3)), NPC.spriteDirection);
 
-                            NPC.ai[1] = 5;
-                            NPC.ai[2] = 0;
+                            AiState = 5;
+                            Timer = 0;
                         }
 
-                        if (NPC.ai[2] > 300)
+                        if (Timer > 300)
                         {
-                            NPC.ai[2] = 0;
-                            NPC.ai[1] = 4;
+                            Timer = 0;
+                            AiState = 4;
                         }
                     }
                     
                     //Twilight JumpSlash Finisher
-                    else if (NPC.ai[1] == 3)
+                    else if (AiState == 3)
                     {
                         ChangeAnimation(AnimationState.TwilightFinisher);
                         NPC.velocity *= 0.95f;
                         if (NPC.velocity.X > -1 && NPC.velocity.X < 1)
                             NPC.velocity.X = 0;
-                        NPC.ai[2]++;
+                        Timer++;
 
-                        if (NPC.ai[2] == 25)
+                        if (Timer == 25)
                         {
                             Talk("Arrive", NPC.spriteDirection);
                         }
 
-                        if (NPC.ai[2] > 20 && NPC.ai[2] < 60)
+                        if (Timer > 20 && Timer < 60)
                         {
                             for (int i = 0; i < 2; i++)
                             {
@@ -1110,67 +440,67 @@ namespace LobotomyCorp.NPCs.RedMist
                             }
                         }
 
-                        if (NPC.ai[2] > 100)
+                        if (Timer > 100)
                         {
-                            NPC.ai[2] = 0;
-                            NPC.ai[1]++;
+                            Timer = 0;
+                            AiState++;
                         }
                     }
 
                     //KNEEL
-                    else if (NPC.ai[1] == 4)
+                    else if (AiState == 4)
                     {
                         NPC.noTileCollide = false;
                         NPC.noGravity = false;
 
-                        if (NPC.ai[2] % 30 == 0)
+                        if (Timer % 30 == 0)
                         {
-                            Talk("Tired" + (Main.rand.Next(5) + 1), NPC.ai[2] % 60 == 30 ? 1 : -1);
+                            Talk("Tired" + (Main.rand.Next(5) + 1), Timer % 60 == 30 ? 1 : -1);
                         }
 
                         ChangeAnimation(AnimationState.TwilightEnd);
-                        NPC.ai[2]++;
-                        if (NPC.ai[2] > 120)
+                        Timer++;
+                        if (Timer > 120)
                         {
-                            NPC.ai[2] = 0;
-                            NPC.ai[1] = 0;
+                            Timer = 0;
+                            AiState = 0;
                         }
                     }
                     
                     //Twilight DashSlash
-                    else if (NPC.ai[1] == 5)
+                    else if (AiState == 5)
                     {
                         NPC.noTileCollide = true;
                         NPC.noGravity = true;
                         NPC.spriteDirection = Math.Sign(NPC.velocity.X);
                         ChangeAnimation(AnimationState.TwilightDashSlash);
-                        NPC.ai[2]++;
+                        Timer++;
 
-                        if (NPC.ai[2] % 3 == 0)
+                        if (Timer % 3 == 0)
                         {
                             Vector2 SlashPosition = NPC.Center + new Vector2(Main.rand.Next(-10, 10), Main.rand.Next(-100, 101));
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), SlashPosition, Vector2.Zero, ModContent.ProjectileType<Projectiles.RedMistSlashes>(), 43, 0);
                         }
 
-                        if (NPC.ai[2] > 20)
+                        if (Timer > 20)
                         {
-                            NPC.ai[1] = 2;
+                            AiState = 2;
                         }
                     }
 
                     //Twilight Normal Attack
-                    else if (NPC.ai[1] == 6)
+                    else if (AiState == 6)
                     {
-                        if (NPC.ai[2] == 0)
+                        if (Timer == 0)
                         {
                             NPC.TargetClosest(true);
                             NPC.spriteDirection = NPC.direction;
                         }                      
 
                         ChangeAnimation(AnimationState.TwilightDashSlash);
-                        NPC.ai[2]++;
+                        Timer++;
 
-                        if (NPC.ai[2] == 10)
+                        if (Timer == 10)
                         {
                             Vector2 velocity = (NPC.GetTargetData().Center - NPC.Center);
                             velocity.Normalize();
@@ -1179,28 +509,28 @@ namespace LobotomyCorp.NPCs.RedMist
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<Projectiles.RedMistSlashSpawner>(), 43, 0);
                         }
 
-                        if (NPC.ai[2] > 45)
+                        if (Timer > 45)
                         {
-                            NPC.ai[2] = 0;
-                            NPC.ai[1] = 0;
+                            Timer = 0;
+                            AiState = 0;
                             if (Main.rand.Next(3) == 0)
-                                NPC.ai[1] = 7;
+                                AiState = 7;
                         }
                     }
 
                     //Twilight Normal Attack 2
-                    else if (NPC.ai[1] == 7)
+                    else if (AiState == 7)
                     {
-                        if (NPC.ai[2] == 0)
+                        if (Timer == 0)
                         {
                             NPC.TargetClosest(true);
                             NPC.spriteDirection = NPC.direction;
                         }
 
                         ChangeAnimation(AnimationState.TwilightDashSlash2);
-                        NPC.ai[2]++;
+                        Timer++;
 
-                        if (NPC.ai[2] == 10)
+                        if (Timer == 10)
                         {
                             Vector2 velocity = (NPC.GetTargetData().Center - NPC.Center);
                             velocity.Normalize();
@@ -1209,18 +539,18 @@ namespace LobotomyCorp.NPCs.RedMist
                             Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, velocity, ModContent.ProjectileType<Projectiles.RedMistSlashSpawner>(), 43, 0);
                         }
 
-                        if (NPC.ai[2] > 45)
+                        if (Timer > 45)
                         {
-                            NPC.ai[2] = 0;
-                            NPC.ai[1] = 0;
+                            Timer = 0;
+                            AiState = 0;
                             if (Main.rand.Next(3) == 0)
-                                NPC.ai[1] = 3;
+                                AiState = 3;
                         }
                     }
 
 
                     /*
-                    if (NPC.ai[2] == 0)
+                    if (Timer == 0)
                     {
                         NPC.velocity.X = 4f;
                     }
@@ -1249,21 +579,22 @@ namespace LobotomyCorp.NPCs.RedMist
             //Can Transform mimicry spear form to poke
             //Can Transform mimicry hammer form as heavy hitter
 
+            ScreenFilterHandler();
 
             //Music Changer???
-            if (NPC.ai[0] > 0)
+            if (Phase > 0)
             {
-                if (NPC.ai[0] < 3)
+                if (Phase < 3)
                     Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/TilaridsDistortedNight");
                 else
                     Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/TilaridsInsigniaDecay");
             }
 
             //Suppresion Text Maker
-            if (Main.rand.Next(300) == 0)
+            if (Main.rand.NextBool(300))
             {
                 List<string> possibleText = new List<string>();
-                if (Main.rand.Next(2) == 0)
+                if (Main.rand.NextBool(2))
                 {
                     possibleText.Add(SuppressionText.GetSephirahText("Gebura", 0));
                     possibleText.Add(SuppressionText.GetSephirahText("Gebura", 1));
@@ -1300,15 +631,726 @@ namespace LobotomyCorp.NPCs.RedMist
             }
         }
 
+        const int FollowState = 0;
+        const int SwingPenitence = 1;
+        const int SwingRedEyes = 2;
+        const int SwingBoth = 3;
+        const int GoldRushBig = 4;
+        const int GoldRushSmall = 8;
+        const int SwitchPhase = 10;
+
+        void FollowMode1()
+        {
+            float healthPercent = NPC.life / (float)NPC.lifeMax;
+
+            if (NPC.velocity.Y == 0)
+            {
+                if (NPC.velocity.X == 0)
+                    ChangeAnimation(AnimationState.Idle1);
+                else
+                    ChangeAnimation(AnimationState.Walk1);
+            }
+            else
+                ChangeAnimation(AnimationState.MidAir);
+
+            fighterAI(NPC.GetTargetData(), 64f, 0.08f, 2f);
+            Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
+
+            if (Timer > 0)
+                Timer--;
+            else
+            {
+                if (delta.Length() > 2000f && Main.rand.NextBool(360))
+                {
+                    AiState = GoldRushSmall;
+                }
+                else if (delta.Length() < 128f && Main.rand.NextBool(30))
+                {
+                    ChooseAttack1();
+                }
+            }
+
+            if (CheckGoldRushCounterValid(0))
+            {
+                AiState = GoldRushBig;
+                Timer = 0;
+                Talk("GoldRush1", NPC.spriteDirection);
+            }
+
+            if (healthPercent <= .75f && GoldRushCount >= 3)
+            {
+                AiState = SwitchPhase;
+                Timer = 0;
+            }
+        }
+
+        bool CheckGoldRushCounterValid(int Phase)
+        {
+            float healthPercent = NPC.life / (float)NPC.lifeMax;
+            healthPercent -= 0.75f - ( 0.25f * Phase);
+
+            healthPercent /= 0.25f;
+            int RushCountOffset = 3 * Phase;
+
+            bool first = healthPercent < 0.66f && GoldRushCount <= 0 + RushCountOffset;
+            bool second = healthPercent < 0.33f && GoldRushCount <= 1 + RushCountOffset;
+            bool third = healthPercent <= 0f && GoldRushCount <= 2 + RushCountOffset;
+            return first || second || third;
+        }
+        
+        void ChooseAttack1()
+        {
+            int atk = Main.rand.Next(3);
+            switch (atk)
+            {
+                case 0:
+                    Talk("RedEyes", NPC.spriteDirection);
+                    break;
+                case 1:
+                    Talk("Penitence", NPC.spriteDirection);
+                    break;
+                case 2:
+                    Talk("Both", NPC.spriteDirection);
+                    break;
+            }
+            AiState = 1 + atk; //Swings takes 50 frames 
+        }
+
+        void SwingWeapon()
+        {
+            NPC.velocity.X *= 0;
+            switch (AiState)
+            {
+                case SwingRedEyes:
+                    ChangeAnimation(AnimationState.SwingRedEyes);
+                    break;
+                case SwingPenitence:
+                    ChangeAnimation(AnimationState.SwingPenitence);
+                    break;
+                case SwingBoth:
+                    ChangeAnimation(AnimationState.SwingBoth);
+                    break;
+            }
+
+            Timer++;
+            if (20 < Timer && Timer < 30)
+            {
+                if (AiState != SwingRedEyes)
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), skelly.Weapon1.EndPoint(NPC.spriteDirection), Vector2.Zero, ModContent.ProjectileType<RedMistMelee>(), 25, 2);
+                if (AiState != SwingPenitence)
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), skelly.Weapon2.EndPoint(NPC.spriteDirection), Vector2.Zero, ModContent.ProjectileType<RedMistMelee>(), 25, 2);
+            }
+            if (Timer >= 50)
+            {
+                AiState = FollowState;
+                Timer = 30;
+            }
+            if (Timer == 20)
+            {
+                SoundEngine.PlaySound(SoundID.Item1, NPC.Center);
+            }
+        }
+
+        void GoldRush1Sequence()
+        {
+            //GoldRush Start
+            if (AiState == GoldRushBig)
+            {
+                GoldRushCount++;
+                NPC.velocity *= 0;
+                NPC.spriteDirection *= -1;
+                AiState++;
+                ChangeAnimation(AnimationState.GoldRushIntro);
+                NPC.noGravity = true;
+                NPC.noTileCollide = true;
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, -1, 5);
+            }
+            //GoldRush Charging
+            else if (AiState == 5)
+            {
+                Timer++;
+                if (Timer > 30)
+                {
+                    Timer = 30 * 5 + 15;
+                    AiState++;
+                    NPC.velocity.X = 24f * NPC.spriteDirection;
+                    NPC.velocity.Y = 0;
+                }
+            }
+            //GoldRush Charge
+            else if (AiState == 6)
+            {
+                NPC.damage = 65;
+                Timer--;
+                if (Timer <= 0)
+                {
+                    ChangeAnimation(AnimationState.GoldRushEnd);
+                    AiState++;
+                    Timer = 0;
+                    NPC.noGravity = false;
+                    NPC.noTileCollide = false;
+                }
+
+                Dust d = Dust.NewDustPerfect(new Vector2(Main.rand.NextFloat(NPC.position.X, NPC.position.X + NPC.width), NPC.position.Y + NPC.height), 57);
+                d.fadeIn = 1.4f;
+                d.noGravity = true;
+            }
+            //GoldRush End
+            else if (AiState == 7)
+            {
+                NPC.damage = 0;
+                NPC.velocity.X *= 0.9f;
+                Timer++;
+                if (Timer > 120)
+                {
+                    ChangeAnimation(AnimationState.Idle1);
+                    AiState = 0;
+                    Timer = 0;
+                }
+            }
+
+            //Mini GoldRush
+            else if (AiState == GoldRushSmall)
+            {
+                NPC.velocity *= 0;
+                AiState++;
+                ChangeAnimation(AnimationState.GoldRushIntro);
+                NPC.noGravity = true;
+                NPC.noTileCollide = true;
+                int i = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(400 * NPC.spriteDirection, Main.LocalPlayer.height / 2 - 50), new Vector2(-22f * NPC.spriteDirection, 0), ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, -2);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, i);
+            }
+            //Mini GoldRush Charge
+            else if (AiState == 9)
+            {
+                Timer++;
+                if (Timer > 30)
+                {
+                    Timer = 45;
+                    AiState = 6;
+                    NPC.velocity.X = 24f * NPC.spriteDirection;
+                }
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Teleport_Start") with { Volume = 0.25f }, NPC.position);
+            }
+        }
+
+        const int SwingMimicry = 1;
+        const int SwingDaCapo = 2;
+        const int ThrowHeaven = 4;
+        const int Dash = 5;
+        const int DashSwingMimicry = 6;
+        const int SpecialAttackStart = 7;
+
+        void FollowMode2()
+        {
+            float healthPercent = NPC.life / (float)NPC.lifeMax;
+
+            if (NPC.velocity.Y == 0)
+            {
+                if (NPC.velocity.X == 0)
+                    ChangeAnimation(AnimationState.Idle2);
+                else
+                    ChangeAnimation(AnimationState.Walk2);
+            }
+            else
+                ChangeAnimation(AnimationState.MidAir);
+
+            fighterAI(NPC.GetTargetData(), 64f, 0.08f, 5f);
+            Vector2 difference = NPC.GetTargetData().Center - NPC.Center;
+            float distance = difference.Length();
+
+            if (Timer > 0)
+                Timer--;
+            else
+            {
+                if (distance < 128f && Main.rand.NextBool(30))
+                {
+                    if (Main.rand.NextBool(2))
+                    {
+                        Talk("Mimicry" + (1 + Main.rand.Next(2)), NPC.spriteDirection);
+                        AiState = SwingMimicry;
+                        ChangeAnimation(AnimationState.SwingMimicry);
+                        NPC.velocity.X = 0;
+                    }
+                    else if (IsDaCapoHeld)//if DaCapo is held by red mist
+                    {
+                        Talk("DaCapo" + (1 + Main.rand.Next(2)), NPC.spriteDirection);
+                        AiState = SwingDaCapo;
+                        ChangeAnimation(AnimationState.SwingDaCapo);
+                        NPC.velocity.X = 0;
+                    }
+                }
+
+                //Check if Heaven throw is valid
+                HeavenThrowCheck(distance, difference.Y);
+            }
+
+            if (distance > 460)
+            {
+                if (distance < 600 && Main.rand.NextBool(200))
+                {
+                    AiState = DashSwingMimicry;
+                    Timer = 30;
+                    NPC.velocity.Y *= 0;
+                    NPC.velocity.X = 18 * NPC.spriteDirection;
+                    ChangeAnimation(AnimationState.Dash);
+                }
+
+                if (IncomingProjectile())
+                {
+                    AiState = Dash;
+                    Timer = 30;
+                    NPC.velocity.Y *= 0;
+                    NPC.velocity.X = 18 * NPC.spriteDirection;
+                    ChangeAnimation(AnimationState.Dash);
+                }
+            }
+
+            if (IsDaCapoHeld && CheckGoldRushCounterValid(1))
+            {
+                AiState = SpecialAttackStart;
+                Timer = 0;
+                NPC.velocity *= 0;
+                if (healthPercent <= .50f)
+                {
+                    AiState = SwitchPhase;
+                    Talk("Shift1", NPC.spriteDirection);
+                }
+                else
+                {
+                    GoldRushCount++;
+                    Talk("Teleport1", NPC.spriteDirection);
+                }
+            }
+        }
+
+        void SwingingMimicry()
+        {
+            ChangeAnimation(AnimationState.SwingMimicry);
+            NPC.velocity.X *= 0.9f;
+            Timer++;
+            if (60 < Timer && Timer < 67)
+            {
+                Vector2 position = skelly.Weapon1.Position(NPC.spriteDirection) + new Vector2(100, 0).RotatedBy(skelly.Weapon1.GetRotation(NPC.spriteDirection));
+
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), position, Vector2.Zero, ModContent.ProjectileType<RedMistMimicry>(), 50, 2);
+            }
+
+            if (Timer == 60)
+            {
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Atk1") with { Volume = 0.5f }, NPC.position);
+            }
+
+            if (Timer > 90)
+            {
+                AiState = 0;
+                Timer = 60;
+            }
+        }
+
+        void SwingingDaCapo()
+        {
+            Timer++;
+            NPC.velocity.X *= 0.9f;
+            if (Timer > 20 && Timer < 90 && Timer % 30 < 10)
+            {
+                Vector2 position = skelly.Weapon2.Position(NPC.spriteDirection) + new Vector2(40, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
+
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), position, Vector2.Zero, ModContent.ProjectileType<RedMistDaCapo>(), 15, 0);
+            }
+            if (Timer == 90) //Throw DaCapo when enemy is at certain distance
+            {
+                Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
+                if (delta.Length() > 260)
+                {
+                    AiState++;
+                    ChangeAnimation(AnimationState.DaCapoThrow);
+                    Timer = 0;
+                }
+            }
+            if (Timer > 100)
+            {
+                AiState = FollowState;
+                Timer = 30;
+            }
+
+            if (Timer == 1 || Timer == 30 || Timer == 60)
+            {
+                SoundEngine.PlaySound(SoundID.Item1, NPC.Center);
+            }
+        }
+
+        void HeavenThrowCheck(float distance, float differenceY)
+        {
+            if ((distance > 600 && Main.rand.NextBool(240)) ||
+                    (Main.rand.NextBool(2400)) ||
+                    (differenceY < -150 && Main.rand.NextBool(200)))
+            {
+                AiState = ThrowHeaven;
+                Talk("Heaven", NPC.spriteDirection);
+                NPC.velocity.X = 0;
+            }
+        }
+
+        void ThrowingHeaven()
+        {
+            ChangeAnimation(AnimationState.HeavenThrow);
+            Timer++;
+            NPC.velocity.X *= 0.9f;
+            if (Timer == 50)
+            {
+                Vector2 delta = NPC.GetTargetData().Center - NPC.Center + new Vector2(0, -13);
+                if (Math.Sign(delta.X) != Math.Sign(NPC.spriteDirection) || delta.Y > 0)
+                {
+                    delta = new Vector2(1 * NPC.spriteDirection, 0);
+                }
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -13), Vector2.Normalize(delta) * 12f, ModContent.ProjectileType<HeavenBoss>(), 25, 2, 0, NPC.whoAmI);
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Spear") with { Volume = 0.5f }, NPC.position);
+            }
+            if (Timer > 80)
+            {
+                AiState = FollowState;
+                Timer = 30;
+            }
+        }
+
+        void DashFront(int ToAiState)
+        {
+            ChangeAnimation(AnimationState.Dash);
+            Timer--;
+            NPC.noTileCollide = true;
+            NPC.noGravity = true;
+            if (Timer < 10)
+            {
+                NPC.velocity.X *= 0.9f;
+            }
+            if (Timer <= 0)
+            {
+                AiState = ToAiState;
+
+                NPC.noTileCollide = false;
+                NPC.noGravity = false;
+            }
+        }
+
+        bool IsDaCapoHeld { get { return NPC.ai[3] < 0; } }
+
+        const int SwingSmile = 4;
+
+        void RedMistPhase3()
+        {
+            if (AiState == FollowState)
+            {
+                FollowMode3();
+            }
+            //Justitia Slashes
+            else if (AiState > 0 && AiState <= 3)
+            {
+                Timer++;
+                if (Timer > 30 && Timer % 45 == 0)
+                {
+                    //Shoot Justitia Slashes
+                    Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
+                    delta.Normalize();
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, 8 * delta, ModContent.ProjectileType<JustitiaSlashBoss>(), 15, 0);
+                    if (AiState > 1)
+                        AiState--;
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Atk3") with { Volume = 0.5f }, NPC.position);
+
+                }
+                if (AiState == 1)
+                {
+                    if (Timer % 90 >= 59)
+                    {
+                        AiState = 0;
+                        Timer = 100 * (int)(Timer / 60);
+                    }
+                }
+            }
+            else if (AiState == SwingSmile)
+            {
+                Timer++;
+                if (Timer == 70)
+                {
+                    SmileImpact();
+                }
+                else if (Timer >= 160 && Timer < 240)
+                {
+                    SmileScream();
+                }
+
+                if (Timer > 270)
+                {
+                    AiState = 0;
+                    Timer = 180;
+                }
+            }
+            //Heaven Throw
+            else if (AiState == ThrowHeaven + 1)
+            {
+                ThrowingHeaven();
+            }
+            //GoldRush Start
+            else if (AiState == 6)
+            {
+                //GoldRushCount++;
+                NPC.velocity *= 0;
+                NPC.spriteDirection *= -1;
+                AiState++;
+                ChangeAnimation(AnimationState.GoldRushIntro);
+                NPC.noGravity = true;
+                NPC.noTileCollide = true;
+                //Spawn Portals MANUALLY AAAAAA
+                int portals = 8;
+                int currentPortal = -1;
+                float currentRotation = 0;
+                //Doesnt work because of portal intersecting :(
+                Vector2 targetPos = NPC.Center;
+                /*
+                for (int i = 0; i < portals; i++)
+                {
+                    if (currentPortal == -1)
+                    {
+                        currentRotation = Main.rand.NextFloat((float)Math.PI * 2);
+                        currentPortal = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(400, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, -1, 5);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), targetPos + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
+                        continue;
+                    }
+                    if (i == portals - 1)
+                    {
+                        int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(-400, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, -2, 5);
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(0, -320), new Vector2(0, -22), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, -2, 5);
+                        Main.Projectile[p].ai[0] = currentPortal;
+                        Main.Projectile[p].netUpdate = true;
+                    }
+                    else
+                    {
+                        int p = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(-400, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, -2, 5);
+                        currentRotation = Main.rand.NextFloat((float)Math.PI * 2);
+                        currentPortal = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(400, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
+                        Main.Projectile[p].ai[0] = currentPortal;
+                        Main.Projectile[p].netUpdate = true;
+                    }
+                }*/
+                //One at a time version
+                /*
+                Also Kinda bad
+                currentRotation = Main.rand.NextFloat((float)Math.PI * 2);
+                currentPortal = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(320, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), targetPos + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
+                */
+                //Default
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(320 * NPC.spriteDirection, 0), Vector2.Zero, ModContent.ProjectileType<Projectiles.KingPortal.RoadOfGold>(), 0, 0, 0, -3, 8);
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Teleport_Start") with { Volume = 0.5f }, NPC.position);
+            }
+            //GoldRush Charging
+            else if (AiState == 7)
+            {
+                Timer++;
+                if (Timer > 30)
+                {
+                    Timer = 30 * 8;// + 15;
+                    AiState++;
+                    NPC.velocity.X = 24f * NPC.spriteDirection;
+                    NPC.velocity.Y = 0;
+                }
+            }
+            //GoldRush Charge
+            else if (AiState == 8)
+            {
+                NPC.damage = 65;
+                Timer--;
+                if (Timer <= 0)
+                {
+                    ChangeAnimation(AnimationState.GoldRushEnd);
+                    AiState++;
+                    Timer = 0;
+                    NPC.noGravity = false;
+                    NPC.noTileCollide = false;
+                }
+                /*
+                if (Timer % 45 == 0)
+                {
+                    float currentRotation = Main.rand.NextFloat((float)Math.PI * 2);
+                    int currentPortal = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.GetTargetData().Center + new Vector2(600, 0).RotatedBy(currentRotation), new Vector2(-22, 0).RotatedBy(currentRotation), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, -1, 5);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(400, 0).RotatedBy(NPC.velocity.ToRotation()), new Vector2(-22, 0).RotatedBy(NPC.velocity.ToRotation()), ModContent.ProjectileType<GoldRushPortal>(), 0, 0, 0, currentPortal, 5);
+                }*/
+
+                Dust d = Dust.NewDustPerfect(new Vector2(Main.rand.NextFloat(NPC.position.X, NPC.position.X + NPC.width), NPC.position.Y + NPC.height), 57);
+                d.fadeIn = 1.4f;
+                d.noGravity = true;
+            }
+            //GoldRush End
+            else if (AiState == 9)
+            {
+                NPC.damage = 0;
+                NPC.velocity.X *= 0.9f;
+                Timer++;
+                if (Timer > 120)
+                {
+                    ChangeAnimation(AnimationState.Idle1);
+                    AiState = 0;
+                    Timer = 0;
+                }
+            }
+
+            //Phase4Transition
+            else if (AiState == SwitchPhase)
+            {
+                NPC.velocity.X = 0;
+                Timer++;
+                if (Timer == 120)
+                {
+                    Talk("Shift4", NPC.spriteDirection);
+                }
+                if (Timer > 160)
+                {
+                    NPC.ai[0] = 3;
+                    AiState = 0;// -60;
+                    Timer = 0;
+                }
+                if (Timer == 30)
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Change") with { Volume = 0.5f }, NPC.position);
+                else if (Timer == 120)
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Change_justice") with { Volume = 0.5f }, NPC.position);
+            }
+        }
+
+        void FollowMode3()
+        {
+            float healthPercent = NPC.life / (float)NPC.lifeMax;
+
+            if (NPC.velocity.Y == 0)
+            {
+                if (NPC.velocity.X == 0)
+                    ChangeAnimation(AnimationState.Idle3);
+                else
+                    ChangeAnimation(AnimationState.Walk3);
+            }
+            else
+                ChangeAnimation(AnimationState.MidAir);
+
+            fighterAI(NPC.GetTargetData(), 90, 0.08f, 2f);
+
+            Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
+
+            if (Timer > 0)
+                Timer--;
+
+            if (Timer <= 0 && Main.rand.NextBool(60))
+            {
+                if (Main.rand.NextBool(2))
+                {
+                    NPC.velocity.X *= 0;
+                    //Justitia Attack, up to three just to catch people offguard
+                    AiState = 1;
+                    Timer = 0;
+                    ChangeAnimation(AnimationState.JustitiaSwing);
+
+                    Talk("Justitia" + Main.rand.Next(1, 3), NPC.spriteDirection);
+                }
+                else
+                {
+                    //Smile Attack
+                    NPC.velocity.X *= 0;
+                    AiState = 4;
+                    Timer = 0;
+                    ChangeAnimation(AnimationState.SmileSwing);
+                    Talk("Smile" + Main.rand.Next(1, 3), NPC.spriteDirection);
+                }
+
+                //Heaven Attack
+                HeavenThrowCheck(delta.Length(), delta.Y);
+            }
+
+            //Gold Rush!
+            if (CheckGoldRushCounterValid(2))
+            {
+                Timer = 0;
+                GoldRushCount++;
+                if (healthPercent <= .25f)
+                {
+                    AiState = SwitchPhase;
+                    GoldRushCount++;
+                    Talk("Shift3", NPC.spriteDirection);
+                    ChangeAnimation(AnimationState.Phase4Transition);
+                    return;
+                }
+                Main.NewText(healthPercent);
+                AiState = 6;//Gold Rush!
+                NPC.velocity *= 0;
+                Talk("GoldRush1", NPC.spriteDirection);
+                ChangeAnimation(AnimationState.GoldRushIntro);
+            }
+        }
+
+        void SmileImpact()
+        {
+            SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Atk1") with { Volume = 0.5f }, NPC.position);
+
+            Vector2 hammerPos = skelly.Weapon2.Position(NPC.spriteDirection) + new Vector2(70, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
+            foreach (Player p in Main.player)
+            {
+                if (p.active && !p.dead && Collision.CanHit(hammerPos, 1, 1, p.position, p.width, p.height))
+                {
+                    p.AddBuff(ModContent.BuffType<Buffs.Scream>(), 300);
+                    p.velocity.Y = 6;
+                }
+            }
+
+            for (int i = 0; i < 24; i++)
+            {
+                Vector2 vel = new Vector2(Main.rand.NextFloat(10f, 20f), 0).RotatedBy(Main.rand.NextFloat(0.34f) + MathHelper.ToRadians(-90 + 45 * NPC.spriteDirection));
+                Dust d = Dust.NewDustPerfect(hammerPos, DustID.Wraith, vel);
+                d.noGravity = true;
+            }
+        }
+
+        void SmileScream()
+        {
+            if (Timer == 160)
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Atk3") with { Volume = 0.5f }, NPC.position);
+
+            Vector2 hammerPos = skelly.Weapon2.Position(NPC.spriteDirection) + new Vector2(70, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
+            /*if (Timer % 10 == 0)
+            {
+                foreach (Player p in Main.player)
+                {
+                    if (p.active && !p.dead && Collision.CanHit(hammerPos, 1, 1, p.position, p.width, p.height))
+                        p.AddBuff(ModContent.BuffType<Buffs.Vomit>(), 60);
+                }
+            }*/
+
+            if (Timer % 5 == 0)
+            {
+                float random = Main.rand.NextFloat(1.00f);
+                for (int i = 0; i < 28; i++)
+                {
+                    Vector2 vel = new Vector2(16, 0).RotatedBy(random + MathHelper.ToRadians(11.25f * i));
+                    Vector2 dustPos = new Vector2(70, 0).RotatedBy(skelly.Weapon2.GetRotation(NPC.spriteDirection));
+                    Dust d = Dust.NewDustPerfect(hammerPos, DustID.Wraith, vel);
+                    d.noGravity = true;
+                }
+                int dir = (int)(Timer % 40) / 5;
+                for (int i = -3; i <= 3; i++)
+                {
+                    float angle = MathHelper.ToRadians(dir * 45f + i * (45f / 7f));
+                    Vector2 vel = new Vector2(8, 0).RotatedBy(angle);
+
+                    Projectile.NewProjectile(NPC.GetSource_FromThis(), hammerPos, vel, ModContent.ProjectileType<Projectiles.SmileBits>(), 16, 0, 255, Main.rand.NextFloat(0.26f));
+                }
+            }
+        }
+
         public void TeleportP4(int Entrance, int Exit, Vector2 position, Vector2 velocity)
         {
             NPC.Center = position;
             NPC.velocity = velocity;
-            NPC.ai[2] = 0;
+            Timer = 0;
             bool isExitLast = Main.projectile[Exit].ai[0] == -4;
             if (isExitLast)
             {
-                NPC.ai[1] = 3;
+                AiState = 3;
             }
             NPC.netUpdate = true;
         }
@@ -2770,8 +2812,8 @@ namespace LobotomyCorp.NPCs.RedMist
                 if (animState == AnimationState.GoldRushLoop ||
                     animState == AnimationState.Dash ||
                     animState == AnimationState.MimicryGreaterSplitV ||
-                    (animState == AnimationState.TwilightChase && NPC.ai[1] == 2) ||
-                    (animState == AnimationState.TwilightDashSlash && NPC.ai[1] == 5))
+                    (animState == AnimationState.TwilightChase && AiState == 2) ||
+                    (animState == AnimationState.TwilightDashSlash && AiState == 5))
                     NPC.localAI[2] = 1f;
                 else if (NPC.localAI[2] > 0f)
                     NPC.localAI[2] -= 0.1f;
@@ -2967,7 +3009,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override bool? CanBeHitByProjectile(Projectile Projectile)
         {
-            if (Projectile.ai[0] == 1 && Projectile.ai[1] == 5)
+            if (Phase == 1 && (AiState == Dash || AiState == DashSwingMimicry))
                 return false;
             return null;
         }
@@ -2982,6 +3024,35 @@ namespace LobotomyCorp.NPCs.RedMist
             else if (dir > 0)
                 pos.X = NPC.position.X + NPC.width * 0.75f;
             SuppressionText.AddText(text, pos, Main.rand.NextFloat(-0.12f, 0.12f), 0.5f, Color.Red, 0.75f, 30, dir, 0);
+        }
+
+        private float filterProgress = 0;
+        public void ScreenFilterHandler()
+        {
+            if (Main.netMode != NetmodeID.Server)
+            {
+                if (!Filters.Scene["LobotomyCorp:RedMistOverlay"].IsActive())
+                {
+                    Filters.Scene.Activate("LobotomyCorp:RedMistOverlay");
+                }
+                else
+                {
+                    float distance = NPC.Distance(Main.LocalPlayer.Center);
+                    float minDist = 120;
+                    float maxDist = 1000;
+
+                    distance = (distance - minDist) / (maxDist - minDist);
+                    Math.Clamp(distance, 0, 1);
+
+                    Filters.Scene["LobotomyCorp:RedMistOverlay"].GetShader().UseIntensity(distance);
+
+                    filterProgress += 1f / 180f;
+                    if (filterProgress > 1f)
+                        filterProgress -= 1f;
+
+                    Filters.Scene["LobotomyCorp:RedMistOverlay"].GetShader().UseProgress(filterProgress);
+                }
+            }
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
@@ -3163,7 +3234,7 @@ namespace LobotomyCorp.NPCs.RedMist
             //---Gauntlet
             if (skelly.Gauntlet.Visible)
             {
-                Texture2D weapon = Mod.Assets.Request<Texture2D>("Items/GoldRush").Value;
+                Texture2D weapon = Mod.Assets.Request<Texture2D>("Projectiles/GoldRushPunches").Value;
                 position = skelly.Gauntlet.Position(NPC.spriteDirection, i);
                 rot = skelly.LowerArmL.GetRotation(NPC.spriteDirection, i) + (NPC.spriteDirection == -1 ? 0.785f : 0.785f + 1.57f);
                 Vector2 weaponOrigin = new Vector2(3, 28);
@@ -3185,6 +3256,9 @@ namespace LobotomyCorp.NPCs.RedMist
         }
     }    
 
+    /// <summary>
+    /// This class is old and specialized for red mist, for the actual skeleton helper check SkeletonBase/Skeletonii
+    /// </summary>
     class RedMistSkeletonHelper
     {
         //I hate myself

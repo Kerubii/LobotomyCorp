@@ -8,8 +8,11 @@ namespace LobotomyCorp.Items
 	public class Hornet : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("The fire roars and burns like the first flame.\n" +
-                               "The light of the match will not go out.");
+			Tooltip.SetDefault("The kingdom needed to stay prosperous, and more bees were required for that task.\n" +
+							   "The name of that kingdom may go down in history.\n" +
+							   "But who will be there to remember the bees that gave their lives to the cause?" +
+							   "The weapon's bullets selectively fly toward threats, so skillful aiming isn't required; all that's needed is the will to hit the target.\n" +
+							   "Bullets are converted to bees");
 
         }
 

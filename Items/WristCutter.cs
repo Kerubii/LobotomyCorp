@@ -10,7 +10,8 @@ namespace LobotomyCorp.Items
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("Its sharp blade can make a clean cut through bone like a hot knife through butter,\n" +
-                               "Leaving a wound that will never heal.");
+                               "Leaving a wound that will never heal.\n" +
+                               "Sold by the Merchant during Blood Moon");
         }
 
         public override void SetDefaults() {
@@ -19,16 +20,6 @@ namespace LobotomyCorp.Items
 			Item.damage = 16;
             Item.rare = ItemRarityID.Blue;
             Item.UseSound = LobotomyCorp.WeaponSounds.Dagger;
-        }
-
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
-        {
-            target.AddBuff(ModContent.BuffType<Buffs.Scars>(), 60);
-        }
-
-        public override void OnHitPvp(Player player, Player target, int damage, bool crit)
-        {
-            target.AddBuff(ModContent.BuffType<Buffs.Scars>(), 60);
         }
 
         public override void AddRecipes() {

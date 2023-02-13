@@ -64,8 +64,8 @@ namespace LobotomyCorp.Items
                     {
                         position = new Vector2(Main.MouseWorld.X + (32 * i) + Main.rand.Next(-8, 9), (y + j) * 16 - 8);
                         Vector2 speed = Main.MouseWorld - position;
-
-                        Projectile.NewProjectile(source, position, speed, Item.shoot, damage, knockback, player.whoAmI, (1 + i + add) * dir);                        
+                        if (Main.myPlayer == player.whoAmI)
+                            Projectile.NewProjectile(source, position, speed, Item.shoot, damage, knockback, player.whoAmI, (1 + i + add) * dir);                        
                         break;
                     }
                 }

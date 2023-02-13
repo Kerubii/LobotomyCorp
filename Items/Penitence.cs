@@ -1,6 +1,9 @@
+using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Terraria.Graphics.Effects;
 
 namespace LobotomyCorp.Items
 {
@@ -28,12 +31,9 @@ namespace LobotomyCorp.Items
 			Item.rare = ItemRarityID.Green;
 			Item.UseSound = LobotomyCorp.WeaponSounds.Mace;
 			Item.autoReuse = true;
-		}
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
-        {
-            //Gain 10 SP onhit
-        }
+			//Item.shoot = 1;
+		}
 
         public override void AddRecipes() 
 		{

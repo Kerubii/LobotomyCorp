@@ -13,7 +13,8 @@ namespace LobotomyCorp.Items
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
 			Tooltip.SetDefault("It is patched with heavy leather of unknown origin.\n" +
 							   "The stitches are carefully woven, but for whom or for what, exactly, is unclear.\n" +
-							   "It is not elegant, but you can feel the devotion of its creator.");
+							   "It is not elegant, but you can feel the devotion of its creator.\n" +
+							   "Can be obtained from Presents");
         }
 
 		public override void SetDefaults() 

@@ -174,8 +174,8 @@ namespace LobotomyCorp.Projectiles
                 }
                 foreach (NPC n in Main.npc)
                 {
-                    if (n.active && n.chaseable && n.CanBeChasedBy(ModContent.ProjectileType<AlriuneDeathAnimation>()) && (n.Center - player.Center).Length() < 800)
-                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), n.Center, Vector2.Zero, ModContent.ProjectileType<AlriuneDeathAnimation>(), (int)(Projectile.damage * 3f), 0, player.whoAmI, n.whoAmI);
+                    if (n.active && n.chaseable && n.CanBeChasedBy(ModContent.ProjectileType<AlriuneDeathAnimation>()) && (n.Center - player.Center).Length() < 800 && Main.myPlayer == Projectile.owner)
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), n.Center, Vector2.Zero, ModContent.ProjectileType<AlriuneDeathAnimation>(), (int)(Projectile.damage * 3f), 0, player.whoAmI, n.whoAmI);
                 }
             }
             target.immune[Projectile.owner] = player.itemAnimation;

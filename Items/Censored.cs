@@ -14,7 +14,7 @@ namespace LobotomyCorp.Items
 			DisplayName.SetDefault("[CENSORED]"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
 			Tooltip.SetDefault("[CENSORED] has the ability to [CENSORED], but this is a horrendous sight for those watching.\n" +
 							   "Looking at the E.G.O for more than 3 seconds will make you sick.\n" +
-							   "Heal 40% damage taken");
+							   "Heal 40% damage taken\n");
 		}
 
 		public override void SetDefaults() 

@@ -45,7 +45,8 @@ namespace LobotomyCorp.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(),Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FourthMatchFlameExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+            if (Main.myPlayer == Projectile.owner)
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(),Projectile.Center, Vector2.Zero, ModContent.ProjectileType<FourthMatchFlameExplosion>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
         }
     }
 

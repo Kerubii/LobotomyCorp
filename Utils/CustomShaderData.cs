@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
 
@@ -17,6 +18,8 @@ namespace LobotomyCorp.Utils
 		private float _uSaturation = 1f;
 
 		private float _uOpacity = 1f;
+
+		private Vector4 _uCustomShaderData = Vector4.Zero;
 
 		private Asset<Texture2D> _uImage1;
 		private Asset<Texture2D> _uImage2;
@@ -34,6 +37,7 @@ namespace LobotomyCorp.Utils
 			Shader.Parameters["uSecondaryColor"].SetValue(_uSecondaryColor);
 			Shader.Parameters["uTime"].SetValue(Main.GlobalTimeWrappedHourly);
 			Shader.Parameters["uOpacity"].SetValue(_uOpacity);
+			Shader.Parameters["uCustomData"].SetValue(_uCustomShaderData);
 			if (drawData.HasValue)
 			{
 				DrawData value = drawData.Value;
@@ -89,6 +93,12 @@ namespace LobotomyCorp.Utils
 			return this;
 		}
 
+		public CustomShaderData UseImage3(Asset<Texture2D> tex)
+        {
+			_uImage3 = tex;
+			return this;
+        }
+
 		public CustomShaderData UseColor(float r, float g, float b)
 		{
 			return UseColor(new Vector3(r, g, b));
@@ -132,5 +142,11 @@ namespace LobotomyCorp.Utils
 			_uOpacity = alpha;
 			return this;
 		}
+
+		public CustomShaderData UseCustomShaderDate(float x, float y = 0, float z = 0, float w = 0)
+        {
+			_uCustomShaderData = new Vector4(x, y, z, w);
+			return this;
+        }
 	}
 }

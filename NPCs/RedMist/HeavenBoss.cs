@@ -11,7 +11,8 @@ using Terraria.GameContent;
 namespace LobotomyCorp.NPCs.RedMist
 {
     //[AutoloadBossHead]
-	class HeavenBoss : ModProjectile
+    [Autoload(LobotomyCorp.TestMode)]
+    class HeavenBoss : ModProjectile
     {
         public override void SetStaticDefaults()
         {

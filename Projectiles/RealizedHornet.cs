@@ -10,9 +10,10 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Projectiles
 {
-	public class RealizedHornet : ModProjectile
-	{
-		public override void SetStaticDefaults() {
+
+    public class RealizedHornet : ModProjectile
+    {
+        public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 16;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;

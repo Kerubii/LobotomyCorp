@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 using LobotomyCorp.Utils;
 using Terraria.GameContent;
 using System.Collections.Generic;
+using Terraria.Audio;
 
 namespace LobotomyCorp.Projectiles.Realized
 {
@@ -16,6 +17,8 @@ namespace LobotomyCorp.Projectiles.Realized
 		{
 			DisplayName.SetDefault("What the fuck do you want from me?"); // The English name of the Projectile
 			Main.projFrames[Projectile.type] = 2;
+			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
+			ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
 		}
 
 		public override void SetDefaults()
@@ -24,6 +27,7 @@ namespace LobotomyCorp.Projectiles.Realized
 			Projectile.height = 128; 
 			Projectile.aiStyle = -1;
 			Projectile.scale = 1f;
+			Projectile.alpha = 255;
 
 			Projectile.DamageType = DamageClass.Magic;
 			Projectile.friendly = true;
@@ -89,6 +93,22 @@ namespace LobotomyCorp.Projectiles.Realized
 					}
 				}
 			}
+
+			if (Main.rand.NextBool(5))
+            {
+				int d = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Blood);
+				Main.dust[d].noGravity = true;
+            }
+
+			if (Projectile.timeLeft < 10)
+            {
+				Projectile.alpha += 26;
+				Projectile.scale -= 0.05f;
+				return;
+            }
+			Projectile.alpha -= 25;
+			if (Projectile.alpha < 0)
+				Projectile.alpha = 0;
         }
 
         public override void ModifyDamageScaling(ref float damageScale)
@@ -101,6 +121,44 @@ namespace LobotomyCorp.Projectiles.Realized
 				damageBonus = 0.5f;
 			damageScale += damageBonus;
             base.ModifyDamageScaling(ref damageScale);
+        }
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+			/*if (Projectile.ai[0] == 4)
+				SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/Shy_Strong_Atk") with { Volume = 0.5f }, target.position);
+			else
+				SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/Shy_Atk") with { Volume = 0.5f , PitchVariance = 0.2f}, target.position);*/
+
+			base.OnHitNPC(target, damage, knockback, crit);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+			Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
+
+			Rectangle frame = tex.Frame(1, 2, 0, Projectile.frame);
+			Vector2 origin = frame.Size() / 2;
+			Color color = lightColor * (1f - Projectile.alpha / 255f);
+			Vector2 scale = new Vector2(1f, Projectile.scale);
+
+			int amount = 6;
+			if (Projectile.ai[0] > 1)
+            {
+				for (int i = 0; i < amount; i++)
+				{
+					Vector2 oldPos = Projectile.oldPos[i] + Projectile.Size / 2 - Main.screenPosition + Vector2.UnitY * Projectile.gfxOffY;
+					Color glowColor = color * (1f - (1f + i) / (amount + 1f));
+					glowColor.A = (byte)(glowColor.A * 0.8f);
+
+					Main.EntitySpriteDraw(tex, oldPos, frame, glowColor, Projectile.oldRot[i], origin, scale, SpriteEffects.None, 0);
+				}
+            }
+
+			Vector2 pos = Projectile.Center - Main.screenPosition + Vector2.UnitY * Projectile.gfxOffY;
+			Main.EntitySpriteDraw(tex, pos, frame, color, Projectile.rotation, origin, scale, SpriteEffects.None, 0);
+
+			return false;
         }
     }
 }

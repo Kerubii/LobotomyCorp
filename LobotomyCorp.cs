@@ -1,3 +1,4 @@
+using LobotomyCorp.Config;
 using LobotomyCorp.UI;
 using LobotomyCorp.Utils;
 using Microsoft.Xna.Framework;
@@ -5,8 +6,10 @@ using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria;
 using Terraria.Audio;
+using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.Localization;
@@ -37,6 +40,8 @@ namespace LobotomyCorp
 
         public static Asset<Texture2D> CircleGlow = null;
 
+        public static Asset<Texture2D> RedShoesGlittering = null;
+
         public static Color PositivePE => new Color(18, 255, 86);
         public static Color NegativePE => new Color(239, 77, 61);
 
@@ -52,8 +57,8 @@ namespace LobotomyCorp
         public static Color AlephRarity => new Color(255, 1, 0);
 
         public static ModKeybind SynchronizeEGO;
-        public static ModKeybind PassiveShow;
-        public static bool ExtraPassiveShow = true;
+
+        public const bool TestMode = true;
 
         public class WeaponSounds
         {
@@ -84,9 +89,6 @@ namespace LobotomyCorp
 
             if (!Main.dedServ)
             {
-                ExtraPassiveShow = true;
-                PassiveShow = KeybindLoader.RegisterKeybind(this, "Extend Passive", "F");
-
                 if (Main.netMode != NetmodeID.Server)
                 {
                     ArcanaSlaveLaser = Assets.Request<Texture2D>("Projectiles/QueenLaser/Laser", AssetRequestMode.ImmediateLoad);
@@ -98,6 +100,8 @@ namespace LobotomyCorp
                     MagicBulletBullet = Assets.Request<Texture2D>("Projectiles/MagicBulletBullet");
 
                     CircleGlow = Assets.Request<Texture2D>("Misc/CircleGlow", AssetRequestMode.ImmediateLoad);
+
+                    RedShoesGlittering = Assets.Request<Texture2D>("Misc/RedShoesGlitter", AssetRequestMode.ImmediateLoad);
 
                     Main.QueueMainThreadAction(() =>
                     {
@@ -111,6 +115,10 @@ namespace LobotomyCorp
                         PremultiplyTexture(MagicBulletBullet.Value);
 
                         PremultiplyTexture(CircleGlow.Value);
+
+                        PremultiplyTexture(RedShoesGlittering.Value);
+
+                        
                     });
 
                     //Ref<Effect> punishingRef = new Ref<Effect>(GetEffect("Effects/PunishingBird"));
@@ -120,10 +128,23 @@ namespace LobotomyCorp
                     Ref<Effect> FourthMatchFlame = new Ref<Effect>(Assets.Request<Effect>("Effects/FourthMatchFlame", AssetRequestMode.ImmediateLoad).Value);
                     Ref<Effect> GenericTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/GenericTrail", AssetRequestMode.ImmediateLoad).Value);
                     Ref<Effect> BladeTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/BladeTrail", AssetRequestMode.ImmediateLoad).Value);
-
+                    Ref<Effect> BrokenScreen = new Ref<Effect>(Assets.Request<Effect>("Effects/BrokenShader", AssetRequestMode.ImmediateLoad).Value);
+                    Ref<Effect> RedMistEffect = new Ref<Effect>(Assets.Request<Effect>("Effects/OverlayShader", AssetRequestMode.ImmediateLoad).Value);
                     //GameShaders.Misc["Punish"] = new MiscShaderData(punishingRef, "PunishingBird");
 
                     GameShaders.Misc["LobotomyCorp:Rotate"] = new MiscShaderData(new Ref<Effect>(ArcanaSlaveRef.Value), "ArcanaResize").UseSaturation(0f);
+
+                    ScreenShaderData shaderData = new ScreenShaderData(BrokenScreen, "BrokenScreenShader");
+                    shaderData.UseImage(Assets.Request<Texture2D>("Misc/CameraFilterPack_TV_BrokenGlass5", AssetRequestMode.ImmediateLoad).Value, 0, SamplerState.LinearWrap);
+                    Filters.Scene["LobotomyCorp:BrokenScreen"] = new Filter(shaderData, EffectPriority.Medium);
+
+                    shaderData = new ScreenShaderData(RedMistEffect, "OverlayRedMist");
+                    shaderData.UseImage(Assets.Request<Texture2D>("Misc/Hexagons2", AssetRequestMode.ImmediateLoad).Value, 0, SamplerState.LinearWrap);
+                    shaderData.UseImage(Assets.Request<Texture2D>("Misc/Hexagons", AssetRequestMode.ImmediateLoad).Value, 1, SamplerState.LinearWrap);
+                    shaderData.UseImage(Assets.Request<Texture2D>("Misc/VignetteA", AssetRequestMode.ImmediateLoad).Value, 2, SamplerState.LinearWrap);
+                    shaderData.UseColor(Color.Red);
+                    shaderData.UseSecondaryColor(new Color(1, 0.8f, 0.8f));
+                    Filters.Scene["LobotomyCorp:RedMistOverlay"] = new Filter(shaderData, EffectPriority.Medium);
 
                     //Texture2D blankTexture = TextureManager.BlankTexture;
 
@@ -209,7 +230,6 @@ namespace LobotomyCorp
             HeRarity = new Color();
             WawRarity = new Color();
             AlephRarity = new Color();*/
-            PassiveShow = null;
         }
         /*
         public override void Close()
@@ -280,19 +300,20 @@ namespace LobotomyCorp
         
         public static SoundStyle WeaponSound(string name, bool PitchVariance = true, int Variance = 1)
         {
+            float Volume = 0.1f;
             if (PitchVariance)
             {
                 if (Variance > 1)
-                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name, Variance) with { Volume = 0.5f, MaxInstances = 2,PitchVariance = 0.1f };
+                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name, Variance) with { Volume = Volume, MaxInstances = 2,PitchVariance = 0.1f };
                 else
-                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name) with { Volume = 0.5f, MaxInstances = 2, PitchVariance = 0.1f };
+                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name) with { Volume = Volume, MaxInstances = 2, PitchVariance = 0.1f };
             }
             else
             {
                 if (Variance > 1)
-                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name, Variance) with { Volume = 0.5f, MaxInstances = 2 };
+                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name, Variance) with { Volume = Volume, MaxInstances = 2 };
                 else
-                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name) with { Volume = 0.5f, MaxInstances = 2 };
+                    return new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/" + name) with { Volume = Volume, MaxInstances = 2 };
             }
         }
 
@@ -315,10 +336,107 @@ namespace LobotomyCorp
                 return new SoundStyle("LobotomyCorp/Sounds/Item/" + NameLocation, Variance) with { Volume = 0.5f, MaxInstances = instances, PitchVariance = Pitch };
             }
         }
+
+        public static void ScreenShake(int Time, float Intensity, float decay = 0, bool Forced = true)
+        {
+            ModContent.GetInstance<LobSystem>().ScreenShake(Time, Intensity, decay, Forced);
+        }
+    }
+
+    struct LCMWorleyNoise
+    {
+        private float _variability;
+        private int _columns;
+        private int _rows;
+        private int _width;
+        private int _height;
+
+        public LCMWorleyNoise(float randomSeed, int columns = 5, int rows = 5)
+        {
+            _variability = randomSeed;
+            _columns = columns;
+            _rows = rows;
+            _width = 100;
+            _height = 100;
+        }
+
+        public void CreateWorleyNoise(float time = 0)
+        {
+            Texture2D voronoise;
+            Color[] data = new Color[_width * _height];
+            for (int x = 0; x < _width; x++)
+            {
+                for (int y = 0; y < _height; y++)
+                {
+                    float result = GenerateWorley(new Vector2(x / (float)_width, y / (float)_height), _columns, _rows);
+                    data[x + (y * 100)] = new Color(result, result, result);
+                }
+            }
+            Main.QueueMainThreadAction(() =>
+            {
+                voronoise = new Texture2D(Main.graphics.GraphicsDevice, 100, 100);
+                voronoise.SetData(data);
+                voronoise.SaveAsPng(new FileStream(testFilePath, FileMode.Create), 100, 100);
+            });
+        }
+
+        private static string cacheFolder = Path.Combine(Main.SavePath, "Mods", "Cache");
+        private static string testFileName = "Worley.png";
+        private static string testFilePath = Path.Combine(cacheFolder, testFileName);
+
+        private float GenerateWorley(Vector2 uv, int columns, int rows)
+        {
+            uv.X *= columns;
+            uv.Y *= rows;
+
+            Vector2 uvFloor = new Vector2((float)Math.Floor(uv.X), (float)Math.Floor(uv.Y));
+            uv -= uvFloor;
+
+            float minimumDist = 1f;
+
+            for (int y = -1; y <= 1; y++)
+            {
+                for (int x = -1; x <= 1; x++)
+                {
+                    Vector2 neighbor = new Vector2(x, y);
+                    Vector2 Point = random(uvFloor + neighbor);
+
+                    Vector2 diff = neighbor + Point - uv;
+                    float dist = diff.Length();
+                    minimumDist = (float)Math.Min(minimumDist, dist);
+                }
+            }
+
+            return minimumDist;
+        }
+
+        private Vector2 random(Vector2 uv)
+        {
+            if (uv.X == 0)
+            {
+                uv += new Vector2((float)Math.Sin(_variability * 0.2f), (float)Math.Sin(_variability * 0.5f)) * 0.4f;
+            }
+
+            float dot = (float)Math.Sin(Vector2.Dot(uv, new Vector2(321.2f * _variability, 21.43f)));
+            float fract = dot - (float)Math.Floor(dot);
+            dot = (float)Math.Sin(Vector2.Dot(uv, new Vector2(142.7f * _variability * 0.84f, 421.3f * _variability * 0.2f)));
+            float fract2 = dot - (float)Math.Floor(dot);
+            return new Vector2(fract, fract2);
+        }
     }
 
     class LobSystem : ModSystem
     {
+        public override void PostUpdateEverything()
+        {
+            if (Filters.Scene["LobotomyCorp:RedMistOverlay"].IsActive() && !NPC.AnyNPCs(ModContent.NPCType<NPCs.RedMist.RedMist>()))
+            {
+                Filters.Scene["LobotomyCorp:RedMistOverlay"].Deactivate();
+            }
+
+            base.PostUpdateEverything();
+        }
+
         public override void AddRecipeGroups()
         {
             RecipeGroup rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "EvilPowder", new[]
@@ -353,6 +471,32 @@ namespace LobotomyCorp
                 ItemID.OilRagSconse
             });
             RecipeGroup.RegisterGroup("LobotomyCorp:DungeonLantern", rec);
+
+            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Boss Masks", new[]
+           {
+                (int)ItemID.KingSlimeMask,
+                (int)2112,
+                2103,
+                2111,
+                2108,
+                1281,
+                5109,
+                2105,
+                4959,
+                2113,
+                2106,
+                2107,
+                2109,
+                2110,
+                4784,
+                2588,
+                3372,
+                3373,
+                3864,
+                3865,
+                3863
+            });
+            RecipeGroup.RegisterGroup("LobotomyCorp:BossMasks", rec);
         }
 
         public override void ModifyScreenPosition()
@@ -362,7 +506,29 @@ namespace LobotomyCorp
                 Main.screenPosition = modifiedScreenPosition;
                 modifiedCamera = false;
             }
+            
+            if (ScreenShakeTimer > 0)
+            {
+                Main.screenPosition.X += Main.rand.NextFloat(-ScreenShakeIntensity, ScreenShakeIntensity);
+                Main.screenPosition.Y += Main.rand.NextFloat(-ScreenShakeIntensity, ScreenShakeIntensity);
+                ScreenShakeIntensity -= ScreenShakeDecay;
+                ScreenShakeTimer--;
+            }
             base.ModifyScreenPosition();
+        }
+
+        private int ScreenShakeTimer;
+        private float ScreenShakeIntensity;
+        private float ScreenShakeDecay;
+
+        public void ScreenShake(int Time, float Intensity, float decay = 0, bool Forced = true)
+        {
+            if (!ModContent.GetInstance<LobotomyConfig>().ScreenShakeEnabled || (!Forced && ScreenShakeTimer > 0))
+                return;
+
+            ScreenShakeTimer = Time;
+            ScreenShakeIntensity = Intensity;
+            ScreenShakeDecay = decay;
         }
 
         private bool modifiedCamera;
@@ -537,7 +703,7 @@ namespace LobotomyCorp
         }
 
         /// <summary>
-        /// There are 5 Layers for screentextures, Replaces the layer so as a General rule of thumb, lets say this
+        /// There are 5 Layers for screentextures, Replaces the layer as inteded limitation so as a General rule of thumb, lets say this
         /// 0-2 Lower Layers, Used as visual effects for players, will occupy a spot inactive, if all slots active replaces preferred layer
         /// 3   Used by NPCs to provide information, preferably bosses or special npcs
         /// 4   Special Cases
@@ -551,10 +717,22 @@ namespace LobotomyCorp
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    if (screenFilters.GetType() == newLayer.GetType() || !screenFilters[i].Active)
+                    if (screenFilters.GetType() == newLayer.GetType())
                     {
+                        screenFilters[i] = null;
                         screenFilters[i] = newLayer;
                         return;
+                    }
+                }
+
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        if (!screenFilters[i].Active)
+                        {
+                            screenFilters[i] = newLayer;
+                            return;
+                        }
                     }
                 }
             }

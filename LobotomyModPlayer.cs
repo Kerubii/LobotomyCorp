@@ -71,6 +71,10 @@ namespace LobotomyCorp
 
         public bool PleasureDebuff = false;
 
+        public int RegretShockwave = 0;
+        public bool RegretChainedWrath = false;
+        public bool RegretBinded = false;
+
         public bool GrinderMk2Active = false;
         public int GrinderMk2Dash = 0;
         public int GrinderMk2BatteryMax = 1400;
@@ -88,7 +92,7 @@ namespace LobotomyCorp
         public bool NihilActive = false;
         public int NihilMode = 0;
 
-        public bool RedEyesActive = false;
+        public bool RedEyesAlerted = false;
         public float RedEyesOpacity = 0f;
         public int RedEyesMealMax = 60 * 8;
 
@@ -111,6 +115,9 @@ namespace LobotomyCorp
         public int RealizedWingbeatMeal = -1;
         public bool WingbeatFairyMeal = false;
         public bool WingbeatGluttony = false;
+
+        private bool forcePlayerVelocity = false;
+        private Vector2 forcePlayerVelocityValue;
 
         public static LobotomyModPlayer ModPlayer(Player Player)
         {
@@ -170,7 +177,10 @@ namespace LobotomyCorp
 
             PleasureDebuff = false;
 
-            RedEyesActive = false;
+            RegretChainedWrath = false;
+            RegretBinded = false;
+
+            RedEyesAlerted = false;
             RedEyesOpacity = 0f;
 
             SmileDebuff = false;
@@ -190,6 +200,8 @@ namespace LobotomyCorp
             HarmonyConnected = false;
 
             WristCutterScars = false;
+
+            //RemoveMaxFallSpeed = false;
         }
 
         public override void OnRespawn(Player player)
@@ -289,6 +301,15 @@ namespace LobotomyCorp
             }
         }
 
+        public override void PreUpdateMovement()
+        {
+            if (forcePlayerVelocity)
+            {
+                Player.velocity = forcePlayerVelocityValue;
+                forcePlayerVelocity = false;
+            }
+        }
+
         public override void SetControls()
         {
             if (Hopeless)
@@ -353,6 +374,18 @@ namespace LobotomyCorp
             else if (Player.grappling[0] == -1 && !Player.tongued)
             {
                 DashMovement();
+            }
+
+            if (RegretBinded)
+            {
+                Player.moveSpeed = 1f;
+            }
+            else if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.RegretR>() && !Player.mount.Active)
+            {
+                Player.GetDamage(DamageClass.Melee) += (Player.moveSpeed - 1) * 0.5f;
+                RegretChainedWrath = true;
+                //Main.NewText("test");
+                Player.moveSpeed = 1f;
             }
         }
 
@@ -446,6 +479,12 @@ namespace LobotomyCorp
             else
                 GrinderMk2Dash = 0;
         }
+            
+        public void ForcePlayerVelocity(Vector2 vel)
+        {
+            forcePlayerVelocity = true;
+            forcePlayerVelocityValue = vel;
+        }
 
         public override void UpdateBadLifeRegen()
         {
@@ -476,7 +515,7 @@ namespace LobotomyCorp
                 Player.lifeRegenTime = 0;
                 Player.lifeRegen = -30;
             }
-            if (WingbeatGluttony)
+            if (WingbeatGluttony && !WingbeatFairyMeal)
             {
                 if (Player.lifeRegen > 0)
                 {
@@ -504,10 +543,6 @@ namespace LobotomyCorp
 
         public override void UpdateLifeRegen()
         {
-            if (WingbeatFairyMeal)
-            {
-                Player.lifeRegen += 10;
-            }
             if (FaintAromaPetal > 0 && Player.lifeRegen < 0)
                 Player.lifeRegen = 0;
         }
@@ -535,7 +570,7 @@ namespace LobotomyCorp
                 BeakPunish = 180;
                 LobotomyGlobalNPC.LNPC(npc).BeakTarget = 180;
             }*/
-            if (BlackSwanParryChance > 0 && Main.rand.Next(100) < BlackSwanParryChance && Player.CanParryAgainst(Player.Hitbox, npc.Hitbox, npc.velocity))
+            if (BlackSwanParryChance > 0 && Main.rand.Next(100) < BlackSwanParryChance)
             {
                 Player.ApplyDamageToNPC(npc, damage, 0, Player.direction, false);
             }
@@ -553,10 +588,6 @@ namespace LobotomyCorp
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (Player.whoAmI == Main.myPlayer && LobotomyCorp.PassiveShow.JustPressed)
-            {
-                LobotomyCorp.ExtraPassiveShow = !LobotomyCorp.ExtraPassiveShow;
-            }
         }
 
         public override void DrawEffects(PlayerDrawSet drawInfo, ref float r, ref float g, ref float b, ref float a, ref bool fullBright)
@@ -635,7 +666,7 @@ namespace LobotomyCorp
 
                     if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Literature.BlackSwanR>())
                     {
-                        if (BlackSwanNettleClothing >= 3 - 1)
+                        if (BlackSwanNettleClothing >= 3 - 1 || BlackSwanBrokenDream)
                         {
                             reflectDamage = (int)(reflectDamage * 1.2f);
                         }
@@ -660,11 +691,25 @@ namespace LobotomyCorp
             return base.PreHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource, ref cooldownCounter);
         }
 
+        /// <summary>
+        /// True Nettle amount
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="NettleAmount"></param>
+        /// <returns></returns>
+        public bool IsNettleOver(int NettleAmount, bool BrokenDreams = true)
+        {
+            if (BrokenDreams)
+                return BlackSwanNettleClothing >= NettleAmount || BlackSwanBrokenDream;
+            return BlackSwanNettleClothing >= NettleAmount;
+        }
+
         public override void PostHurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
         {
             OnHitSolemnLament();
 
-            if (Player.HeldItem.type == ModContent.ItemType<Items.Censored>())
+            int heldItem = Player.HeldItem.type;
+            if (heldItem == ModContent.ItemType<Items.Censored>())
             {
                 float healing = (float)damage * 0.4f;
                 if (damage > 1)
@@ -673,6 +718,47 @@ namespace LobotomyCorp
                     Player.HealEffect((int)healing);
                 }
             }
+            else if (heldItem == ModContent.ItemType<Items.Ruina.Literature.TodaysExpressionR>() && Main.myPlayer == Player.whoAmI)
+            {
+                float velocityMult = 1f;
+                float knockback = 6f;
+                float projDamage = Player.HeldItem.damage;
+                switch (TodaysExpressionFace)
+                {
+                    case 0://Happy
+                        velocityMult *= 0.1f;
+                        knockback *= 3f;
+                        projDamage = (int)(damage * 0.05f);
+                        break;
+                    case 1://Smile
+                        velocityMult *= 0.4f;
+                        knockback *= 2f;
+                        projDamage = (int)(damage * 0.5f);
+                        break;
+                    default://Neutral
+                        break;
+                    case 3://Sad
+                        velocityMult *= 1.5f;
+                        knockback *= 0.5f;
+                        projDamage = (int)(damage * 1.1f);
+                        break;
+                    case 4://Angry
+                        velocityMult *= 2.2f;
+                        knockback *= 0f;
+                        projDamage = (int)(damage * 1.5f);
+                        break;
+                }
+                
+                for (int i = 0; i < 6; i++)
+                {
+                    Vector2 vel = new Vector2(16f, 0).RotatedBy(MathHelper.ToRadians(60 * i));
+
+                    Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, vel * velocityMult, ModContent.ProjectileType<Projectiles.Realized.TodaysExpressionWall>(), (int)projDamage, knockback, Player.whoAmI, TodaysExpressionFace);
+                }
+
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/Shy_Strong_Guard") with { Volume = 0.5f }, Player.position);
+            }
+
 
             base.PostHurt(pvp, quiet, damage, hitDirection, crit, cooldownCounter);
         }
@@ -717,7 +803,7 @@ namespace LobotomyCorp
             if (giftFourthMatchFlame)
                 return;
             Player.AddBuff(BuffID.OnFire, 120);
-            if (forced)// || (Main.rand.Next(100) == 0 && (Player.statLife == Player.statLifeMax2 || (float)(Player.statLife / (float)Player.statLifeMax2) < 0.25f)))
+            if (Main.myPlayer == Player.whoAmI && forced)// || (Main.rand.Next(100) == 0 && (Player.statLife == Player.statLifeMax2 || (float)(Player.statLife / (float)Player.statLifeMax2) < 0.25f)))
             {
                 Projectile.NewProjectile(Player.GetSource_Misc("ItemUse_FourthMatchFlameExplosion"), Player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.FourthMatchFlameSelfExplosion>(), 500, 10f, Player.whoAmI);
             }
@@ -836,7 +922,6 @@ namespace LobotomyCorp
             }
             //could not finish their performance
             //"Goodbye"
-            //could not satiate their addiction
             //'s head bursted from pleasure
             //tried to forcefully escape their established role
             //'s malice overtook their body
@@ -846,8 +931,22 @@ namespace LobotomyCorp
             //disrespected the fairy's care
             //'s unbearable loneliness crushed them
             //averted their gaze 
+            
+            
+            //was overthrown
+            //was consumed by Malice
+        
+            //could not satiate their addiction
+            //'s soul has fallen to hell
+
+            //could not protect their beloved family
             base.Kill(damage, hitDirection, pvp, damageSource);
         }*/
+
+        public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
+        {
+            base.Kill(damage, hitDirection, pvp, damageSource);
+        }
 
         public static float Lerp(float x, float x2, float progress, bool reverse = false)
         {
@@ -1257,8 +1356,29 @@ namespace LobotomyCorp
 
                 Color color = Color.White;
 
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), texture.Frame(5, 1, ModPlayer.TodaysExpressionFace), color, 0, new Vector2(texture.Width / 10f, texture.Height / 2f), 0.75f, 0, 0);
+                float scale = 0.75f;
+                if (ModPlayer.TodaysExpressionTimer < 60)
+                {
+                    float prog = ModPlayer.TodaysExpressionTimer / 60f;
+                    float amount = 0.1f * (float)Math.Sin((3f * Math.PI) * prog);
+                    if (amount < 0)
+                        amount *= -1;
+
+                    scale += amount;
+                }
+                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), texture.Frame(5, 1, ModPlayer.TodaysExpressionFace), color, 0, new Vector2(texture.Width / 10f, texture.Height / 2f), scale, 0, 0);
                 drawInfo.DrawDataCache.Add(data);
+
+                int timer = ModPlayer.TodaysExpressionTimerMax - 30;
+                if (ModPlayer.TodaysExpressionTimer > timer)
+                {
+                    float prog = (ModPlayer.TodaysExpressionTimer - timer) / 30f;
+
+                    scale += 0.25f * (float)Math.Sin(1.57f * (1f - prog));
+                    float opacity = prog;
+                    data = new DrawData(texture, new Vector2(drawX, drawY), texture.Frame(5, 1, ModPlayer.TodaysExpressionFace), color * opacity, 0, new Vector2(texture.Width / 10f, texture.Height / 2f), scale, 0, 0);
+                    drawInfo.DrawDataCache.Add(data);
+                }
             }
         
             if (ModPlayer.BlackSwanNettleClothing > 0)

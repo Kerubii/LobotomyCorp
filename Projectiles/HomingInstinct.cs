@@ -36,7 +36,8 @@ namespace LobotomyCorp.Projectiles
             Tile tile = Main.tile[x, y];
             if (!tile.HasTile)
             {
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(x * 16,y * 16), Projectile.velocity, ModContent.ProjectileType<HomingInstinctBlock>(), 0, 0);
+                if (Main.myPlayer == Projectile.owner)
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), new Vector2(x * 16,y * 16), Projectile.velocity, ModContent.ProjectileType<HomingInstinctBlock>(), 0, 0);
                 /*WorldGen.PlaceObject(x, y, Mod.TileType("YellowBrickRoad"));
                 if (!(Projectile.velocity.ToRotation() == 0 || Projectile.velocity.ToRotation() == 180))
                     WorldGen.PoundPlatform(x, y);*/

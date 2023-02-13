@@ -8,7 +8,8 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	public class TheHomingInstinctS : SEgoItem
+    [Autoload(LobotomyCorp.TestMode)]
+    public class TheHomingInstinctS : SEgoItem
 	{
 		public override void SetStaticDefaults() {
             Tooltip.SetDefault("\"Friends, Friends, let us all go home together!\"");

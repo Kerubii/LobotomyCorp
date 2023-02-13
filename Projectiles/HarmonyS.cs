@@ -151,7 +151,8 @@ namespace LobotomyCorp.Projectiles
             if (Projectile.ai[0] > 30 && Projectile.ai[1] <= 0 && LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).HarmonyAddiction)
             {
                 Projectile.ai[1] = 15;
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<HarmonyBloodEffect>(), Projectile.damage, 0, Projectile.owner, Projectile.whoAmI, Main.rand.NextFloat(0.6f , 0.8f) * Projectile.ai[0] / 60f);
+                if (Main.myPlayer == Projectile.owner)
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<HarmonyBloodEffect>(), Projectile.damage, 0, Projectile.owner, Projectile.whoAmI, Main.rand.NextFloat(0.6f , 0.8f) * Projectile.ai[0] / 60f);
             }
 
             if (Projectile.ai[0] < 60)

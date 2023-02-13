@@ -47,7 +47,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			Item.width = 40;
 			Item.height = 40;
 
-			Item.useTime = 30;
+			Item.useTime = 24;
             Item.useAnimation = 12;
 
             Item.useStyle = ItemUseStyleID.Shoot;
@@ -78,7 +78,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
             Item.UseSound = SoundID.Item11;
             PerfectSwitch = false;
-            if (player.itemTime > 12)
+            if (player.itemTime > 6)
                 PerfectSwitch = true;
 
             if (player.altFunctionUse == 2)
@@ -106,39 +106,41 @@ namespace LobotomyCorp.Items.Ruina.Technology
         {
             if (player.altFunctionUse == 2)
                 AltAmmoConsume(player, ref type, ref velocity.X, ref velocity.Y, ref damage);
-            
-            if (!PerfectSwitch)
-                Main.projectile[Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI)].GetGlobalProjectile<LobotomyGlobalProjectile>().Lament = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? (byte)1 : (byte)2;
-            else
+            if (Main.myPlayer == player.whoAmI)
             {
-                damage = (int)(damage * 0.6f);
-
-                int amount = Main.rand.Next(6, 9);
-                for (int i = 0; i < amount; i++)
+                if (!PerfectSwitch)
+                    Main.projectile[Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI)].GetGlobalProjectile<LobotomyGlobalProjectile>().Lament = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? (byte)1 : (byte)2;
+                else
                 {
-                    Vector2 tempVel = velocity;
-                    if (i > 0)
+                    damage = (int)(damage * 0.6f);
+
+                    int amount = Main.rand.Next(6, 9);
+                    for (int i = 0; i < amount; i++)
                     {
-                        tempVel *= Main.rand.NextFloat(0.6f, 1f);
-                        tempVel = tempVel.RotatedByRandom(MathHelper.ToRadians(15));
+                        Vector2 tempVel = velocity;
+                        if (i > 0)
+                        {
+                            tempVel *= Main.rand.NextFloat(0.6f, 1f);
+                            tempVel = tempVel.RotatedByRandom(MathHelper.ToRadians(15));
+                        }
+                        int p = Projectile.NewProjectile(source, position, tempVel, ModContent.ProjectileType<Projectiles.Kaleidoscope>(), damage, knockback, player.whoAmI, -type);
+                        Main.projectile[p].localAI[0] = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? 1 : 2;
+                        Main.projectile[p].GetGlobalProjectile<LobotomyGlobalProjectile>().Lament = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? (byte)1 : (byte)2;
                     }
-                    int p = Projectile.NewProjectile(source, position, tempVel, ModContent.ProjectileType<Projectiles.Kaleidoscope>(), damage, knockback, player.whoAmI, -type);
-                    Main.projectile[p].localAI[0] = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? 1 : 2;
-                    Main.projectile[p].GetGlobalProjectile<LobotomyGlobalProjectile>().Lament = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? (byte)1 : (byte)2;
-                }
-                for (int i = 0; i < 10; i++)
-                {
-                    int dustType = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? 91 : 109;
+                    for (int i = 0; i < 10; i++)
+                    {
+                        int dustType = LobotomyModPlayer.ModPlayer(player).SolemnSwitch ? 91 : 109;
 
-                    Vector2 tempVel = velocity;
-                    tempVel *= Main.rand.NextFloat(4f);
-                    tempVel = tempVel.RotatedByRandom(MathHelper.ToRadians(15));
+                        Vector2 tempVel = velocity;
+                        tempVel *= Main.rand.NextFloat(4f);
+                        tempVel = tempVel.RotatedByRandom(MathHelper.ToRadians(15));
 
-                    Dust d = Dust.NewDustPerfect(position, dustType, tempVel);
-                    d.noGravity = true;
-                    d.fadeIn = 1.2f;
+                        Dust d = Dust.NewDustPerfect(position, dustType, tempVel);
+                        d.noGravity = true;
+                        d.fadeIn = 1.2f;
+                    }
                 }
-            }    
+            }
 
             player.itemRotation = (float)Math.Atan2(velocity.Y * player.direction, velocity.X * player.direction) - player.fullRotation;
             return false;

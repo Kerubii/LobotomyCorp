@@ -53,7 +53,8 @@ namespace LobotomyCorp.Projectiles
                 if (Projectile.ai[1] < 1)
                 {
                     Projectile.ai[1]++;
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction * -1);
+                    if (Main.myPlayer == Projectile.owner)
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction * -1);
                 }
                 float progress = ((float)projOwner.itemAnimation - ((float)AnimationMax * 2)) / ((float)AnimationMax - AnimationRest) - 0.5f;
                 rot += MathHelper.ToRadians(Lerp(-90, 90, progress, Projectile.spriteDirection == 1));
@@ -64,7 +65,8 @@ namespace LobotomyCorp.Projectiles
                 {
                     Projectile.ai[1] = 2;
                     SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/silent2_2") with { Volume = 0.5f });
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction);
+                    if (Main.myPlayer == Projectile.owner)
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction);
                 }
                 float progress = ((float)projOwner.itemAnimation - ((float)AnimationMax)) / ((float)AnimationMax - AnimationRest) - 0.5f;
                 rot += MathHelper.ToRadians(Lerp(90, -110, progress, Projectile.spriteDirection == 1));
@@ -76,7 +78,8 @@ namespace LobotomyCorp.Projectiles
                 {
                     Projectile.ai[1] = 3;
                     SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/silent2_3") with { Volume = 0.5f });
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction * -1);
+                    if (Main.myPlayer == Projectile.owner)
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction * -1);
                 }
                 float progress = ((float)projOwner.itemAnimation) / ((float)AnimationMax - AnimationRest) - 0.5f;
                 rot += MathHelper.ToRadians(Lerp(-110, 120, progress, Projectile.spriteDirection == 1));

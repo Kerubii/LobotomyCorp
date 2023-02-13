@@ -113,6 +113,32 @@ namespace LobotomyCorp.Projectiles
                 Projectile.frameCounter = 0;
         }
 
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+            int dustType = 91;
+
+            if (Projectile.localAI[0] == 1)
+            {
+                dustType = 109;
+            }
+
+            Vector2 pos = target.position;
+            pos.X += Main.rand.Next(target.width);
+            pos.Y += Main.rand.Next(target.height);
+            int limit = 16;
+
+            float speed = Main.rand.NextFloat(8f);
+            for (int a = 0; a < limit; a++)
+            {
+                float angle = (float)a / limit * 6.34f;
+
+                Vector2 velocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+                Dust d = Dust.NewDustPerfect(pos + velocity * speed, dustType, velocity * 2);
+                d.noGravity = true;
+                d.scale = 0.5f;
+            }
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
             Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;

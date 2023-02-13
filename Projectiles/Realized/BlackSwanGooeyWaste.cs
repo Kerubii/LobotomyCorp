@@ -32,12 +32,14 @@ namespace LobotomyCorp.Projectiles.Realized
 			Projectile.DamageType = DamageClass.Melee;
 			Projectile.tileCollide = false;
 			Projectile.friendly = true;
+			Projectile.usesIDStaticNPCImmunity = true;
+			Projectile.idStaticNPCHitCooldown = 10;
 		}
 
 		public override void AI()
 		{
-			Projectile.velocity.Y = 0.1f;
-			for (int i = 0; i < 3; i++)
+			Projectile.velocity.Y += 0.01f;
+			if (Main.rand.NextBool(120))
             {
 				int type = Main.rand.Next(2, 4);
 				int d = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, type);
@@ -46,9 +48,12 @@ namespace LobotomyCorp.Projectiles.Realized
 			}
 		}
 
+
+
         public override bool? CanHitNPC(NPC target)
         {
-			target.AddBuff(ModContent.BuffType<Buffs.GooeyWaste>(), 300);
+			if (Projectile.Hitbox.Intersects(target.getRect()))
+				target.AddBuff(ModContent.BuffType<Buffs.GooeyWaste>(), 300);
 			return false;
         }
     }

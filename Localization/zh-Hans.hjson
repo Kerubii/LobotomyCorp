@@ -17,6 +17,56 @@
 			FragmentsFromSomewhere: "彼方的碎片"
 			WristCutter: "割腕者"
 			Regret: "悔恨"
+            RedEyes: "赤瞳"
+            Solitude: "孤独"
+     
+            #He
+            ScreamingWedge: "刺耳尖叫"
+            BearPaw: "熊熊抱"
+            SanguineDesire: "血之渴望"
+            Syrinx: "泣婴"
+            FrostSplinter: "霜之碎片"
+            Harmony: "谐奏发射器"
+            Lumber: "伐木者" 
+            GrinderMk4: "粉碎机MK4"
+            Christmas: "悲惨圣诞"
+            OurGalaxy: "小小银河"
+            Laetitia: "蕾蒂希娅"
+            Gaze: "凝视"
+            Pleasure: "因勒癫狂"
+
+			#Waw
+            InTheNameOfLoveAndHate: "以爱与恨为名"
+            SolemnLament: "圣宣"
+            Lamp: "目灯"
+            GreenStem: "绿色枝干"
+            Hornet: "黄蜂"
+            FaintAroma: "余香"
+            CrimsonScar: "猩红创痕"
+            CobaltScar: "郁蓝创痕"
+            Spore: "荧光菌孢"
+            MagicBullet: "魔弹射手"
+            Ecstacy: "沉醉"
+            Heaven: "穿刺极乐"
+            SwordSharpenedWithTears: "盈泪之剑"
+            Exuviae: "蜕落之皮"
+            Diffraction: "虚无衍射体"
+            FeatherOfHonor: "荣耀之羽"
+            Discord: "不和"
+            Moonlight: "月光"
+            Hypocrisy: "伪善"
+            Amrita: "无量"
+
+            #Aleph
+            Mimicry: "拟态"
+            DaCapo: " Da Capo"
+            ParadiseLost: "失乐园"
+            Justitia: "正义裁决者"
+            GoldRush: "闪金冲锋"
+            Smile: "笑靥"
+            Censored: "［数据删除］"
+            SoundOfAStar: "新星之声"
+            Adoration: "爱慕"
 		}
 
 		ItemTooltip: {
@@ -90,6 +140,55 @@
 				为了一个更远大的目标，他们放下了道德和尊严，虽不人道，可没人会感到后悔...除了他
 				们。看上去连仁慈的Carmen都默许了这一切。
 				'''
+			RedEyes:
+				'''
+				命中目标时给予自身“迅捷”buff。
+				在这座长有多眼睛的蜘蛛巢中，爬着许多饥肠辘辘却不知满足的后代。
+				为了在夜间觅食，它的眼睛会发出微光。这把E.G.O武器可以增强持有者的追踪能力。
+				'''
+			Solitude: 
+				'''
+				即便是这个异想体的核心已经变成了E.G.O的形式，那种强烈的孤独感也仍旧存在于这把武器上。
+				它射出来的子弹并不会穿透敌人的骨头，反而会留下永久的，孤独的空白。
+				'''
+
+			#He
+	       ScreamingWedge:
+				'''
+				这是一把被充斥着复仇的妖妇所诅咒的十字弩。她的执念使她的长发沿着弩身生长
+				弩箭弹射所发出的声音令人联想起她那刺耳的尖叫。
+		 		'''
+	       BearPaw: 
+				'''
+				柔软的棉花填充着这只可爱的泰迪熊。
+				他的身体因为岁月而变得破烂不堪，就如同人们早已失去童真一样。
+				'''
+       SanguineDesire: 
+				'''
+				甚至在女孩的双脚被砍断后，舞鞋依旧凭借着难以置信的执念，带着残肢进入了森林。
+				大多数员工都熟悉这双舞鞋曾引发的悲剧往事。    
+				'''
+       Syrinx: 
+				'''
+				受原始欲望所驱使的哭声极具杀伤力。
+				仿佛一切都毫无意义，那无尽的嚎哭使人精神麻木，无法思考。
+				'''
+       Harmony: 
+				'''
+				每次攻击消耗一定生命值发动更加强大的攻击。
+				即使这把武器看起来很像一台已经锈蚀的机器，可他演奏出来的乐曲仍比普通的乐器更加悦耳动听。
+				而代价是，持有者要献出自己的肉体来使它演奏。
+				'''
+       Lumber: 
+				'''
+				用这把斧头来砍树和砍人真是在适合不过了。  
+				布满猩红痕迹的斧刃总是锋利无比。
+				'''
+       FrostSplinter: 
+				'''
+				冰雪女王是美丽的，但是她的内心之应当在空虚中被冻结。
+				尖锐的矛冰冷无比，被他刺中的目标甚至会因为寒冷而暂时无法动弹
+				'''
 		}
 		
 		#RUINA EGO
@@ -99,13 +198,13 @@
 			#Split Green and Red with |
 			#History
 			FourthMatchFlame: {
-				ItemTooltip: "I am coming to you. You, who will be reduced to ash like me."
+				ItemTooltip: "我来...找你了...你会...化为...灰烬...就和我...一样..."
 				PassiveList:
 					'''
-					Warmth of a Flame - 400% damage on fourth use
-					Fourth Match - Alternate attack makes you explode on fourth use that deals 4000% increased damage
-					Matchstick - 16% increased damage while on fire
-					|Scorching Embers - Sets self on fire every fourth use
+					温暖的火 - 第四次使用本武器时造成相当于武器攻击力400%的伤害
+					第四根火柴 - 交替攻击会让你在第四次使用本武器时爆炸并追加武器攻击力4000%的伤害
+					火柴杆 - 处于[着火了！]状态时本武器攻击力+16%
+					|焦灼余烬 - 第四次使用本武器时对自身施加[着火了！]
 					'''
 			}
 
@@ -167,82 +266,84 @@
 
 		SuppressionTexts: {
 			Gebura: {
-				0: 秘密研究是从一个地下室开始的，而那项研究有着改变人类未来的无限可能。
-				1: What's left for me, the one who failed to protect them?
-				2: Do you really think feeble cowards like you can stop me?
-				3: Let me show you how to actually wield E.G.O.
+				0: 我要摧毁一切...
+				1: 我要摧毁一切...
+				2: 懦夫！你胆敢阻止我！？
+				3: 好好看着E.G.O该怎么用！！！
 
 				#Phase1
-				4: I'm back; the Red Mist has walked out from a sea of pain.
-				5: I'm no longer weak like I used to be; I can replace any body part even if it gets cut off, and I can be repaired even if I'm broken.
+				4: 我，血雾，从痛苦中归来。
+				5: 我不再像过去那样软弱了，现在的我能够随意替换身体，从一切伤害中复原！
 				
 				#Phase2
-				6: Some things simply couldn't be forgotten, no matter how much time has passed.
-				7: Hatred is a poison that eviscerates me, and yet it makes me open my eyes once more.
+				6: 有些事，是不能忘记的...
+				7: 仇恨在我脑中挥之不去，我再次睁开眼睛...
 				
 				#Phase3
-				8: Some things just wouldn't cool down, no matter how long they were left in the cold.
-				9: Those monsters always kill people, there is no end to this sin; I have descended to bring about their reckoning.
+				8: 有些东西，能让你感到温暖...即使是在寒冬之中...
+				9: 我要报仇！我要让这群杀人的怪物付出代价！
 				
 				#Phase4
-				10: The right path is too far away, and I have too far to go. My heart is pulsing with anger, and I must keep pushing.
+				10: 这条永远看不到尽头的路，我已经走了很久很久，可我必须坚持下去。
 				
 				#Death Message
-				11: Ah... I'm breaking... I won't drop my sword, even if I turn to dust...
-				12: Even after all this, I can't do a single thing with this power...
+				11: ...就算被碾成灰...我也绝不会抛下我的剑！
+				12: 就算有...这样的力量...我还是做不到...
 				
 				#Phase 1 Messages
-				RedEyes: Red Eyes
-				Penitence: Penitence
-				Both: Get blown to pieces
-				GoldRush1: The Road of Gold opens
+				RedEyes: 赤瞳！
+				Penitence: 忏悔！
+				Both: 砸扁你！
+				GoldRush1: 闪金，冲锋！！！
 				
 				#Phase 2 Messages
-				Heaven: The Burrowing Heaven
+				Heaven: 穿刺极乐！！！
 				
-				Mimicry1: Nothing will Remain
-				Mimicry2: I'll mow you down
+				Mimicry1: 一个不留！
+				Mimicry2: 杀！杀！杀！！！
 				
-				DaCapo1: From the Overture
-				DaCapo2: Adagio e Tranquillo
+				DaCapo1: 从头再来。
+				DaCapo2: 归于，死寂。
 				
 				#Not from game
-				Dash1: Stop running
-				Dash2: You can't escape from me
+				Dash1: 停下来。
+				Dash2: 你逃不掉的。
 				
-				Teleport1: Legato
-				Teleport2: Let's do this, partner
-				Teleport3: Only bloody mist remains
+				Teleport1: 连奏。
+				Teleport2: 去死吧！
+				Teleport3: 血雾弥漫...
 				
 				#Phase 3 Messages
-				Shift1: This isn't enough
-				Shift2: I wasn't slacking off all this time
+				Shift1: 还不够。
+				Shift2: 我还没用力呐！
 				
-				Smile1: Black Laughter
-				Smile2: Be Eaten
+				Smile1: 笑靥！
+				Smile2: 吃掉他！
 				
-				Justitia1: Justitia
-				Justitia2: Judgement
+				Justitia1: 正义裁决！
+				Justitia2: 审判！
 				
 				#Phase 4 Messages
-				Shift3: Let's put an end to this
-				Shift4: The apocalypse is here...
+				Shift3: 到此为止了！
+				Shift4: 终末降临！！！
 				
-				Pass1: Beat it, coward
-				Pass2: Don't try and stop me
-				Pass3: You're weak
+				Pass1: 碍事的家伙，给我死！！！
+				Pass2: 休想阻止我！！！
+				Pass3: 太弱了！！！
 				
-				Arrive: Be torn apart before my eyes
+				Arrive: 散架吧！！！
 				
-				GoldRush2: The hunt begins
-				GoldRush3: The Road of the King opens
+				GoldRush2: 猎杀，开始！！！
+				GoldRush3: 湮灭之道！！！
 				
-				Tired1: I'm just not as capable as I used to be...
-				Tired2: I'll break it down...
-				Tired3: I'll kill all of you...
-				Tired4: I can't stop
-				Tired5: It just isn't enough
+				Tired1: 为什么...我不能像以前那样...
+				Tired2: 死吧，废物！！！
+				Tired3: 赶尽杀绝！！！
+				Tired4: 我不能...停下...
+				Tired5: 还不够...还不够！！！
 			}
 		}
 	}
 }
+
+

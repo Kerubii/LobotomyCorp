@@ -38,7 +38,8 @@ namespace LobotomyCorp.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            for (int i = 0; i < 3; i++)
+            if (Main.myPlayer == Projectile.owner)
+                for (int i = 0; i < 3; i++)
             {
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, new Vector2(Main.rand.NextFloat(-0.3f, 0.3f), Main.rand.NextFloat(-0.3f, 0.3f)), ModContent.ProjectileType<ExuviaeMist>(), (int)(Projectile.damage * 0.77f), 1f, Projectile.owner);
             }

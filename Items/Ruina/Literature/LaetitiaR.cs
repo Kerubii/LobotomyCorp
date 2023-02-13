@@ -7,6 +7,7 @@ using Terraria.DataStructures;
 
 namespace LobotomyCorp.Items.Ruina.Literature
 {
+	[Autoload(LobotomyCorp.TestMode)]
 	public class LaetitiaR : SEgoItem
 	{
 		public override void SetStaticDefaults() 

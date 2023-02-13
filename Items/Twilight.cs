@@ -15,12 +15,14 @@ namespace LobotomyCorp.Items
 			Tooltip.SetDefault("Just like how the ever-watching eyes...\n" +
                                "The scale that could measure any and all sin...\n" +
                                "The beak that could swallow everything protected the peace of the Black Forest...\n" +
-                               "The wielder of this armament may also bring peace as they did");
+                               "The wielder of this armament may also bring peace as they did\n" +
+							   "Alternate attack to perform to leap forward and back and slash the target\n" +
+							   "Alternate attack be used again after 8 seconds while holding this weapon");
 		}
 
 		public override void SetDefaults() 
 		{
-			Item.damage = 62;
+			Item.damage = 42;
 			Item.scale = 1.3f;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
@@ -41,27 +43,50 @@ namespace LobotomyCorp.Items
 			Item.noMelee = true;
 		}
 
+		private int SpecialAttackTimer = 0;
+
+        public override void HoldItem(Player player)
+        {
+			if (SpecialAttackTimer > 0)
+			{
+				if (SpecialAttackTimer == 1)
+                {
+					SoundEngine.PlaySound(SoundID.MaxMana, player.Center);
+					for (int index1 = 0; index1 < 5; ++index1)
+					{
+						int index2 = Dust.NewDust(player.position, player.width, player.height, 45, 0.0f, 0.0f, (int)byte.MaxValue, new Color(), (float)Main.rand.Next(20, 26) * 0.1f);
+						Main.dust[index2].noLight = true;
+						Main.dust[index2].noGravity = true;
+						Main.dust[index2].velocity *= 0.5f;
+					}
+				}
+				SpecialAttackTimer--;
+			}
+            base.HoldItem(player);
+        }
+
         public override bool AltFunctionUse(Player player)
         {
-			return LobotomyModPlayer.ModPlayer(player).TwilightSpecial >= 10;
+			return SpecialAttackTimer <= 0;
         }
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-			damage = (int)(damage * 1.3f);
+			if (player.altFunctionUse == 2)
+				damage = (int)(damage * 1.3f);
         }
 
         public override bool CanUseItem(Player player)
         {
 			if (player.altFunctionUse == 2)
 			{
-				LobotomyModPlayer.ModPlayer(player).TwilightSpecial = 0;
+				SpecialAttackTimer = 480;
 				Item.UseSound = LobotomyCorp.WeaponSound("judgement2_1");
 				Item.useTime = 90;
 				Item.useAnimation = 90;
 				Item.useStyle = ItemUseStyleID.Shoot;
 				Item.shoot = ModContent.ProjectileType<Projectiles.TwilightSpecial>();
-				Item.shootSpeed = 4.2f;
+				Item.shootSpeed = 7.6f;//4.2f;
 				//Item.noUseGraphic = true;
 				Item.noMelee = true;
 			}
@@ -71,8 +96,8 @@ namespace LobotomyCorp.Items
 				Item.useTime = 26;
 				Item.useAnimation = 26;
 				Item.useStyle = 15;
-				Item.shoot = 0;// ModContent.ProjectileType<Projectiles.TwilightSlash>();
-				Item.shootSpeed = 1f;
+				Item.shoot = ModContent.ProjectileType<Projectiles.TwilightSlash>();
+				Item.shootSpeed = 18f;
 				//Item.noUseGraphic = false;
 				Item.noMelee = false;
 			}
@@ -113,6 +138,7 @@ namespace LobotomyCorp.Items
 
         public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
         {
+			/*
 			if (LobotomyModPlayer.ModPlayer(player).TwilightSpecial < 9)
             {
 				LobotomyModPlayer.ModPlayer(player).TwilightSpecial++;
@@ -128,10 +154,24 @@ namespace LobotomyCorp.Items
 					}
 					LobotomyModPlayer.ModPlayer(player).TwilightSpecial++;
 				}
-			}
+			}*/
+			target.immune[player.whoAmI] = player.itemAnimation;
+			
+			float angle = Main.rand.NextFloat(6.28f);
+			Vector2 velocity = new Vector2(16f, 0f).RotatedBy(angle);
+			Projectile.NewProjectile(player.GetSource_FromThis(), target.Center - velocity * 15, velocity, ModContent.ProjectileType<Projectiles.TwilightStrikes>(), damage / (int)(4 * 1.5f), knockBack, player.whoAmI, target.whoAmI, 3);
+			//Main.NewText("Twilight Hit!");
+		}
+
+        public override bool? CanHitNPC(Player player, NPC target)
+        {
+			if (target.immune[player.whoAmI] > 0)
+				return false;
+
+            return base.CanHitNPC(player, target);
         }
 
-		public override void AddRecipes()
+        public override void AddRecipes()
 		{
 			CreateRecipe()
 			.AddIngredient(Mod, "Justitia")

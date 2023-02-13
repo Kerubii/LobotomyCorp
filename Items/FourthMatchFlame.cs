@@ -10,7 +10,8 @@ namespace LobotomyCorp.Items
 	{
 		public override void SetStaticDefaults() {
 			Tooltip.SetDefault("The fire roars and burns like the first flame.\n" +
-                               "The light of the match will not go out.");
+                               "The light of the match will not go out.\n" +
+                               "Consumes bullets");
 
         }
 

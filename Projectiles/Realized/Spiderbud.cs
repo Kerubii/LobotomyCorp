@@ -89,7 +89,7 @@ namespace LobotomyCorp.Projectiles.Realized
 					Projectile.alpha = 0;
 
 				LobotomyModPlayer.ModPlayer(owner).RedEyesOpacity = Projectile.alpha / 255f;
-				Projectile.velocity.Y = 40;// 1057 / 30;
+				Projectile.velocity.Y = 42;// 1057 / 30;
 				owner.itemAnimation = owner.itemAnimationMax / 2;
 				owner.itemTime = owner.itemAnimation;
 			}

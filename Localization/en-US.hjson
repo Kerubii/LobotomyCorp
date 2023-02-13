@@ -75,10 +75,10 @@ Mods: {
 				ItemTooltip: "What's really pitiful is people like you dying to the likes of me."
 				PassiveList:
 					'''
-					Ends, Begins, Ends - Third strikes creates shockwaves, temporarily decreases enemy defense
-					Metallic Ringing - Enemies with reduced defense creates shockwaves when hit by this weapon
-					Chained Wrath - Movement speed is converted to damage
-					|Binding Jacket - While having any debuff, 35% decreased damage, Movement speed bonuses nullified, -10 defense and disable Chained Wrath
+					Ends, Begins, Ends - This weapon's third succesful attack inflicts Metallic Ringing on the first enemy hit
+					Metallic Ringing - Reduces defense and creates shockwaves when hit by this weapon
+					Chained Wrath - Increased movement speed is converted to damage while held (50% conversion), cancelled while on a mount or minecart
+					|Binding Jacket - While having any form of debuff, 35% decreased damage, Movement speed bonuses nullified, -10 defense for 5 seconds
 					Incomplete and unobtainable
 					'''
 			}
@@ -135,9 +135,8 @@ Mods: {
 					'''
 					Wavering Feelings - Send out a wall that has special properties depending on Look of the Day
 					Look of the Day - Right click gain a buff or to swap to a random Face, Faces provide buffs and debuffs ranging from Offensive Angry and Defensive Happy
-					Social Distancing - Up to 50% Increased damage based on enemy distance, 10% increased damage reduction while no enemies are nearby
+					Social Distancing - When getting hit by contact damage, release a wall of expression depending on your current Look of the Day
 					|Shyness - Cannot be used while not having Look of the Day, Look of the Day changes randomly after 3 seconds
-					Incomplete and unobtainable
 					'''
 			}
 
@@ -148,9 +147,8 @@ Mods: {
 					I CANT RESIST IT!!! - Alternate Attack to deal a heavy short range attack with bonus damage against Extensive Bleeding and removes it
 					Extensive Bleeding - Deals damage to enemies after they deal contact damage, maximum damage inflicted is equal to enemy's contact damage
 					Obsession - Inflict Extensive Bleeding and extend its duration on continous hits
-					Axe - Deal increased damage and increased Attack Speed against enemies with Extensive Bleeding
-					|Glitter - Enemies are more likely to target you, Periodically attempts to force enemies to target you. Can only hit enemies targeting you.
-					Incomplete and unobtainable
+					Axe - Deal up to 20% increased damage and increased Attack Speed against enemies with Extensive Bleeding
+					|Glitter - Enemies are more likely and are periodically forced to target you. Take 15% increased damage from enemies that have Glitter
 					'''
 			}
 
@@ -158,12 +156,11 @@ Mods: {
 				ItemTooltip: "Unsurprisingly, not a single employee volunteered to retrieve the corpse of their cocooned colleague."
 				PassiveList:
 					'''
-					Cry Out - Alternate attack to teleport and inflict Cocoon on a marked Meal
-					Meal - After hitting enemies enough times or it kills a Spiderling critter, Marks them as Meal indicated by its Color and an Eye icon
-					Cocoon - -8 defense and 12% decreased damage
+					Cry Out - Alternate attack to teleport and inflict Cocoon on a marked Meal, Only 3 enemies can be Cocooned at a time
+					Meal - After hitting enemies enough times, Marks them as Meal indicated by its Color and an Eye icon
+					Cocoon - -8 defense and 12% decreased damage, Restricts non boss movement
 					Spiderling - While this weapon is held, Spiderling critters spawn in and Cocooned enemies are periodically attacked by Spiderlings
-					|Alertness - This weapon is only usable if the user was hurt holding this weapon or a Spiderling critter was killed by an enemy
-					Incomplete and unobtainable
+					|Alertness - This weapon has no downsides for now
 					'''
 			}
 
@@ -176,7 +173,6 @@ Mods: {
 					Funny Prank - After dealing enough indirect damage (with allies or minions) against enemies with Gift. The Gift explodes and deals damage
 					Friend - Friends spawn from Gift explosion and becomes a minion, after dealing enough damage they explode
 					|Being Lonely is Sad - If the last Friend explodes, 100% increased damage taken until death or a new Friend spawns
-					Incomplete and unobtainable
 					'''
 			}
 
@@ -185,11 +181,10 @@ Mods: {
 				PassiveList:
 					'''
 					Clothing of Nettle - Gain a Nettle after 5 seconds, Up to 6. A Nettle upgrades Black Swan. Also reduces incoming damage by 75%, Attackers also take damage and consumes it
-					Shriek of Broken Dreams - While having 4 or more Nettles, or Broken Dream; Alternate Attack transforms to Shriek, damaging enemies around you
-					Gooey Waste - Leave a trail of debuffing waste while having 2 or more Nettles, or Broken Dream. Spreads sporatically while Shrieking
-					Well-worn Parasol - Poking or Swinging this weapon deflects Projectiles when timed correctly, Poking can be held to deflect for a longer time
-					|Broken Dream - Getting hit without a Nettle disables Clothing of Nettle for 30 seconds and increases damage taken by 30%
-					Incomplete and unobtainable
+					Shriek of Broken Dreams - While having 4 or more Nettles, Alternate Attack transforms to Shriek which damaging enemies around you and consumes a nettle
+					Gooey Waste - Leave a trail of debuffing waste while having 2 or more Nettles. Spreads sporatically while attacking, or Shrieking
+					Well-worn Parasol - Poking or Swinging this weapon deflects Projectiles when timed correctly, can be held to deflect for a longer time
+					|Broken Dream - Getting hit without a Nettle disables Clothing of Nettle for 30 seconds, increasing damage taken by 30% and activates most Nettle effects. Shrieking will extend the duration by 6 seconds
 					'''
 			}
 			
@@ -199,7 +194,7 @@ Mods: {
 				ItemTooltip: "You see a song in front of you. It's approaching, becoming more colorful by the second."
 				PassiveList:
 					'''
-					Echoes from the Beyond - Alternate attack to damage enemies around you, Inflicts Enlightenment for 10 seconds if it deals enough damage
+					Echoes from the Beyond - Alternate attack to damage enemies around you, Inflicts 10 Enlightenment
 					Enlightenment - Other allies deal 20% increased damage
 					Tentacles - Pierced enemies has less damage resistance from Echoes from the Beyond (Up to 200%)
 					|Understand - The user deals 50% decreased damage against enemies with Enlightenment
@@ -213,7 +208,7 @@ Mods: {
 					An Eternal Farewell - Summon meteors that explodes, healing the user and its allies
 					A Token of Friendship - Allies healed by this weapon gain a Pebble that is only removed when they die
 					Pebble - Gain increased life regeneration based on how many other allies have Pebble
-					|Teardrop - If an ally with a stone die, the user and all other allies with stones also die
+					|Teardrop - If an ally with a Pebble die, the user and all other allies with stones also die
 					'''
 			}
 
@@ -222,10 +217,10 @@ Mods: {
 				PassiveList:
 					'''
 					Time for the Head to Burst - Alternate attack use 20 Mana, Forcefully explodes Pleasure
-					Pleasure - Attacks inflict Pleasure to enemies, decreasing damage taken from this weapon
-					Thorns - If the attacker has Pleasure, reflect damage taken
-					Elation - After an enemy has enough Pleasure, they explode
-					Fluttering - Take no damage from Projectiles if no enemy is nearby
+					Pleasure - Attacks inflict Pleasure to enemies, increasing damage taken from this weapon
+					Thorns - If the attacker has Pleasure, reflect 60% of damage taken and heal 10% of the damage back
+					Elation - After an enemy has enough Pleasure, they explode into hearts
+					Fluttering - Take no health damage from Projectiles if no enemy is nearby
 					|Laughing Powder - Heavily decreased Mana regeneration, Mana decreases when taking damage. When Mana reaches 0 take 50% damage from your health and set Mana to max
 					'''
 			}
@@ -256,9 +251,6 @@ Mods: {
 			
 			#Natural
 
-			MagicalGirl: Magical Girl - This weapon changes when its positive effects are activated
-			MinorArcana: Minor Arcana - This weapon changes when its negative effects are activated
-
 			InTheNameOfLoveAndHate: {
 				ItemTooltip: "In the name of Love and Justice~ Here comes Magical Girl!"
 				PassiveList:
@@ -267,14 +259,7 @@ Mods: {
 					Justice - Hitting an enemy or getting hit reduces Arcana Slave cost, resets when used
 					Villain - Hitting an enemy with Arcana Beats marks them, increasing Justice and Hate gained
 					Love - Increases defense and lowers damage when hitting enemies
-					|Hate - Getting hit reduces defense and increases damage, Maximum hate turns all attacks of this weapon into lasers
-					'''
-				PassiveList2:
-					'''
-					Love - Increases overtime
-					|Arcana Slave - Summon a laser of Love and Justice that costs {$0} mana, Resets to maximum when used
-					Hate - Getting hit reduces defense and increases damage, reduces Arcana Slave cost
-					Villain - Temporarily gain an increased 20% damage boost after getting hit
+					|Hate - Getting hit reduces defense and increases damage. After getting hit enough times, turns all attacks of this weapon into lasers
 					'''
 			}
 
@@ -285,15 +270,9 @@ Mods: {
 					Heart-piercing sword - Summon three swords that floats around you
 					Whetted with Teardrops - Critical hits ignores defense
 					Blessing - When a teammate stands near you while using with this weapon, they gain Blessed buff. Only one Blessed at a time
-					|Despair - When a Blessed teammate dies, Turn to despair
+					Blessed - 50% decreased damage taken, 10% chance to recieve double damage with no reduction instead, Only active while this weapon is held
+					|Despair - If no Blessed teammate is present, Attacks deals a flat amount of damage, -10 defense and if a sword misses, it impales the user
 					This Item is incomplete and unobtainable
-					'''
-				PassiveList2:
-					'''
-					Justice - Restore 25% health after 
-					|Sharpened with Tears - Swords deal a flat amount of damage and ignores all defense
-					Despair - 20% increased damage and -10 defense
-					Sword that pierces Despair - If a sword miss, It impales back to the user
 					'''
 			}
 
@@ -301,10 +280,10 @@ Mods: {
 				ItemTooltip: "...Sadness says: 'Begone, pass away!' But greed seeks eternity—seeks deep, deep eternity."
 				PassiveList:
 					'''
-					Road of the King - Destroy all Fragments of Bliss, Creates a portal through both sides
+					Road of the King - Alternate attack to destroy all Fragments of Bliss, Creates a portal through both sides and sequentially teleport through them
 					Fragment of Bliss - Attacked enemies are given a Brilliant Bliss
-					Intemperance - Critical hits heal 10% of its damage and temporarily reduces 
-					|Greed - a
+					Intemperance - Critical hits heal 10% of its damage and temporarily reduces enemy defense
+					|Greed - While under 50% health, 40% decreased attack speed and movement and gain 30% critical strike chance, Road of king only targets 1 enemy
 					'''
 			}
 
@@ -312,10 +291,10 @@ Mods: {
 				ItemTooltip: "We... We were true friends... Right?"
 				PassiveList:
 					'''
-					EMBODIMENTS OF EVIL!!!! - All attacks have a splash radius
-					Acidic Sludge - Attacks apply Erosion, increasing damage taken by up to 15%
-					Companion - Mark the first enemy hit with Companion. When killing the marked enemy, heal back to full health
-					|Wrath - After taking a total damage equal to 25% of your health, Increased splash radius, attacks erratically and be able to hit allies
+					EMBODIMENTS OF EVIL!!!! - All attacks have a splash radius that inflicts Acidic Sludge
+					Acidic Sludge - Up to 15% increased damage taken
+					Companion - Mark an ally with Companion, Gain
+					|Wrath - After taking a total damage equal to 25% of your health, Increased splash radius, attacks erratically and be able to hit allies. Companion transforms into a monster
 					'''
 			}
 
@@ -341,11 +320,11 @@ Mods: {
 				PassiveList:
 					'''
 					Bullet Shower - Alternate attack to shoot a barrage of bullets
-					Strike without Hesitation - Under 50% health, attacks turn into thrown sickles and Bullet Shower increases in intensity and inaccuracy
+					Strike without Hesitation - Under 50% health, attacks turn into thrown sickles and Bullet Shower increases in intensity and inaccuracy, Can hit allies
 					Prey - First enemy hit by a bullet is marked as Prey and shows its general direction
 					Rudded Welts - Gain increased damage depending on health loss, up to 20% at 25% health
 					Vengeance - Getting hit by Prey temporarily increases damage by 20%
-					|Fury with no Outlet - When a Prey is not killed by the player or despawns, be unable to use any other weapons or items for 1 minute. Can hit allies
+					|Fury with no Outlet - When a Prey is not killed by the player or despawns, be unable to use any other weapons or items and Strike without Hesitation is active for 1 minute
 					'''
 			}
 
@@ -380,7 +359,7 @@ Mods: {
 					Banquet of Blood - Alternate attack to attack everything currently on screen and consume 20% of your current health, if below 50% health it costs 10% instead
 					Vampirism - All attacks heal you and inflicts Vampirism and Fear of Water
 					Wine - If there are allies, apply Vampirism and Fear of Water to allies when using Banquet of Blood
-					|Fear of Water - Health constantly drains, this weapon's attacks changes under 50% health and returns to normal when reaching 75% health
+					|Fear of Water - Decreases life regeneration and Attacks costs 1% of maximum health, this weapon's attacks changes under 50% health and returns to normal when reaching 75% health
 					'''
 			}
 
@@ -391,7 +370,7 @@ Mods: {
 					heLLo? - Shoot a piercing projectile infront of you
 					GoDdByE - deal 200% more damage when hitting enemies on your attack's sweetspot
 					Mimic - Killing an enemy restores 20% of your health and grants A New Shell buff, disabling Shell
-					|Wear Shell - Gain the debuff Craving for 1 minute when using this weapon. When the debuff times out, the user dies
+					|Wear Shell - Gain the debuff Craving for 1 minute when using this weapon. When the debuff expires, the user dies
 					This Item is incomplete and unobtainable
 					'''
 			}
@@ -432,7 +411,7 @@ Mods: {
 			}
 
 			HomingInstinct: {
-				ItemTooltip: "Let's walk together. To a wonderful land… The world of dreams."
+				ItemTooltip: "Let's walk together. To a wonderful land... The world of dreams."
 				PassiveList:
 					'''
 					You... Wicked Wizard! - Drop a house
@@ -471,11 +450,11 @@ Mods: {
 				ItemTooltip: "A month later, we came to this conclusion: There was no such 'beast' in the forest."
 				PassiveList:
 					'''
-					Darkness - Alternate attack to cover the area with darkness, 
+					Darkness - Alternate attack to cover the area with darkness, nullifying defense and damage resistance.
 					Watchful Eyes - Mark enemies within the darkness, marked enemies have higher chance to target you
 					Eternally Lit Lamp - This weapon automatically attacks nearby marked enemies when held
 					Salvation - If an non boss enemy is targetting you and is near, has a 5% chance to instantly execute the enemy
-					|Sleepy Eyes - If there is no valid target 
+					|Sleepy Eyes - This weapon is unusable while there is no marked enemy
 					'''
 			}
 
@@ -717,7 +696,7 @@ Mods: {
 				5: This place will never be safe, you know.
 
 				6: Abandon your sense of guilt, everyone. They couldn't be saved anyways.
-				7: 'Cause this place is always horrible, the only thing I can hope for is a blissful end.
+				7: "'Cause this place is always horrible, the only thing I can hope for is a blissful end."
 
 				8: I never wanted to be in this position anyways. I never asked for this. Not once.
 				9: In the end, the hope that anyone will live on thanks to me is gone.

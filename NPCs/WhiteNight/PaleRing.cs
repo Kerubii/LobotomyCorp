@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.NPCs.WhiteNight
 {
+    [Autoload(LobotomyCorp.TestMode)]
     class PaleRing : ModProjectile
     {
         public override void SetStaticDefaults()

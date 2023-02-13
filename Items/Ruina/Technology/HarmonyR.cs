@@ -51,7 +51,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-			if (type == ModContent.ProjectileType<Projectiles.HarmonyShotR>() && LobotomyModPlayer.ModPlayer(player).HarmonyAddiction)
+			if (Main.myPlayer == player.whoAmI && type == ModContent.ProjectileType<Projectiles.HarmonyShotR>() && LobotomyModPlayer.ModPlayer(player).HarmonyAddiction)
             {
 				for (int i = -1; i < 2; i += 2)
 				{

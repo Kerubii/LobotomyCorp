@@ -33,7 +33,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			Item.value = 10000;
             Item.noMelee = true;
             Item.noUseGraphic = true;
-			Item.UseSound = SoundID.Item1;
+			//Item.UseSound = SoundID.Item1;
 			Item.autoReuse = true;
 			Item.rare = ItemRarityID.Yellow;
 
@@ -79,7 +79,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-			if (player.altFunctionUse != 2)
+			if (Main.myPlayer == player.whoAmI && player.altFunctionUse != 2)
             {
 				int face = LobotomyModPlayer.ModPlayer(player).TodaysExpressionFace;
 				switch (face)
@@ -107,6 +107,10 @@ namespace LobotomyCorp.Items.Ruina.Literature
 						damage = (int)(damage * 1.5f); 
 						break;
 				}
+				if (face == 4)
+					SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/Shy_Strong_Atk") with { Volume = 0.5f, MaxInstances = 2}, player.position);
+				else
+					SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/Shy_Atk") with { Volume = 0.5f, PitchVariance = 0.2f, MaxInstances = 2}, player.position);
 
 				Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, face);
 			}
@@ -116,6 +120,12 @@ namespace LobotomyCorp.Items.Ruina.Literature
 
         public override void AddRecipes() 
 		{
+			CreateRecipe()
+			   .AddIngredient(ModContent.ItemType<TodaysExpression>())
+			   .AddIngredient(ItemID.SoulofNight, 8)
+			   .AddRecipeGroup("LobotomyCorp:BossMasks")
+			   .AddTile<Tiles.BlackBox3>()
+			   .Register();
 		}
 	}
 }

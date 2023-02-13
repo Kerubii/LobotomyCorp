@@ -59,7 +59,7 @@ namespace LobotomyCorp.Items
             if (Item.useStyle == 1)
             {
                 float progress = 1f - player.itemAnimation / (float)player.itemAnimationMax;
-                float rotation = ItemRotation(progress, player.direction);
+                float rotation = ItemRotation(progress, 1);
                 LobCorpLight.PseudoUseStyleSwing(player, heldItemFrame, rotation);
 
                 if (progress > 0.5f)
@@ -82,7 +82,7 @@ namespace LobotomyCorp.Items
         {
             if (Item.useStyle == 1)
             {
-                LobCorpLight.PseudoUseItemFrame(player, ItemRotation(1f - player.itemAnimation / (float)player.itemAnimationMax, player.direction));
+                LobCorpLight.LobItemFrame(player, ItemRotation(1f - player.itemAnimation / (float)player.itemAnimationMax, player.direction));
             }
         }
 

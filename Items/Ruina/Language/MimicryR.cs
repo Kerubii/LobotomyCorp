@@ -6,7 +6,8 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Language
 {
-	public class MimicryR : SEgoItem
+    [Autoload(LobotomyCorp.TestMode)]
+    public class MimicryR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{

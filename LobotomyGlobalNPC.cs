@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoMod.Cil;
 using System;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
@@ -10,6 +11,35 @@ namespace LobotomyCorp
 {
 	public class LobotomyGlobalNPC : GlobalNPC
     {
+        public override void Load()
+        {
+            IL.Terraria.NPC.TargetClosest += forcetarget;
+
+            base.Load();
+        }
+
+        private void forcetarget(ILContext il)
+        {
+            var c = new ILCursor(il);
+            if (!c.TryGotoNext(i => i.MatchLdloc(3)))
+                throw new NotImplementedException("A Mod is Incompatible, Report to Mod Author");
+
+            c.Emit(Mono.Cecil.Cil.OpCodes.Ldarg_0);
+            c.EmitDelegate<Action<NPC>>((npc) =>
+            {
+                npc.GetGlobalNPC<LobotomyGlobalNPC>().ForceChangeTarget(npc);
+            });
+        }
+
+        public void ForceChangeTarget(Terraria.NPC npc)
+        {
+            if (SanguineDesireGlitter && SanguineDesireGlitterTarget > -1 && !Main.player[SanguineDesireGlitterTarget].dead)
+            {
+                npc.target = SanguineDesireGlitterTarget;
+            }
+            //Main.NewText("Code is running, Target is " + SanguineDesireGlitterTarget);
+        }
+
         public override bool InstancePerEntity
         {
             get
@@ -39,6 +69,8 @@ namespace LobotomyCorp
         private int RedEyesMealDecay = 0;
         public int RedEyesCocoonPlayer = -1;
         public int RedEyesCocoonCooldown = 0;
+
+        public bool RegretMetallicRinging = false;
 
         public bool SanguineDesireGlitter = false;
         public int SanguineDesireGlitterTarget = -1;
@@ -82,6 +114,8 @@ namespace LobotomyCorp
             }
             else
                 RedEyesMealDecay--;
+
+            RegretMetallicRinging = false;
 
             if (!SanguineDesireGlitter)
                 SanguineDesireGlitterTarget = -1;
@@ -191,6 +225,19 @@ namespace LobotomyCorp
                 damage = (int)(damage * 1.1f);
             }
 
+            if (SanguineDesireGlitter)
+            {
+                if (SanguineDesireGlitterTarget == target.whoAmI)
+                    damage = (int)(damage * 1.15f);
+                else
+                    damage = (int)(damage * 0.8f);
+            }
+
+            if (RedEyesCocoon)
+            {
+                damage = (int)(damage * 0.88f);
+            }
+
             base.ModifyHitPlayer(npc, target, ref damage, ref crit);
         }
 
@@ -237,10 +284,11 @@ namespace LobotomyCorp
             if (LaetitiaGiftOwner >= 0)
             {
                 LaetitiaGiftDamage += damage;
-                if (LaetitiaGiftDamage > 1700f)
+                if (LaetitiaGiftDamage > 10f)
                 {
                     Main.player[LaetitiaGiftOwner].ApplyDamageToNPC(npc, LaetitiaGiftDamage, 0f, 1, false);
-                    Projectile.NewProjectile(Main.player[LaetitiaGiftOwner].GetSource_FromThis(), npc.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LaetitiaFriend>(), 60, 3.5f, LaetitiaGiftOwner);
+                    if (Main.myPlayer == LaetitiaGiftOwner)
+                        Projectile.NewProjectile(Main.player[LaetitiaGiftOwner].GetSource_FromThis(), npc.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LaetitiaFriend>(), 60, 3.5f, LaetitiaGiftOwner);
 
                     for (int i = 0; i < 16; i++)
                     {
@@ -253,6 +301,13 @@ namespace LobotomyCorp
                     LaetitiaGiftOwner = -1;
                 }
             }
+
+            if (RegretMetallicRinging && projectile.type == ModContent.ProjectileType<Projectiles.Realized.RegretR>() && projectile.owner == Main.myPlayer)
+            {
+                Player player = Main.player[projectile.owner];
+                int type = ModContent.ProjectileType<Projectiles.Realized.RegretShock>();
+                Projectile.NewProjectile(player.GetSource_FromThis(), npc.Center, Vector2.Zero, type, projectile.damage, 0.2f, projectile.owner);
+            }
         }
 
         public override void DrawEffects(NPC npc, ref Color drawColor)
@@ -260,16 +315,26 @@ namespace LobotomyCorp
             if (BeakTarget > 0)
                 drawColor = Color.Red;
 
+            if (SanguineDesireGlitter && SanguineDesireGlitterTarget == Main.myPlayer)
+            {
+                if (Main.rand.NextBool(5))
+                {
+                    Dust d = Dust.NewDustPerfect(npc.Center, DustID.PinkCrystalShard);
+                    d.noGravity = true;
+                    d.scale = 0.5f;
+                }
+            }
+
             if (MatchstickBurn)
             {
                 if (MatchstickBurnTime < 20)
                 {
-                    if (Main.rand.Next(25 - MatchstickBurnTime) == 0)
+                    if (Main.rand.NextBool(25 - MatchstickBurnTime))
                         Dust.NewDust(npc.position, npc.width, npc.height, DustID.Torch);
                 }
                 else
                 {
-                    if (Main.rand.Next(2) == 0)
+                    if (Main.rand.NextBool(2))
                     {
                         float scale = 0.5f + MatchstickBurnTime / 40f;
                         if (scale > 4f)
@@ -288,7 +353,7 @@ namespace LobotomyCorp
 
             if (Main.netMode != NetmodeID.Server)
             {
-                if (RedEyesMealAmount > 0 && Main.LocalPlayer.HeldItem.type == ModContent.ItemType<Items.Ruina.Literature.RedEyesR>())
+                if (RedEyesMealAmount > 0 && LobotomyModPlayer.ModPlayer(Main.LocalPlayer).RedEyesAlerted)// Main.LocalPlayer.HeldItem.type == ModContent.ItemType<Items.Ruina.Literature.RedEyesR>())
                 {
                     int RedEyesMax = LobotomyModPlayer.ModPlayer(Main.LocalPlayer).RedEyesMealMax;
                     if (RedEyesMealAmount > RedEyesMax)
@@ -375,6 +440,19 @@ namespace LobotomyCorp
                     spriteBatch.Draw(texture, position, null, Color.White * 0.7f, rotation, texture.Size() / 2, scale, 0, 0);
                 }
             }
+
+            if (SanguineDesireGlitter && SanguineDesireGlitterTarget == Main.myPlayer && SanguineDesireGlitterTarget == npc.target)
+            {
+                Texture2D texture = LobotomyCorp.RedShoesGlittering.Value;
+                Vector2 scale = new Vector2(npc.width / 50f, npc.width / 50f * 0.8f) * 0.75f;
+                if (npc.height > npc.width)
+                {
+                    scale = new Vector2(npc.height / 50f, npc.height / 50f * 0.8f) * 0.75f;
+                }
+                Color color = Color.White * (0.7f + 0.1f * (float) Math.Sin(0.03f * Main.timeForVisualEffects));
+
+                spriteBatch.Draw(texture, npc.Center - Main.screenPosition + Vector2.UnitY * (npc.gfxOffY - npc.height * 0.25f), texture.Frame(), color, 0f, texture.Size() / 2, scale, 0, 0);
+            }
         
             if (LaetitiaGiftOwner >= 0)
             {
@@ -388,6 +466,17 @@ namespace LobotomyCorp
                 Rectangle frame = texture.Frame();
 
                 spriteBatch.Draw(texture, position, frame, drawColor, 0f, frame.Size()/2, scale, SpriteEffects.None, 0f);
+            }
+            if (Main.netMode != NetmodeID.Server)
+            {
+                if (RedEyesMealAmount >= LobotomyModPlayer.ModPlayer(Main.LocalPlayer).RedEyesMealMax && LobotomyModPlayer.ModPlayer(Main.LocalPlayer).RedEyesAlerted)
+                {
+                    Texture2D texture = Mod.Assets.Request<Texture2D>("Misc/MarkedMeal").Value;
+                    Vector2 position = npc.Center + new Vector2(0, npc.gfxOffY) - Main.screenPosition;
+                    float scale = 1f + 0.2f * (float)Math.Sin(0.052f * Main.timeForVisualEffects);
+
+                    spriteBatch.Draw(texture, position, null, Color.White * (0.5f + 0.2f * (float)Math.Sin(0.15f * Main.timeForVisualEffects)), 0f, texture.Size() / 2, scale, 0, 0);
+                }
             }
         }
 
@@ -463,7 +552,7 @@ namespace LobotomyCorp
         public static void SpawnHornet(NPC npc, int player = -1, int damage = 0, float knockBack = 0)
         {
             Mod Mod = ModLoader.GetMod("LobotomyCorp");
-            if (LNPC(npc).QueenBeeLarva)
+            if (Main.myPlayer == player && LNPC(npc).QueenBeeLarva)
             {
                 if (player <= -1)
                 {
@@ -522,6 +611,17 @@ namespace LobotomyCorp
             }
             else
                 npc.AddBuff(ModContent.BuffType<Buffs.ExtensiveBleeding>(), time);
+        }
+
+        public static int SanguineDesireConsumeBleed(NPC npc)
+        {
+            LobotomyGlobalNPC Lnpc = LNPC(npc); 
+            int bleedAmount = (int)Lnpc.SanguineDesireExtensiveBleedAmount;
+            Lnpc.SanguineDesireExtensiveBleedAmount = 0;
+            Lnpc.SanguineDesireExtensiveBleeding = false;
+            npc.RequestBuffRemoval(ModContent.BuffType<Buffs.ExtensiveBleeding>());
+
+            return bleedAmount;
         }
     }
 }

@@ -56,7 +56,8 @@ namespace LobotomyCorp.Items
                     order++;
                 if (i == 4)
                     order = 2;
-                Projectile.NewProjectile(source, position, Vector2.Zero, type, damage, knockback, player.whoAmI, order);
+                if (Main.myPlayer == player.whoAmI)
+                    Projectile.NewProjectile(source, position, Vector2.Zero, type, damage, knockback, player.whoAmI, order);
             }
 
             return false;

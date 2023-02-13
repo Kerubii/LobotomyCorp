@@ -73,6 +73,7 @@ namespace LobotomyCorp.Items.Ruina.History
                 Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/MatchGirl_Atk") with {Volume = 0.25f};
                 LobotomyModPlayer.ModPlayer(player).FourthMatchExplode();
                 LobotomyModPlayer.ModPlayer(player).FourthMatchFlameR = 0;
+                ModContent.GetInstance<LobSystem>().ScreenShake(15, 10f, 0.1f);
             }
             return true;
         }

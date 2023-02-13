@@ -14,6 +14,7 @@ namespace LobotomyCorp.Items
 			Tooltip.SetDefault("The yearning to imitate the human form is sloppily reflected on the E.G.O.\n" +
 							   "As if it were a reminder that it should remain a mere desire.\n" +
 							   "It can deliver a powerful downswing that should be impossible for a human.\n" +
+							   "Can be charged for 300% increased damage\n" +
 							   "Recovers 25% damage dealt on hit");
 		}
 

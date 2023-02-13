@@ -117,7 +117,7 @@ namespace LobotomyCorp.Utils
 
     public class BonePart
     {
-        Vector2[] Offset;
+        Vector2[] offset;
         bool InheritOffset;
         float[] Rotation;
         bool InheritRotation;
@@ -136,11 +136,11 @@ namespace LobotomyCorp.Utils
 
         public BonePart(Vector2 initOffset, float initRot, float initScale, float length, BonePart BoneParent = null, int oldRecord = 1)
         {
-            Offset = new Vector2[oldRecord];
+            offset = new Vector2[oldRecord];
             Rotation = new float[oldRecord];
             Scale = new float[oldRecord];
 
-            Offset[0] = initOffset;
+            offset[0] = initOffset;
             Rotation[0] = initRot;
             Scale[0] = initScale;
             Length = length;
@@ -164,12 +164,12 @@ namespace LobotomyCorp.Utils
 
         public void Record()
         {
-            for (int i = Offset.Length - 1; i > 0; i--)
+            for (int i = offset.Length - 1; i > 0; i--)
             {
                 if (i > 0)
                 {
-                    if (Offset[i - 1] != null)
-                        Offset[i] = Offset[i - 1];
+                    if (offset[i - 1] != null)
+                        offset[i] = offset[i - 1];
 
                     Rotation[i] = Rotation[i - 1];
                     Scale[i] = Scale[i - 1];
@@ -186,7 +186,7 @@ namespace LobotomyCorp.Utils
                     newPos = GetPosition();
                 else
                     newPos = Parent.EndPoint() - GetPosition();
-                Offset[0] = newPos;
+                offset[0] = newPos;
                 InheritOffset = To;
             }
             return this;
@@ -224,7 +224,7 @@ namespace LobotomyCorp.Utils
         {
             if (speed > 0)
             {
-                Vector2 bonePos = Offset[0];
+                Vector2 bonePos = offset[0];
                 Vector2 delta = newPos - bonePos;
 
                 if (delta.Length() > speed)
@@ -232,11 +232,11 @@ namespace LobotomyCorp.Utils
                     delta.Normalize();
                     delta *= speed;
                 }
-                Offset[0] += delta;
+                offset[0] += delta;
             }
             else if (speed < 0)
             {
-                Offset[0] = newPos;
+                offset[0] = newPos;
             }
 
             if (rotSpeed > 0)
@@ -250,6 +250,11 @@ namespace LobotomyCorp.Utils
             ChangeBone(newPos, speed, 0, 0);
         }
 
+        public void ChangeOffsetLerp(Vector2 newPos, float lerp)
+        {
+            ChangeBone(Vector2.Lerp(offset[0], newPos, lerp), -1, 0, 0);
+        }
+
         public void ChangeRotation(float Rotation, float speed = -1)
         {
             ChangeBone(Vector2.Zero, 0, Rotation, speed);
@@ -257,10 +262,10 @@ namespace LobotomyCorp.Utils
 
         public Vector2 GetPosition(int dir = 1, int i = 0)
         {
-            Vector2 offset = new Vector2(Offset[i].X, Offset[i].Y * dir) * GetScale(i);
+            Vector2 positionOffset = new Vector2(offset[i].X, offset[i].Y * dir) * GetScale(i);
             if (InheritOffset)
-                return offset.RotatedBy(Parent.GetRotation(dir, i)) + Parent.EndPoint(dir, i);
-            return offset;
+                return positionOffset.RotatedBy(Parent.GetRotation(dir, i)) + Parent.EndPoint(dir, i);
+            return positionOffset;
         }
 
         public Vector2 EndPoint(int dir = 1, int i = 0)

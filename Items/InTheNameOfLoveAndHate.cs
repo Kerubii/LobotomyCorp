@@ -40,7 +40,8 @@ namespace LobotomyCorp.Items
 			{
 				position = pos2;
 			}
-			Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Main.rand.Next(4));
+			if (Main.myPlayer == player.whoAmI)
+				Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Main.rand.Next(4));
 			return false;
         }
 

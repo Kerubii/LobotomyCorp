@@ -5,6 +5,7 @@ using static Terraria.ModLoader.ModContent;
 
 namespace LobotomyCorp.Items.Tools
 {
+    [Autoload(LobotomyCorp.TestMode)]
     public class HeartOfAspiration : ModItem
     {
         public override void SetStaticDefaults()

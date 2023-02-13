@@ -99,8 +99,8 @@ namespace LobotomyCorp.Projectiles
 
             float scale = target.width > target.height ? target.width : target.height * 0.8f;
             scale /= 76f;
-
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<Censored>(), 0, 0, Projectile.owner, scale, target.whoAmI);
+            if (Main.myPlayer == Projectile.owner)
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<Censored>(), 0, 0, Projectile.owner, scale, target.whoAmI);
         }
 
         public override bool ShouldUpdatePosition()
@@ -248,8 +248,8 @@ namespace LobotomyCorp.Projectiles
 
             float scale = target.width > target.height ? target.width : target.height * 0.8f;
             scale /= 76f;
-
-            Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<Censored>(), 0, 0, Projectile.owner, scale, target.whoAmI);
+            if (Main.myPlayer == Projectile.owner)
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<Censored>(), 0, 0, Projectile.owner, scale, target.whoAmI);
         }
 
         public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)

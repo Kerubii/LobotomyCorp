@@ -63,6 +63,10 @@ namespace LobotomyCorp.Projectiles
                     rot += MathHelper.ToRadians(Lerp(-140, 30, progress2 % 0.3f / 0.3f)) * Projectile.spriteDirection;
                     projOwner.velocity += Projectile.velocity;
                     projOwner.velocity.Y -= projOwner.gravity;
+                    //projOwner.maxFallSpeed = projOwner.velocity.Y;
+                    LobotomyModPlayer.ModPlayer(projOwner).ForcePlayerVelocity(projOwner.velocity);
+                    SpawnTwilightSlashes(3);
+
                     //projOwner.position = PreviousPosition + Projectile.velocity * Lerp(0, distance, progress2 % .3f / .3f);
                 }
                 else if (progress2 < .5f)
@@ -88,7 +92,7 @@ namespace LobotomyCorp.Projectiles
             else if (progress < 0.66f)
             {
                 float progress2 = progress % .33f / .33f;
-                if (progress2 < .3f)
+                if (progress2 <= .3f)
                 {
                     if (Projectile.localAI[0] < 1)
                     {
@@ -100,6 +104,9 @@ namespace LobotomyCorp.Projectiles
                     //projOwner.position = PreviousPosition + Projectile.velocity * distance * (float)Math.Sin(1.57f + 1.57f * (progress2 % .3f / .3f));
                     projOwner.velocity -= Projectile.velocity;
                     projOwner.velocity.Y -= projOwner.gravity;
+                    LobotomyModPlayer.ModPlayer(projOwner).ForcePlayerVelocity(projOwner.velocity);
+
+                    SpawnTwilightSlashes(3);
                 }
                 else if (progress < .8f)
                 {
@@ -123,10 +130,13 @@ namespace LobotomyCorp.Projectiles
                     if (Projectile.localAI[0] < 2)
                     {
                         SoundEngine.PlaySound(LobotomyCorp.WeaponSound("judgement2_3"), ownerMountedCenter);
+                        if (Main.myPlayer == Projectile.owner) ;
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), projOwner.Center, Vector2.Normalize(Projectile.velocity) * 18f, ModContent.ProjectileType<TwilightSlash>(), (int)(Projectile.damage * 0.8f), Projectile.knockBack, Projectile.owner);
                         Projectile.localAI[0] = 2;
                     }
 
                     rot += MathHelper.ToRadians(-80 + 230 * (float)Math.Sin(1.65f * (progress2 % .5f / .5f))) * Projectile.spriteDirection;
+
                 }
                 else
                 {
@@ -134,10 +144,11 @@ namespace LobotomyCorp.Projectiles
                     {
                         SoundEngine.PlaySound(LobotomyCorp.WeaponSound("judgement2_4"), ownerMountedCenter);
                         Projectile.localAI[0] = 3;
+                        if (Main.myPlayer == Projectile.owner) ;
+                            Projectile.NewProjectile(Projectile.GetSource_FromThis(), projOwner.Center, Vector2.Normalize(Projectile.velocity) * 18f, ModContent.ProjectileType<TwilightSlash>(), (int)(Projectile.damage * 0.8f), Projectile.knockBack, Projectile.owner);
                     }
-
                     rot += MathHelper.ToRadians(180 + 320 * (0.5f * (float)Math.Cos(3.14f * (progress2 % .5f / .5f) + 3.14f) + 0.5f)) * Projectile.spriteDirection;
-                }  
+                }
 
                 //rot += MathHelper.ToRadians(Lerp(-140, 505, progress2)) * Projectile.spriteDirection;
 
@@ -211,6 +222,32 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
+        private void SpawnTwilightSlashes(int amount)
+        {
+            if (Main.myPlayer != Projectile.owner)
+                return;
+            Player onwer = Main.player[Projectile.owner];
+            float angle = Main.rand.NextFloat(6.28f);
+            Vector2 velocity = new Vector2(16f, 0f).RotatedBy(angle) * Main.rand.NextFloat(0.5f, 1f);
+            Vector2 position = -velocity * 15;
+            int offsetX = Projectile.width/2;
+            int offsetY = Projectile.height/2;
+
+            position += onwer.Center;
+
+            position.X += Main.rand.Next(-offsetX, offsetX);
+            position.Y += Main.rand.Next(-offsetY, offsetY);
+            int type = ModContent.ProjectileType<Projectiles.TwilightStrikes>();
+            if (Main.rand.NextBool(5))
+            {
+                position += velocity * 15;
+                velocity *= 0;
+                type = ModContent.ProjectileType<Projectiles.TwilightSlashes>();
+            }
+            if (Main.myPlayer == Projectile.owner)
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), position, velocity, type, Projectile.damage / (amount + 2), 0, Projectile.owner, -1, amount);
+        }
+
         public override bool ShouldUpdatePosition()
         {
             return false;
@@ -236,6 +273,7 @@ namespace LobotomyCorp.Projectiles
 
         public override void OnHitNPC(NPC target, int damage, float knockBack, bool crit)
         {
+            /*
             if (LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).TwilightSpecial < 9)
             {
                 LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).TwilightSpecial++;
@@ -251,7 +289,10 @@ namespace LobotomyCorp.Projectiles
                     }
                     LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).TwilightSpecial++;
                 }
-            }
+            }*/
+            //float angle = Main.rand.NextFloat(6.28f);
+            //Vector2 velocity = new Vector2(16f, 0f).RotatedBy(angle);
+            //Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center - velocity * 15, velocity, ModContent.ProjectileType<Projectiles.TwilightStrikes>(), damage / 2, 0, Projectile.owner, target.whoAmI, 1);
         }
 
         public override bool PreDraw(ref Color lightColor)

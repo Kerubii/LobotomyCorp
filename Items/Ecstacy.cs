@@ -37,12 +37,15 @@ namespace LobotomyCorp.Items
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Main.rand.Next(5));
-            for (int i = 0; i < 5; i++)
-            {
-                Vector2 speed = velocity.RotatedByRandom(MathHelper.ToRadians(15));
-                Projectile.NewProjectile(source, position, speed * Main.rand.NextFloat(0.3f, 0.7f), type, (int)(damage * 0.2f), knockback, player.whoAmI, Main.rand.Next(5));
-            }
+			if (Main.myPlayer == player.whoAmI)
+			{
+				Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI, Main.rand.Next(5));
+				for (int i = 0; i < 5; i++)
+				{
+					Vector2 speed = velocity.RotatedByRandom(MathHelper.ToRadians(15));
+					Projectile.NewProjectile(source, position, speed * Main.rand.NextFloat(0.3f, 0.7f), type, (int)(damage * 0.2f), knockback, player.whoAmI, Main.rand.Next(5));
+				}
+			}
             return false;
         }
 

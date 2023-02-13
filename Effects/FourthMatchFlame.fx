@@ -19,6 +19,7 @@ float2 uImageOffset;
 float uSaturation;
 float4 uSourceRect;
 float2 uZoom;
+float4 uCustomData;
 
 float4 FMF(float4 color : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {

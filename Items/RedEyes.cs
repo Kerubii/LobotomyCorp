@@ -10,7 +10,8 @@ namespace LobotomyCorp.Items
         {
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
             Tooltip.SetDefault("The Spider Bud had dozens of eyes, and its children were always hungry.\n" +
-                               "This tenacity carried over to the E.G.O., demonstrating an outstanding ability to track down targets.");
+                               "This tenacity carried over to the E.G.O., demonstrating an outstanding ability to track down targets.\n" +
+                               "Grants swiftness buff for 3 seconds on hit");
         }
 
         public override void SetDefaults()

@@ -1,3 +1,4 @@
+using System;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -18,10 +19,20 @@ namespace LobotomyCorp.Buffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            if (npc.noGravity)
-                npc.velocity *= 0.95f;
+            if (npc.boss)
+            {
+                if (npc.noGravity && npc.velocity.Length() > 12f)
+                    npc.velocity *= 0.95f;
+                else if (Math.Abs(npc.velocity.X) > 12f)
+                    npc.velocity.X *= 0.95f;
+            }
             else
-                npc.velocity.X *= 0.95f;
+            {
+                if (npc.noGravity)
+                    npc.velocity *= 0.95f;
+                else
+                    npc.velocity.X *= 0.95f;
+            }
         }
     }
 }

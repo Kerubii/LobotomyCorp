@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -12,7 +13,8 @@ namespace LobotomyCorp.Items
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
 			Tooltip.SetDefault("It has the pale faces of nameless employees and a giant mouth on it.\n" +
-                               "Upon striking with the weapon, the monstrous mouth opens wide to devour the target, its hunger insatiable.");
+                               "Upon striking with the weapon, the monstrous mouth opens wide to devour the target, its hunger insatiable.\n" +
+							   "Alternate attack to slam down an enemy or the ground");
 
         }
 
@@ -48,8 +50,9 @@ namespace LobotomyCorp.Items
         {
 			if (player.altFunctionUse != 2)
 				ResetPlayerAttackCooldown(player);
-			float rotation = ItemRotation(player);
-            if ((player.direction == 1 && rotation < 0) ||
+			
+			float rotation = ItemRotation(player) - 90;
+            /*if ((player.direction == 1 && rotation < 0) ||
                     (player.direction == -1 && rotation > 0))
             {
 				player.itemLocation.X += 12 * player.direction;
@@ -63,8 +66,20 @@ namespace LobotomyCorp.Items
                     (player.direction == -1 && rotation > -180))
             {
 				player.itemLocation.X -= 12 * player.direction;
+			}*/
+
+			rotation = Math.Clamp(rotation, -180, 180);
+			rotation = MathHelper.ToRadians(rotation);
+			float x = (float)Math.Cos(rotation);
+			if (x < 0)
+			{
+				player.itemLocation.X += 12 * player.direction;
 			}
-        }
+			else
+			{
+				player.itemLocation.X -= 12 * player.direction;
+			}
+		}
 
         public override bool? UseItem(Player player)
         {

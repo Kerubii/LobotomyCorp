@@ -71,5 +71,17 @@ namespace LobotomyCorp.Projectiles
 				Projectile.rotation -= MathHelper.ToRadians(90);
 			}
 		}
-	}
+
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        {
+			target.AddBuff(ModContent.BuffType<Buffs.Slow>(), 180);
+            base.OnHitNPC(target, damage, knockback, crit);
+        }
+
+        public override void OnHitPlayer(Player target, int damage, bool crit)
+        {
+			target.AddBuff(ModContent.BuffType<Buffs.Slow>(), 180);
+			base.OnHitPlayer(target, damage, crit);
+        }
+    }
 }

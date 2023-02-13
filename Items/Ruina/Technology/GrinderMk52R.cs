@@ -48,9 +48,12 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
             if (player.ownedProjectileCounts[Item.shoot] == 0)
             {
-                for (int i = 0; i < 4; i++)
+                if (Main.myPlayer == player.whoAmI)
                 {
-                    Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, Item.shoot, Item.damage, Item.knockBack, player.whoAmI, i);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, Item.shoot, Item.damage, Item.knockBack, player.whoAmI, i);
+                    }
                 }
                 SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Helper_On") with {Volume = 0.25f}, player.Center);
             }

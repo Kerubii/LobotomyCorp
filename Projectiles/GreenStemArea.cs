@@ -119,7 +119,8 @@ namespace LobotomyCorp.Projectiles
                             Vector2 vel = Vector2.Normalize(targetCenter - vineSpawn) * 32;
 
                             int damage = Projectile.damage + (int)(Projectile.damage * 0.5f * (1f - projOwner.statLife / (float)projOwner.statLifeMax2));
-                            Projectile.NewProjectile(Projectile.GetSource_FromAI(), vineSpawn, vel, ModContent.ProjectileType<Projectiles.GreenStemVine>(), damage, 0, Projectile.owner, vineDist, vineAngle);
+                            if (Main.myPlayer == Projectile.owner)
+                                Projectile.NewProjectile(Projectile.GetSource_FromAI(), vineSpawn, vel, ModContent.ProjectileType<Projectiles.GreenStemVine>(), damage, 0, Projectile.owner, vineDist, vineAngle);
 
                             SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/SnowWhite_NormalAtk") with { Volume = 0.25f, MaxInstances = 12 }, vineSpawn);
 

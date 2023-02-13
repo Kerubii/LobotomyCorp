@@ -14,6 +14,8 @@ namespace LobotomyCorp.Projectiles.Realized
 {
     public class SanguineDesireR : ModProjectile
     {
+        public override string Texture => "LobotomyCorp/Items/Ruina/Literature/SanguineDesireR";
+
         public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
@@ -51,10 +53,11 @@ namespace LobotomyCorp.Projectiles.Realized
                 Projectile.ai[1] = 1;
             }*/
 
-            float rot = Projectile.velocity.ToRotation() - MathHelper.ToRadians(145) * projOwner.direction;
+            float rot = Projectile.velocity.ToRotation() - MathHelper.ToRadians(145) * projOwner.direction ;
 
             float progress = 1f - (float)projOwner.itemAnimation / (float)projOwner.itemAnimationMax;
-            
+
+            rot += WeaponRotation(projOwner, progress);
             /*if (progress < 0.3f)
             {
                 float swing = progress / 0.3f;
@@ -72,41 +75,63 @@ namespace LobotomyCorp.Projectiles.Realized
                 Projectile.scale = 1f + 0.2f * (float)Math.Sin(3.14f * swing);
             }*/
 
+            if (progress < 0.8f)
+            {
+                if (true)
+                {
+                    Vector2 position = projOwner.Center + new Vector2(80, 0).RotatedBy(rot);
+                    position.X -= Projectile.width / 4;
+                    position.Y -= Projectile.height / 4;
+
+                    Dust d = Main.dust[Dust.NewDust(position, Projectile.width / 2, Projectile.height / 2, DustID.Blood)];
+
+                    Vector2 vel = Projectile.velocity;// d.position - projOwner.Center;
+                    vel.Normalize();
+                    d.velocity = vel * 3;
+                    d.noGravity = true;
+                    d.fadeIn = 1.1f;
+                }
+            }
+
             if (progress < 0.3f)
             {
+                if (Projectile.localAI[0] == 0)
+                {
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/RedShoes_Strong_Vert") with { Volume = 0.5f, MaxInstances = 3}, Projectile.Center);
+                    Projectile.localAI[0] += 0.01f + Main.rand.NextFloat(0.95f);
+                }
+
                 progress = (progress) / 0.3f;
-                rot += MathHelper.ToRadians(190) * (float)Math.Sin(1.57f * progress) * projOwner.direction;
                 Projectile.scale = 1f + 0.2f * (float)Math.Sin(3.14f * progress);
             }
             else if (progress < 0.4f)
             {
-                progress = (progress - 0.3f) / 0.1f;
-                rot += MathHelper.ToRadians(190 + 10 * progress) * projOwner.direction;
             }
             else if (progress < 0.5f)
             {
-                progress = (progress - 0.4f) / 0.1f;
-                rot += MathHelper.ToRadians(200 - 200 * progress) * projOwner.direction;
             }
             else if (progress < 0.8f)
             {
+                if (Projectile.localAI[1] == 0)
+                {
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/RedShoes_Strong_Vert") with { Volume = 0.5f, MaxInstances = 3 }, Projectile.Center);
+                    Projectile.localAI[1] += 0.01f + Main.rand.NextFloat(0.95f);
+                }
+
                 progress = (progress - 0.5f) / 0.3f;
-                rot += MathHelper.ToRadians(190) * (float)Math.Sin(1.57f * progress) * projOwner.direction;
                 Projectile.scale = 1f + 0.2f * (float)Math.Sin(3.14f * progress);
             }
             else
             {
-                progress = (progress - 0.8f) / 0.2f;
-                rot += MathHelper.ToRadians(190 + 10 * progress) * projOwner.direction;
             }
 
             Vector2 velRot = new Vector2(1, 0).RotatedBy(rot);
-            projOwner.itemRotation = (float)Math.Atan2(velRot.Y * Projectile.direction, velRot.X * Projectile.direction);
+            //projOwner.itemRotation = (float)Math.Atan2(velRot.Y * Projectile.direction, velRot.X * Projectile.direction);
             projOwner.direction = Projectile.spriteDirection;
             Projectile.rotation = rot;// + MathHelper.ToRadians(Projectile.spriteDirection == 1 ? 45 : 135);
             //projOwner.SetCompositeArmFront(enabled: true, CompositeArmStretchAmount.Full, Projectile.rotation - 1.57f); //- 0.785f);// * owner.direction);
 
-            Items.LobCorpLight.LobItemFrame(projOwner, rot);
+            Items.LobCorpLight.LobItemFrame(projOwner, MathHelper.ToDegrees(rot), projOwner.direction);
 
             Projectile.Center = ownerMountedCenter + (60 + Projectile.ai[0]) * velRot;
 
@@ -126,6 +151,73 @@ namespace LobotomyCorp.Projectiles.Realized
             }
         }
 
+        private float WeaponRotation(Player player, float progress)
+        {
+            float rot = 0;
+            if (progress < 0.3f)
+            {
+                progress = (progress) / 0.3f;
+                rot += MathHelper.ToRadians(190) * (float)Math.Sin(1.57f * progress) * player.direction;
+            }
+            else if (progress < 0.4f)
+            {
+                progress = (progress - 0.3f) / 0.1f;
+                rot += MathHelper.ToRadians(190 + 10 * progress) * player.direction;
+            }
+            else if (progress < 0.5f)
+            {
+                progress = (progress - 0.4f) / 0.1f;
+                rot += MathHelper.ToRadians(200 - 200 * progress) * player.direction;
+            }
+            else if (progress < 0.8f)
+            {
+                progress = (progress - 0.5f) / 0.3f;
+                rot += MathHelper.ToRadians(210) * (float)Math.Sin(1.57f * progress) * player.direction;
+            }
+            else
+            {
+                progress = (progress - 0.8f) / 0.2f;
+                rot += MathHelper.ToRadians(210 + 10 * progress) * player.direction;
+            }
+
+            return rot;
+        }
+
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            Player projOwner = Main.player[Projectile.owner];
+            Vector2 ownerMountedCenter = projOwner.RotatedRelativePoint(projOwner.MountedCenter, true);
+
+            int length = 40;
+            float progress = 1f - (float)projOwner.itemAnimation / (float)projOwner.itemAnimationMax;
+
+            if (0.5f < progress && progress < 0.9f)
+            {
+                progress = (progress - 0.5f) / 0.5f;
+                length += (int)(75 * progress);
+            }
+
+            projHitbox.X += (int)(length * (float)Math.Cos(Projectile.rotation));
+            projHitbox.Y += (int)(length * (float)Math.Sin(Projectile.rotation));
+
+            if (targetHitbox.Intersects(projHitbox))
+                return true;
+
+            return base.Colliding(projHitbox, targetHitbox);
+        }
+
+        public override void ModifyDamageScaling(ref float damageScale)
+        {
+            int itemTime = Main.player[Projectile.owner].itemAnimation;
+            int itemMax = Main.player[Projectile.owner].itemAnimationMax;
+            if (((int)(itemMax * 0.95f) >= itemTime && itemTime >= (int)(itemMax * 0.7f)) ||
+                ((int)(itemMax * 0.45f) >= itemTime && itemTime >= (int)(itemMax * 0.2f)))
+            {
+                return;
+            }
+            damageScale = 0.6f;
+        }
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
             Projectile.ai[0] = -1;
@@ -133,6 +225,27 @@ namespace LobotomyCorp.Projectiles.Realized
             if (maximumDamage < Projectile.damage * 20)
                 maximumDamage = Projectile.damage * 20;
             LobotomyGlobalNPC.SanguineDesireApplyBleed(target, damage / 2f, maximumDamage, 60, 600);
+
+            int amount = 5 + Main.rand.Next(5);
+            for (int i = 0; i < amount; i++)
+            {
+                Dust d = Main.dust[Dust.NewDust(target.position, target.width, target.height, DustID.Blood)];
+                float rotation = (d.position - target.Center).ToRotation(); 
+
+                Vector2 dustVel = new Vector2(2f, 0).RotatedBy(rotation);
+                d.velocity = dustVel * Main.rand.NextFloat(2f);
+                d.noGravity = true;
+                d.fadeIn = 1f + Main.rand.NextFloat(0.4f);
+            }
+            Player projOwner = Main.player[Projectile.owner];
+            if (projOwner.itemAnimation >= (int)(projOwner.itemAnimationMax * 0.5f))
+            {
+                target.immune[Projectile.owner] = projOwner.itemAnimation - (int)(projOwner.itemAnimationMax * 0.5f);
+            }
+            else
+            {
+                target.immune[Projectile.owner] = projOwner.itemAnimation;
+            }
         }
 
         public override bool ShouldUpdatePosition()
@@ -143,24 +256,61 @@ namespace LobotomyCorp.Projectiles.Realized
         public override bool PreDraw(ref Color lightColor)
         {
             Player projOwner = Main.player[Projectile.owner];
+            Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
             Vector2 ownerMountedCenter = projOwner.RotatedRelativePoint(projOwner.MountedCenter, true);
             //Dust.NewDustPerfect(ownerMountedCenter, 14, Vector2.Zero);
-            Vector2 position = ownerMountedCenter - Main.screenPosition;
+            Vector2 position = Items.LobCorpLight.LobItemLocation(projOwner, tex.Frame(), MathHelper.ToDegrees(Projectile.rotation), projOwner.direction, 2) - Main.screenPosition;
             Vector2 originOffset = new Vector2(Projectile.ai[0] + 12, 0).RotatedBy(MathHelper.ToRadians(Projectile.direction == 1 ? 135 : 45));
-            Vector2 origin = new Vector2((Projectile.spriteDirection == 1 ? 9 : 74), 74) + originOffset;
+            Vector2 origin = new Vector2((Projectile.spriteDirection == 1 ? 14 : 70), 70) + originOffset;
             float rotation = Projectile.rotation + MathHelper.ToRadians(Projectile.spriteDirection == 1 ? 45 : 135);
             SpriteEffects spriteEffect = Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Main.EntitySpriteDraw(TextureAssets.Projectile[Projectile.type].Value, position, new Microsoft.Xna.Framework.Rectangle?
-                                    (
-                                        new Rectangle
-                                        (
-                                            0, 0, TextureAssets.Projectile[Projectile.type].Width(), TextureAssets.Projectile[Projectile.type].Height()
-                                        )
-                                    ),
-                lightColor * ((float)(255 - Projectile.alpha) / 255f), rotation, origin, Projectile.scale, spriteEffect, 0);
+            Main.EntitySpriteDraw(tex, position, tex.Frame(), lightColor * ((float)(255 - Projectile.alpha) / 255f), rotation, origin, Projectile.scale, spriteEffect, 0);
             /*
             SlashTrail trail = new SlashTrail(80, 1.57f);
             trail.DrawTrail(Projectile, LobcorpShaders["TwilightSlash"]);*/
+
+            float progress = 1f - (float)projOwner.itemAnimation / (float)projOwner.itemAnimationMax;
+            bool attack1 = progress < 0.4f;
+            bool attack2 = 0.5f < progress && progress < 0.9f;
+            if (attack1 || attack2)
+            {
+                SlashTrail trail = new SlashTrail(40, 1.57f);
+
+                float opacity = 1f;
+                float length = 0.4f;// + 0.6f * pprog;
+                float distance = 100;
+                if (attack1)
+                {
+                    progress = progress / 0.4f;
+                    distance += 15 * progress;
+                }
+                else if (attack2)
+                {
+                    progress = (progress - 0.5f) / 0.4f;
+                    distance += 75 * progress;
+                }
+                length += 1.2f * progress;
+                if (length > 1f)
+                    length = 1f;
+
+                float rot = Projectile.velocity.ToRotation() - MathHelper.ToRadians(125) * projOwner.direction;
+                rot += MathHelper.ToRadians(220) * (float)Math.Sin(1.57f * progress) * projOwner.direction;
+
+                if (progress > 0.5f)
+                {
+                    progress = (progress - 0.5f) / 0.5f;
+                    opacity -= progress;
+                }
+
+                CustomShaderData shader = LobcorpShaders["SwingTrail"].UseOpacity(opacity);
+                shader.UseImage1(Mod, "Misc/Noise4");
+                shader.UseImage2(Mod, "Misc/BloodTrail2");
+                shader.UseImage3(Mod, "Misc/Worley");
+                //shader.UseCustomShaderDate(Projectile.localAI[0], Projectile.localAI[1]);
+                trail.color = Color.Red;// * opacity;
+
+                trail.DrawPartCircle(ownerMountedCenter, rot, MathHelper.ToRadians(180f) * length, projOwner.direction, distance, 60, shader);
+            }
 
             return false;
         }
@@ -168,7 +318,7 @@ namespace LobotomyCorp.Projectiles.Realized
 
     public class SanguineDesireRHeavy : ModProjectile
     {
-        public override string Texture => "LobotomyCorp/Projectiles/Realized/SanguineDesireR";
+        public override string Texture => "LobotomyCorp/Items/Ruina/Literature/SanguineDesireR";
 
         public override void SetStaticDefaults()
         {
@@ -214,8 +364,15 @@ namespace LobotomyCorp.Projectiles.Realized
             float rot = Projectile.velocity.ToRotation() - MathHelper.ToRadians(135) * projOwner.direction;
 
             float progress = Projectile.ai[1] / ((float)projOwner.itemAnimationMax * Projectile.extraUpdates);
+
             if (progress < 0.5f)
             {
+                if (Projectile.localAI[0] == 0 && projOwner.itemAnimation == (int)(projOwner.itemAnimationMax * 0.95f))
+                {
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/RedShoes_Strong_Finish") with { Volume = 0.5f }, Projectile.Center);
+                    Projectile.localAI[0]++;
+                }
+
                 rot += MathHelper.ToRadians(2) * Main.rand.NextFloat(-1, 1);
             }
             else if (progress < 0.8f)
@@ -230,7 +387,7 @@ namespace LobotomyCorp.Projectiles.Realized
             if (Projectile.ai[0] < 4)
                 Projectile.ai[1]++;
 
-            if (Projectile.ai[0] > 0)
+            if (Projectile.ai[0] > 0 || (Projectile.ai[0] == 1 && Projectile.ai[1] < 86))
                 Projectile.ai[0]++;
 
             Vector2 velRot = new Vector2(1, 0).RotatedBy(rot);
@@ -259,9 +416,52 @@ namespace LobotomyCorp.Projectiles.Realized
             return base.CanHitNPC(target);
         }
 
+        /*
+        public override void ModifyDamageScaling(ref float damageScale)
+        {
+            float progress = Projectile.ai[1] / ((float)Main.player[Projectile.owner].itemAnimationMax * Projectile.extraUpdates);
+            if (0.65f >= progress && progress >= 0.55f)
+            {
+                return;
+            }
+            damageScale = 0.6f;
+        }*/
+
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
-            Projectile.ai[0]++;
+            float progress = Projectile.ai[1] / ((float)Main.player[Projectile.owner].itemAnimationMax * Projectile.extraUpdates);
+            if (0.65f >= progress && progress >= 0.55f)
+            {
+                Projectile.ai[0]++;
+            }
+            target.immune[Projectile.owner] = Main.player[Projectile.owner].itemAnimation;
+        }
+
+        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        {
+            int amount = (int)(LobotomyGlobalNPC.LNPC(target).SanguineDesireExtensiveBleedAmount / 15);
+            if (amount > 30)
+                amount = 30;
+            for (int i = 0; i < amount; i++)
+            {
+                Vector2 dustVel = new Vector2(4f, 0).RotatedByRandom(3.14f);
+                dustVel *= Main.rand.NextFloat(10 * (amount / 30f));
+
+                Dust d = Dust.NewDustPerfect(target.Center, DustID.Blood, dustVel);
+                d.noGravity = true;
+                d.fadeIn = 1f + Main.rand.NextFloat(0.4f);
+            }
+            for (int i = 0; i < amount/2; i++)
+            {
+                float dustVel = -4 * Main.rand.NextFloat(10 * (amount / 30f));
+
+                int d = Dust.NewDust(target.position + new Vector2(target.width * 0.25f, target.height * 0.25f), target.width/2, target.height/2, DustID.Blood, 0, dustVel);
+                Main.dust[d].noGravity = true;
+                Main.dust[d].fadeIn = 1f + Main.rand.NextFloat(0.4f);
+            }
+            LobotomyCorp.ScreenShake(15, amount * 0.5f, 0.05f, true);
+            damage += LobotomyGlobalNPC.SanguineDesireConsumeBleed(target) * 2;
+            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
         }
 
         public override bool ShouldUpdatePosition()

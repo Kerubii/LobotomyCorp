@@ -83,7 +83,8 @@ namespace LobotomyCorp.Projectiles
                     int time = Projectile.timeLeft - 28;
                     Vector2 target = Projectile.Center + new Vector2(156 * 0.25f * time, 0).RotatedBy(Projectile.velocity.ToRotation());
                     Vector2 vel = Vector2.Normalize(Projectile.velocity);
-                    Projectile.NewProjectile(Projectile.GetSource_FromAI(), target, -vel * 0.1f, ModContent.ProjectileType<GreenStemCircle>(), 0, 0, Projectile.owner);
+                    if (Main.myPlayer == Projectile.owner)
+                        Projectile.NewProjectile(Projectile.GetSource_FromAI(), target, -vel * 0.1f, ModContent.ProjectileType<GreenStemCircle>(), 0, 0, Projectile.owner);
                 }
 
 				for (int i = 0; i < 5; i++)

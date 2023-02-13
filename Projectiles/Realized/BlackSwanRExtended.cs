@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -35,6 +36,7 @@ namespace LobotomyCorp.Projectiles.Realized
 			Projectile.DamageType = DamageClass.Melee;
 			Projectile.tileCollide = false;
 			Projectile.friendly = true;
+			Projectile.hide = true;
 		}
 
 		// In here the AI uses this example, to make the code more organized and readable
@@ -117,22 +119,58 @@ namespace LobotomyCorp.Projectiles.Realized
         }
 
 		public override bool PreDraw(ref Color lightColor)
-        {
+		{
 			Texture2D pierceTrail = SpearExtender.SpearTrail;
 			Vector2 pos = Projectile.Center - Main.screenPosition + Projectile.gfxOffY * Vector2.UnitY;
 			Rectangle frame = pierceTrail.Frame();
 			Vector2 origin = frame.Size() / 2;
 			origin.X += frame.Width / 4;
 			Vector2 scale = new Vector2((Projectile.localAI[0] / 192f), Projectile.scale * 0.25f);
-			Color BaseColor = new Color(103, 232, 192);
+			float opacity = Math.Clamp(Projectile.timeLeft / 3f, 0f, 1f);
+
+			Color BaseColor = new Color(103, 232, 192) * opacity;
 			Main.EntitySpriteDraw(pierceTrail, pos, frame, BaseColor, Projectile.rotation, origin, scale, 0, 0);
 
-			BaseColor = Color.White;
+			BaseColor = Color.White * opacity;
 			scale.X *= 0.66f;
 			scale.Y *= 0.33f;
 			Main.EntitySpriteDraw(pierceTrail, pos, frame, Color.White, Projectile.rotation, origin, scale, 0, 0);
 
+
+			SlashTrail trail = new SlashTrail(0, 0);
+			trail.color = new Color(0, 150, 0);
+
+			Player projOwner = Main.player[Projectile.owner];
+			float trailScale = Projectile.scale;
+			trailScale *= Projectile.timeLeft / 14f;
+			if (Projectile.timeLeft < 5)
+			{
+				//trail.color *= opacity;
+			}
+			CustomShaderData shader = LobotomyCorp.LobcorpShaders["SwingTrail"].UseOpacity(opacity);
+			shader.UseImage1(Mod, "Misc/Noise4");
+			shader.UseImage2(Mod, "Misc/Trail713");
+			shader.UseImage3(Mod, "Misc/Trail52");
+
+			int max = Projectile.timeLeft > 4 ? 10 - (Projectile.timeLeft - 4) : 10;
+			max = (int)(max * 0.7f);
+			if (max < 2)
+				max = 2;
+			Vector2[] trail1 = new Vector2[max];
+			Vector2[] trail2 = new Vector2[max];
+			float[] rot = new float[max];
+			for (int i = 0; i < max; i++)
+			{
+				Vector2 center = Projectile.Center - Projectile.velocity * i * 6 - Main.screenPosition;
+				rot[i] = Projectile.rotation;
+				float distance = 30 + 60 * trailScale;
+				trail1[i] = center + new Vector2(0, distance).RotatedBy(Projectile.rotation);
+				trail2[i] = center + new Vector2(0, -distance).RotatedBy(Projectile.rotation);
+			}
+
+			trail.DrawManual(trail1, trail2, shader);
 			return false;
+			/*
 			SlashTrail trail = new SlashTrail(24, MathHelper.ToRadians(0));//, 0.785f - MathHelper.ToRadians(Projectile.direction == 1 ? 0 : 90));
 			trail.color = new Color(0, 100, 0);
 
@@ -152,8 +190,8 @@ namespace LobotomyCorp.Projectiles.Realized
             }
 
 			trail.DrawSpecific(posTrail, rot, Vector2.Zero, windTrail);
-
-			return false;
+			
+			return false;*/
         }
     }
 }

@@ -5,7 +5,8 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Natural
 {
-	public class SwordSharpenedWithTearsR : SEgoItem
+    [Autoload(LobotomyCorp.TestMode)]
+    public class SwordSharpenedWithTearsR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{
@@ -42,7 +43,7 @@ namespace LobotomyCorp.Items.Ruina.Natural
 
         public override bool SafeCanUseItem(Player player)
         {
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.RealizedSwordSharpenedWithTearsProj>()] == 0)
+            if (Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.RealizedSwordSharpenedWithTearsProj>()] == 0)
             {
                 for (int i = -1; i < 2; i++)
                 {

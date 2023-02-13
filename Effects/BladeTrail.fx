@@ -19,13 +19,20 @@ float2 uImageOffset;
 float uSaturation;
 float4 uSourceRect;
 float2 uZoom;
+float4 uCustomData;
 
 float4 Blade(float4 color : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
-    float4 tex = tex2D(uImage0, coords); //Main image
+    float4 tex = tex2D(uImage1, coords); //Main image
 
     float4 alpha = tex2D(uImage2, coords); //Alpha image 1, used for general alpha
-    color *= alpha.r / 1;
+    color *= alpha.r / 1;//Apply Alpha to Main image
+
+    coords += float2(uCustomData.x, uCustomData.y);
+    if (coords.x > 1)
+        coords.x -= 1;
+    if (coords.y > 1)
+        coords.y -= 1;
 
     alpha = tex2D(uImage3, coords); //Alpha image 2, used for fading
     float top = (1 - uOpacity) * 1.1;

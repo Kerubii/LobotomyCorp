@@ -10,7 +10,8 @@ namespace LobotomyCorp.Items
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("An ancient sword.\n" +
-                               "Just as its archetype desired, it will be useless in the hands of the frightened");
+                               "Just as its archetype desired, it will be useless in the hands of the frightened\n" +
+                               "Ignores target's defense");
         }
 
         public override void SetDefaults() {
@@ -24,7 +25,7 @@ namespace LobotomyCorp.Items
 
         public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
         {
-            damage += target.defense / 2;
+            damage += target.checkArmorPenetration(target.defense);
         }
 
         public override void ModifyHitPvp(Player player, Player target, ref int damage, ref bool crit)

@@ -44,7 +44,7 @@ namespace LobotomyCorp.Items.Ruina.History
 
         public override void HoldItem(Player player)
         {
-            if (player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.WorkerBee>()] <= 1 && player.statLife > player.statLifeMax2 * 0.25f)
+            if (Main.myPlayer == player.whoAmI && player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.WorkerBee>()] <= 1 && player.statLife > player.statLifeMax2 * 0.25f)
             {
                 int beeDamage = (Item.damage / 2);
                 int bee = Projectile.NewProjectile(player.GetSource_ItemUse(Item), player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.WorkerBee>(), beeDamage, Item.knockBack, player.whoAmI);

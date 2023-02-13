@@ -11,7 +11,8 @@ using LobotomyCorp;
 namespace LobotomyCorp.NPCs.OneBadManyGood
 {
     //[AutoloadBossHead]
-	class OneBadManyGood : ModNPC
+    [Autoload(LobotomyCorp.TestMode)]
+    class OneBadManyGood : ModNPC
     {
         private bool SinsConfessed = false;
 

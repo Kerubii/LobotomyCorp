@@ -19,11 +19,13 @@ float2 uImageOffset;
 float uSaturation;
 float4 uSourceRect;
 float2 uZoom;
+float4 uCustomData;
 
 float4 Trailing(float4 color : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
-    color = tex2D(uImage2, coords) * color;
-    float4 color2 = tex2D(uImage1, coords);
+    color = tex2D(uImage2, coords) * color; //Main texture Color
+
+    float4 color2 = tex2D(uImage1, coords); //Alpha Image 1, used for genral alpha
     color.rgba *= color2.r;
     
     if (uOpacity < 0.05) 

@@ -68,7 +68,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-			if (player.altFunctionUse != 2)
+			if (Main.myPlayer == player.whoAmI && player.altFunctionUse != 2)
 			{
 				type = ModContent.ProjectileType<Projectiles.Realized.RedEyesSlash>();
 				int slashType = 1;
@@ -159,20 +159,23 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			if (prog < 0.4f)
 			{
 				prog = prog / 0.4f;
-				rotation = (-60 + 285 * (float)Math.Sin(1.57f * prog)) * player.direction;
+				rotation = (-60 + 285 * (float)Math.Sin(1.57f * prog));// * player.direction;
 			}
 			else if (prog < 0.5f)
 			{
-				rotation = 255 * player.direction;
+				rotation = 255;// * player.direction;
 			}
 			else
 			{
 				prog = (prog - 0.5f) / 0.5f;
-				rotation = (255 - 45 * prog) * player.direction;
+				rotation = (255 - 45 * prog);// * player.direction;
 			}
-			rotation += MathHelper.ToDegrees(angle);
-			if (player.direction < 0)
-				rotation -= 180;
+			float additionalAngle = angle;
+				additionalAngle = (float)Math.Atan2(Math.Sin(angle), Math.Cos(angle) * player.direction);
+
+			rotation += MathHelper.ToDegrees(additionalAngle);
+			//if (player.direction < 0)
+				//rotation -= 180;
 			return rotation;
 		}
 
@@ -196,7 +199,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 				{
 					rotation = AltRotation(player);
 				}
-				LobCorpLight.PseudoUseItemFrame(player, rotation);
+				LobCorpLight.LobItemFrame(player, rotation - 90);
 			}
 		}
 
@@ -264,11 +267,13 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			else
 				noHitbox = true;
 
-            base.UseItemHitbox(player, ref hitbox, ref noHitbox);
+            //base.UseItemHitbox(player, ref hitbox, ref noHitbox);
         }
 
         public override void HoldItem(Player player)
         {
+			LobotomyModPlayer.ModPlayer(player).RedEyesAlerted = true;
+
 			if (Main.myPlayer == player.whoAmI)
 			{
 				foreach (NPC n in Main.npc)
@@ -334,6 +339,19 @@ namespace LobotomyCorp.Items.Ruina.Literature
 
         public override void AddRecipes() 
 		{
+			CreateRecipe()
+			.AddIngredient(ModContent.ItemType<RedEyes>())
+			.AddIngredient(ItemID.SpiderFang, 8)
+			.AddIngredient(ItemID.CobaltSword)
+			.AddTile<Tiles.BlackBox3>()
+			.Register();
+
+			CreateRecipe()
+			.AddIngredient(ModContent.ItemType<RedEyes>())
+			.AddIngredient(ItemID.SpiderFang, 8)
+			.AddIngredient(ItemID.PalladiumSword)
+			.AddTile<Tiles.BlackBox3>()
+			.Register();
 		}
 	}
 }

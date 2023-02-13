@@ -40,6 +40,15 @@ namespace LobotomyCorp
             {
                 int p = Projectile.NewProjectile(projectile.GetSource_FromThis(), Main.player[projectile.owner].Center, new Vector2(6, 0).RotateRandom(6.28f), ModContent.ProjectileType<Projectiles.Kaleidoscope>(), projectile.damage, projectile.knockBack, projectile.owner, target.whoAmI);
                 Main.projectile[p].localAI[0] = Lament;
+                if (projectile.type != ModContent.ProjectileType<Projectiles.Kaleidoscope>())
+                {                     
+                    for (int i = 0, amount = Main.rand.Next(4, 9); i < amount; i++)
+                    {
+                        Vector2 vel = new Vector2(Main.rand.NextFloat(2,5), 0).RotatedByRandom(6.29f);
+                        Projectile.NewProjectile(projectile.GetSource_FromThis(), target.Center, vel, ModContent.ProjectileType<Projectiles.KaleidoscopeEffect>(), 0, 0, projectile.owner, Lament);
+                    }
+                }
+
                 SoundStyle ding = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_Black");
                 int dustType = 91;
                 ScreenFilter screenFilter = new Items.Ruina.Technology.SolemnLamentWhite();
@@ -95,6 +104,20 @@ namespace LobotomyCorp
             {
                 damage = (int)(damage * 1.15f);
             }
+        }
+
+        public override void ModifyDamageHitbox(Projectile projectile, ref Rectangle hitbox)
+        {
+            if (BlackSwanReflected)
+            {
+                float growth = 1.75f;
+                hitbox.Width = (int)(hitbox.Width * growth);
+                hitbox.X -= hitbox.Width / 4;
+
+                hitbox.Height = (int)(hitbox.Height * growth);
+                hitbox.Y -= hitbox.Height / 4;
+            }
+            base.ModifyDamageHitbox(projectile, ref hitbox);
         }
     }
 }

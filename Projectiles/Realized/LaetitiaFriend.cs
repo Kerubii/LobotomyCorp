@@ -9,6 +9,7 @@ using Terraria.Audio;
 using Terraria.GameContent;
 using System.IO;
 using System.Collections.Generic;
+using Terraria.DataStructures;
 
 namespace LobotomyCorp.Projectiles.Realized
 {
@@ -40,6 +41,7 @@ namespace LobotomyCorp.Projectiles.Realized
         }
 
         private Vector2[] legLocation;
+        private float[] legLerp;
 
         public override void AI()
         {
@@ -50,10 +52,10 @@ namespace LobotomyCorp.Projectiles.Realized
             else if (Projectile.Center.X > player.Center.X)
                 Projectile.velocity.X -= 0.05f;
 
-            if (Projectile.velocity.X > 2f)
-                Projectile.velocity.X = 2f;
-            if (Projectile.velocity.X < -2f)
-                Projectile.velocity.X = -2f;
+            if (Projectile.velocity.X > 1f)
+                Projectile.velocity.X = 1f;
+            if (Projectile.velocity.X < -1f)
+                Projectile.velocity.X = -1f;
 
             Projectile.direction = Math.Sign(Projectile.velocity.X);
 
@@ -61,13 +63,14 @@ namespace LobotomyCorp.Projectiles.Realized
             {
                 InitializeSkeleton();
                 legLocation = new Vector2[4];
+                legLerp = new float[4];
                 legLocation[0] = FSkel.BoneName[FRONTLEFTLEGIK].GetPosition();
                 legLocation[1] = FSkel.BoneName[FRONTRIGHTLEGIK].GetPosition();
                 legLocation[2] = FSkel.BoneName[BACKLEFTLEGIK].GetPosition();
                 legLocation[3] = FSkel.BoneName[BACKRIGHTLEGIK].GetPosition();
             }
 
-            FSkel.BoneName[HEAD].ChangeOffset(Projectile.Center + (4 * (float)Math.Sin(6.18f * Projectile.localAI[0]++ / 30) * Vector2.UnitY));
+            FSkel.BoneName[HEAD].ChangeOffset(Projectile.Center + (1 * (float)Math.Sin(6.18f * Projectile.localAI[0]++ / 60) * Vector2.UnitY));
 
             //IK Stuff
             //FrontLeft
@@ -98,16 +101,38 @@ namespace LobotomyCorp.Projectiles.Realized
             SwitchLegLocation(2, BACKLEFTLEG, BACKLEFTLEG2);
             SwitchLegLocation(3, BACKRIGHTLEG, BACKRIGHTLEG2);
 
-            FSkel.BoneName[FRONTLEFTLEGIK].ChangeOffset(legLocation[0], 12);
-            FSkel.RotationIK(FRONTLEFTLEG, FRONTLEFTLEG2, FRONTLEFTLEGIK);
+            for (int i = 0; i < 4; i++)
+            {
+                if (legLerp[i] >= 0)
+                {
+                    BonePart bone = FSkel.BoneName[4 + i * 3];
+                    Vector2 moveTo = Vector2.Lerp(bone.GetPosition(), legLocation[i], 0.3f);
+                    moveTo.Y = moveTo.Y - (12f * (float)Math.Sin(legLerp[i] * 3.14f));
+                    bone.ChangeOffset(moveTo);
+                    //.NewText(legLerp[i]);
+                    legLerp[i] -= 0.2f;
+                    if (legLerp[i] == 0)
+                    {
+                        legLerp[i] = -1;
+                    }
+                    if (legLerp[i] < 0)
+                    {
+                        legLerp[i] = 0;
+                    }
+                }
+            }
 
-            FSkel.BoneName[FRONTRIGHTLEGIK].ChangeOffset(legLocation[1], 12);
+            //FSkel.BoneName[FRONTLEFTLEGIK].ChangeOffset(legLocation[0], 12);
+            FSkel.RotationIK(FRONTLEFTLEG, FRONTLEFTLEG2, FRONTLEFTLEGIK);
+            //Dust.NewDustPerfect(FSkel.BoneName[FRONTLEFTLEGIK].EndPoint(), 6, Vector2.Zero).noGravity = true;
+
+            //FSkel.BoneName[FRONTRIGHTLEGIK].ChangeOffset(legLocation[1], 12);
             FSkel.RotationIK(FRONTRIGHTLEG, FRONTRIGHTLEG2, FRONTRIGHTLEGIK, -1);
 
-            FSkel.BoneName[BACKLEFTLEGIK].ChangeOffset(legLocation[2], 12);
+            //FSkel.BoneName[BACKLEFTLEGIK].ChangeOffset(legLocation[2], 12);
             FSkel.RotationIK(BACKLEFTLEG, BACKLEFTLEG2, BACKLEFTLEGIK);
 
-            FSkel.BoneName[BACKRIGHTLEGIK].ChangeOffset(legLocation[3], 12);
+            //FSkel.BoneName[BACKRIGHTLEGIK].ChangeOffset(legLocation[3], 12);
             FSkel.RotationIK(BACKRIGHTLEG, BACKRIGHTLEG2, BACKRIGHTLEGIK, -1);
         }
 
@@ -142,6 +167,7 @@ namespace LobotomyCorp.Projectiles.Realized
                         Tile t = Main.tile[x2, y2];
                         if (t.HasTile && (Main.tileSolid[t.TileType] || Main.tileSolidTop[t.TileType]))
                         {
+                            legLerp[legLoc] = 1f;
                             legLocation[legLoc] = new Vector2(x2 * 16 - 8, y2 * 16);
                             changeTo = true;
                             break;
@@ -223,25 +249,25 @@ namespace LobotomyCorp.Projectiles.Realized
             if (FSkel == null)
                 return false;
 
-            List<BonePart> list = new List<BonePart>();
-            list.Add(FSkel.BoneName[BACKLEFTLEG]);
-            list.Add(FSkel.BoneName[BACKRIGHTLEG]);
+            List<DrawData> list = new List<DrawData>();
+            list.Add(FSkel.BoneName[BACKLEFTLEG].DrawBone());
+            list.Add(FSkel.BoneName[BACKRIGHTLEG].DrawBone());
 
-            list.Add(FSkel.BoneName[BACKLEFTLEG2]);
-            list.Add(FSkel.BoneName[BACKRIGHTLEG2]);
+            list.Add(FSkel.BoneName[BACKLEFTLEG2].DrawBone());
+            list.Add(FSkel.BoneName[BACKRIGHTLEG2].DrawBone());
 
-            list.Add(FSkel.BoneName[FRONTLEFTLEG]);
-            list.Add(FSkel.BoneName[FRONTRIGHTLEG]);
+            list.Add(FSkel.BoneName[FRONTLEFTLEG].DrawBone());
+            list.Add(FSkel.BoneName[FRONTRIGHTLEG].DrawBone());
 
-            list.Add(FSkel.BoneName[FRONTLEFTLEG2]);
-            list.Add(FSkel.BoneName[FRONTRIGHTLEG2]);
+            list.Add(FSkel.BoneName[FRONTLEFTLEG2].DrawBone());
+            list.Add(FSkel.BoneName[FRONTRIGHTLEG2].DrawBone());
 
-            list.Add(FSkel.BoneName[FRONTMISCLEG]);
+            list.Add(FSkel.BoneName[FRONTMISCLEG].DrawBone());
 
-            list.Add(FSkel.BoneName[HEAD]);
-            foreach (BonePart bones in list)
+            list.Add(FSkel.BoneName[HEAD].DrawBone());
+            foreach (DrawData data in list)
             {
-                Main.EntitySpriteDraw(bones.DrawBone());
+                Main.EntitySpriteDraw(data);
             }
 
             return false;

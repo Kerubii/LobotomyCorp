@@ -65,7 +65,7 @@ namespace LobotomyCorp.Projectiles
 				Projectile.Kill();
 			}
 
-            Projectile.ai[1] += MathHelper.ToRadians(24) * projOwner.direction;
+            Projectile.localAI[1] += MathHelper.ToRadians(24) * projOwner.direction;
 			// Apply proper rotation, with an offset of 135 degrees due to the sprite's rotation, notice the usage of MathHelper, use this class!
 			// MathHelper.ToRadians(xx degrees here)
 			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(135f);
@@ -78,12 +78,22 @@ namespace LobotomyCorp.Projectiles
         public override void PostDraw(Color lightColor)
         {
             Texture2D tex = Mod.Assets.Request<Texture2D>("Projectiles/GazeHead").Value;
-            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, tex.Frame(), lightColor, Projectile.ai[1], tex.Size()/2 , 1f, 0f, 0);
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, tex.Frame(), lightColor, Projectile.localAI[1], tex.Size()/2 , 1f, 0f, 0);
         }
 
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
+			Projectile.ai[1]++;
             target.immune[Projectile.owner] = 5;
+        }
+
+        public override void ModifyDamageScaling(ref float damageScale)
+        {
+			float mult = Projectile.ai[1] / 30;
+			if (mult > 1f)
+				mult = 1f;
+			damageScale += 0.5f * mult;
+            base.ModifyDamageScaling(ref damageScale);
         }
     }
 }

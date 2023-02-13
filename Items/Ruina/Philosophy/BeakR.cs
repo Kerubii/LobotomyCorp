@@ -4,7 +4,8 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Philosophy
 {
-	public class BeakR : SEgoItem
+    [Autoload(LobotomyCorp.TestMode)]
+    public class BeakR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{

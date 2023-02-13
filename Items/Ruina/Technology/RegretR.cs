@@ -6,6 +6,7 @@ using Terraria.Audio;
 
 namespace LobotomyCorp.Items.Ruina.Technology
 {
+	//[Autoload(LobotomyCorp.TestMode)]
 	public class RegretR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
@@ -18,7 +19,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 		{
 			EgoColor = LobotomyCorp.TethRarity;
 
-			Item.damage = 63;
+			Item.damage = 90;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
@@ -34,7 +35,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			Item.autoReuse = true;
             Item.channel = true;
 
-			Item.shoot = 0;//ModContent.ProjectileType<Projectiles.Realized.RegretR2>();
+			Item.shoot = ModContent.ProjectileType<Projectiles.Realized.RegretR>();
 			Item.shootSpeed = 1f;
 		}
 
@@ -43,19 +44,39 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			return base.SafeCanUseItem(player);
         }
 
+        public override void HoldItem(Player player)
+        {
+			int bind = ModContent.BuffType<Buffs.BindingJacket>();
+			foreach (int buff in player.buffType)
+            {
+				if (buff > 0 && Main.debuff[buff] && buff != bind)
+                {
+					player.AddBuff(bind, 300);
+                }
+            }
+        }
+
+        /*
         public override bool AltFunctionUse(Player player)
         {
             return true;
-        }
-
-        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
-        {
-			Vector2 delta = Main.MouseWorld - player.Center;
-			//velocity *= delta;
-        }
+        }*/
 
         public override void AddRecipes() 
 		{
+			CreateRecipe()
+			.AddIngredient(ModContent.ItemType<Regret>())
+			.AddIngredient(ItemID.AdamantiteBar, 5)
+			.AddIngredient(ItemID.FlamingMace)
+			.AddTile<Tiles.BlackBox3>()
+			.Register();
+
+			CreateRecipe()
+			.AddIngredient(ModContent.ItemType<Regret>())
+			.AddIngredient(ItemID.TitaniumBar, 5)
+			.AddIngredient(ItemID.FlamingMace)
+			.AddTile<Tiles.BlackBox3>()
+			.Register();
 		}
 	}
 }

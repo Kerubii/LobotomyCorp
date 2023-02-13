@@ -65,7 +65,8 @@ namespace LobotomyCorp.Projectiles
                         }
 
                     Vector2 vel = Vector2.Normalize(targetPos - Projectile.Center);
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel * 4, ModContent.ProjectileType<SoundOfAStarShoot>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    if (Main.myPlayer == Projectile.owner)
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel * 4, ModContent.ProjectileType<SoundOfAStarShoot>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                     Projectile.velocity = vel * -4f;
 
                     SoundEngine.PlaySound(SoundID.Item72, Projectile.Center);
@@ -138,6 +139,7 @@ namespace LobotomyCorp.Projectiles
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = -1;
 
+            Projectile.tileCollide = false;
             Projectile.extraUpdates = 50;
             Projectile.DamageType = DamageClass.Summon;
             Projectile.friendly = true;
@@ -148,6 +150,11 @@ namespace LobotomyCorp.Projectiles
             if (Projectile.ai[0] > 0 && Projectile.timeLeft > 2)
             {
                 Projectile.timeLeft = 2;
+            }
+
+            if (Projectile.ai[1]++ > 30)
+            {
+                Projectile.tileCollide = true;
             }
             Dust.NewDustPerfect(Projectile.Center, 91).noGravity = true;
         }

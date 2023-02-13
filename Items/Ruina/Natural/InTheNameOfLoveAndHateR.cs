@@ -5,7 +5,8 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Natural
 {
-	public class InTheNameOfLoveAndHateR : SEgoItem
+    [Autoload(LobotomyCorp.TestMode)]
+    public class InTheNameOfLoveAndHateR : SEgoItem
 	{
         public int ArcanaManaCost = 500;
 

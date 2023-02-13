@@ -11,7 +11,9 @@ namespace LobotomyCorp.Items
         public override void SetStaticDefaults()
         {
             Tooltip.SetDefault("The weapon resembles the claws of a vicious wolf.\n" +
-                               "Once upon a time, these claws would cut open the bellies of numerous creatures and tear apart their guts.");
+                               "Once upon a time, these claws would cut open the bellies of numerous creatures and tear apart their guts.\n" +
+                               "Hitting an enemy has a chance of increasing melee damage by 10%\n" +
+                               "50% increased damage while under 50% health");
         }
 
         public override void SetDefaults() {
