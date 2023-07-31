@@ -159,9 +159,9 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage = target.life * 2;
+            modifiers.SourceDamage.Base = target.life * 2;
         }
 
         public override bool? CanHitNPC(NPC target)

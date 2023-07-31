@@ -5,13 +5,17 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Natural
 {
-    [Autoload(LobotomyCorp.TestMode)]
     public class InTheNameOfLoveAndHateR : SEgoItem
 	{
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+        }
+
         public int ArcanaManaCost = 500;
 
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("In the name of Love and Justice~ Here comes Magical Girl!");
+			// Tooltip.SetDefault("In the name of Love and Justice~ Here comes Magical Girl!");
             
             EgoColor = LobotomyCorp.WawRarity;
             //Item.staff[Item.type] = true;

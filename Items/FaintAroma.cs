@@ -7,8 +7,8 @@ namespace LobotomyCorp.Items
 	public class FaintAroma : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("Even after the E.G.O was extracted, it still carried the fragrance of the archetype.\n" +
-							   "Simply carrying it gives the illusion that you're standing in a forest in the middle of nowhere.");
+			/* Tooltip.SetDefault("Even after the E.G.O was extracted, it still carried the fragrance of the archetype.\n" +
+							   "Simply carrying it gives the illusion that you're standing in a forest in the middle of nowhere."); */
         }
 
 		public override void SetDefaults() {

@@ -10,9 +10,9 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("The green - eyed beauty's favorite flower was the dahlia; \"Your love makes me happy.\"\n" +
+            /* Tooltip.SetDefault("The green - eyed beauty's favorite flower was the dahlia; \"Your love makes me happy.\"\n" +
                                "The lady's happiness came to an end with the budding of those unsightly horns.\n" +
-                               "The dahlia's unfulfilled meaning was borne as a seed in this E.G.O, carrying a lingering emotion.");
+                               "The dahlia's unfulfilled meaning was borne as a seed in this E.G.O, carrying a lingering emotion."); */
 
         }
 

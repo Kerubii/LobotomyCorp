@@ -14,7 +14,7 @@ namespace LobotomyCorp.Projectiles
         public override string Texture => "LobotomyCorp/Projectiles/GoldRushPunches";
 
         public override void SetStaticDefaults() {
-            DisplayName.SetDefault("ORA");
+            // DisplayName.SetDefault("ORA");
         }
 
 		public override void SetDefaults() {

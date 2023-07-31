@@ -112,6 +112,12 @@ namespace LobotomyCorp.Projectiles
                 }
         }
 
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.ScalingArmorPenetration += 1f;
+            base.ModifyHitNPC(target, ref modifiers);
+        }
+
         public override bool PreDraw(ref Color lightColor)
         {
             //Dust.NewDustPerfect(ownerMountedCenter, 14, Vector2.Zero);

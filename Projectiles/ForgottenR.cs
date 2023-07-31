@@ -13,7 +13,7 @@ namespace LobotomyCorp.Projectiles
 	public class ForgottenR : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("BigHug");
+            // DisplayName.SetDefault("BigHug");
         }
 
         public override void SetDefaults()
@@ -136,7 +136,7 @@ namespace LobotomyCorp.Projectiles
             return base.Colliding(projHitbox, targetHitbox);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             LobotomyModPlayer owner = LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]);
             if (ValidTarget(owner.Player, target))

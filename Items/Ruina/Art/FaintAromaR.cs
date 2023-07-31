@@ -8,13 +8,17 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Art
 {
-    [Autoload(LobotomyCorp.TestMode)]
     public class FaintAromaS : SEgoItem
 	{
-		public override void SetStaticDefaults() 
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+        }
+
+        public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("\"Bearing the hope to return to dust, it shall go back to the grave with all that desires to live.\"");
+			// Tooltip.SetDefault("\"Bearing the hope to return to dust, it shall go back to the grave with all that desires to live.\"");
 
             EgoColor = LobotomyCorp.WawRarity;
         }
@@ -123,7 +127,7 @@ namespace LobotomyCorp.Items.Ruina.Art
             }
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             LobotomyModPlayer.ModPlayer(player).FaintAromaPetal += 30f;
             if (LobotomyModPlayer.ModPlayer(player).FaintAromaPetal > LobotomyModPlayer.ModPlayer(player).FaintAromaPetalMax * 3 + 30)

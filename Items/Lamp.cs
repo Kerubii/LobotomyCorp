@@ -8,8 +8,8 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("Big Bird's eyes gained another in number for every creature it saved.\n" +
-                               "On this weapon, the radiant pride is apparent.");
+			/* Tooltip.SetDefault("Big Bird's eyes gained another in number for every creature it saved.\n" +
+                               "On this weapon, the radiant pride is apparent."); */
 		}
 
 		public override void SetDefaults() 

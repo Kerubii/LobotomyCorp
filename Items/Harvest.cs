@@ -10,8 +10,8 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("The last legacy of the man who sought wisdom.\n" +
-							   "The rake tilled the human brain instead of farmland.");
+            /* Tooltip.SetDefault("The last legacy of the man who sought wisdom.\n" +
+							   "The rake tilled the human brain instead of farmland."); */
 
         }
 

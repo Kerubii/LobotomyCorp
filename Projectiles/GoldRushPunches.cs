@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles
 	public class GoldRushPunches : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Ora");
+            // DisplayName.SetDefault("Ora");
         }
 
 		public override void SetDefaults() {

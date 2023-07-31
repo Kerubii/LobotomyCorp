@@ -1,0 +1,63 @@
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.Audio;
+using Terraria.DataStructures;
+using System;
+
+namespace LobotomyCorp.Items.Ruina.Art
+{
+	public class OurGalaxyR : SEgoItem
+	{
+		public override bool IsLoadingEnabled(Mod mod)
+		{
+			return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+		}
+
+		public override void SetStaticDefaults() 
+		{
+			// DisplayName.SetDefault("Our Galaxy");
+			// Tooltip.SetDefault(GetTooltip());
+		}
+
+		public override void SetDefaults() 
+		{
+			EgoColor = LobotomyCorp.TethRarity;
+
+			Item.width = 64;
+			Item.height = 64;
+
+			Item.damage = 90;
+			Item.DamageType = DamageClass.Magic;
+			Item.knockBack = 1f;
+			Item.useTime = 20;
+			Item.useAnimation = 20;
+			Item.useStyle = ItemUseStyleID.Shoot;
+
+			Item.value = 100000;
+            Item.noMelee = true;
+            Item.noUseGraphic = true;
+			//Item.UseSound = SoundID.Item1;
+			Item.autoReuse = true;
+			Item.rare = ItemRarityID.Yellow;
+
+			Item.shoot = ModContent.ProjectileType<Projectiles.Realized.OurGalaxyComet>();
+			Item.shootSpeed = 12;
+		}
+
+        public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+        {
+			if (player.whoAmI == Main.myPlayer)
+            {
+				int rotation = Main.rand.Next(80, 100);
+				Vector2 speed = new Vector2(velocity.Length(), 0).RotatedBy(MathHelper.ToRadians(rotation));
+
+				position = Main.MouseWorld + new Vector2(Main.rand.Next(-16, 17), Main.rand.Next(-16, 17)) - speed * 60;
+				velocity = speed;
+			}
+
+            base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
+        }
+    }
+}

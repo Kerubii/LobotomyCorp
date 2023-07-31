@@ -9,9 +9,9 @@ namespace LobotomyCorp.Items
 	{
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("An ancient sword.\n" +
+            /* Tooltip.SetDefault("An ancient sword.\n" +
                                "Just as its archetype desired, it will be useless in the hands of the frightened\n" +
-                               "Ignores target's defense");
+                               "Ignores target's defense"); */
         }
 
         public override void SetDefaults() {
@@ -23,14 +23,14 @@ namespace LobotomyCorp.Items
             Item.UseSound = LobotomyCorp.WeaponSound("katana");
 		}
 
-        public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
+        public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage += target.checkArmorPenetration(target.defense);
+            modifiers.ScalingArmorPenetration += 1f;
         }
 
-        public override void ModifyHitPvp(Player player, Player target, ref int damage, ref bool crit)
+        public override void ModifyHitPvp(Player player, Player target, ref Player.HurtModifiers modifiers)
         {
-            damage = (int)(player.statLifeMax2 * (float)Item.damage * 0.01f);
+            modifiers.SourceDamage.Base = (int)(player.statLifeMax2 * (float)Item.damage * 0.01f);
         }
 
         public override void AddRecipes() {

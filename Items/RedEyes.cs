@@ -9,9 +9,9 @@ namespace LobotomyCorp.Items
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("The Spider Bud had dozens of eyes, and its children were always hungry.\n" +
+            /* Tooltip.SetDefault("The Spider Bud had dozens of eyes, and its children were always hungry.\n" +
                                "This tenacity carried over to the E.G.O., demonstrating an outstanding ability to track down targets.\n" +
-                               "Grants swiftness buff for 3 seconds on hit");
+                               "Grants swiftness buff for 3 seconds on hit"); */
         }
 
         public override void SetDefaults()
@@ -30,12 +30,12 @@ namespace LobotomyCorp.Items
             Item.autoReuse = true;
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             player.AddBuff(BuffID.Swiftness, 180);
         }
 
-        public override void OnHitPvp(Player player, Player target, int damage, bool crit)
+        public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
             player.AddBuff(BuffID.Swiftness, 180);
         }

@@ -14,7 +14,7 @@ namespace LobotomyCorp.Projectiles
 	public class ForgottenR2 : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("BiggerHug");
+            // DisplayName.SetDefault("BiggerHug");
             Main.projFrames[Projectile.type] = 2;
         }
 
@@ -162,7 +162,7 @@ namespace LobotomyCorp.Projectiles
             Projectile.localAI[0]++;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Projectile.ai[1] = target.whoAmI;
             if (target.realLife >= 0)
@@ -187,12 +187,12 @@ namespace LobotomyCorp.Projectiles
             modPlayer.ForgottenAffectionResistance = 0f;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (Projectile.ai[0] < 60)
                 return;
 
-            damage += (int)(damage * 0.5f);
+            modifiers.FinalDamage += 0.5f;
         }
 
         public override bool ShouldUpdatePosition()
@@ -233,7 +233,7 @@ namespace LobotomyCorp.Projectiles
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("BiggerHug");
+            // DisplayName.SetDefault("BiggerHug");
         }
 
         public override void SetDefaults()

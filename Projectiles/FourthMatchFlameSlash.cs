@@ -69,16 +69,15 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (target.HasBuff(ModContent.BuffType<Buffs.Matchstick>()))
                 target.buffTime[target.FindBuffIndex(ModContent.BuffType<Buffs.Matchstick>())] += 300;
             else
                 target.AddBuff(ModContent.BuffType<Buffs.Matchstick>(), 300);
-            base.OnHitNPC(target, damage, knockback, crit);
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             if (target.HasBuff(ModContent.BuffType<Buffs.Matchstick>()))
                 target.buffTime[target.FindBuffIndex(ModContent.BuffType<Buffs.Matchstick>())] += 300;

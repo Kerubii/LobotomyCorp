@@ -8,8 +8,8 @@ namespace LobotomyCorp.Items
 	public class Soda : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("A pistol painted in a refreshing purple.\n" +
-                               "Whenever this E.G.O. is used, a faint scent of grapes wafts through the air.");
+			/* Tooltip.SetDefault("A pistol painted in a refreshing purple.\n" +
+                               "Whenever this E.G.O. is used, a faint scent of grapes wafts through the air."); */
         }
 
 		public override void SetDefaults() {

@@ -11,11 +11,11 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("The yearning to imitate the human form is sloppily reflected on the E.G.O.\n" +
+			/* Tooltip.SetDefault("The yearning to imitate the human form is sloppily reflected on the E.G.O.\n" +
 							   "As if it were a reminder that it should remain a mere desire.\n" +
 							   "It can deliver a powerful downswing that should be impossible for a human.\n" +
 							   "Can be charged for 300% increased damage\n" +
-							   "Recovers 25% damage dealt on hit");
+							   "Recovers 25% damage dealt on hit"); */
 		}
 
 		public override void SetDefaults() 
@@ -61,9 +61,9 @@ namespace LobotomyCorp.Items
 			{
 				SoundStyle swingSound;
 				if (modPlayer.ChargeWeaponHelper >= 0.9f)
-					swingSound = new SoundStyle("LobotomyCorp/Sounds/Item/Nullthing_Skill3_Finish") with { Volume = 0.5f };
+					swingSound = new SoundStyle("LobotomyCorp/Sounds/Item/Nullthing_Skill3_Finish") with { Volume = 0.3f };
 				else
-					swingSound = new SoundStyle("LobotomyCorp/Sounds/Item/Nullthing_Attack1") with { Volume = 0.5f };
+					swingSound = new SoundStyle("LobotomyCorp/Sounds/Item/Nullthing_Attack1") with { Volume = 0.3f };
 
 				SoundEngine.PlaySound(swingSound, player.Center);
 			}
@@ -85,9 +85,9 @@ namespace LobotomyCorp.Items
             noHitbox = player.channel;
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
-			int heal = (int)(damage * 0.25f);
+			int heal = (int)(damageDone * 0.25f);
 			player.HealEffect(heal);
 			player.statLife += heal;
 			if (Main.myPlayer == player.whoAmI && LobotomyModPlayer.ModPlayer(player).ChargeWeaponHelper >= 0.9f)

@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles
 	public class RedMistSlashes : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Twilight");
+            // DisplayName.SetDefault("Twilight");
         }
 
 		public override void SetDefaults() {

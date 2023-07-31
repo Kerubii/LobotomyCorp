@@ -12,9 +12,10 @@ namespace LobotomyCorp.Items.Ruina.Technology
 	{
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Harmony"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault(GetTooltip());
-
+			// DisplayName.SetDefault("Harmony"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			// Tooltip.SetDefault(GetTooltip());
+			ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
+			ItemID.Sets.IsChainsaw[Item.type] = true;
 		}
 
 		public override void SetDefaults() 
@@ -26,7 +27,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			Item.width = 40;
 			Item.height = 40;
 
-			Item.useTime = 22;
+			Item.useTime = 5;
 			Item.useAnimation = 20;
 
 			Item.useStyle = ItemUseStyleID.Shoot;
@@ -41,6 +42,9 @@ namespace LobotomyCorp.Items.Ruina.Technology
             Item.noMelee = true;
 			Item.autoReuse = true;
             Item.channel = true;
+
+			Item.tileBoost = 3;
+			Item.axe = 22;
 		}
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
@@ -59,6 +63,14 @@ namespace LobotomyCorp.Items.Ruina.Technology
 				}
 			}
             return base.Shoot(player, source, position, velocity, type, damage, knockback);
+        }
+
+        public override float UseTimeMultiplier(Player player)
+        {
+			if (player.altFunctionUse == 2)
+				return 4;
+
+            return base.UseTimeMultiplier(player);
         }
 
         public override bool SafeCanUseItem(Player player)

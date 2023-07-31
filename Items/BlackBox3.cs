@@ -8,9 +8,9 @@ namespace LobotomyCorp.Items
 	{
         public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Black Box - Extractor");
-			Tooltip.SetDefault("A Tool to extract from the subconsciousness of mankind\n" +
-							   "Allows the creation of WAW and ALEPH E.G.O");
+			// DisplayName.SetDefault("Black Box - Extractor");
+			/* Tooltip.SetDefault("A Tool to extract from the subconsciousness of mankind\n" +
+							   "Allows the creation of WAW and ALEPH E.G.O"); */
 		}
 
         public override void SetDefaults()

@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Satiated");
-			Description.SetDefault("I CRAVE THIS MELODY");
+			// DisplayName.SetDefault("Satiated");
+			// Description.SetDefault("I CRAVE THIS MELODY");
 		}
 
         public override void Update(Player player, ref int buffIndex)

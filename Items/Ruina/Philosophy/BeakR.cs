@@ -4,13 +4,17 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Philosophy
 {
-    [Autoload(LobotomyCorp.TestMode)]
     public class BeakR : SEgoItem
 	{
-		public override void SetStaticDefaults() 
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+        }
+
+        public override void SetStaticDefaults() 
 		{
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("People have been committing sins since long ago. \"Why do they commit sins, knowing it is wrong?\"");
+            // Tooltip.SetDefault("People have been committing sins since long ago. \"Why do they commit sins, knowing it is wrong?\"");
 
             EgoColor = LobotomyCorp.TethRarity;
 		}

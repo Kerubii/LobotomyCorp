@@ -11,7 +11,7 @@ namespace LobotomyCorp.Projectiles
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Magic Bullet"); // The English name of the Projectile
+			// DisplayName.SetDefault("Magic Bullet"); // The English name of the Projectile
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 60; // The length of old position to be recorded
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 0; // The recording Mode
 		}

@@ -10,7 +10,7 @@ namespace LobotomyCorp.Items
 	public class Exuviae : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("The slick sensation when holding this E.G.O may disturb some employees.");
+			// Tooltip.SetDefault("The slick sensation when holding this E.G.O may disturb some employees.");
         }
 
 		public override void SetDefaults() {

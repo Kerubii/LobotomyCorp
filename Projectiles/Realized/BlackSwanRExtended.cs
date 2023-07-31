@@ -109,13 +109,12 @@ namespace LobotomyCorp.Projectiles.Realized
 				Projectile.Kill();
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			if (LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).BlackSwanNettleClothing >= 5)
 			{
 				target.AddBuff(BuffID.Ichor, 300);
 			}
-			base.OnHitNPC(target, damage, knockback, crit);
         }
 
 		public override bool PreDraw(ref Color lightColor)

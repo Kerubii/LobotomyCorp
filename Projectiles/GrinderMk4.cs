@@ -81,7 +81,7 @@ namespace LobotomyCorp.Projectiles
             Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, tex.Frame(), lightColor, Projectile.ai[1], tex.Size()/2 , 1f, 0f, 0);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.immune[Projectile.owner] = 5;
         }

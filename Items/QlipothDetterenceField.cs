@@ -4,13 +4,17 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	[Autoload(LobotomyCorp.TestMode)]
 	public class QlipothDetterenceField : ModItem
 	{
+		public override bool IsLoadingEnabled(Mod mod)
+		{
+			return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+		}
+
 		public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("Coffee, manager?");
+			// Tooltip.SetDefault("Coffee, manager?");
 		}
 
 		public override void SetDefaults()

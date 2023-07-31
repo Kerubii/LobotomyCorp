@@ -34,8 +34,9 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
         public override void SetStaticDefaults() 
 		{
-            DisplayName.SetDefault("Solemn Lament"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault(GetTooltip());
+            // DisplayName.SetDefault("Solemn Lament"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+            // Tooltip.SetDefault(GetTooltip());
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
 
 		public override void SetDefaults() 
@@ -78,7 +79,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
             Item.UseSound = SoundID.Item11;
             PerfectSwitch = false;
-            if (player.itemTime > 6)
+            if (player.itemTime > 8)
                 PerfectSwitch = true;
 
             if (player.altFunctionUse == 2)
@@ -302,6 +303,12 @@ namespace LobotomyCorp.Items.Ruina.Technology
             ammo.active = false;
             ammo.TurnToAir();
         }
+
+        public override void HoldItem(Player player)
+        {
+            player.scope = false;
+        }
+
         /*public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color ItemColor, Vector2 origin, float scale)
         {
             Texture2D texture = Mod.Assets.Request<Texture2D>("LobotomyCorp/Items/SolemnLamentS");

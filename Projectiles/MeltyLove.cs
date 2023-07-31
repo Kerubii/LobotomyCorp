@@ -11,7 +11,7 @@ namespace LobotomyCorp.Projectiles
 	public class MeltyLove : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Gunk");
+            // DisplayName.SetDefault("Gunk");
         }
 
         public override void SetDefaults()
@@ -46,7 +46,7 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<Buffs.Slow>(), 300);
         }

@@ -8,11 +8,15 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-    [Autoload(LobotomyCorp.TestMode)]
     public class TheHomingInstinctS : SEgoItem
 	{
-		public override void SetStaticDefaults() {
-            Tooltip.SetDefault("\"Friends, Friends, let us all go home together!\"");
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+        }
+
+        public override void SetStaticDefaults() {
+            // Tooltip.SetDefault("\"Friends, Friends, let us all go home together!\"");
             PassiveText = "Home - Drop a house\n" +
                           "A Road Walked Together - Create temporary yellow brick road that gives buffs to nearby teammates\n" +
                           "|On the Way Home - While a yellow brick road or this weapon is active, the user gains a debuff when not near it";

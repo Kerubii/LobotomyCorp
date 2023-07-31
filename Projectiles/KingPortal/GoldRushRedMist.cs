@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
 	public class GoldRushRedMist : ModProjectile
 	{
         public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Gold Rush");
+            // DisplayName.SetDefault("Gold Rush");
         }
 
         public override void SetDefaults()

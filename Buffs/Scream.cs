@@ -9,8 +9,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Horrid Screech");
-			Description.SetDefault("Wings disabled, 8% decreased movement speed");
+			// DisplayName.SetDefault("Horrid Screech");
+			// Description.SetDefault("Wings disabled, 8% decreased movement speed");
             Main.debuff[Type] = true;
             //Main.buffNoTimeDisplay[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

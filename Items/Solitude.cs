@@ -7,9 +7,9 @@ namespace LobotomyCorp.Items
 	public class Solitude : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("A strong sense of loneliness still lingers, even in the form of an E.G.O.\n" +
+			/* Tooltip.SetDefault("A strong sense of loneliness still lingers, even in the form of an E.G.O.\n" +
                                "Its bullets create a void that cannot be filled on the victim's soul.\n" +
-                               "It was a rusty weapon from the beginning.");
+                               "It was a rusty weapon from the beginning."); */
         }
 
 		public override void SetDefaults() {

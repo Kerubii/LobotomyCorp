@@ -9,9 +9,9 @@ namespace LobotomyCorp.Items
 	{
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Its sharp blade can make a clean cut through bone like a hot knife through butter,\n" +
+            /* Tooltip.SetDefault("Its sharp blade can make a clean cut through bone like a hot knife through butter,\n" +
                                "Leaving a wound that will never heal.\n" +
-                               "Sold by the Merchant during Blood Moon");
+                               "Sold by the Merchant during Blood Moon"); */
         }
 
         public override void SetDefaults() {

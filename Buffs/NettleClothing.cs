@@ -11,8 +11,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Clothing of Nettle");
-			Description.SetDefault("Nettle regenerating, 75% reduced damage and Attackers also take damage");
+			// DisplayName.SetDefault("Clothing of Nettle");
+			// Description.SetDefault("Nettle regenerating, 75% reduced damage and Attackers also take damage");
             Main.buffNoTimeDisplay[Type] = true;
         }
 
@@ -25,7 +25,7 @@ namespace LobotomyCorp.Buffs
         5 - Attacks and reflected projectiles inflict Ichor and Gooey Waste
         6 - Reduces 100% damage taken and extended invulnerability
         */
-        public override void ModifyBuffTip(ref string tip, ref int rare)
+        public override void ModifyBuffText(ref string buffName, ref string tip, ref int rare)
         {
             float NettleCount = LobotomyModPlayer.ModPlayer(Main.LocalPlayer).BlackSwanNettleClothing;
             if (NettleCount < 1)
@@ -42,8 +42,6 @@ namespace LobotomyCorp.Buffs
                 tip += "\nAttacks and reflected projectiles inflict Ichor and Gooey Waste";
             if (NettleCount >= 6)
                 tip += "\nNext attack is nullified and gain temporary invincibility";
-
-            base.ModifyBuffTip(ref tip, ref rare);
         }
 
         public override void Update(Player player, ref int buffIndex)

@@ -10,10 +10,10 @@ namespace LobotomyCorp.Items
 	{
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("The weapon resembles the claws of a vicious wolf.\n" +
+            /* Tooltip.SetDefault("The weapon resembles the claws of a vicious wolf.\n" +
                                "Once upon a time, these claws would cut open the bellies of numerous creatures and tear apart their guts.\n" +
                                "Hitting an enemy has a chance of increasing melee damage by 10%\n" +
-                               "50% increased damage while under 50% health");
+                               "50% increased damage while under 50% health"); */
         }
 
         public override void SetDefaults() {
@@ -35,13 +35,13 @@ namespace LobotomyCorp.Items
             }
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Main.rand.NextBool(3))
                 player.AddBuff(ModContent.BuffType<Buffs.WillBeBad>(), 180);
         }
 
-        public override void OnHitPvp(Player player, Player target, int damage, bool crit)
+        public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
             if (Main.rand.NextBool(3))
                 player.AddBuff(ModContent.BuffType<Buffs.WillBeBad>(), 180);

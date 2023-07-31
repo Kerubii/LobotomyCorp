@@ -10,9 +10,9 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("The snake\'s open mouth represents the endless yearning for music.\n" +
+			/* Tooltip.SetDefault("The snake\'s open mouth represents the endless yearning for music.\n" +
                                "It temporarily invites the user to the world of trance.\n" +
-                               "25% chance to apply Black Shields to nearby allies when used");
+                               "25% chance to apply Black Shields to nearby allies when used"); */
         }
 
 		public override void SetDefaults() 
@@ -31,7 +31,7 @@ namespace LobotomyCorp.Items
 			Item.autoReuse = true;
 		}
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Main.rand.Next(4) == 0)
                 LobotomyModPlayer.ModPlayer(player).ApplyShield("B", 900, Item.damage * 2);

@@ -12,9 +12,10 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("A scythe that swings silently and with discipline like a conductor's gestures and baton.\n" +
-                               "If there were a score for this song, it would be one that sings of the apocalypse.");
-		}
+			/* Tooltip.SetDefault("A scythe that swings silently and with discipline like a conductor's gestures and baton.\n" +
+                               "If there were a score for this song, it would be one that sings of the apocalypse."); */
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
+        }
 
 		public override void SetDefaults() 
 		{
@@ -86,7 +87,7 @@ namespace LobotomyCorp.Items
             }
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             PreviousTarget = target.whoAmI;
         }
@@ -162,10 +163,10 @@ namespace LobotomyCorp.Items
             scale *= 1.2f;
         }
 
-        public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
+        public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
         {
             if (player.itemAnimation > player.itemAnimationMax / 2)
-                knockBack *= 0.75f;
+                modifiers.Knockback *= 0.75f;
         }
 
         private float ItemRotation(float progress, int direction)

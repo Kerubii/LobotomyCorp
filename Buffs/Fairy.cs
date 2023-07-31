@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Fairy");
-			Description.SetDefault("Under the Fairy's care");
+			// DisplayName.SetDefault("Fairy");
+			// Description.SetDefault("Under the Fairy's care");
 		}
 		
 		public override void Update(NPC npc, ref int BuffIndex)

@@ -299,7 +299,7 @@ namespace LobotomyCorp.Projectiles.Realized
 				Projectile.rotation = (chainBezier.BezierPoint(0f) - chainBezier.BezierPoint(0.05f)).ToRotation() + MathHelper.ToRadians(45);
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			if (!screencrackAttack && Projectile.ai[0] != 0)
 			{
@@ -317,19 +317,17 @@ namespace LobotomyCorp.Projectiles.Realized
 					if (Main.player[Projectile.owner].ownedProjectileCounts[type] == 0)
 					{
 						modPlayer.RegretShockwave = 0;
-						Projectile.NewProjectile(player.GetSource_FromThis(), target.Center, Vector2.Zero, type, damage, 0, player.whoAmI, 0, target.whoAmI);
+						Projectile.NewProjectile(player.GetSource_FromThis(), target.Center, Vector2.Zero, type, hit.Damage, 0, player.whoAmI, 0, target.whoAmI);
 						screencrackAttack = true;
 					}
 				}
 			}
 		}
 
-        public override void ModifyDamageScaling(ref float damageScale)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
 			if (Projectile.ai[0] == 0)
-				damageScale *= 0.7f;
-
-            base.ModifyDamageScaling(ref damageScale);
+				modifiers.FinalDamage *= 0.7f;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

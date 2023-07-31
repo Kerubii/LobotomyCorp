@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using MonoMod.Cil;
 using System;
 using Terraria;
+using Terraria.DataStructures;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -13,7 +14,7 @@ namespace LobotomyCorp
     {
         public override void Load()
         {
-            IL.Terraria.NPC.TargetClosest += forcetarget;
+            Terraria.IL_NPC.TargetClosest += forcetarget;
 
             base.Load();
         }
@@ -50,6 +51,10 @@ namespace LobotomyCorp
 
         public int BeakTarget = 0;
 		public bool BODExecute = false;
+
+        public float FragmentsFromSomewhereTentacles = 0;
+        public bool FragmentsFromSomewhereEnlightenment = false;
+        public int FragmentsFromSomewherePlayer = -1;
 
         public bool HarmonyMusicalAddiction = false;
 
@@ -95,6 +100,8 @@ namespace LobotomyCorp
         {
             if (BeakTarget > 0)
                 BeakTarget--;
+
+            //FragmentsFromSomewhereEnlightenment = false;
 
             HarmonyMusicalAddiction = false;
 
@@ -218,30 +225,28 @@ namespace LobotomyCorp
             }
         }
 
-        public override void ModifyHitPlayer(NPC npc, Player target, ref int damage, ref bool crit)
+        public override void ModifyHitPlayer(NPC npc, Player target, ref Player.HurtModifiers modifiers)
         {
             if (HarmonyMusicalAddiction)
             {
-                damage = (int)(damage * 1.1f);
+                modifiers.FinalDamage *= 1.1f;
             }
 
             if (SanguineDesireGlitter)
             {
                 if (SanguineDesireGlitterTarget == target.whoAmI)
-                    damage = (int)(damage * 1.15f);
+                    modifiers.FinalDamage *= 1.15f;
                 else
-                    damage = (int)(damage * 0.8f);
+                    modifiers.FinalDamage *= 0.8f;
             }
 
             if (RedEyesCocoon)
             {
-                damage = (int)(damage * 0.88f);
+                modifiers.FinalDamage *= 0.88f;
             }
-
-            base.ModifyHitPlayer(npc, target, ref damage, ref crit);
         }
 
-        public override void OnHitPlayer(NPC npc, Player target, int damage, bool crit)
+        public override void OnHitPlayer(NPC npc, Player target, Player.HurtInfo hurtInfo)
         {
             if (SanguineDesireExtensiveBleeding && !npc.immortal)
             {
@@ -276,14 +281,13 @@ namespace LobotomyCorp
                     }
                 }
             }
-            base.OnHitPlayer(npc, target, damage, crit);
         }
 
-        public override void OnHitByProjectile(NPC npc, Projectile projectile, int damage, float knockback, bool crit)
+        public override void OnHitByProjectile(NPC npc, Projectile projectile, NPC.HitInfo hit, int damageDone)
         {
             if (LaetitiaGiftOwner >= 0)
             {
-                LaetitiaGiftDamage += damage;
+                LaetitiaGiftDamage += damageDone;
                 if (LaetitiaGiftDamage > 10f)
                 {
                     Main.player[LaetitiaGiftOwner].ApplyDamageToNPC(npc, LaetitiaGiftDamage, 0f, 1, false);
@@ -307,6 +311,14 @@ namespace LobotomyCorp
                 Player player = Main.player[projectile.owner];
                 int type = ModContent.ProjectileType<Projectiles.Realized.RegretShock>();
                 Projectile.NewProjectile(player.GetSource_FromThis(), npc.Center, Vector2.Zero, type, projectile.damage, 0.2f, projectile.owner);
+            }
+        }
+
+        public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
+        {
+            if (FragmentsFromSomewhereEnlightenment && projectile.owner == FragmentsFromSomewherePlayer)
+            {
+                modifiers.FinalDamage /= 2;
             }
         }
 
@@ -365,8 +377,11 @@ namespace LobotomyCorp
                         float amount = (float)RedEyesMealAmount / RedEyesMax;
                         if (amount > 1)
                             amount = 1;
-                        Color red = Color.Red * 0.8f;
-                        red.A = drawColor.A;
+                        Color red = drawColor;
+                        byte r = (byte)(255 - red.R);
+                        red.R = (byte)(red.R + r * amount);
+                        red.G = (byte)(red.G * amount);
+                        red.B = (byte)(red.B * amount);
                         drawColor = Color.Lerp(drawColor, red, amount);
                     }
                 }
@@ -489,7 +504,7 @@ namespace LobotomyCorp
             return true;
         }
 
-        public override void HitEffect(NPC npc, int hitDirection, double damage)
+        public override void HitEffect(NPC npc, NPC.HitInfo hit)
         {
             if (npc.life <= 0 && LobotomyModPlayer.ModPlayer(Main.LocalPlayer).MagicBulletRequest == npc.whoAmI)
             {
@@ -516,24 +531,18 @@ namespace LobotomyCorp
             }
         }
 
-        public override void SetupShop(int type, Chest shop, ref int nextSlot)
+        public override void ModifyShop(NPCShop shop)
         {
-            if (type == NPCID.Merchant)
+            if (shop.NpcType == NPCID.Merchant)
             {
-                if (Main.bloodMoon)
-                {
-                    shop.item[nextSlot].SetDefaults(ModContent.ItemType < Items.WristCutter>());
-                    nextSlot++;
-                }
+                shop.Add(ModContent.ItemType<Items.WristCutter>(), Condition.BloodMoon);
             }
-            if (type == NPCID.Dryad)
+            else if (shop.NpcType == NPCID.Dryad)
             {
-                if (NPC.downedQueenBee || NPC.downedBoss3)
+                shop.Add(new Item(ModContent.ItemType<Items.WristCutter>())
                 {
-                    shop.item[nextSlot].SetDefaults(ModContent.ItemType <Items.Hypocrisy>());
-                    shop.item[nextSlot].shopCustomPrice = 100000;
-                    nextSlot++;
-                }
+                    shopCustomPrice = 100000
+                }, Condition.DownedQueenBee, Condition.DownedSkeletron);
             }
         }
 
@@ -622,6 +631,21 @@ namespace LobotomyCorp
             npc.RequestBuffRemoval(ModContent.BuffType<Buffs.ExtensiveBleeding>());
 
             return bleedAmount;
+        }
+
+        public static void ApplyTentacles(NPC npc, float amount, float amountLimit = 2)
+        {
+            LobotomyGlobalNPC Lnpc = LNPC(npc);
+            Lnpc.FragmentsFromSomewhereTentacles += amount;
+            if (Lnpc.FragmentsFromSomewhereTentacles > amountLimit)
+                Lnpc.FragmentsFromSomewhereTentacles = amountLimit;
+        }
+
+        public static void ApplyEnlightenment(NPC npc, int player)
+        {
+            LobotomyGlobalNPC Lnpc = LNPC(npc);
+            Lnpc.FragmentsFromSomewhereEnlightenment = true;
+            Lnpc.FragmentsFromSomewherePlayer = player;
         }
     }
 }

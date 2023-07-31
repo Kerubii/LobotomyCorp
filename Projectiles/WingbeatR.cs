@@ -11,7 +11,7 @@ namespace LobotomyCorp.Projectiles
 	public class WingbeatR : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Wingbeat");
+            // DisplayName.SetDefault("Wingbeat");
         }
 
 		public override void SetDefaults() {
@@ -182,25 +182,25 @@ namespace LobotomyCorp.Projectiles
             //Main.NewText(Projectile.ai[1]);
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (target.HasBuff<Buffs.Fairy>())
             {
-                damage = (int)(damage * 1.5f);
+                modifiers.FinalDamage *= 1.5f;
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             //target.immune[Projectile.owner] = 10;
             bool hasFairy = target.HasBuff<Buffs.Fairy>();
-            if (damage > 10)
+            if (damageDone > 10)
             {
                 int heal = 0;
                 if (Projectile.ai[1] == -1)
-                    heal += (int)(damage * 0.1f);
+                    heal += (int)(damageDone * 0.1f);
                 if (hasFairy)
-                    heal += (int)(damage * 0.1f);
+                    heal += (int)(damageDone * 0.1f);
                 if (heal > 0)
                 {
                     Main.player[Projectile.owner].statLife += heal;

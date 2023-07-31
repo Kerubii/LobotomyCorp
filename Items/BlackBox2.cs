@@ -8,9 +8,9 @@ namespace LobotomyCorp.Items
 	{
         public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Black Box - Container");
-			Tooltip.SetDefault("Contains an abnormal energy\n" +
-							   "Allows the creation of HE E.G.O");
+			// DisplayName.SetDefault("Black Box - Container");
+			/* Tooltip.SetDefault("Contains an abnormal energy\n" +
+							   "Allows the creation of HE E.G.O"); */
 		}
 
         public override void SetDefaults()

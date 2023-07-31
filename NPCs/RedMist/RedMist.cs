@@ -15,9 +15,13 @@ using Terraria.Graphics.Effects;
 namespace LobotomyCorp.NPCs.RedMist
 {
     [AutoloadBossHead]
-    [Autoload(LobotomyCorp.TestMode)]
     class RedMist : ModNPC
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+        }
+
         public override void Load()
         {
             string tex = "LobotomyCorp/NPCs/RedMist/RedMist_Head_Boss";
@@ -51,7 +55,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("The Red Mist");
+            // DisplayName.SetDefault("The Red Mist");
         }
 
         public override void SetDefaults()
@@ -2864,10 +2868,10 @@ namespace LobotomyCorp.NPCs.RedMist
             }
         }
 
-        public override void ModifyHitByProjectile(Projectile Projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
         {
-            if ((NPC.Center - Main.player[Projectile.owner].Center).Length() > 300)
-                    damage /= 3;
+            if ((NPC.Center - Main.player[projectile.owner].Center).Length() > 300)
+                    modifiers.FinalDamage /= 3;
         }
 
         private void fighterAI(Terraria.DataStructures.NPCAimedTarget target, float EffectiveRange, float speed, float maxSpeed)
@@ -3646,7 +3650,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Eye");
+            // DisplayName.SetDefault("Eye");
         }
 
         public override void SetDefaults()

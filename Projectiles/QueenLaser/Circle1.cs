@@ -14,7 +14,7 @@ namespace LobotomyCorp.Projectiles.QueenLaser
 	public class Circle1 : ModProjectile
 	{
         public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Arcana Slave");
+            // DisplayName.SetDefault("Arcana Slave");
         }
 
         public override void SetDefaults()
@@ -200,7 +200,7 @@ namespace LobotomyCorp.Projectiles.QueenLaser
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.immune[Projectile.owner] = 5;
         }

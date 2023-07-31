@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Increase Aggression");
-			Description.SetDefault("They live for the only one queen");
+			// DisplayName.SetDefault("Increase Aggression");
+			// Description.SetDefault("They live for the only one queen");
 		}
 
         public override void Update(Player player, ref int buffIndex)

@@ -8,13 +8,628 @@
 
 Mods: {
 	LobotomyCorp: {
-		EgoItemTooltip: {
-			RealizedEgo: A Realized E.G.O
-			
-			#History
+		Items: {
+			Adoration: {
+				Tooltip:
+					'''
+					A big mug filled with mysterious slime that never runs out.
+					It's the byproduct of some horrid experiment in a certain laboratory that eventually failed.
+					Inflicts Slow
+					'''
+				DisplayName: Adoration
+			}
+
+			Amrita: {
+				Tooltip:
+					'''
+					A cane used by monks for when they travel away from their temple.
+					It is commonly used to measure the depth of a body of water or to drive animals or insects away.
+					'''
+				DisplayName: Amrita
+			}
+
+			Beak: {
+				Tooltip:
+					'''
+					As if to prove that size doesn't matter when it comes to force,
+					The weapon has high firepower despite its small size.
+					'''
+				DisplayName: Beak
+			}
+
+			BearPaw: {
+				Tooltip:
+					'''
+					Its adorable appearance makes it something that might even appeal to a child as a gift.
+					Do not underestimate the weapon's power because of its fluffy exterior.
+					'''
+				DisplayName: Bear Paw
+			}
+
+			BlackSwan: {
+				Tooltip:
+					'''
+					Believing that it would turn white,
+					The black swan wanted to lift the curse by weaving together nettles.
+					All that was left is a worn parasol it once treasured.
+					Small chance to reflect damage taken
+					'''
+				DisplayName: Black Swan
+			}
+
+			Censored: {
+				Tooltip:
+					'''
+					[CENSORED] has the ability to [CENSORED], but this is a horrendous sight for those watching.
+					Looking at the E.G.O for more than 3 seconds will make you sick.
+					Heal 40% damage taken
+					'''
+				DisplayName: Censored
+			}
+
+			CherryBlossoms: {
+				Tooltip:
+					'''
+					Petals scatter from the fan like afterimages...
+					The spring breeze clad in cherry blossom petals is still cold and painful.
+					'''
+				DisplayName: Cherry Blossoms
+			}
+
+			Christmas: {
+				Tooltip:
+					'''
+					It is patched with heavy leather of unknown origin.
+					The stitches are carefully woven, but for whom or for what, exactly, is unclear.
+					It is not elegant, but you can feel the devotion of its creator.
+					Can be obtained from Presents
+					'''
+				DisplayName: Christmas
+			}
+
+			CobaltScar: {
+				Tooltip:
+					'''
+					Once upon a time, these claws would cut open the bellies of numerous creatures and tear apart their guts.
+					Hitting an enemy has a chance of increasing melee damage by 10%
+					50% increased damage while under 50% health
+					'''
+				DisplayName: Cobalt Scar
+			}
+
+			CrimsonScar: {
+				Tooltip:
+					'''
+					With steel in one hand and gunpowder in the other, there's nothing to fear in this place.
+					It's more important to deliver a decisive strike in blind hatred without hesitation than to hold on to insecure courage.
+					50% increased damage under 50% health
+					'''
+				DisplayName: Crimson Scar
+			}
+
+			Diffraction: {
+				Tooltip:
+					'''
+					To see this E.G.O, one must thoroughly concentrate.
+					You can ignore the ridiculous advice that you can see it with your mind.
+					'''
+				DisplayName: Diffraction
+			}
+
+			DaCapo: {
+				Tooltip:
+					'''
+					A scythe that swings silently and with discipline like a conductor's gestures and baton.
+					If there were a score for this song, it would be one that sings of the apocalypse.
+					'''
+				DisplayName: Da Capo
+			}
+
+			Ecstacy: {
+				Tooltip: The colorful pattern is vivid, similar to a child's plaything.
+				DisplayName: Ecstacy
+			}
+
+			Discord: {
+				Tooltip:
+					'''
+					A falchion edge shadowed by the world's discord.
+					Every life is trapped in the cycle of reincarnation.
+					'''
+				DisplayName: Discord
+			}
+
+			EngulfingDream: {
+				Tooltip:
+					'''
+					We must be awake at all times.
+					Not even sweet dreams in a sound sleep are allowed here; this weapon shall wake those who swim in such illusions.
+					And when the crying stops, dawn will break.
+					'''
+				DisplayName: Engulfing Dream
+			}
+
+			Exuviae: {
+				Tooltip: The slick sensation when holding this E.G.O may disturb some employees.
+				DisplayName: Exuviae
+			}
+
+			FaintAroma: {
+				Tooltip:
+					'''
+					Even after the E.G.O was extracted, it still carried the fragrance of the archetype.
+					Simply carrying it gives the illusion that you're standing in a forest in the middle of nowhere.
+					'''
+				DisplayName: Faint Aroma
+			}
+
+			FeatherOfHonor: {
+				Tooltip:
+					'''
+					The feather strikes with vivid flame. It is not weak, nor faint.
+					The flame pierces the body and melts the frost of the heart.
+					'''
+				DisplayName: Feather Of Honor
+			}
 
 			FourthMatchFlame: {
-				ItemTooltip: "I am coming to you. You, who will be reduced to ash like me."
+				Tooltip:
+					'''
+					The fire roars and burns like the first flame.
+					The light of the match will not go out.
+					Consumes bullets
+					'''
+				DisplayName: Fourth Match Flame
+			}
+
+			FragmentsFromSomewhere: {
+				Tooltip:
+					'''
+					Do not attempt to understand it, just use it.
+					The spear often tries to lead the wielder into a long and endless realm of mind...
+					But they must try to not be swayed by it.
+					'''
+				DisplayName: Fragments From Somewhere
+			}
+
+			FrostSplinter: {
+				Tooltip:
+					'''
+					The edge of the spear is both straight and icy.
+					Anyone damaged by it will lose themselves for a moment.
+					As the equipment was forged from snow, it shall disappear without a trace someday.
+					Inflicts Slow
+					'''
+				DisplayName: Frost Splinter
+			}
+
+			Gaze: {
+				Tooltip:
+					'''
+					The gaze from the keyhole is fixed on its target without ever stopping.
+					No one knows what it wanted to peep at so dearly.
+					Can cause additional damage over time
+					'''
+				DisplayName: Gaze
+			}
+
+			GoldRush: {
+				Tooltip:
+					'''
+					The weapon she used to brandish in her prime, before the greed solidified and became what it is now.
+					One can release their primal desires and strike enemies with full force; technical skill is unneeded.
+					'''
+				DisplayName: Gold Rush
+			}
+
+			GreenStem: {
+				Tooltip: Those who come in contact die by the deep-seated hatred rather than the sharpness of its tip.
+				DisplayName: Green Stem
+			}
+
+			GrinderMk4: {
+				Tooltip:
+					'''
+					The sharp sawtooth of the grinder makes a clean cut through its enemy.
+					Its operation is simple and straightforward, but that doesn't necessarily make it easy to wield.
+					'''
+				DisplayName: Grinder Mk4
+			}
+
+			Harmony: {
+				Tooltip:
+					'''
+					It may look like a deteriorating machine at first glance,
+					But the music it makes captures its audience more than any other instrument could.
+					The wielder must dedicate himself in return.
+					After all, art is a devil's gift, born from despair and suffering.
+					30% increased damage when consuming 2% hp while having above 2% maximum health
+					'''
+				DisplayName: Harmony
+			}
+
+			Horn: {
+				Tooltip:
+					'''
+					The green - eyed beauty's favorite flower was the dahlia; "Your love makes me happy."
+					The lady's happiness came to an end with the budding of those unsightly horns.
+					The dahlia's unfulfilled meaning was borne as a seed in this E.G.O, carrying a lingering emotion.
+					'''
+				DisplayName: Horn
+			}
+
+			Hornet: {
+				Tooltip:
+					'''
+					The kingdom needed to stay prosperous, and more bees were required for that task.
+					The name of that kingdom may go down in history.
+					But who will be there to remember the bees that gave their lives to the cause?
+					The weapon's bullets selectively fly toward threats, so skillful aiming isn't required; all that's needed is the will to hit the target.
+					Bullets are converted to bees
+					'''
+				DisplayName: Hornet
+			}
+
+			Harvest: {
+				Tooltip:
+					'''
+					The last legacy of the man who sought wisdom.
+					The rake tilled the human brain instead of farmland.
+					'''
+				DisplayName: Harvest
+			}
+
+			Heaven: {
+				Tooltip:
+					'''
+					Just contain it in your sight.
+					As it spreads its wings for an old god, a heaven just for you burrows its way.
+					'''
+				DisplayName: Heaven
+			}
+
+			Hypocrisy: {
+				Tooltip:
+					'''
+					The tree turned out to be riddled with hypocrisy and deception;
+					Those who wear its blessing act in the name of bravery and faith.
+					However, be warned that nature does not know the difference between a blessing and a curse.
+					Sold by the Dryad after Queen Bee
+					'''
+				DisplayName: Hypocrisy
+			}
+
+			InTheNameOfLoveAndHate: {
+				Tooltip:
+					'''
+					A magic wand surging with the lovely energy of a magical girl.
+					The holy light can cleanse the body and mind of every villain, and they shall be born anew.
+					'''
+				DisplayName: In The Name Of Love And Hate
+			}
+
+			Justitia: {
+				Tooltip:
+					'''
+					It remembers the balance of the Long Bird that never forgot others' sins.
+					This weapon may be able to not only cut flesh but trace of sins as well.
+					Attacks hit multiple times
+					Has a chance to perform a special attack
+					'''
+				DisplayName: Justitia
+			}
+
+			Laetitia: {
+				Tooltip:
+					'''
+					The crude design appears to have been made a long time ago.
+					The small accessory remains like the wishes of a child who yearned for happiness.
+					'''
+				DisplayName: Laetitia
+			}
+
+			Lamp: {
+				Tooltip:
+					'''
+					Big Bird's eyes gained another in number for every creature it saved.
+					On this weapon, the radiant pride is apparent.
+					'''
+				DisplayName: Lamp
+			}
+
+			Lantern: {
+				Tooltip:
+					'''
+					The luminous organ shines brilliantly, making it useful for lighting up the dark.
+					Though teeth sticking out of some spots of the equipment is a rather frightening sight.
+					'''
+				DisplayName: Lantern
+			}
+
+			LifeForADaredevil: {
+				Tooltip:
+					'''
+					An ancient sword.
+					Just as its archetype desired, it will be useless in the hands of the frightened
+					Ignores target's defense
+					'''
+				DisplayName: Life For A Daredevil
+			}
+
+			Lumber: {
+				Tooltip:
+					'''
+					A versatile equipment made to cut down trees and people alike.
+					Perhaps sharpening the axe was the one thing it didn't neglect. The blade is always shiny.
+					'''
+				DisplayName: Lumber
+			}
+
+			MagicBullet: {
+				Tooltip:
+					'''
+					Though the original's power couldn't be fully extracted, the magic this holds is still potent.
+					The weapon's bullets travel across the corridor, along the horizon.
+					Pierces through foes and friends alike
+					'''
+				DisplayName: Magic Bullet
+			}
+
+			Mimicry: {
+				Tooltip:
+					'''
+					The yearning to imitate the human form is sloppily reflected on the E.G.O.
+					As if it were a reminder that it should remain a mere desire.
+					It can deliver a powerful downswing that should be impossible for a human.
+					Can be charged for 300% increased damage
+					Recovers 25% damage dealt on hit
+					'''
+				DisplayName: Mimicry
+			}
+
+			Moonlight: {
+				Tooltip:
+					'''
+					The snake\'s open mouth represents the endless yearning for music.
+					It temporarily invites the user to the world of trance.
+					25% chance to apply Black Shields to nearby allies when used
+					'''
+				DisplayName: Moonlight
+			}
+
+			OurGalaxy: {
+				Tooltip:
+					'''
+					"There's a universe inside a pebble."
+					When the child cries, the stars in the galaxy light the void.
+					"In your universe, am I to be found?"
+					'''
+				DisplayName: Our Galaxy
+			}
+
+			ParadiseLost: {
+				Tooltip:
+					'''
+					Behold: you stood at the door and knocked, and it was opened to you.
+					I come from the end, and I am here to stay for but a moment.
+					At the same time, I am the one who kindled the light to face the world.
+					My loved ones, who now eagerly desire the greater gifts; I will show you the most excellent way.
+					'''
+				DisplayName: Paradise Lost
+			}
+
+			Penitence: {
+				Tooltip:
+					'''
+					To know means to understand.
+					We successfully extracted the archetype and materialized it,
+					and the observer reshaped it into a weapon.
+					'''
+				DisplayName: Penitence
+			}
+
+			Pink: {
+				Tooltip:
+					'''
+					Pink is considered to be the color of warmth and love, but is that true?
+					Can guns really bring peace and love?
+					Can only be used while standing still
+					'''
+				DisplayName: Pink
+			}
+
+			Pleasure: {
+				Tooltip:
+					'''
+					If you grasp for pleasure you cannot endure, you will end up losing yourself.
+					When the powder that falls from the thorns becomes known to the world,
+					People may forever sink into the swamp of intoxication.
+					'''
+				DisplayName: Pleasure
+			}
+
+			RedEyes: {
+				Tooltip:
+					'''
+					The Spider Bud had dozens of eyes, and its children were always hungry.
+					This tenacity carried over to the E.G.O., demonstrating an outstanding ability to track down targets.
+					Grants swiftness buff for 3 seconds on hit
+					'''
+				DisplayName: Red Eyes
+			}
+
+			Regret: {
+				Tooltip:
+					'''
+					Enemies crushed by this regret can never return to their normal life.
+					Before swinging this weapon, expressing one's condolences for the demise of the inmate who couldn't even have a funeral would be nice.
+					'''
+				DisplayName: Regret
+			}
+
+			SanguineDesire: {
+				Tooltip:
+					'''
+					The axe may seem light, but the wielder musn't forget that it has hurt countless people as a consequence of poor choices.
+					The weapon is stronger when used by an employee with strong conviction.
+					'''
+				DisplayName: Sanguine Desire
+			}
+
+			ScreamingWedge: {
+				Tooltip:
+					'''
+					Hair has grown on the crossbow as if to express that the woman's dejection will never be forgotten.
+					The sound of the projectile splitting the air is reminiscent of her piercing scream.
+					'''
+				DisplayName: Screaming Wedge
+			}
+
+			Smile: {
+				Tooltip:
+					'''
+					It has the pale faces of nameless employees and a giant mouth on it.
+					Upon striking with the weapon, the monstrous mouth opens wide to devour the target, its hunger insatiable.
+					Alternate attack to slam down an enemy or the ground
+					'''
+				DisplayName: Smile
+			}
+
+			SoCute: {
+				Tooltip:
+					'''
+					Beware that the beast inside you may awaken if you use this weapon too much...
+					Oh but the soft jelly-like pawbs feel vewwy nice to touch.
+					'''
+				DisplayName: So Cute
+			}
+
+			Soda: {
+				Tooltip:
+					'''
+					A pistol painted in a refreshing purple.
+					Whenever this E.G.O. is used, a faint scent of grapes wafts through the air.
+					'''
+				DisplayName: Soda
+			}
+
+			SolemnLament: {
+				Tooltip:
+					'''
+					The somber design is a reminder that not a sliver of frivolity is allowed for the minds of those who mourn.
+					One handgun symbolizes grief for the dead, while the other symbolizes early lament for the living.
+					Switches between range and magic depending on the gun used
+					'''
+				DisplayName: Solemn Lament
+			}
+
+			Solitude: {
+				Tooltip:
+					'''
+					A strong sense of loneliness still lingers, even in the form of an E.G.O.
+					Its bullets create a void that cannot be filled on the victim's soul.
+					It was a rusty weapon from the beginning.
+					'''
+				DisplayName: Solitude
+			}
+
+			SoundOfAStar: {
+				Tooltip:
+					'''
+					The star shines brighter as our despair gathers.
+					The weapon's small, evocative sphere fires a warm ray
+					In the light, everything is equal.
+					'''
+				DisplayName: Sound Of A Star
+			}
+
+			Spore: {
+				Tooltip:
+					'''
+					A spear covered in spores and affection.
+					It lights the employee's heart, shines like a star, and steadily tames them.
+					'''
+				DisplayName: Spore
+			}
+
+			SwordSharpenedWithTears: {
+				Tooltip:
+					'''
+					A sword suitable for swift thrusts.
+					Even someone unskilled in dueling can rapidly puncture an enemy using this E.G.O with remarkable agility.
+					Alternate attack to perform a flurry of stabs
+					'''
+				DisplayName: Sword Sharpened With Tears
+			}
+
+			Syrinx: {
+				Tooltip:
+					'''
+					What cry could be more powerful than one spurred by primal instinct?
+					As if everything else were hollow and pointless,
+					The wailing numbs even the brain, making it impossible to think.
+					Can be dropped by Eye of Cthulhu
+					'''
+				DisplayName: Syrinx
+			}
+
+			TodaysExpression: {
+				Tooltip:
+					'''
+					Many different expressions are pdamageed on the equipment like patches.
+					The inability to show one's face is perhaps a form of shyness.
+					'''
+				DisplayName: Todays Expression
+			}
+
+			Tough: {
+				Tooltip:
+					'''
+					A glock reminiscent of a certain detective who fought evil for 25 years, losing hair as time went by.
+					Only those who maintain a clean 'hairstyle' with no impurities on their head will be deemed worthy of equipping this weapon.
+					'''
+				DisplayName: Tough
+			}
+
+			Twilight: {
+				Tooltip:
+					'''
+					Just like how the ever-watching eyes...
+					The scale that could measure any and all sin...
+					The beak that could swallow everything, protected the peace of the Black Forest...
+					The wielder of this armament may also bring peace as they did
+					Alternate attack to perform to leap forward and back and slash the target
+					Alternate attack be used again after 8 seconds while holding this weapon
+					'''
+				DisplayName: Twilight
+			}
+
+			Wingbeat: {
+				Tooltip:
+					'''
+					Graced by the fairies, the weapon radiates a pale light.
+					Despite its cute shape, the E.G.O. itself is rather heavy.
+					'''
+				DisplayName: Wingbeat
+			}
+
+			WristCutter: {
+				Tooltip:
+					'''
+					Its sharp blade can make a clean cut through bone like a hot knife through butter
+					Leaving a wound that will never heal.
+					Sold by the Merchant during Blood Moon
+					'''
+				DisplayName: Wrist Cutter
+			}
+
+			#Ruina EGO
+			
+			#History
+			
+			FourthMatchFlameR: {
+				DisplayName: Fourth Match Flame
+				Tooltip: I am coming to you. You, who will be reduced to ash like me.
 				PassiveList:
 					'''
 					Warmth of a Flame - 400% damage on fourth use
@@ -24,8 +639,9 @@ Mods: {
 					'''
 			}
 
-			Forgotten: {
-				ItemTooltip: "Its memories began with a warm hug."
+			ForgottenR: {
+				DisplayName: Forgotten
+				Tooltip: Its memories began with a warm hug.
 				PassiveList:
 					'''
 					Display of Affection - Attacking the same enemy three times in a row marks them, unmarks enemies when far away or switching weapons
@@ -35,19 +651,25 @@ Mods: {
 					'''
 			}
 
-			Wingbeat: {
-				ItemTooltip: "Everything will be peaceful while you are under the fairies' care."
+			WingbeatR: {
+				DisplayName: Wingbeat
+				Tooltip: Everything will be peaceful while you are under the fairies' care.
 				PassiveList:
 					'''
 					Ravenous Hunger - First enemy hit has a 10% lifesteal
-					Fairies Care - Send a fairy to heal an enemy or ally
+					Fairies Care - Send a fairy to heal an enemy
 					Prepared Meal - 15% increased damage and 20% increased lifesteal against enemies under Fairies Care
 					|Predation - Your health slowly drains, temporarily stopped after killing an enemy
 					'''
 			}
 
-			Hornet: {
-				ItemTooltip: "If you feel an abdominal pain and a tingling sensation in your neck,\nthe best thing you can do now is look at the great blue sky you'll never get to see again."
+			HornetR: {
+				DisplayName: Hornet
+				Tooltip:
+					'''
+					If you feel an abdominal pain and a tingling sensation in your neck,
+					the best thing you can do now is look at the great blue sky you'll never get to see again.
+					'''
 				PassiveList:
 					'''
 					Strike of Retribution - Charge up a forward strike, the distance travelled depends on how long you've charged
@@ -58,8 +680,9 @@ Mods: {
 					'''
 			}
 
-			GreenStem: {
-				ItemTooltip: "The day a ripe apple fell off the tree in the garden where the princess and the king stood, the witch's heart shattered."
+			GreenStemR: {
+				DisplayName: Green Stem
+				Tooltip: The day a ripe apple fell off the tree in the garden where the princess and the king stood, the witch's heart shattered.
 				PassiveList:
 					'''
 					Enroaching Malice - Slowly spread vines around you
@@ -70,21 +693,22 @@ Mods: {
 			}
 
 			#Technology
-
-			Regret: {
-				ItemTooltip: "What's really pitiful is people like you dying to the likes of me."
+			
+			RegretR: {
+				DisplayName: Regret
+				Tooltip: What's really pitiful is people like you dying to the likes of me.
 				PassiveList:
 					'''
 					Ends, Begins, Ends - This weapon's third succesful attack inflicts Metallic Ringing on the first enemy hit
 					Metallic Ringing - Reduces defense and creates shockwaves when hit by this weapon
 					Chained Wrath - Increased movement speed is converted to damage while held (50% conversion), cancelled while on a mount or minecart
 					|Binding Jacket - While having any form of debuff, 35% decreased damage, Movement speed bonuses nullified, -10 defense for 5 seconds
-					Incomplete and unobtainable
 					'''
 			}
 
-			GrinderMk52: {
-				ItemTooltip: "Blood covers the whole floor, screams echo, people are running away..."
+			GrinderMk52R: {
+				DisplayName: Grinder Mk52
+				Tooltip: Blood covers the whole floor, screams echo, people are running away...
 				PassiveList:
 					'''
 					Disable Limiter - 40% increased movement speed while blades are active, Blades have extra reach while at high charge
@@ -94,8 +718,9 @@ Mods: {
 					'''
 			}
 
-			Harmony: {
-				ItemTooltip: "But nothing could compare to the music it makes when it eats a human."
+			HarmonyR: {
+				DisplayName: Harmony
+				Tooltip: But nothing could compare to the music it makes when it eats a human.
 				PassiveList:
 					'''
 					Harmony of Despair - Hitting enemies produces Harmony Notes that gives "Satiated" buff, negating negative effects of Musical Addiction
@@ -105,32 +730,35 @@ Mods: {
 					'''
 			}
 
-			SolemnLament: {
-				ItemTooltip: "Where does one go when they die?"
+			SolemnLamentR: {
+				DisplayName: Solemn Lament
+				Tooltip: Where does one go when they die?
 				PassiveList:
 					'''
 					Eternal Rest - The second gun uses the next ammo type, it does not shoot otherwise.
 					Tranquility - The weapon's firerate is increased when alternating between the two guns. When shooting quickly the bullets transform into numerous butterflies
 					Hand of Salvation - Bullets deal 15% increased damage and spawn butterflies against enemies with the lowest health
-					|Lament - Getting hit disables one of the gun for 3 seconds, Only one gun can be disabled at a time
+					|Lament - After taking a total of 25% health damage while holding this weapon, disables one of the gun for 5 seconds. Only one gun can be disabled at a time
 					'''
 			}
 
-			MagicBullet: {
-				ItemTooltip: "This magical bullet can truly hit anyone, just like you say."
+			MagicBulletR: {
+				DisplayName: Magic Bullet
+				Tooltip: This magical bullet can truly hit anyone, just like you say.
 				PassiveList:
 					'''
 					Magic Bullet - Each shot has a special damage, target and property. The bullets always hits its mark
-					Request - Mark a target, The bullets only targets the marked target. Removed when switching weapons
+					Request - Right click to Mark a target, The bullets only targets the marked target. Removed when switching weapons
 					Dark Flame - After the Seventh shot, Gain Dark Flame buff, boosting this weapon's damage by 70%
 					|The Seventh Bullet - The 7th Bullet always targets Town NPCs. If there is none, targets allies. Pierces the user's heart if there are none left
 					'''
 			}
-			
-			#Literature
 
-			TodaysExpression: {
-				ItemTooltip: "It's a good day! Are you still shy today?"
+			#Literature
+			
+			TodaysExpressionR: {
+				DisplayName: Todays Expression
+				Tooltip: It's a good day! Are you still shy today?
 				PassiveList:
 					'''
 					Wavering Feelings - Send out a wall that has special properties depending on Look of the Day
@@ -140,8 +768,9 @@ Mods: {
 					'''
 			}
 
-			SanguineDesire: {
-				ItemTooltip: "The girl begged in tears. 'Mister, please cut off my feet...'"
+			SanguineDesireR: {
+				DisplayName: Sanguine Desire
+				Tooltip: The girl begged in tears. 'Mister, please cut off my feet...'
 				PassiveList:
 					'''
 					I CANT RESIST IT!!! - Alternate Attack to deal a heavy short range attack with bonus damage against Extensive Bleeding and removes it
@@ -152,8 +781,9 @@ Mods: {
 					'''
 			}
 
-			RedEyes: {
-				ItemTooltip: "Unsurprisingly, not a single employee volunteered to retrieve the corpse of their cocooned colleague."
+			RedEyesR: {
+				DisplayName: Red Eyes
+				Tooltip: Unsurprisingly, not a single employee volunteered to retrieve the corpse of their cocooned colleague.
 				PassiveList:
 					'''
 					Cry Out - Alternate attack to teleport and inflict Cocoon on a marked Meal, Only 3 enemies can be Cocooned at a time
@@ -164,8 +794,9 @@ Mods: {
 					'''
 			}
 
-			Laetitia: {
-				ItemTooltip: "She was so sad that she had to leave her dear friends behind, so she came up with a brilliant idea!"
+			LaetitiaR: {
+				DisplayName: Laetitia
+				Tooltip: She was so sad that she had to leave her dear friends behind, so she came up with a brilliant idea!
 				PassiveList:
 					'''
 					Huuuuge Gift!!! - If no enemies have any Gifts, use all Mana to send a Huge Gift that give gifts up to 5 enemies
@@ -176,8 +807,9 @@ Mods: {
 					'''
 			}
 
-			BlackSwan: {
-				ItemTooltip: "What happens when the black swan wakes up from dreaming of a white swan?"
+			BlackSwanR: {
+				DisplayName: Black Swan
+				Tooltip: What happens when the black swan wakes up from dreaming of a white swan?
 				PassiveList:
 					'''
 					Clothing of Nettle - Gain a Nettle after 5 seconds, Up to 6. A Nettle upgrades Black Swan. Also reduces incoming damage by 75%, Attackers also take damage and consumes it
@@ -187,50 +819,211 @@ Mods: {
 					|Broken Dream - Getting hit without a Nettle disables Clothing of Nettle for 30 seconds, increasing damage taken by 30% and activates most Nettle effects. Shrieking will extend the duration by 6 seconds
 					'''
 			}
-			
-			#Art
 
-			FragmentsFromSomewhere: {
-				ItemTooltip: "You see a song in front of you. It's approaching, becoming more colorful by the second."
+			#Art
+			
+			FragmentsFromSomewhereR: {
+				DisplayName: Fragments From Somewhere
+				Tooltip: You see a song in front of you. It's approaching, becoming more colorful by the second.
 				PassiveList:
 					'''
-					Echoes from the Beyond - Alternate attack to damage enemies around you, Inflicts 10 Enlightenment
-					Enlightenment - Other allies deal 20% increased damage
+					Echoes from the Beyond - Alternate attack to damage enemies around you, Inflicts Enlightenment for 20 seconds
+					Enlightenment - True melee attacks and other allies deal 20% increased damage, Immune to Echoes from the Beyond
 					Tentacles - Pierced enemies has less damage resistance from Echoes from the Beyond (Up to 200%)
-					|Understand - The user deals 50% decreased damage against enemies with Enlightenment
+					|Understand - The user deals 50% decreased damage with any projectiles against enemies with Enlightenment
+					'''
+			}
+
+			OurGalaxyR: {
+				DisplayName: Our Galaxy
+				Tooltip: A teardrop fell from the child's dewy eyes, as stars showered from the sky. The world falls into a slumber, trapped in an ecstatic lullaby.
+				PassiveList:
+					'''
+					An Eternal Farewell - Summon comets that explodes, healing the user and its allies on hit
+					A Token of Friendship - Allies healed by this weapon gain a Pebble that is only removed when they die
+					Pebble - Gain increased life regeneration based on how many other allies have Pebble
+					|Teardrop - If an ally with a Pebble die, the user and all other allies with Pebble also die
+					'''
+			}
+
+			FaintAromaR: {
+				DisplayName: Faint Aroma
+				Tooltip: Bearing the hope to return to dust, it shall go back to the grave with all that desires to live.
+				PassiveList:
+					'''
+					Magnificent End - Hitting an enemy while having 3 petals consumes them and deal 300% of your weaponÔøΩ's damage to all enemies around you
+					Flower Petals - Hitting enemies or charging up with Right click grants a petal that dissapears overtime
+					Spring's Genesis - Each petal enhances your normal attacks and damage
+					Doll Fashioned from the Earth - Negate any negative life regen while a petal is active
+					|Autumn's Passing - 10% increased contact damage taken per petals
+					This Item is incomplete and unobtainable
+					'''
+			}
+
+			#Originals
+			
+			LifeForADaredevilR: {
+				DisplayName: Life For A Daredevil
+				Tooltip: Life is only granted to those who hold no fear of death.
+				PassiveList:
+					'''
+					No Fear for Death - Channeling the attack holds a stance. When released before being hit, kill nearby projectiles and do a Counter attack
+					Mortal Life - Successful counters deal additional true damage equal to missing health and increased radius
+					Inspired Bravery - After successfully countering an attack, applies a buff that enhances movement speed, melee swing speed and counter damage by 10% and improves this EGO
+					|Reckless Foolishness - Failing to counter any attack for a period of time decreases damage reduction up to 15%
+					'''
+			}
+
+			#Crafting Stations // Furnitures
+			
+			BlackBox3: {
+				Tooltip:
+					'''
+					A Tool to extract from the subconsciousness of mankind
+					Allows the creation of WAW and ALEPH E.G.O
+					'''
+				DisplayName: Black Box3
+			}
+
+			BlackBox2: {
+				Tooltip:
+					'''
+					Contains an abnormal energy
+					Allows the creation of HE E.G.O
+					'''
+				DisplayName: Black Box2
+			}
+
+			BlackBox: {
+				Tooltip:
+					'''
+					Absorbs an unknown energy around itself
+					Allows the creation of ZAYIN and TETH E.G.O
+					"The Bucket rises from the Well of a person, filled with the water that can only be drawn by that person."
+					'''
+				DisplayName: Black Box
+			}
+
+			QlipothDetterenceField: {
+				Tooltip: '''"Coffee, manager?"'''
+				DisplayName: Qlipoth Detterence Field
+			}
+
+			DisciplinaryShell: {
+				Tooltip:
+					'''
+					Awakens the Red Mist
+					"Crush those monstrous bastards."
+					The Boss is highly unfinished I dont recommend fighting it
+					'''
+				DisplayName: Disciplinary Shell
+			}
+
+			#Accessories
+			
+			BehaviorAdjustment: {
+				DisplayName: Behavior Adjustment
+				Tooltip: ""
+			}
+
+			TheHomingInstinctS: {
+				Tooltip: ""
+				DisplayName: The Homing Instinct S
+			}
+
+			BeakR: {
+				Tooltip: ""
+				DisplayName: Beak R
+			}
+
+			SwordSharpenedWithTearsR: {
+				Tooltip: ""
+				DisplayName: Sword Sharpened With Tears R
+			}
+
+			NihilR: {
+				Tooltip: ""
+				DisplayName: Nihil R
+			}
+
+			InTheNameOfLoveAndHateR: {
+				Tooltip: ""
+				DisplayName: In The Name Of Love And Hate R
+			}
+
+			MimicryR: {
+				Tooltip: ""
+				DisplayName: Mimicry R
+			}
+
+			FaintAromaS: {
+				Tooltip: ""
+				DisplayName: Faint Aroma S
+			}
+
+			HeartOfAspiration: {
+				DisplayName: Heart Of Aspiration
+				Tooltip: ""
+			}
+
+			LuminousBracelet: {
+				DisplayName: Luminous Bracelet
+				Tooltip: ""
+			}
+
+			HarmonyNote: {
+				Tooltip: ""
+				DisplayName: Harmony Note
+			}
+		}
+
+		#DONT transfer this to Items it deletes them :V
+		EgoItemTooltip: {
+			RealizedEgo: A Realized E.G.O
+
+			#Art
+			
+			FragmentsFromSomewhere: {
+				ItemTooltip: You see a song in front of you. It's approaching, becoming more colorful by the second.
+				PassiveList:
+					'''
+					Echoes from the Beyond - Alternate attack to damage enemies around you, Inflicts Enlightenment for 20 seconds
+					Enlightenment - True melee attacks and other allies deal 20% increased damage, Immune to Echoes from the Beyond
+					Tentacles - Pierced enemies has less damage resistance from Echoes from the Beyond (Up to 200%)
+					|Understand - The user deals 50% decreased damage with any projectiles against enemies with Enlightenment
 					'''
 			}
 
 			OurGalaxy: {
-				ItemTooltip: "A teardrop fell from the child's dewy eyes, as stars showered from the sky. The world falls into a slumber, trapped in an ecstatic lullaby."
+				ItemTooltip: A teardrop fell from the child's dewy eyes, as stars showered from the sky. The world falls into a slumber, trapped in an ecstatic lullaby.
 				PassiveList:
 					'''
-					An Eternal Farewell - Summon meteors that explodes, healing the user and its allies
+					An Eternal Farewell - Summon comets that explodes, healing the user and its allies on hit
 					A Token of Friendship - Allies healed by this weapon gain a Pebble that is only removed when they die
 					Pebble - Gain increased life regeneration based on how many other allies have Pebble
-					|Teardrop - If an ally with a Pebble die, the user and all other allies with stones also die
+					|Teardrop - If an ally with a Pebble die, the user and all other allies with Pebble also die
 					'''
 			}
 
 			Pleasure: {
-				ItemTooltip: "Now it's time for my head to burst. Good day."
+				ItemTooltip: Now it's time for my head to burst. Good day.
 				PassiveList:
 					'''
 					Time for the Head to Burst - Alternate attack use 20 Mana, Forcefully explodes Pleasure
 					Pleasure - Attacks inflict Pleasure to enemies, increasing damage taken from this weapon
 					Thorns - If the attacker has Pleasure, reflect 60% of damage taken and heal 10% of the damage back
-					Elation - After an enemy has enough Pleasure, they explode into hearts
-					Fluttering - Take no health damage from Projectiles if no enemy is nearby
+					Elation - After an enemy has enough Pleasure, they explode taking additional damage and bleed
+					Fluttering - Dodges Projectiles if no enemy is nearby
 					|Laughing Powder - Heavily decreased Mana regeneration, Mana decreases when taking damage. When Mana reaches 0 take 50% damage from your health and set Mana to max
 					'''
 			}
 
 			FaintAroma: {
-				ItemTooltip: "Bearing the hope to return to dust, it shall go back to the grave with all that desires to live."
+				ItemTooltip: Bearing the hope to return to dust, it shall go back to the grave with all that desires to live.
 				PassiveList:
 					'''
-					Magnificent End - Hitting an enemy while having 3 petals removes them and deal 300% of your weaponÅ's damage to all enemies around you
-					Flower Petals - Hitting enemies or charging up grants a petal that dissapears overtime
+					Magnificent End - Hitting an enemy while having 3 petals consumes them and deal 300% of your weaponÔøΩ's damage to all enemies around you
+					Flower Petals - Hitting enemies or charging up with Right click grants a petal that dissapears overtime
 					Spring's Genesis - Each petal enhances your normal attacks and damage
 					Doll Fashioned from the Earth - Negate any negative life regen while a petal is active
 					|Autumn's Passing - 10% increased contact damage taken per petals
@@ -239,7 +1032,7 @@ Mods: {
 			}
 
 			DaCapo: {
-				ItemTooltip: "From break and ruin, the most beautiful performance begins."
+				ItemTooltip: From break and ruin, the most beautiful performance begins.
 				PassiveList:
 					'''
 					Ever-repeating Performance - Alternate attack to start a Performance, Automatically moves to the next movement
@@ -248,11 +1041,11 @@ Mods: {
 					|From the Beginning - After performance ends, start again. If the Performance is stopped except during Finale, the user gains a debuff
 					'''
 			}
-			
-			#Natural
 
+			#Natural
+			
 			InTheNameOfLoveAndHate: {
-				ItemTooltip: "In the name of Love and Justice~ Here comes Magical Girl!"
+				ItemTooltip: In the name of Love and Justice~ Here comes Magical Girl!
 				PassiveList:
 					'''
 					Arcana Slave - Summon a laser of Love and Justice that costs {$0} mana, Resets to maximum when used
@@ -264,7 +1057,7 @@ Mods: {
 			}
 
 			TheSwordSharpenedWithTears: {
-				ItemTooltip: "All that remains is the hollow pride of a weathered knight."
+				ItemTooltip: All that remains is the hollow pride of a weathered knight.
 				PassiveList:
 					'''
 					Heart-piercing sword - Summon three swords that floats around you
@@ -277,71 +1070,71 @@ Mods: {
 			}
 
 			GoldRush: {
-				ItemTooltip: "...Sadness says: 'Begone, pass away!' But greed seeks eternityóseeks deep, deep eternity."
+				ItemTooltip: ...Sadness says: 'Begone, pass away!' But greed seeks eternityÔøΩseeks deep, deep eternity.
 				PassiveList:
 					'''
 					Road of the King - Alternate attack to destroy all Fragments of Bliss, Creates a portal through both sides and sequentially teleport through them
-					Fragment of Bliss - Attacked enemies are given a Brilliant Bliss
+					Fragment of Bliss - Attacked enemies are given a Brilliant Bliss, Up to 5 active Bliss at a time. If an enemy dies it stays on its current spot
 					Intemperance - Critical hits heal 10% of its damage and temporarily reduces enemy defense
 					|Greed - While under 50% health, 40% decreased attack speed and movement and gain 30% critical strike chance, Road of king only targets 1 enemy
 					'''
 			}
 
 			BlindRage: {
-				ItemTooltip: "We... We were true friends... Right?"
+				ItemTooltip: We... We were true friends... Right?
 				PassiveList:
 					'''
 					EMBODIMENTS OF EVIL!!!! - All attacks have a splash radius that inflicts Acidic Sludge
-					Acidic Sludge - Up to 15% increased damage taken
-					Companion - Mark an ally with Companion, Gain
-					|Wrath - After taking a total damage equal to 25% of your health, Increased splash radius, attacks erratically and be able to hit allies. Companion transforms into a monster
+					Acidic Sludge - Up to 15% increased damage taken and deals up to 15 damage when hit
+					Companion - Alternate attack marks an ally with Companion, Gain 10% increased damage when hitting enemies attacked by Companion. Removed if Wrath is activated
+					|Wrath - After taking a total damage equal to 25% of your health, Increased splash radius, attacks erratically and be able to hit allies
 					'''
 			}
 
 			Nihil: {
-				ItemTooltip: "If you're confused because there doesn't seem to be a correct method at the moment, just trust your intuition!"
+				ItemTooltip: If you're confused because there doesn't seem to be a correct method at the moment, just trust your intuition!
 				PassiveList:
 					'''
 					All Returns to Nihil - When held or equipped, Grants Flight and major increase to defense, speed, life regeneration, and defense
-					Nix - The weapon has 5 different modes listed below and Starts at Will of Nihil
+					Nix - The weapon has 5 different modes listed below and Starts at Will of Nihil, different modes changes All Returns to Nihil buffs
 					Will of Nihil - Summon all other modes as playing cards. Attack to apply a debuff to all enemies, Permanently decreasing their damage and defense by 5%, and switch to a chosen mode for 10 seconds
 					Worthless Greed - Summon multiple fists, Dash to hit enemies, Create portals and dash through them to teleport
-					Pointless Hate - Shoot stars, After doing enough damage you can shoots a laser
+					Pointless Hate - Shoot stars. After doing enough damage, shoot a laser beam to the nearest high health enemy
 					Meaningless Despair - Create three swords that attacks nearby enemies, Swords deal true damage
 					Senseless Wrath - Rapidly swing an acidic hammer, creating splashes of Acid that inflicts Erosion
-					|Void - Only usable and active when inventory, armor and accessories slots are empty except for this item and Encumbering Stone
+					|Void - Only usable and active when inventory, armor and accessories slots are empty except for this item or Encumbering Stone
 					'''
 			}
-			
-			#Language
 
+			#Language
+			
 			CrimsonScar: {
-				ItemTooltip: "Iíll hang his head over my bed. Only then can I get up in the morning without having a nightmare."
+				ItemTooltip: IÔøΩll hang his head over my bed. Only then can I get up in the morning without having a nightmare.
 				PassiveList:
 					'''
-					Bullet Shower - Alternate attack to shoot a barrage of bullets
+					Bullet Shower - Alternate attack to shoot a barrage of bullets, First enemy hit by a bullet is marked as Prey and shows its general direction
 					Strike without Hesitation - Under 50% health, attacks turn into thrown sickles and Bullet Shower increases in intensity and inaccuracy, Can hit allies
-					Prey - First enemy hit by a bullet is marked as Prey and shows its general direction
+					Prey - Deal 20% increased damage to marked Prey, 50% if hitting with a true melee
 					Rudded Welts - Gain increased damage depending on health loss, up to 20% at 25% health
 					Vengeance - Getting hit by Prey temporarily increases damage by 20%
-					|Fury with no Outlet - When a Prey is not killed by the player or despawns, be unable to use any other weapons or items and Strike without Hesitation is active for 1 minute
+					|Fury with no Outlet - Gain Bleed debuff while held, When a Prey is not killed by the player or despawns, be unable to use any other weapons or items and Strike without Hesitation is active for 1 minute
 					'''
 			}
 
 			CobaltScar: {
-				ItemTooltip: "Still, it didnít matter to him. After all, he was \"destined\" to be a big bad wolf."
+				ItemTooltip: Still, it didnÔøΩt matter to him. After all, he was "destined" to be a big bad wolf.
 				PassiveList:
 					'''
 					Uncontrollable Instinct - Dealing damage inflicts Scars
 					Scars - Up to 20% Increased damage taken from this weapon, Maximum of 10 Stacks
-					Howl - Alternate attack to Howl, Rupturing all inflicted Scars and deals damage
+					Howl - Alternate attack to Howl, Rupturing all inflicted Scars that deals damage and applies damage over time
 					Claws of Savagery - After dealing enough damage by Rupturing Scars, temporarily turn into an invincible black mist for 5 seconds and deal contact damage
 					|Role of the Wolf - After using this weapon, be unable to use any other weapons before activating Claws of Savagery
 					'''
 			}
 
 			Smile: {
-				ItemTooltip: "The smiling faces are unfamiliar yet sorrowful."
+				ItemTooltip: The smiling faces are unfamiliar yet sorrowful.
 				PassiveList:
 					'''
 					Absorption - Killing enemies drops corpses, hitting or grabbing corpses increases Corpse stack with a maximum of 12
@@ -353,7 +1146,7 @@ Mods: {
 			}
 
 			Dipsia: {
-				ItemTooltip: "...And the thirst would never truly be quenched."
+				ItemTooltip: ...And the thirst would never truly be quenched.
 				PassiveList:
 					'''
 					Banquet of Blood - Alternate attack to attack everything currently on screen and consume 20% of your current health, if below 50% health it costs 10% instead
@@ -364,7 +1157,7 @@ Mods: {
 			}
 
 			Mimicry: {
-				ItemTooltip: "And the many shells cried out one word, \"Manager\"."
+				ItemTooltip: And the many shells cried out one word, "Manager".
 				PassiveList:
 					'''
 					heLLo? - Shoot a piercing projectile infront of you
@@ -374,11 +1167,11 @@ Mods: {
 					This Item is incomplete and unobtainable
 					'''
 			}
-			
-			#Social
 
+			#Social
+			
 			Harvest: {
-				ItemTooltip: "The city still remained a beautiful place where the emerald roads sparkled bright as ever."
+				ItemTooltip: The city still remained a beautiful place where the emerald roads sparkled bright as ever.
 				PassiveList:
 					'''
 					Gleaning - Alternate attack launches a hook that deals damage overtime, pulls you into it
@@ -389,7 +1182,7 @@ Mods: {
 			}
 
 			Lumber: {
-				ItemTooltip: "This is a forest full of hearts. No matter how many he cuts down, the forest still remains dense."
+				ItemTooltip: This is a forest full of hearts. No matter how many he cuts down, the forest still remains dense.
 				PassiveList:
 					'''
 					Timber - If the enemy has higher health percentage, 50% increased damage
@@ -400,7 +1193,7 @@ Mods: {
 			}
 
 			Dependence: {
-				ItemTooltip: "Can I follow you forever? So I can tear them apart..."
+				ItemTooltip: Can I follow you forever? So I can tear them apart...
 				PassiveList:
 					'''
 					Exoneration - While being near an ally, Gain Courage after 5 seconds
@@ -411,7 +1204,7 @@ Mods: {
 			}
 
 			HomingInstinct: {
-				ItemTooltip: "Let's walk together. To a wonderful land... The world of dreams."
+				ItemTooltip: Let's walk together. To a wonderful land... The world of dreams.
 				PassiveList:
 					'''
 					You... Wicked Wizard! - Drop a house
@@ -422,7 +1215,7 @@ Mods: {
 			}
 
 			FadedMemories: {
-				ItemTooltip: "Child... I will grant you a life anew."
+				ItemTooltip: Child... I will grant you a life anew.
 				PassiveList:
 					'''
 					Jack - Summon a Jack, Jacks 'die' after dealing enough damage
@@ -434,7 +1227,7 @@ Mods: {
 			}
 
 			FalseThrone: {
-				ItemTooltip: "Soon, Oz came to be called a wizard by the people."
+				ItemTooltip: Soon, Oz came to be called a wizard by the people.
 				PassiveList:
 					'''
 					Emerald - While standing still, spawn 
@@ -443,11 +1236,11 @@ Mods: {
 					|False Present - a
 					'''
 			}
-			
-			#Philosophy
 
+			#Philosophy
+			
 			Lamp: {
-				ItemTooltip: "A month later, we came to this conclusion: There was no such 'beast' in the forest."
+				ItemTooltip: A month later, we came to this conclusion: There was no such 'beast' in the forest.
 				PassiveList:
 					'''
 					Darkness - Alternate attack to cover the area with darkness, nullifying defense and damage resistance.
@@ -459,7 +1252,7 @@ Mods: {
 			}
 
 			Beak: {
-				ItemTooltip: "People have been committing sins since long ago. \"Why do they commit sins, knowing it's wrong?\""
+				ItemTooltip: People have been committing sins since long ago. "Why do they commit sins, knowing it's wrong?"
 				PassiveList:
 					'''
 					PUNISHMENT!! - Alternate attack to counter, inflicting 1000% increased damage back
@@ -470,7 +1263,7 @@ Mods: {
 			}
 
 			Justitia: {
-				ItemTooltip: "Its scale would never neglect the weight of even the smallest sin."
+				ItemTooltip: Its scale would never neglect the weight of even the smallest sin.
 				PassiveList:
 					'''
 					Judgement - Alternate attack to judge all enemies, having a chance to instantly kill enemies depending on their missing health. Against bosses, deal 7% total health damage
@@ -480,7 +1273,7 @@ Mods: {
 			}
 
 			Apocalypse: {
-				ItemTooltip: "Then, in the middle of all the chaotic cries, someone shouted: \"It's the beast! A big, scary monster lives in the black, dusky forest!\""
+				ItemTooltip: Then, in the middle of all the chaotic cries, someone shouted: "It's the beast! A big, scary monster lives in the black, dusky forest!"
 				PassiveList:
 					'''
 					Peace for All - Become invincible while atleast one Egg is active
@@ -492,11 +1285,11 @@ Mods: {
 					Cracking Eggs - Three Eggs encircle the player and can take damage, disables a mode and passive that is tied to the egg when broken
 					'''
 			}
-			
-			#Religion
 
+			#Religion
+			
 			Heaven: {
-				ItemTooltip: "Don't look away, just keep your eyes on it. Contain it in your sight."
+				ItemTooltip: Don't look away, just keep your eyes on it. Contain it in your sight.
 				PassiveList:
 					'''
 					Lean, Bloody Wings - Alternate attack to damage all enemies in the screen
@@ -506,7 +1299,7 @@ Mods: {
 			}
 
 			DeadSilence: {
-				ItemTooltip: "Silence does not always bring peace."
+				ItemTooltip: Silence does not always bring peace.
 				PassiveList:
 					'''
 					Time - Alternate attack to stop time for 5 seconds and gain Silence
@@ -517,7 +1310,7 @@ Mods: {
 			}
 
 			SoundOfAStar: {
-				ItemTooltip: "Let us meet again as stars."
+				ItemTooltip: Let us meet again as stars.
 				PassiveList:
 					'''
 					Into the Star's Embrace - Alternate attack to summon Blue Star temporarily for Mana. It sends shockwaves 3 times before dissapearing, dealing damage
@@ -528,7 +1321,7 @@ Mods: {
 			}
 
 			Penitence: {
-				ItemTooltip: "It feeds on the 'evil' that seeps out during conversations between people."
+				ItemTooltip: It feeds on the 'evil' that seeps out during conversations between people.
 				PassiveList:
 					'''
 					Confession - All allies heal 100% Health after using this weapon
@@ -537,7 +1330,7 @@ Mods: {
 			}
 
 			ParadiseLost: {
-				ItemTooltip: "I shall heal you, curing you of all disease and injury you possess."
+				ItemTooltip: I shall heal you, curing you of all disease and injury you possess.
 				PassiveList:
 					'''
 					Behold My Power - Alternate attack to create a pale ring that deals flat damage
@@ -548,9 +1341,9 @@ Mods: {
 			}
 
 			#General
-
+			
 			WristCutter: {
-				ItemTooltip: "Many hands float in the bath. They are the hands of the people I once loved."
+				ItemTooltip: Many hands float in the bath. They are the hands of the people I once loved.
 				PassiveList:
 					'''
 					Sinking - Alternate attack to hit all enemies with a Pale Hand attached
@@ -561,7 +1354,7 @@ Mods: {
 			}
 
 			Aspiration: {
-				ItemTooltip: "Excessive aspiration would bring about unwarranted frenzy."
+				ItemTooltip: Excessive aspiration would bring about unwarranted frenzy.
 				PassiveList:
 					'''
 					Beats of Aspiration - Buff all allies with Urging
@@ -583,7 +1376,7 @@ Mods: {
 			}
 
 			FrostSplinter: {
-				ItemTooltip: "The snow is steadily melting... Perhaps because spring is coming, or it might be the palace collapsing."
+				ItemTooltip: The snow is steadily melting... Perhaps because spring is coming, or it might be the palace collapsing.
 				PassiveList:
 					'''
 					Blizzard - Alternate attack to summon a Blizzard
@@ -604,106 +1397,132 @@ Mods: {
 					'''
 			}
 
-			#Miscellaneous
+			#Limbus Inspired
+			
+			LimbusEGO: A Resonance E.G.O
 
-			#Template: {
-			#	ItemTooltip: 
-			#	PassiveList:
-			#		'''
-			#		
-			#		'''
-			#}
+			FourthMatchFlameS1: {
+				ItemTooltip: I am coming to you. You, who will be reduced to ash like me.
+				PassiveList:
+					'''
+					Ashes - 400% damage on fourth use
+					Fourth Match - Alternate attack makes you explode on fourth use that deals 4000% increased damage
+					Matchlight - 16% increased damage while on fire
+					|Corrosion - Sets self on fire every fourth use
+					'''
+			}
+
+			FourthMatchFlameS4: {
+				ItemTooltip: I am coming to you. You, who will be reduced to ash like me.
+				PassiveList:
+					'''
+					Art of Ashes - Creates a series of Slashes on a predeterminated location, explodes after 4th use
+					Fourth Match - Alternate attack makes you explode on fourth use that deals 4000% increased damage
+					Matchlight - 16% increased damage while on fire
+					|Corrosion - Sets self on fire every fourth use
+					'''
+			}
+
+			FourthMatchFlameS10: {
+				ItemTooltip: I am coming to you. You, who will be reduced to ash like me.
+				PassiveList:
+					'''
+					Ashes - 400% damage on fourth use
+					Fourth Match - Alternate attack makes you explode on fourth use that deals 4000% increased damage
+					Matchlight - 16% increased damage while an enemy is on fire
+					|Corrosion - Sets everything nearby on fire every fourth use
+					'''
+			}
+
+			Soda: {
+				ItemTooltip: You hear the sound of crashing waves and seagulls
+				PassiveList:
+					'''
+					Crashing Waves - E.G.O can be charged, when fully charged, creates geysers of soda
+					Well cheers - When hitting enemies, drop around Can of sodas that restore Health and Mana, these cans dissapear after 5 seconds
+					|An Opened Can - Very rarely drops an Opened Can of Wellcheers, when consumed, the consumer is whisked away...
+					'''
+			}
+
+			#Originals
+			
+			LifeForADaredevil: {
+				ItemTooltip: Life is only granted to those who hold no fear of death.
+				PassiveList:
+					'''
+					No Fear for Death - Channeling the attack holds a stance. When released before being hit, kill nearby projectiles and do a Counter attack
+					Mortal Life - Successful counters deal additional true damage equal to missing health and increased radius
+					Inspired Bravery - After successfully countering an attack, applies a buff that enhances movement speed, melee swing speed and counter damage by 10% and improves this EGO
+					|Reckless Foolishness - Failing to counter any attack for a period of time decreases damage reduction up to 15%
+					'''
+			}
 		}
 
 		SuppressionTexts: {
 			Malkuth: {
 				0: This is what you call a truly uncontrollable situation, manager.
-				1: Everythingís all jumbled up, messed up, flustered... hahaha...
+				1: EverythingÔøΩs all jumbled up, messed up, flustered... hahaha...
 				2: It's unpredictable, isn't it?
-
 				3: I could have done it.
 				4: I just wanted to help out.
-
-				5: I knew I didnít have any right to participate in the experiment, thatís why I was so impatient.
+				5: I knew I didnÔøΩt have any right to participate in the experiment, thatÔøΩs why I was so impatient.
 				6: Make sure you feel this horrible sense of helplessness to your core, right to your heart.
-
 				7: Please watch me manager! I can take care of this situation, no problem!
-				8: I still have so much to do, just look at my notebook... itís all worn out...
-
-				9: Canít you hear it? The sound of it struggling, as if to say it canít fall asleep like this.
+				8: I still have so much to do, just look at my notebook... itÔøΩs all worn out...
+				9: CanÔøΩt you hear it? The sound of it struggling, as if to say it canÔøΩt fall asleep like this.
 				10: Will you finally praise me? I just want to feel proud.
-
 				11: Be honest, back then it wasn't that hard to turn around and look back at me.
 				12: I see now how much fun it can be to look down on someone, manager...
-
 				13: Ah... So I couldn't do it..."
 			}
-			
+
 			Yesod: {
 				0: What was I really looking at all this time?
 				1: This impenetrable darkness is inexplicably lonely.
 				2: You will not be able to discern anything properly.
-
 				3: What did we do wrong?
 				4: Are we not even allowed to fall into despair?
-
 				5: To tell you the truth, it's just that I did not want to witness any more deaths.
-				6: Weíve created monsters that should never have been in this world. This sin can never be forgotten.
-
-				7: You should know that all the information you just mindlessly skimmed through was from somebodyís dire sacrifice.
+				6: WeÔøΩve created monsters that should never have been in this world. This sin can never be forgotten.
+				7: You should know that all the information you just mindlessly skimmed through was from somebodyÔøΩs dire sacrifice.
 				8: I am the head of the Information Team. I take great pride in my department and team for obtaining information and expunging it exactly as ordered.
-
 				9: You are unfit to be the manager if you cannot even remember the simplest rules.
 				10: Did you not see my marred, rotting flesh, covered in boils and oozing with pus?
-
 				11: Now I see; I have been wallowing in despair, for such a long time.
 				12: I tried to pretend that everything was fine, but in reality, it never was. I was dying on the inside..
-
-				13: So I was the one who couldnít see a single step ahead...
+				13: So I was the one who couldnÔøΩt see a single step ahead...
 			}
 
 			Hod: {
 				0: Well, shall we film the corporate educational video together?
 				1: Please make sure to do it carefully, and don't mess up! Every employee will watch this educational video and refer back to it!
 				2: Alright everyone, look here! Smile, say cheese!
-
 				3: I want to help as much as I can here.
 				4: I wish everyone would rely on me...
-
 				5: How come nobody understands my kindness?
 				6: I'm the only one who cares about them... Why would they hate me...?
-
-				7: Manager, youíre not mad at me, right? You can't be mad at me, I swear Iím a good Sephirah...
+				7: Manager, youÔøΩre not mad at me, right? You can't be mad at me, I swear IÔøΩm a good Sephirah...
 				8: It's all thanks to me that the employees could survive so long, but does anyone ever thank me? No, no one does...
-
 				9: Our employees are suffering! See? Things just don't work out without me here!
-				10: Whereís Tiffany? She's late for her counseling session. Why isn't she here?
-
+				10: WhereÔøΩs Tiffany? She's late for her counseling session. Why isn't she here?
 				11: Forgive me, manager. If you can't forgive, then please at least forget.
 				12: You all would be dead where you stand without me! Every single one of you!
-
 				13: I guess I just never was a good person from the start...
 			}
 
 			Netzach: {
 				0: No one is actually safe here. You know that the Safety Team is just for show, right?
 				1: Why do you want to continue prolonging these undesired lives? What'd you expect to see at the end of all this?
-
 				2: The moment I woke up again here, I met you. You, whom I never wanted to see ever again.
 				3: Why must I wake up and do all the garbage I hate every single day?
-
 				4: You weren't the person I put my trust in.
 				5: This place will never be safe, you know.
-
 				6: Abandon your sense of guilt, everyone. They couldn't be saved anyways.
 				7: "'Cause this place is always horrible, the only thing I can hope for is a blissful end."
-
 				8: I never wanted to be in this position anyways. I never asked for this. Not once.
 				9: In the end, the hope that anyone will live on thanks to me is gone.
-
-				10: Just leave me alone, itís what youíre best at.
+				10: Just leave me alone, itÔøΩs what youÔøΩre best at.
 				11: All I want is to close my eyes and enjoy a good nap, just once.
-
 				12: I stopped breathing, but if life calls out to me yet again...
 			}
 
@@ -712,62 +1531,43 @@ Mods: {
 				1: What's left for me, the one who failed to protect them?
 				2: Do you really think feeble cowards like you can stop me?
 				3: Let me show you how to actually wield E.G.O.
-
 				4: I'm back; the Red Mist has walked out from a sea of pain.
 				5: I'm no longer weak like I used to be; I can replace any body part even if it gets cut off, and I can be repaired even if I'm broken.
-				
 				6: Some things simply couldn't be forgotten, no matter how much time has passed.
 				7: Hatred is a poison that eviscerates me, and yet it makes me open my eyes once more.
-				
 				8: Some things just wouldn't cool down, no matter how long they were left in the cold.
 				9: Those monsters always kill people, there is no end to this sin; I have descended to bring about their reckoning.
-				
 				10: The right path is too far away, and I have too far to go. My heart is pulsing with anger, and I must keep pushing.
-				
 				11: Ah... I'm breaking... I won't drop my sword, even if I turn to dust...
 				12: Even after all this, I can't do a single thing with this power...
-				
 				RedEyes: Red Eyes
 				Penitence: Penitence
 				Both: Get blown to pieces
 				GoldRush1: The Road of Gold opens
-				
 				Heaven: The Burrowing Heaven
-				
 				Mimicry1: Nothing will Remain
 				Mimicry2: I'll mow you down
-				
 				DaCapo1: From the Overture
 				DaCapo2: Adagio e Tranquillo
-				
 				Dash1: Stop running
 				Dash2: You can't escape from me
-				
 				Teleport1: Legato
 				Teleport2: Let's do this, partner
 				Teleport3: Only bloody mist remains
-				
 				Shift1: This isn't enough
 				Shift2: I wasn't slacking off all this time
-				
 				Smile1: Black Laughter
 				Smile2: Be Eaten
-				
 				Justitia1: Justitia
 				Justitia2: Judgement
-				
 				Shift3: Let's put an end to this
 				Shift4: The apocalypse is here...
-				
 				Pass1: Beat it, coward
 				Pass2: Don't try and stop me
 				Pass3: You're weak
-				
 				Arrive: Be torn apart before my eyes
-				
 				GoldRush2: The hunt begins
 				GoldRush3: The Road of the King opens
-				
 				Tired1: I'm just not as capable as I used to be...
 				Tired2: I'll break it down...
 				Tired3: I'll kill all of you...
@@ -780,56 +1580,519 @@ Mods: {
 				1: Go ahead and stop me without her help this time.
 				2: Ah, this brings me back to my senses.
 				3: It seems this body of mine can also use these powers. Interesting, yet tenuous.
-
 				4: This body simply has too many limits.
 				5: If only I knew what power this place held, we could have acquired it for us to use.
-				6: Youíre being reckless yet again, deceiving the Head and planning such bold actions.
-
+				6: YouÔøΩre being reckless yet again, deceiving the Head and planning such bold actions.
 				7: If you cannot defeat me, you shall be crushed by the Head and its ruthless Claws yet again.
 				8: Even if you were to break this cycle, it would not last long.
 				9: You cannot escape the Head.
 				10: What do you think you will accomplish on your own, even after breaking out of this prison?
-
 				11: You've proven yourself. I shall witness you with my eyes.
-
 				Fairy1: Disperse.
 				Fairy2: Heed my words, Fairies.
 				Fairy3: Analyze. Copmress. Expand.
 				Fairy4: Do not dare to stand before me.
-
 				Key1: Condensing the Key.
 				Key2: Focus.
 				Key3: Open.
-
 				Key4: Wreak havoc.
 				Key5: Come on out.
 				Key6: Crumble.
-
 				Wave1: Rise.
 				Wave2: Collapse.
 				Wave3: Resonate.
-
 				MeltdownGold1: The sandman calls me.
 				MeltdownGold2: You failed to bend my back.
-
 				MeltdownFog1: I'm fading.
 				MeltdownFog2: You missed the opportunity.
-
 				MeltdownWaves1: The waves will rock the shore again.
 				MeltdownWaves2: You cannot stop the torrent of this world alone.
-
 				MeltdownFlight1: Grant the freedom you desire.
 				MeltdownFlight2: The Wing is still immature.
-
 				PauseAttempt1: You cannot stop the grand current with just those hands of yours.
 				PauseAttempt2: I want you to finish me with your own power.
-
 				Wave4: I'll open the door if I must.
 				Wave5: Let us sink here together.
-
 				MeltdownPillar1: Excellent.
 				MeltdownPillar2: Your immaturity is to blame.
 			}
+		}
+
+		AbnormalityData: {
+			ManagerialTips: Managerial Tips
+			EscapeInfo: Escape Information
+			EGOEquipment: E.G.O Equipment
+			EGOGift: E.G.O Gift
+
+			Damagetype: {
+				Red: Red
+				White: White
+				Black: Black
+				Pale: Pale
+			}
+
+			Defensetype: {
+				Absorbed: Absorbed
+				Immuned: Immuned
+				Endured: Endured
+				Normal: Normal
+				Weak: Weak
+				Vulnerable: Vulnerable
+			}
+
+			Worktype: {
+				Red: Instinct
+				White: Insight
+				Black: Attachment
+				Pale: Justice
+				VeryHigh: Very High
+				High: High
+				Common: Common
+				Low: Low
+				VeryLow: Very Low
+				RedText.1: 2:
+			}
+
+			2: {
+				Name: Scorched Girl
+
+				Story: {
+					1: It takes the form of a girl burnt to ashes. Even though there's nothing left to burn, the fire still doesn't extinguish.
+					2: A matchstick impales the girl's body like a stake. Usually, the match is always lit, while the Abnormality shows no sign of activity. Because of this, employees often speculate that the matchstick may be the Abnormality's true body. However, recently, the ashen figure was seen crying, according to witnesses.
+					3: Excerpt from Abnormality Specialist Doctor <Redacted>ÔøΩs Research Log> \n"The charred body represents the child's crumbled hope, while the ever blazing flame represents the obsession for affection. It's always in conflict with the contradiction between these two.ÔøΩ ÔøΩWe paid a boatload and that's all they have to say?
+					4: <Excerpt from Recorded Staff Conversation>\n"Well, sheÔøΩs like a ticking time bomb. No one can tell if sheÔøΩs in a good mood or not. We just hope that we wonÔøΩt be the one blown up before entering the Containment Unit. She wonÔøΩt get any better, we can only try and keep her from getting worse."
+					5: <Excerpt from Counseling Log>  "I never thought the abnormality would be able to escape. Maybe we were getting careless, but it seemed that all it could do was burn up the match stuck in its body. Yes, our response was a bit late. (Omitted) Most Abnormalities that try to escape would attack the employees in front of them, but this one didn't show any aggression toward the nearby employees. Instead, it headed to a different department, the most crowded place in the company. If we didn't suppress it at the door, half of the people here wouldn't be in one piece.
+				}
+
+				Tips: {
+					1: When the work result was Normal, the Qliphoth Counter lowered with a normal probability.
+					2: When the work result was Bad, the Qliphoth Counter lowered with a high probability.
+					3: Scorched Girl, who had escaped, exploded after being near their target for 5 seconds. Many of the staff nearby sustained burns from the incident.
+				}
+
+				FlavourText: {
+					1: Please be advised that Scorched Girl's Encyclopedia is incomplete, so anything undocumented could occur.
+					2: AAAA
+				}
+			}
+
+			3: {
+				Name: One Sin and Hundreds of Good Deeds
+
+				Story: {
+					1:
+						'''
+						A silent Abnormality that understands the conflict between good and evil. Its empty eye sockets stare at all those who encounter it.
+						A giant skull that is attached to a cross, it wears a crown of thorns.&#10;It floats about 2 meters above the ground.
+						'''
+					2: While its appearance is bizarre, it is rare to record an incident of violence against employees involving this Abnormality.
+					3:
+						'''
+						It feeds on the "evil" that seeps out during conversations between people. The assigned employee must kneel before it (standing appears to be acceptable) and present their "evil" by confessing their sins to it. The way it feeds is unknown.
+
+						<Excerpt from Experiment Records>
+						We have cataloged the sins a person can commit into three levels.
+						Level 1: A small lie or action that either goes unnoticed or can be shared in jest.
+						Level 2: Sins that are more serious and only shared with the closest of friends.
+						Level 3: Sins so profound that they cannot be shared with anyone. These will be taken to the grave.
+						Employee <Redacted> had been assigned to confess a Level 1 sin. Energy production via the Abnormality increased by 12%.
+						Employee <Redacted> was assigned to confess a Level 2 sin. Energy production via the Abnormality increased by 15%.
+						We assigned employee <Redacted> to confess a Level 3 sin. 1 minute and 48 seconds after the employee was sent in, a bright flash of light was seen. The light was so bright that it could be seen outside of the Containment Unit. Immediately following the light, there was a facility-wide power outage. The phenomena lasted for 2 hours. Employee <Redacted> lost 6 years of their memory.
+						Further experiments were canceled. Scientific ethics decree that all footage of those who participated in the experiment is to be kept sealed. However, the incident left us no choice but to review the footage of the Containment Unit.
+						'''
+					4:
+						'''
+						Employee <Redacted>: "This happened during <Redacted> at around 4:00 PM. Anyways, there was a railway about 20 minutes from my house. Some of my good friends and I decided to dress as forest animals. One of us chose to go as a deer. It was a crude costume, it could hardly be called one to be honest. Just a pair of clumsily made antlers and a dark outfit with some deer-like spots on it. (Omitted)
+
+						I don't know how our ÔøΩdeerÔøΩ friend wandered into the woods. We didn't even notice he was missing for maybe an hour. We searched for him and finally found him in some bushes. We called out his name, and I'm not sure if it was from relief of finally finding us or what but he started sprinting towards us.
+						And that's when we heard it; the gunshots. Bang! Bang! Bang! When I came to my senses, I saw his blood splattered all the way to my feet. After that, not one of us dressed up as an animal ever again. ThatÔøΩs all. By the way, is this really supposed to work?"
+
+						<Observation Log #4_435>
+						"Its eye sockets are empty. It is a skull after all. But I doubt itÔøΩs blind. It certainly has its gaze fixed on me, and I can somehow feel that itÔøΩs listening to me. Confessing to it does lighten my heart, admittedly."
+						'''
+					5:
+						'''
+						Afterwards, we investigated the incident in the employeeÔøΩs hometown to get a better picture. We learned that a boy named Justin was shot and killed in a deer costume by hunters during hunting season. Unlike the employeeÔøΩs confession, Justin was repeatedly bullied by other kids. Witnesses said they heard the kids shout ÔøΩRun Justin, run!" right before the gunshot. After the incident, the kids at the scene moved out of town, and deer hunting was banned in the area."
+
+						<Excerpt from Abnormality Research Log X-392>
+						"Honestly, you canÔøΩt expect all of our employees to give honest confessions to that skull. Around every one in ten employees will tend to say something that is not completely true. ItÔøΩs a bit different from a lie. You can say that itÔøΩs a subconscious excuse they make.
+						They distort perspectives to justify their actions, even though they are aware that they should be telling the truth. Once this happens, the confession is no longer truly a confession. Yes, IÔøΩm talking about you trying to justify your tardiness for 5 minutes now!
+						'''
+				}
+
+				Tips: {
+					1: "{$0} will restore the employeeÔøΩs mental state when the work result is Good. Joshua, who received this benediction, commented that it felt refreshing."
+					2: After the maximum number of PE-Boxes was produced with {$0}, it restored the mental health of every employee in the department.
+				}
+
+				FlavourText: {
+					Start: {
+					}
+
+					Mid1: {
+					}
+
+					Mid2: {
+					}
+
+					Mid3: {
+					}
+
+					Mid4: {
+					}
+				}
+			}
+		}
+
+		Projectiles: {
+			TwilightStrikes.DisplayName: Twilight Strikes
+			TwilightSpecial.DisplayName: Twilight Special
+			TwilightSlashes.DisplayName: Twilight Slashes
+			TwilightSlash.DisplayName: Twilight Slash
+			TwilightEye.DisplayName: Twilight Eye
+			SyrinxShot.DisplayName: Syrinx Shot
+			SwordSharpenedWithTearsProj.DisplayName: Sword Sharpened With Tears Proj
+			StarShot.DisplayName: Star Shot
+			Spore.DisplayName: Spore
+			SpearExtender.DisplayName: Spear Extender
+			SoundOfAStarShoot.DisplayName: Sound Of A Star Shoot
+			SoundOfAStar.DisplayName: Sound Of A Star
+			SoCute.DisplayName: So Cute
+			SmileSpecial.DisplayName: Smile Special
+			SmileShockwave.DisplayName: Smile Shockwave
+			SmileScream.DisplayName: Smile Scream
+			SmileBits.DisplayName: Smile Bits
+			RedMistSlashSpawner.DisplayName: Red Mist Slash Spawner
+			RedMistSlashes.DisplayName: Red Mist Slashes
+			RealizedSwordSharpenedWithTearsProj.DisplayName: Realized Sword Sharpened With Tears Proj
+			RealizedHornet.DisplayName: Realized Hornet
+			TodaysExpressionWall.DisplayName: Todays Expression Wall
+			Spiderling.DisplayName: Spiderling
+			Spiderbud.DisplayName: Spiderbud
+			SanguineDesireRHeavy.DisplayName: Sanguine Desire R Heavy
+			SanguineDesireR.DisplayName: Sanguine Desire R
+			RegretShockwave.DisplayName: Regret Shockwave
+			RegretShock.DisplayName: Regret Shock
+			RegretR4.DisplayName: Regret R4
+			RegretR3.DisplayName: Regret R3
+			RegretR2.DisplayName: Regret R2
+			RegretR.DisplayName: Regret R
+			RedEyesSlash.DisplayName: Red Eyes Slash
+			OurGalaxyComet.DisplayName: Our Galaxy Comet
+			NihilSOW.DisplayName: Nihil S O W
+			NihilQOH.DisplayName: Nihil Q O H
+			NihilKOGFists.DisplayName: Nihil K O G Fists
+			NihilKOG.DisplayName: Nihil K O G
+			NihilKODSwords.DisplayName: Nihil K O D Swords
+			NihilKOD.DisplayName: Nihil K O D
+			MagicBulletSpawner.DisplayName: Magic Bullet Spawner
+			MagicBulletRGun.DisplayName: Magic Bullet R Gun
+			MagicBulletR.DisplayName: Magic Bullet R
+			LifeForADaredevilR.DisplayName: Life For A Daredevil R
+			LifeForADareDevilEffects.DisplayName: Life For A Dare Devil Effects
+			LaetitiaR.DisplayName: Laetitia R
+			LaetitiaFriend.DisplayName: Laetitia Friend
+			GrinderMk2Cleaner2.DisplayName: Grinder Mk2 Cleaner2
+			FragmentsFromSomewhereSong.DisplayName: Fragments From Somewhere Song
+			FragmentsFromSomewhereRSpear.DisplayName: Fragments From Somewhere R Spear
+			FragmentsFromSomewhereEffect.DisplayName: Fragments From Somewhere Effect
+			FragmentsFromSomewhere.DisplayName: Fragments From Somewhere
+			BlackSwanScream.DisplayName: Black Swan Scream
+			BlackSwanRExtended.DisplayName: Black Swan R Extended
+			BlackSwanR.DisplayName: Black Swan R
+			BlackSwanGooeyWaste.DisplayName: Black Swan Gooey Waste
+			BlackSwanAlternate.DisplayName: Black Swan Alternate
+			Circle1.DisplayName: Circle1
+			ArcanaBeats.DisplayName: Arcana Beats
+			PleasureSpear.DisplayName: Pleasure Spear
+			PenitenceSkull.DisplayName: Penitence Skull
+			ParadiseLostBase.DisplayName: Paradise Lost Base
+			OurGalaxySparkle.DisplayName: Our Galaxy Sparkle
+			MimicrySHello.DisplayName: Mimicry S Hello
+			MimicrySEffect.DisplayName: Mimicry S Effect
+			MimicryS.DisplayName: Mimicry S
+			MimicryHello.DisplayName: Mimicry Hello
+			MeltyLove.DisplayName: Melty Love
+			MagicBulletBullet.DisplayName: Magic Bullet Bullet
+			RoadOfKing.DisplayName: Road Of King
+			RoadOfGold.DisplayName: Road Of Gold
+			KingPortal.DisplayName: King Portal
+			GoldRushRedMist.DisplayName: Gold Rush Red Mist
+			BrilliantBliss.DisplayName: Brilliant Bliss
+			KaleidoscopeEffect.DisplayName: Kaleidoscope Effect
+			Kaleidoscope.DisplayName: Kaleidoscope
+			JustitiaExtended.DisplayName: Justitia Extended
+			JustitiaAlt.DisplayName: Justitia Alt
+			HOUSE.DisplayName: H O U S E
+			HornetEffectCircle.DisplayName: Hornet Effect Circle
+			HornetEffect.DisplayName: Hornet Effect
+			Horn.DisplayName: Horn
+			HomingInstinctBlock.DisplayName: Homing Instinct Block
+			HomingInstinct.DisplayName: Homing Instinct
+			Heaven.DisplayName: Heaven
+			Harvest.DisplayName: Harvest
+			HarmonyShotR.DisplayName: Harmony Shot R
+			HarmonyShot.DisplayName: Harmony Shot
+			HarmonyS.DisplayName: Harmony S
+			HarmonyBloodEffect.DisplayName: Harmony Blood Effect
+			GrinderMk4.DisplayName: Grinder Mk4
+			GreenStemVine.DisplayName: Green Stem Vine
+			GreenStemCircle.DisplayName: Green Stem Circle
+			GreenStemArea.DisplayName: Green Stem Area
+			GreenStem.DisplayName: Green Stem
+			GoldRushPunches.DisplayName: Gold Rush Punches
+			GoldRushPunch.DisplayName: Gold Rush Punch
+			Gaze.DisplayName: Gaze
+			FrostSplinter.DisplayName: Frost Splinter
+			FourthMatchFlameSlash.DisplayName: Fourth Match Flame Slash
+			FourthMatchFlameShot.DisplayName: Fourth Match Flame Shot
+			FourthMatchFlameSelfExplosion.DisplayName: Fourth Match Flame Self Explosion
+			FourthMatchFlameGigaSlash.DisplayName: Fourth Match Flame Giga Slash
+			FourthMatchFlameExplosion.DisplayName: Fourth Match Flame Explosion
+			ForgottenR2Behind.DisplayName: Forgotten R2 Behind
+			ForgottenR2.DisplayName: Forgotten R2
+			ForgottenR.DisplayName: Forgotten R
+			FirstMovement.DisplayName: First Movement
+			FeatherOfHonor.DisplayName: Feather Of Honor
+			FaintAromaS.DisplayName: Faint Aroma S
+			ExuviaeShot.DisplayName: Exuviae Shot
+			ExuviaeMist.DisplayName: Exuviae Mist
+			EngulfingDreamCall.DisplayName: Engulfing Dream Call
+			DiscordSlash.DisplayName: Discord Slash
+			DiscordLingeringSlash.DisplayName: Discord Lingering Slash
+			Discord2.DisplayName: Discord2
+			DespairSword.DisplayName: Despair Sword
+			DaCapo.DisplayName: Da Capo
+			CherryBlossomsPetal.DisplayName: Cherry Blossoms Petal
+			CensoredSpike.DisplayName: Censored Spike
+			CensoredGrab.DisplayName: Censored Grab
+			Censored.DisplayName: Censored
+			Candy.DisplayName: Candy
+			BearPaw.DisplayName: Bear Paw
+			AngryWorkerBee.DisplayName: Angry Worker Bee
+			Amrita.DisplayName: Amrita
+			AlriuneDeathAnimation.DisplayName: Alriune Death Animation
+			PaleRing.DisplayName: Pale Ring
+			SwitchMimicryThrow.DisplayName: Switch Mimicry Throw
+			SwitchDaCapoThrow.DisplayName: Switch Da Capo Throw
+			RedMistMimicry.DisplayName: Red Mist Mimicry
+			RedMistMelee.DisplayName: Red Mist Melee
+			RedMistEye.DisplayName: Red Mist Eye
+			RedMistDaCapo.DisplayName: Red Mist Da Capo
+			JustitiaSlashBoss.DisplayName: Justitia Slash Boss
+			DaCapoThrow.DisplayName: Da Capo Throw
+			DaCapoLegato.DisplayName: Da Capo Legato
+			WingbeatFairy.DisplayName: Wingbeat Fairy
+			WingbeatR.DisplayName: Wingbeat R
+			WorkerBee.DisplayName: Worker Bee
+			WristCutter.DisplayName: Wrist Cutter
+			HeavenBoss.DisplayName: Heaven Boss
+		}
+
+		Buffs: {
+			WillBeBad: {
+				Description: 10% increased melee damage
+				DisplayName: Blue Moon
+			}
+
+			Vomit: {
+				Description: Decreased life regeneration
+				DisplayName: Vomit
+			}
+
+			TodaysLook: {
+				Description: The Look for the Day
+				DisplayName: Look for the Day
+			}
+
+			Slow: {
+				Description: Movement speed is reduced
+				DisplayName: Qlipoth Disruption
+			}
+
+			ShieldW: {
+				Description: Protects the user against projectiles
+				DisplayName: Trauma Shield
+			}
+
+			ShieldR: {
+				Description: Protects the user against contact damage
+				DisplayName: Physical Intervention Shield
+			}
+
+			ShieldP: {
+				Description: Protects the user against damage to the soul, and hits people back I guess
+				DisplayName: Pale Shield
+			}
+
+			ShieldCooldown: {
+				Description: Shield recharging
+				DisplayName: Shield Cooldown
+			}
+
+			ShieldB: {
+				Description: Protects the user against projectile and contact damage
+				DisplayName: Erosion Shield
+			}
+
+			Scream: {
+				Description: Wings disabled, 8% decreased movement speed
+				DisplayName: Horrid Screech
+			}
+
+			Scars: {
+				Description: A wound that will never heal
+				DisplayName: Scars
+			}
+
+			Satiated: {
+				Description: I CRAVE THIS MELODY
+				DisplayName: Satiated
+			}
+
+			RecklessFoolishness: {
+				Description: DisplayName: Reckless Foolishness
+				DisplayName: Reckless Foolishness
+			}
+
+			Pleasure: {
+				Description: Pleasant feelings fills your head
+				DisplayName: Pleasure
+			}
+
+			OurGalaxyStoneBuff: {
+				Description: Let's walk the galaxy together
+				DisplayName: Token of Friendship
+			}
+
+			NettleClothing: {
+				Description: Nettle regenerating, 75% reduced damage and Attackers also take damage
+				DisplayName: Clothing of Nettle
+			}
+
+			MusicalAddiction: {
+				Description: Never stop performing until the body crumbles to dust
+				DisplayName: Musical Addiction
+			}
+
+			MetallicRinging: {
+				Description: My head... turning into metal...
+				DisplayName: Metallic Ringing
+			}
+
+			Matchstick: {
+				Description: Reduce to ashes...
+				DisplayName: Matchstick
+			}
+
+			Lament: {
+				Description: A Solemn Lament gun is disabled
+				DisplayName: Lament
+			}
+
+			InspiredBravery: {
+				Description: 10% increased movement speed, melee speed and counter damage
+				DisplayName: Inspired Bravery
+			}
+
+			Hopeless: {
+				Description: Cannot attack while moving, cannot move while attacking
+				DisplayName: Hopeless
+			}
+
+			GrinderMk52Activated: {
+				Description: Cleaning tools active
+				DisplayName: All Around Helper
+			}
+
+			GrinderMk2Recharge: {
+				Description: Power recharging
+				DisplayName: Recharging
+			}
+
+			GooeyWaste: {
+				Description: Reduced movement speed and Defense
+				DisplayName: Gooey Waste
+			}
+
+			Gluttony: {
+				Description: I need something fresh...
+				DisplayName: Predation
+			}
+
+			Glitter: {
+				Description: Red Shoes
+				DisplayName: Glitter
+			}
+
+			Festival: {
+				Description: Everything will be peaceful
+				DisplayName: Festival
+			}
+
+			Fairy: {
+				Description: Under the Fairy's care
+				DisplayName: Fairy
+			}
+
+			ExtensiveBleeding: {
+				Description: Using a weapon hurts you
+				DisplayName: Extensive Bleeding
+			}
+
+			DarkFlame: {
+				Description: 70% increased Magic Bullet damage
+				DisplayName: Dark Flame
+			}
+
+			CrookedNotes: {
+				Description: ...What is that noise?
+				DisplayName: Crooked Notes
+			}
+
+			Cocoon: {
+				Description: Reduced defense and 12% decreased damage
+				DisplayName: Cocoon
+			}
+
+			BrokenDreams: {
+				Description: 30% increased damage taken
+				DisplayName: Broken Dreams
+			}
+
+			BoostSpore: {
+				Description: They live for the only one queen
+				DisplayName: Increase Aggression
+			}
+
+			BindingJacket: {
+				Description: Why is this place always so dark and cold?
+				DisplayName: Binding Jacket
+			}
+
+			BeeSpore: {
+				Description: Your neck feels itchy
+				DisplayName: Spore
+			}
+
+			Alertness: {
+				Description: What careless fool stepped on my baby?
+				DisplayName: Alerted
+			}
+		}
+
+		Tiles: {
+			QlipothDeterence.MapEntry: Qlipoth Deterence
+			DisciplinaryShell.MapEntry: Disciplinary Shell
+			BlackBox3.MapEntry: Black Box3
+			BlackBox2.MapEntry: Black Box2
+			BlackBox.MapEntry: Black Box
+		}
+
+		NPCs: {
+			OneBadManyGood.DisplayName: One Bad Many Good
+			RedMist.DisplayName: Red Mist
+			WhiteNight.DisplayName: White Night
 		}
 	}
 }

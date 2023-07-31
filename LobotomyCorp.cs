@@ -42,6 +42,8 @@ namespace LobotomyCorp
 
         public static Asset<Texture2D> RedShoesGlittering = null;
 
+        public static Asset<Texture2D> Slash2 = null;
+
         public static Color PositivePE => new Color(18, 255, 86);
         public static Color NegativePE => new Color(239, 77, 61);
 
@@ -58,7 +60,7 @@ namespace LobotomyCorp
 
         public static ModKeybind SynchronizeEGO;
 
-        public const bool TestMode = true;
+        public static bool TestMode = false;
 
         public class WeaponSounds
         {
@@ -91,6 +93,8 @@ namespace LobotomyCorp
             {
                 if (Main.netMode != NetmodeID.Server)
                 {
+                    TestMode = ModContent.GetInstance<LobotomyConfig>().ScreenShakeEnabled;
+
                     ArcanaSlaveLaser = Assets.Request<Texture2D>("Projectiles/QueenLaser/Laser", AssetRequestMode.ImmediateLoad);
                     ArcanaSlaveBackground = Assets.Request<Texture2D>("Projectiles/QueenLaser/CircleBackground", AssetRequestMode.ImmediateLoad);
                     KingPortal1 = Assets.Request<Texture2D>("Projectiles/KingPortal/KingPortal1", AssetRequestMode.ImmediateLoad);
@@ -102,6 +106,8 @@ namespace LobotomyCorp
                     CircleGlow = Assets.Request<Texture2D>("Misc/CircleGlow", AssetRequestMode.ImmediateLoad);
 
                     RedShoesGlittering = Assets.Request<Texture2D>("Misc/RedShoesGlitter", AssetRequestMode.ImmediateLoad);
+
+                    Slash2 = Assets.Request<Texture2D>("Projectiles/Slash2A", AssetRequestMode.ImmediateLoad);
 
                     Main.QueueMainThreadAction(() =>
                     {
@@ -118,7 +124,7 @@ namespace LobotomyCorp
 
                         PremultiplyTexture(RedShoesGlittering.Value);
 
-                        
+                        PremultiplyTexture(Slash2.Value);
                     });
 
                     //Ref<Effect> punishingRef = new Ref<Effect>(GetEffect("Effects/PunishingBird"));
@@ -130,6 +136,7 @@ namespace LobotomyCorp
                     Ref<Effect> BladeTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/BladeTrail", AssetRequestMode.ImmediateLoad).Value);
                     Ref<Effect> BrokenScreen = new Ref<Effect>(Assets.Request<Effect>("Effects/BrokenShader", AssetRequestMode.ImmediateLoad).Value);
                     Ref<Effect> RedMistEffect = new Ref<Effect>(Assets.Request<Effect>("Effects/OverlayShader", AssetRequestMode.ImmediateLoad).Value);
+                    Ref<Effect> Fragment = new Ref<Effect>(Assets.Request<Effect>("Effects/FragmentUniverse", AssetRequestMode.ImmediateLoad).Value);
                     //GameShaders.Misc["Punish"] = new MiscShaderData(punishingRef, "PunishingBird");
 
                     GameShaders.Misc["LobotomyCorp:Rotate"] = new MiscShaderData(new Ref<Effect>(ArcanaSlaveRef.Value), "ArcanaResize").UseSaturation(0f);
@@ -194,6 +201,10 @@ namespace LobotomyCorp
                     shader.UseImage3(this, "Misc/FX_Tex_Noise_Plasma1");
                     LobcorpShaders["RedEyesTrail"] = shader;
 
+                    shader = new CustomShaderData(Fragment, "Fragment");
+                    shader.UseImage1(this, "Misc/PurpleNebula5");
+                    LobcorpShaders["Fragment"] = shader;
+
                     WeaponSounds.Axe = WeaponSound("axe", true, 2);
                     WeaponSounds.BowGun = WeaponSound("bowGun");
                     WeaponSounds.Cannon = WeaponSound("cannon");
@@ -222,6 +233,8 @@ namespace LobotomyCorp
             KingPortal3 = null;
 
             MagicBulletBullet = null;
+
+            Slash2 = null;
 
             /*PositivePE = new Color();
             NegativePE = new Color();
@@ -429,7 +442,7 @@ namespace LobotomyCorp
     {
         public override void PostUpdateEverything()
         {
-            if (Filters.Scene["LobotomyCorp:RedMistOverlay"].IsActive() && !NPC.AnyNPCs(ModContent.NPCType<NPCs.RedMist.RedMist>()))
+            if (Main.netMode != NetmodeID.Server && Filters.Scene["LobotomyCorp:RedMistOverlay"].IsActive() && !NPC.AnyNPCs(ModContent.NPCType<NPCs.RedMist.RedMist>()))
             {
                 Filters.Scene["LobotomyCorp:RedMistOverlay"].Deactivate();
             }

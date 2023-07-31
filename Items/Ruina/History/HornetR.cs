@@ -10,8 +10,8 @@ namespace LobotomyCorp.Items.Ruina.History
 	{
 		public override void SetStaticDefaults() 
 		{
-            DisplayName.SetDefault("Hornet");
-            Tooltip.SetDefault(GetTooltip());
+            // DisplayName.SetDefault("Hornet");
+            // Tooltip.SetDefault(GetTooltip());
         }
 
 		public override void SetDefaults() 

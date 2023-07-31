@@ -81,19 +81,18 @@ namespace LobotomyCorp.Projectiles
             Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, tex.Frame(), lightColor, Projectile.localAI[1], tex.Size()/2 , 1f, 0f, 0);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			Projectile.ai[1]++;
             target.immune[Projectile.owner] = 5;
         }
 
-        public override void ModifyDamageScaling(ref float damageScale)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
 			float mult = Projectile.ai[1] / 30;
 			if (mult > 1f)
 				mult = 1f;
-			damageScale += 0.5f * mult;
-            base.ModifyDamageScaling(ref damageScale);
+			modifiers.FinalDamage += 0.5f * mult;
         }
     }
 }

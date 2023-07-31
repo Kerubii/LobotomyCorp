@@ -141,11 +141,9 @@ namespace LobotomyCorp.Projectiles.Realized
             return Projectile.localNPCImmunity[target.whoAmI] == 0;
         }
 
-		public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			Projectile.ai[0] = -1;
-
-			base.OnHitNPC(target, damage, knockback, crit);
 		}
 
         public override bool PreDraw(ref Color lightColor)

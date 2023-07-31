@@ -11,8 +11,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Recharging");
-			Description.SetDefault("Power recharging");
+			// DisplayName.SetDefault("Recharging");
+			// Description.SetDefault("Power recharging");
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }

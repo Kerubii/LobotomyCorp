@@ -8,9 +8,9 @@ namespace LobotomyCorp.Items
 	public class Syrinx : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("What cry could be more powerful than one spurred by primal instinct?\n" +
+			/* Tooltip.SetDefault("What cry could be more powerful than one spurred by primal instinct?\n" +
                                "As if everything else were hollow and pointless,\nThe wailing numbs even the brain, making it impossible to think.\n" +
-							   "Can be dropped by Eye of Cthulhu");
+							   "Can be dropped by Eye of Cthulhu"); */
         }
 
 		public override void SetDefaults() {

@@ -9,9 +9,9 @@ namespace LobotomyCorp.Items
 	public class Pink : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("Pink is considered to be the color of warmth and love, but is that true?\n" +
+			/* Tooltip.SetDefault("Pink is considered to be the color of warmth and love, but is that true?\n" +
                                "Can guns really bring peace and love?\n" +
-                               "Can only be used while standing absolutely still");
+                               "Can only be used while standing absolutely still"); */
         }
 
 		public override void SetDefaults() {

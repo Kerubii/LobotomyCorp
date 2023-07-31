@@ -15,9 +15,9 @@ namespace LobotomyCorp.Items.Ruina.History
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            DisplayName.SetDefault("Forgotten");
+            // DisplayName.SetDefault("Forgotten");
             
-            Tooltip.SetDefault(GetTooltip());
+            // Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 

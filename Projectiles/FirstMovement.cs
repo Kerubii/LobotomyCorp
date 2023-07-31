@@ -11,7 +11,7 @@ namespace LobotomyCorp.Projectiles
 	public class FirstMovement : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Song of Apocalypse");
+            // DisplayName.SetDefault("Song of Apocalypse");
         }
 
         public override void SetDefaults()
@@ -71,10 +71,9 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage = (int)(damage * Projectile.penetrate / 8f);
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+            modifiers.FinalDamage *= Projectile.penetrate / 8f;
         }
 
         public override bool PreDraw(ref Color lightColor)

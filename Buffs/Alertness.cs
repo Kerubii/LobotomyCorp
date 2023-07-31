@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-            DisplayName.SetDefault("Alerted");
-            Description.SetDefault("What careless fool stepped on my baby?");
+            // DisplayName.SetDefault("Alerted");
+            // Description.SetDefault("What careless fool stepped on my baby?");
         }
 
         public override void Update(Player player, ref int buffIndex)

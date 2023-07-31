@@ -157,7 +157,7 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
             if (Projectile.ai[0] >= 2 && player.ownedProjectileCounts[ModContent.ProjectileType<AlriuneDeathAnimation>()] == 0)

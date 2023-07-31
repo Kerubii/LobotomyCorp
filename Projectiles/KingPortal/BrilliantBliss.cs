@@ -11,7 +11,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
 	public class BrilliantBliss : ModProjectile
 	{
         public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Brilliant Bliss");
+            // DisplayName.SetDefault("Brilliant Bliss");
         }
 
         public override void SetDefaults()

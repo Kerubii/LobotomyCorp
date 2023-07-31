@@ -12,9 +12,9 @@ namespace LobotomyCorp.Items.Ruina.History
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            DisplayName.SetDefault("Fourth Match Flame");
+            // DisplayName.SetDefault("Fourth Match Flame");
 
-            Tooltip.SetDefault(GetTooltip());
+            // Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 
@@ -106,7 +106,7 @@ namespace LobotomyCorp.Items.Ruina.History
                 damage += 5f;
         }*/
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             /*
             if (target.HasBuff(ModContent.BuffType<Buffs.Matchstick>()))
@@ -117,7 +117,7 @@ namespace LobotomyCorp.Items.Ruina.History
             target.AddBuff(BuffID.OnFire, 300);
         }
 
-        public override void OnHitPvp(Player player, Player target, int damage, bool crit)
+        public override void OnHitPvp(Player player, Player target, Player.HurtInfo hurtInfo)
         {
             /*
             if (target.HasBuff(ModContent.BuffType<Buffs.Matchstick>()))

@@ -12,9 +12,9 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("It has the pale faces of nameless employees and a giant mouth on it.\n" +
+			/* Tooltip.SetDefault("It has the pale faces of nameless employees and a giant mouth on it.\n" +
                                "Upon striking with the weapon, the monstrous mouth opens wide to devour the target, its hunger insatiable.\n" +
-							   "Alternate attack to slam down an enemy or the ground");
+							   "Alternate attack to slam down an enemy or the ground"); */
 
         }
 

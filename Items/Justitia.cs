@@ -11,10 +11,10 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("It remembers the balance of the Long Bird that never forgot others' sins.\n" +
+			/* Tooltip.SetDefault("It remembers the balance of the Long Bird that never forgot others' sins.\n" +
                                "This weapon may be able to not only cut flesh but trace of sins as well.\n" +
 							   "Attacks hit multiple times\n" +
-							   "Has a chance to perform a special attack");
+							   "Has a chance to perform a special attack"); */
 		}
 
 		public override void SetDefaults() 
@@ -80,7 +80,7 @@ namespace LobotomyCorp.Items
 			return true;
 		}
 
-		public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+		public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			PreviouslyHitNPC = target.whoAmI;
 		}
@@ -136,10 +136,10 @@ namespace LobotomyCorp.Items
 				damage += 0.2f;
         }
 
-        public override void ModifyHitNPC(Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
+        public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
         {
-			damage /= 2;
-			int x = 0;
+			modifiers.FinalDamage *= 0.5f;
+			modifiers.ScalingArmorPenetration += 1f;
 		}
 
         public override void AddRecipes() 

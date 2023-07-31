@@ -8,9 +8,9 @@ namespace LobotomyCorp.Items
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Today's Expression");
-            Tooltip.SetDefault("Many different expressions are pdamageed on the equipment like patches.\n" +
-                               "The inability to show one's face is perhaps a form of shyness.");
+            // DisplayName.SetDefault("Today's Expression");
+            /* Tooltip.SetDefault("Many different expressions are pdamageed on the equipment like patches.\n" +
+                               "The inability to show one's face is perhaps a form of shyness."); */
         }
 
         public override void SetDefaults()

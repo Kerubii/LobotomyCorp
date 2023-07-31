@@ -8,8 +8,8 @@ namespace LobotomyCorp.Items
 	public class Tough : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("A glock reminiscent of a certain detective who fought evil for 25 years, losing hair as time went by.\n" +
-                               "Only those who maintain a clean \'hairstyle\' with no impurities on their head will be deemed worthy of equipping this weapon.");
+			/* Tooltip.SetDefault("A glock reminiscent of a certain detective who fought evil for 25 years, losing hair as time went by.\n" +
+                               "Only those who maintain a clean \'hairstyle\' with no impurities on their head will be deemed worthy of equipping this weapon."); */
         }
 
 		public override void SetDefaults() {

@@ -9,8 +9,8 @@ namespace LobotomyCorp.Items
 	public class InTheNameOfLoveAndHate : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("A magic wand surging with the lovely energy of a magical girl.\n" +
-                               "The holy light can cleanse the body and mind of every villain, and they shall be born anew.");
+			/* Tooltip.SetDefault("A magic wand surging with the lovely energy of a magical girl.\n" +
+                               "The holy light can cleanse the body and mind of every villain, and they shall be born anew."); */
             //Item.staff[Item.type] = true;
         }
 

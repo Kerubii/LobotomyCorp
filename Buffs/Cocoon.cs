@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Cocoon");
-			Description.SetDefault("Reduced defense and 12% decreased damage");
+			// DisplayName.SetDefault("Cocoon");
+			// Description.SetDefault("Reduced defense and 12% decreased damage");
 			Main.debuff[Type] = true;
 		}
 

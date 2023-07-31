@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Glitter");
-			Description.SetDefault("Red Shoes");
+			// DisplayName.SetDefault("Glitter");
+			// Description.SetDefault("Red Shoes");
 		}
 		
 		public override void Update(NPC npc, ref int BuffIndex)

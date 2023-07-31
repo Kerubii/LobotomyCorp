@@ -11,8 +11,8 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("The feather strikes with vivid flame. It is not weak, nor faint.\n" +
-                               "The flame pierces the body and melts the frost of the heart.");
+            /* Tooltip.SetDefault("The feather strikes with vivid flame. It is not weak, nor faint.\n" +
+                               "The flame pierces the body and melts the frost of the heart."); */
 
         }
 

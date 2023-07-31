@@ -12,8 +12,8 @@ namespace LobotomyCorp.Items.Ruina.History
 	{
         public override void SetStaticDefaults() 
 		{
-            DisplayName.SetDefault("Green Stem");
-            Tooltip.SetDefault(GetTooltip());
+            // DisplayName.SetDefault("Green Stem");
+            // Tooltip.SetDefault(GetTooltip());
         }
 
         public override void SetDefaults()

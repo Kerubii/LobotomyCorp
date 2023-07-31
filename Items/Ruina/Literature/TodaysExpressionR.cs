@@ -11,8 +11,8 @@ namespace LobotomyCorp.Items.Ruina.Literature
 	{
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Today's Expression"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Today's Expression"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			// Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 

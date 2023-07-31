@@ -10,8 +10,8 @@ namespace LobotomyCorp.Items
 	{
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("Its adorable appearance makes it something that might even appeal to a child as a gift.\n" +
-                               "Do not underestimate the weaponÅ's power because of its fluffy exterior.");
+            /* Tooltip.SetDefault("Its adorable appearance makes it something that might even appeal to a child as a gift.\n" +
+                               "Do not underestimate the weaponÅ's power because of its fluffy exterior."); */
         }
 
         public override void SetDefaults() {

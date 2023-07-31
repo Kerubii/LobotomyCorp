@@ -5,6 +5,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Projectiles
@@ -88,6 +89,12 @@ namespace LobotomyCorp.Projectiles
                 }
             }
 
+            if (Projectile.localAI[0] <= -15)
+            {
+                SoundEngine.PlaySound(SoundID.Item22, Projectile.position);
+                Projectile.localAI[0] = 45 - 15 * (Projectile.ai[0] / 60);
+            }
+
             Projectile.localAI[0]--;
             Projectile.ai[1]--;
         }
@@ -114,7 +121,7 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             foreach (Player p in Main.player)
             {
@@ -159,11 +166,10 @@ namespace LobotomyCorp.Projectiles
                 Projectile.ai[0] += 2f;
         }
 
-        public override void ModifyDamageScaling(ref float damageScale)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (!Main.player[Projectile.owner].channel)
-                damageScale *= 2f;
-            base.ModifyDamageScaling(ref damageScale);
+                modifiers.FinalDamage *= 2f;
         }
     }
 

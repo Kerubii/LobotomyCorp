@@ -33,7 +33,7 @@ namespace LobotomyCorp.Projectiles.Realized
 
         public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Magic Bullet");
+			// DisplayName.SetDefault("Magic Bullet");
 		}
 
 		public override void SetDefaults()
@@ -67,8 +67,12 @@ namespace LobotomyCorp.Projectiles.Realized
                 {
 					if (modPlayer.MagicBulletNthShot < 6)
                     {
-						SpawnBulletOnNPC(player, modPlayer.MagicBulletRequest, Projectile.velocity.ToRotation());
-
+						int bullet = SpawnBulletOnNPC(player, modPlayer.MagicBulletRequest, Projectile.velocity.ToRotation());
+						if (Main.npc[modPlayer.MagicBulletRequest].townNPC)
+                        {
+							Main.projectile[bullet].friendly = false;
+							Main.projectile[bullet].hostile = true;
+						}
 						modPlayer.MagicBulletNthShot++;
                     }
 					else

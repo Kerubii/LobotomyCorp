@@ -10,13 +10,16 @@ using Terraria.GameContent;
 
 namespace LobotomyCorp.NPCs.RedMist
 {
-    //[AutoloadBossHead]
-    [Autoload(LobotomyCorp.TestMode)]
     class HeavenBoss : ModProjectile
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+        }
+
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Heaven");
+            // DisplayName.SetDefault("Heaven");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }

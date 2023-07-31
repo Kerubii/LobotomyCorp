@@ -11,8 +11,8 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("A cane used by monks for when they travel away from their temple.\n" +
-                               "It is commonly used to measure the depth of a body of water or to drive animals or insects away.");
+            /* Tooltip.SetDefault("A cane used by monks for when they travel away from their temple.\n" +
+                               "It is commonly used to measure the depth of a body of water or to drive animals or insects away."); */
 
         }
 
@@ -45,7 +45,7 @@ namespace LobotomyCorp.Items
             return player.ownedProjectileCounts[Item.shoot] < 1;
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             //On hit, 10% chance to increase sp by 40% for 30 seconds
         }

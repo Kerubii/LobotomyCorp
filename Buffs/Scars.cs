@@ -8,8 +8,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Scars");
-			Description.SetDefault("A wound that will never heal");
+			// DisplayName.SetDefault("Scars");
+			// Description.SetDefault("A wound that will never heal");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

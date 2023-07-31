@@ -7,9 +7,9 @@ namespace LobotomyCorp.Items
 	public class EngulfingDream : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("We must be awake at all times.\n" +
+			/* Tooltip.SetDefault("We must be awake at all times.\n" +
                                "Not even sweet dreams in a sound sleep are allowed here; this weapon shall wake those who swim in such illusions.\n" +
-                               "And when the crying stops, dawn will break.");
+                               "And when the crying stops, dawn will break."); */
         }
 
 		public override void SetDefaults() {

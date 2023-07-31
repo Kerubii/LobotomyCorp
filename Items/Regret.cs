@@ -8,8 +8,8 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("Enemies crushed by this regret can never return to their normal life.\n" +
-                               "Before swinging this weapon, expressing one's condolences for the demise of the inmate who couldn't even have a funeral would be nice.");
+			/* Tooltip.SetDefault("Enemies crushed by this regret can never return to their normal life.\n" +
+                               "Before swinging this weapon, expressing one's condolences for the demise of the inmate who couldn't even have a funeral would be nice."); */
 
         }
 

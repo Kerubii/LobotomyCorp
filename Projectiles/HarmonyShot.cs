@@ -36,7 +36,7 @@ namespace LobotomyCorp.Projectiles
 			}
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			for (int i = 0; i < 8; i++)
 			{
@@ -92,7 +92,7 @@ namespace LobotomyCorp.Projectiles
 			}
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			foreach (Player p in Main.player)
 			{

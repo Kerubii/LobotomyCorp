@@ -10,8 +10,9 @@ namespace LobotomyCorp.Items.Ruina.Technology
 	{
 		public override void SetStaticDefaults() 
 		{
-            DisplayName.SetDefault("Grinder Mk52"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault(GetTooltip());
+            // DisplayName.SetDefault("Grinder Mk52"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+            // Tooltip.SetDefault(GetTooltip());
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
 		}
 
 		public override void SetDefaults() 

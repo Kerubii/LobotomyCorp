@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -16,8 +17,8 @@ namespace LobotomyCorp.Tiles
 			TileObjectData.newTile.CopyFrom(TileObjectData.Style2x2);
 			TileObjectData.newTile.Origin = new Point16(0, 1);
 			TileObjectData.addTile(Type);
-			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Black Box - Container");
+			LocalizedText name = CreateMapEntryName();
+			// name.SetDefault("Black Box - Container");
 			AddMapEntry(new Color(0, 0, 0), name);
 			DustType = DustID.Wraith;
 			TileID.Sets.DisableSmartCursor[Type] = true;

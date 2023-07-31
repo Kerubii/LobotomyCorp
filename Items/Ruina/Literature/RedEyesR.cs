@@ -12,8 +12,8 @@ namespace LobotomyCorp.Items.Ruina.Literature
 	{
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Red Eyes"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Red Eyes"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			// Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 
@@ -114,7 +114,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 				{
 					if (player.itemAnimation == player.itemAnimationMax / 2 - 2)
 					{
-						SoundEngine.PlaySound(LobotomyCorp.ItemLobSound("Literature/Spidermom_Strong_Hori", 1), player.Center);
+						SoundEngine.PlaySound(LobotomyCorp.ItemLobSound("Literature/Spidermom_Strong_Hori", 1, 1, 0, 0.5f), player.Center);
 					}
 					float progress = 1f - (player.itemAnimation + 1) / (player.itemAnimationMax * 0.5f);
 					player.itemLocation.X = player.position.X + player.width * 0.5f + (heldItemFrame.Width * 0.5f - 36) * (float)player.direction;
@@ -138,7 +138,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
             {
 				if (player.itemAnimation == player.itemAnimationMax - 1)
 				{
-					SoundEngine.PlaySound(LobotomyCorp.ItemLobSound("Literature/Spidermom_Hit", 2), player.Center);
+					SoundEngine.PlaySound(LobotomyCorp.ItemLobSound("Literature/Spidermom_Hit", 2, 1, 0, 0.5f), player.Center);
 				}
 				float rotation = LobCorpLight.ItemRotation(player);
 				if (Item.useStyle == 16)
@@ -289,7 +289,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			}
 		}
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			LobotomyGlobalNPC modNPC = target.GetGlobalNPC<LobotomyGlobalNPC>();
 			if (player.altFunctionUse == 2)
@@ -312,8 +312,6 @@ namespace LobotomyCorp.Items.Ruina.Literature
 				Dust d = Dust.NewDustPerfect(target.Center, DustID.Wraith, speed.RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), 0, default, Main.rand.NextFloat(1f, 2f));
 				d.noGravity = true;
 			}
-
-			base.OnHitNPC(player, target, damage, knockBack, crit);
         }
 
         public override bool? CanHitNPC(Player player, NPC target)

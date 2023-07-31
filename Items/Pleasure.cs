@@ -10,9 +10,9 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("If you grasp for pleasure you cannot endure, you will end up losing yourself.\n" +
+            /* Tooltip.SetDefault("If you grasp for pleasure you cannot endure, you will end up losing yourself.\n" +
 							   "When the powder that falls from the thorns becomes known to the world,\n" +
-							   "People may forever sink into the swamp of intoxication.") ;
+							   "People may forever sink into the swamp of intoxication.") ; */
         }
 
 		public override void SetDefaults() 

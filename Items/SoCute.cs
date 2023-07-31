@@ -9,9 +9,9 @@ namespace LobotomyCorp.Items
 	{
         public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("SO CUTE!!!");
-            Tooltip.SetDefault("Beware that the beast inside you may awaken if you use this weapon too much...\n" +
-                               "Oh but the soft jelly-like pawbs feel vewwy nice to touch.");
+			// DisplayName.SetDefault("SO CUTE!!!");
+            /* Tooltip.SetDefault("Beware that the beast inside you may awaken if you use this weapon too much...\n" +
+                               "Oh but the soft jelly-like pawbs feel vewwy nice to touch."); */
         }
 
         public override void SetDefaults() {

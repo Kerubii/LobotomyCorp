@@ -14,7 +14,7 @@ namespace LobotomyCorp.Projectiles
 	public class GreenStemArea : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Malice");
+            // DisplayName.SetDefault("Malice");
         }
 
 		public override void SetDefaults() {

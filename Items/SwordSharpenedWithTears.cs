@@ -11,9 +11,9 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("A sword suitable for swift thrusts.\n" +
+			/* Tooltip.SetDefault("A sword suitable for swift thrusts.\n" +
                                "Even someone unskilled in dueling can rapidly puncture an enemy using this E.G.O with remarkable agility.\n" +
-                               "Alternate attack to perform a flurry of stabs");
+                               "Alternate attack to perform a flurry of stabs"); */
 		}
 
 		public override void SetDefaults() 

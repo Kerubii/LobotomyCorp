@@ -10,9 +10,9 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("Do not attempt to understand it, just use it.\n" +
+            /* Tooltip.SetDefault("Do not attempt to understand it, just use it.\n" +
                                "The spear often tries to lead the wielder into a long and endless realm of mind...\n" +
-                               "But they must try to not be swayed by it.");
+                               "But they must try to not be swayed by it."); */
 
         }
 
@@ -45,7 +45,7 @@ namespace LobotomyCorp.Items
             return player.ownedProjectileCounts[Item.shoot] < 1;
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             //On hit, 10% chance to increase sp by 40% for 30 seconds
         }

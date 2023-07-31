@@ -5,13 +5,17 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Natural
 {
-    [Autoload(LobotomyCorp.TestMode)]
     public class NihilR : SEgoItem
 	{
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+        }
+
         public int ArcanaManaCost = 500;
 
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault(GetTooltip());
+			// Tooltip.SetDefault(GetTooltip());
             
             //Item.staff[Item.type] = true;
         }

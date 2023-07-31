@@ -7,10 +7,10 @@ namespace LobotomyCorp.Items
 	public class Hypocrisy : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("The tree turned out to be riddled with hypocrisy and deception;\n" +
+			/* Tooltip.SetDefault("The tree turned out to be riddled with hypocrisy and deception;\n" +
                                "Those who wear its blessing act in the name of bravery and faith.\n" +
 							   "However, be warned that nature does not know the difference between a blessing and a curse.\n" +
-							   "Sold by the Dryad after Queen Bee");
+							   "Sold by the Dryad after Queen Bee"); */
         }
 
 		public override void SetDefaults() {

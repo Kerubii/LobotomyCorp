@@ -16,7 +16,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("E.G.O");
+            // DisplayName.SetDefault("E.G.O");
         }
 
         public override void SetDefaults()
@@ -46,7 +46,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mimicry");
+            // DisplayName.SetDefault("Mimicry");
         }
 
         public override void SetDefaults()
@@ -79,7 +79,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("DaCapo");
+            // DisplayName.SetDefault("DaCapo");
         }
 
         public override void SetDefaults()

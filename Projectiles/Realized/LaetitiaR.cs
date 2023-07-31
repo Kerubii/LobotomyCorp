@@ -13,7 +13,7 @@ namespace LobotomyCorp.Projectiles.Realized
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Gift");
+			// DisplayName.SetDefault("Gift");
 		}
 
 		public override void SetDefaults()
@@ -33,7 +33,7 @@ namespace LobotomyCorp.Projectiles.Realized
 			Projectile.rotation = 0.261f * (float)Math.Sin(6.28f * Projectile.ai[0]/60);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			LobotomyGlobalNPC modNPC = target.GetGlobalNPC<LobotomyGlobalNPC>();
 			if (modNPC.LaetitiaGiftOwner < 0)
@@ -41,8 +41,6 @@ namespace LobotomyCorp.Projectiles.Realized
 				modNPC.LaetitiaGiftOwner = Projectile.owner;
 				modNPC.LaetitiaGiftDamage = 0;
             }
-
-            base.OnHitNPC(target, damage, knockback, crit);
         }
     }
 }

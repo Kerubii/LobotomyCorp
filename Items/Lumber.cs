@@ -9,8 +9,8 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("A versatile equipment made to cut down trees and people alike.\n" +
-                               "Perhaps sharpening the axe was the one thing it didn't neglect. The blade is always shiny.");
+			/* Tooltip.SetDefault("A versatile equipment made to cut down trees and people alike.\n" +
+                               "Perhaps sharpening the axe was the one thing it didn't neglect. The blade is always shiny."); */
 		}
 
 		public override void SetDefaults() 

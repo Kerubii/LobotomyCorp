@@ -16,7 +16,7 @@ namespace LobotomyCorp.NPCs.RedMist
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Justitia");
+            // DisplayName.SetDefault("Justitia");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 12;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
@@ -60,13 +60,13 @@ namespace LobotomyCorp.NPCs.RedMist
             }    
         }
         
-        public override void ModifyHitPlayer(Player target, ref int damage, ref bool crit)
+        public override void ModifyHitPlayer(Player target, ref Player.HurtModifiers modifiers)
         {
             float pale = (50f + Main.rand.Next(21)) / 100f;
-            damage = (int)((float)target.statLifeMax2 * pale);// + target.statDefense / 2);
-            damage /= 2;
+            modifiers.SourceDamage.Base = (int)((float)target.statLifeMax2 * pale);// + target.statDefense / 2);
+            modifiers.SourceDamage /= 2;
             if (Main.expertMode)
-                damage /= 2;
+                modifiers.SourceDamage /= 2;
         }
 
         public override bool PreDraw(ref Color lightColor)

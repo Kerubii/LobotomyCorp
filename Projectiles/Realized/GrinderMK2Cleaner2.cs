@@ -15,7 +15,7 @@ namespace LobotomyCorp.Projectiles.Realized
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Cleaning Tools");
+            // DisplayName.SetDefault("Cleaning Tools");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
@@ -300,7 +300,7 @@ namespace LobotomyCorp.Projectiles.Realized
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
             LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);

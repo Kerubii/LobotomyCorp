@@ -15,7 +15,7 @@ namespace LobotomyCorp.Projectiles.Realized
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Spiderbud, Spiderbud, does whatever a Spiderbud does");
+			// DisplayName.SetDefault("Spiderbud, Spiderbud, does whatever a Spiderbud does");
 		}
 
 		public override void SetDefaults()

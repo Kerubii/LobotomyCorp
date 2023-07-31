@@ -8,9 +8,9 @@ namespace LobotomyCorp.Items
 	public class Adoration : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("A big mug filled with mysterious slime that never runs out.\n" +
+			/* Tooltip.SetDefault("A big mug filled with mysterious slime that never runs out.\n" +
                                "ItÅ's the byproduct of some horrid experiment in a certain laboratory that eventually failed.\n" +
-                               "Inflicts Slow");
+                               "Inflicts Slow"); */
         }
 
 		public override void SetDefaults() {

@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles
 	public class SmileBits : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Smile");
+            // DisplayName.SetDefault("Smile");
             Main.projFrames[Projectile.type] = 3;
         }
 
@@ -47,7 +47,7 @@ namespace LobotomyCorp.Projectiles
                 Projectile.scale -= 0.05f;
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(ModContent.BuffType<Buffs.Vomit>(), 300);
         }

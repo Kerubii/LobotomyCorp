@@ -13,9 +13,10 @@ namespace LobotomyCorp.Items
 	{
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("With steel in one hand and gunpowder in the other, there's nothing to fear in this place.\n" +
+            /* Tooltip.SetDefault("With steel in one hand and gunpowder in the other, there's nothing to fear in this place.\n" +
                                "It's more important to deliver a decisive strike in blind hatred without hesitation than to hold on to insecure courage.\n" +
-                               "50% increased damage under 50% health");
+                               "50% increased damage under 50% health"); */
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
 
         public override void SetDefaults() {

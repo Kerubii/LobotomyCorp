@@ -6,13 +6,17 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Language
 {
-    [Autoload(LobotomyCorp.TestMode)]
     public class MimicryR : SEgoItem
 	{
-		public override void SetStaticDefaults() 
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+        }
+
+        public override void SetStaticDefaults() 
 		{
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("\"And the many shells cried out one word, \"Manager\".\"");
+            // Tooltip.SetDefault("\"And the many shells cried out one word, \"Manager\".\"");
             
             EgoColor = LobotomyCorp.AlephRarity;
         }

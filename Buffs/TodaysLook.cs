@@ -7,12 +7,12 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Look for the Day");
-			Description.SetDefault("The Look for the Day");
+			// DisplayName.SetDefault("Look for the Day");
+			// Description.SetDefault("The Look for the Day");
 			Main.buffNoTimeDisplay[Type] = true;
 		}
 
-        public override void ModifyBuffTip(ref string tip, ref int rare)
+        public override void ModifyBuffText(ref string buffName, ref string tip, ref int rare)
         {
 			int todaysLook = LobotomyModPlayer.ModPlayer(Main.LocalPlayer).TodaysExpressionFace;
 			switch (todaysLook)
@@ -33,7 +33,6 @@ namespace LobotomyCorp.Buffs
 					tip = "Angry - 50% increased damage and defense is set to 0";
 					break;
             }
-			base.ModifyBuffTip(ref tip, ref rare);
         }
 
         public override void Update(Player player, ref int buffIndex)
@@ -59,7 +58,7 @@ namespace LobotomyCorp.Buffs
 				case 4://Angry
 					player.statDefense -= 30;
 					if (player.statDefense > 0)
-						player.statDefense = 0;
+						player.statDefense *= 0;
 					break;
             }
         }

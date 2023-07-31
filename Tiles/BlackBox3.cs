@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -19,8 +20,8 @@ namespace LobotomyCorp.Tiles
 			TileObjectData.newTile.Origin = new Point16(0, 2);
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
 			TileObjectData.addTile(Type);
-			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Black Box - Extractor");
+			LocalizedText name = CreateMapEntryName();
+			// name.SetDefault("Black Box - Extractor");
 			AddMapEntry(new Color(0, 0, 0), name);
 			DustType = DustID.Wraith;
 			TileID.Sets.DisableSmartCursor[Type] = true;

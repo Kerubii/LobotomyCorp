@@ -9,8 +9,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Lament");
-			Description.SetDefault("A Solemn Lament gun is disabled");
+			// DisplayName.SetDefault("Lament");
+			// Description.SetDefault("A Solemn Lament gun is disabled");
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }

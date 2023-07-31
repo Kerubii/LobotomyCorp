@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Linq;
 using Terraria;
+using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -23,34 +25,34 @@ namespace LobotomyCorp
         public bool CustomDraw = false;
         public Texture2D CustomTexture = null;
 
-        public override void OpenVanillaBag(string context, Player player, int arg)
+        public override void ModifyItemLoot(Item item, ItemLoot itemLoot)
         {
-            if (context == "bossBag")
+            if (item.type == ItemID.QueenBeeBossBag)
             {
-                if (arg == ItemID.QueenBeeBossBag && Main.rand.Next(2) == 0)
-                    player.QuickSpawnItem(player.GetSource_OpenItem(arg), ModContent.ItemType<Items.Hornet>());
-                else if (arg == ItemID.WallOfFleshBossBag && Main.rand.Next(4) == 0)
-                    player.QuickSpawnItem(player.GetSource_OpenItem(arg), ModContent.ItemType < Items.Censored>());
+                itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Hornet>(), 2));
             }
-            else if (context == "present")
+            else if (item.type == ItemID.WallOfFleshBossBag)
             {
-                if (Main.rand.Next(100) == 0)
-                    player.QuickSpawnItem(player.GetSource_OpenItem(arg), ModContent.ItemType < Items.Christmas>());
+                itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Censored>(), 4));
+            }
+            if (item.type == ItemID.Present)
+            {
+                itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Christmas>(), 100));
             }
         }
 
-        public override void ModifyHitNPC(Item item, Player player, NPC target, ref int damage, ref float knockBack, ref bool crit)
+        public override void ModifyHitNPC(Item item, Player player, NPC target, ref NPC.HitModifiers modifiers)
         {
             LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
             if (modPlayer.TodaysExpressionActive)
-                damage = (int)(damage * modPlayer.TodaysExpressionDamage());
+                modifiers.FinalDamage *= modPlayer.TodaysExpressionDamage();
         }
 
-        public override void ModifyHitPvp(Item item, Player player, Player target, ref int damage, ref bool crit)
+        public override void ModifyHitPvp(Item item, Player player, Player target, ref Player.HurtModifiers modifiers)
         {
             LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
             if (modPlayer.TodaysExpressionActive)
-                damage = (int)(damage * modPlayer.TodaysExpressionDamage());
+                modifiers.FinalDamage *= modPlayer.TodaysExpressionDamage();
         }
     }
 }

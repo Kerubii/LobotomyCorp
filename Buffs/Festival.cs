@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Festival");
-			Description.SetDefault("Everything will be peaceful");
+			// DisplayName.SetDefault("Festival");
+			// Description.SetDefault("Everything will be peaceful");
 		}
 
         public override void Update(Player player, ref int buffIndex)

@@ -57,11 +57,10 @@ namespace LobotomyCorp.Projectiles.Realized
 			}
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			if (target.whoAmI == (int)Projectile.ai[1])
 				target.AddBuff(ModContent.BuffType<Buffs.MetallicRinging>(), 480);
-            base.OnHitNPC(target, damage, knockback, crit);
         }
 
         public override void Kill(int timeLeft)

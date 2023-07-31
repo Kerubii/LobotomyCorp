@@ -7,8 +7,9 @@ namespace LobotomyCorp.Buffs
 	{
         public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Metalic Ringing");
-			Description.SetDefault("My head... turning into metal...");
+			// DisplayName.SetDefault("Metalic Ringing");
+			// Description.SetDefault("My head... turning into metal...");
+            Main.debuff[Type] = true;
         }
 
         public override void Update(NPC npc, ref int buffIndex)

@@ -10,9 +10,9 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
             // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault("The gaze from the keyhole is fixed on its target without ever stopping.\n" +
+            /* Tooltip.SetDefault("The gaze from the keyhole is fixed on its target without ever stopping.\n" +
                                "No one knows what it wanted to peep at so dearly.\n" + 
-                               "Can cause additional damage over time");
+                               "Can cause additional damage over time"); */
 
         }
 
@@ -45,7 +45,7 @@ namespace LobotomyCorp.Items
             return player.ownedProjectileCounts[Item.shoot] < 1;
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
             //On hit, 10% chance to increase sp by 40% for 30 seconds
         }

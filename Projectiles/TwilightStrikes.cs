@@ -77,12 +77,10 @@ namespace LobotomyCorp.Projectiles
             return Projectile.localNPCImmunity[target.whoAmI] == 0;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage = Projectile.damage + target.defense / 2;
-            crit = false;
-
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+            modifiers.ScalingArmorPenetration += 1f;
+            modifiers.DisableCrit();
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -140,7 +138,7 @@ namespace LobotomyCorp.Projectiles
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Twilight Slashes");
+            // DisplayName.SetDefault("Twilight Slashes");
         }
 
         public override void SetDefaults()
@@ -219,12 +217,10 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage = Projectile.damage + target.defense / 2;
-            crit = false;
-
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+            modifiers.ScalingArmorPenetration += 1f;
+            modifiers.DisableCrit();
         }
 
         public override bool PreDraw(ref Color lightColor)

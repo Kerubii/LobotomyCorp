@@ -8,8 +8,8 @@ namespace LobotomyCorp.Items
 	public class Beak : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("As if to prove that size doesn't matter when it comes to force,\n" +
-                               "The weapon has high firepower despite its small size.");
+			/* Tooltip.SetDefault("As if to prove that size doesn't matter when it comes to force,\n" +
+                               "The weapon has high firepower despite its small size."); */
 
         }
 

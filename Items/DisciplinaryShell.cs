@@ -4,14 +4,18 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items
 {
-	[Autoload(LobotomyCorp.TestMode)]
 	public class DisciplinaryShell : ModItem
 	{
-        public override void SetStaticDefaults()
+		public override bool IsLoadingEnabled(Mod mod)
+		{
+			return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+		}
+
+		public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Discplinary Shell");
-			Tooltip.SetDefault("Awakens the Red Mist\n" + 
-							   "The Boss is highly unfinished I dont recommend fighting it");
+			// DisplayName.SetDefault("Discplinary Shell");
+			/* Tooltip.SetDefault("Awakens the Red Mist\n" + 
+							   "The Boss is highly unfinished I dont recommend fighting it"); */
 		}
 
         public override void SetDefaults()

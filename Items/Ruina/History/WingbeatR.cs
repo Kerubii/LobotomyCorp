@@ -20,8 +20,8 @@ namespace LobotomyCorp.Items.Ruina.History
 
         public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Wingbeat");
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Wingbeat");
+			// Tooltip.SetDefault(GetTooltip());
         }
 
         public override void SetDefaults() 

@@ -34,7 +34,7 @@ namespace LobotomyCorp
             return base.PreAI(projectile);
         }
 
-        public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (projectile.owner == Main.myPlayer && Lament > 0 && LobotomyCorp.LamentValid(target, projectile) && target.CanBeChasedBy(projectile))
             {
@@ -87,22 +87,17 @@ namespace LobotomyCorp
             }
         }
 
-        public override void ModifyDamageScaling(Projectile projectile, ref float damageScale)
+        public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
             if (projectile.owner >= 0 && projectile.owner < Main.maxPlayers)
             {
                 LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(Main.player[projectile.owner]); 
                 if (modPlayer.TodaysExpressionActive)
-                    damageScale *= modPlayer.TodaysExpressionDamage();
+                    modifiers.FinalDamage *= modPlayer.TodaysExpressionDamage();
             }
-            base.ModifyDamageScaling(projectile, ref damageScale);
-        }
-
-        public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
             if (Lament > 0 && LobotomyCorp.LamentValid(target, projectile) && target.CanBeChasedBy(projectile))
             {
-                damage = (int)(damage * 1.15f);
+                modifiers.FinalDamage *= 1.15f;
             }
         }
 

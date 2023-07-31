@@ -9,11 +9,11 @@ namespace LobotomyCorp.Items
 	public class Harmony : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("It may look like a deteriorating machine at first glance,\n" +
+			/* Tooltip.SetDefault("It may look like a deteriorating machine at first glance,\n" +
                                "But the music it makes captures its audience more than any other instrument could.\n" +
                                "The wielder must dedicate himself in return.\n" +
                                "After all, art is a devil's gift, born from despair and suffering.\n" +
-                               "30% increased damage when consuming 2% hp while having above 2% maximum health");
+                               "30% increased damage when consuming 2% hp while having above 2% maximum health"); */
         }
 
 		public override void SetDefaults() {

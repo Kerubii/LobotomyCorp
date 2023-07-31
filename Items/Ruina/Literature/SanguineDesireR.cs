@@ -13,8 +13,8 @@ namespace LobotomyCorp.Items.Ruina.Literature
 
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Sanguine Desire"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Sanguine Desire"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			// Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 
@@ -105,11 +105,9 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			.Register();
 		}
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
 			LobotomyGlobalNPC.SanguineDesireApplyBleed(target, 0.8f, target.damage * 3, 60, 600);
-
-            base.OnHitNPC(player, target, damage, knockBack, crit);
         }
 
         /// <summary>

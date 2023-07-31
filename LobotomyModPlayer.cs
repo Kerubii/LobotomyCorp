@@ -81,6 +81,11 @@ namespace LobotomyCorp
         public int GrinderMk2Battery = 1400;
         public bool GrinderMk2Recharging = false;
 
+        public int LifeForADareDevilGift = 0;
+        public bool LifeForADareDevilGiftActive = false;
+        public bool LifeForADareDevilCounterStance = false;
+        public int LifeForADareDevilCounterArea = 0;
+
         public int LoveAndHateHysteria = 0;
 
         public int LuminousGreed = 0;
@@ -92,6 +97,9 @@ namespace LobotomyCorp
         public bool NihilActive = false;
         public int NihilMode = 0;
 
+        public bool OurGalaxyStone = false;
+        public int OurGalaxyOwner = -1;
+
         public bool RedEyesAlerted = false;
         public float RedEyesOpacity = 0f;
         public int RedEyesMealMax = 60 * 8;
@@ -99,6 +107,7 @@ namespace LobotomyCorp
         public bool SmileDebuff = false;
 
         public bool SolemnSwitch = false;
+        public int SolemnLamentDisableDamage = 0;
         public int SolemnLamentDisable = 0;
         public int SolemnLamentCooldown = 0;
 
@@ -118,6 +127,10 @@ namespace LobotomyCorp
 
         private bool forcePlayerVelocity = false;
         private Vector2 forcePlayerVelocityValue;
+
+        //Aura Vanity
+        public Utils.AuraBehavior CurrentAura;
+        public Utils.AuraParticle[] AuraParticles = new Utils.AuraParticle[100];
 
         public static LobotomyModPlayer ModPlayer(Player Player)
         {
@@ -166,6 +179,12 @@ namespace LobotomyCorp
 
             GrinderMk2Active = false;
 
+            if (LifeForADareDevilGift > 0)
+            {
+                LifeForADareDevilGift--;
+            }
+            LifeForADareDevilGiftActive = false;
+
             giftFourthMatchFlame = false;
             MatchstickBurn = false;
 
@@ -174,6 +193,10 @@ namespace LobotomyCorp
             MagicBulletDarkFlame = false;
 
             NihilActive = false;
+
+            if (!OurGalaxyStone)
+                OurGalaxyOwner = -1;
+            OurGalaxyStone = false;
 
             PleasureDebuff = false;
 
@@ -202,9 +225,11 @@ namespace LobotomyCorp
             WristCutterScars = false;
 
             //RemoveMaxFallSpeed = false;
+
+            CurrentAura = null;
         }
 
-        public override void OnRespawn(Player player)
+        public override void OnRespawn()
         {
             ForgottenAffection = -1;
             ForgottenAffectionResistance = 0;
@@ -222,18 +247,34 @@ namespace LobotomyCorp
 
             GrinderMk2Recharging = false;
 
+
             HarmonyTime = 0;
             HarmonyAddiction = false;
+
+            LifeForADareDevilGift = 0;
+            LifeForADareDevilCounterStance = false;
+            
             LuminousGreed = 0;
+
+            SolemnLamentDisable = 0;
+
             FaintAromaPetal = 0;
 
             NihilActive = false;
+
+            for(int i = 0; i < AuraParticles.Length; i++)
+            {
+                if (AuraParticles[i] != null && AuraParticles[i].Active)
+                    AuraParticles[i].Active = false;
+            }
         }
 
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld()
         {
-            if (player.HasBuff<Buffs.NettleClothing>())
-                player.ClearBuff(ModContent.BuffType<Buffs.NettleClothing>());
+            if (Player.HasBuff<Buffs.NettleClothing>())
+                Player.ClearBuff(ModContent.BuffType<Buffs.NettleClothing>());
+
+            Utils.AuraParticle[] AuraParticles = new Utils.AuraParticle[100];
         }
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
@@ -386,6 +427,20 @@ namespace LobotomyCorp
                 RegretChainedWrath = true;
                 //Main.NewText("test");
                 Player.moveSpeed = 1f;
+            }
+
+            //Aura Effects
+            if (CurrentAura != null)
+            {
+                if (Main.timeForVisualEffects % CurrentAura.intensity == 0)
+                    LobotomyAura.GenerateParticle(this);
+            }
+            for (int i = 0; i < AuraParticles.Length; i++)
+            {
+                if (AuraParticles[i] != null && AuraParticles[i].Active)
+                {
+                    AuraParticles[i].Update(Player, Player.direction, Player.gravDir, (float)Main.timeForVisualEffects);
+                }
             }
         }
 
@@ -543,8 +598,27 @@ namespace LobotomyCorp
 
         public override void UpdateLifeRegen()
         {
+            if (OurGalaxyStone)
+                Player.lifeRegen += 10 + 10 * OurGalaxyStoneAllies();
+
             if (FaintAromaPetal > 0 && Player.lifeRegen < 0)
                 Player.lifeRegen = 0;
+        }
+
+        private int OurGalaxyStoneAllies()
+        {
+            int count = 0;
+            foreach (Player p in Main.player)
+            {
+                if (p.whoAmI != Player.whoAmI && p.team == Player.team && !p.dead)
+                {
+                    LobotomyModPlayer modPlayer = ModPlayer(p);
+                    if (modPlayer.OurGalaxyStone && modPlayer.OurGalaxyOwner == OurGalaxyOwner)
+                        count++;
+                }
+            }
+
+            return count;
         }
 
         public override bool PreItemCheck()
@@ -556,7 +630,7 @@ namespace LobotomyCorp
             return base.PreItemCheck();
         }
 
-        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
         {
             /*if (Player.HeldItem.type == ModContent.ItemType<Items.BeakS>())
             {
@@ -572,15 +646,19 @@ namespace LobotomyCorp
             }*/
             if (BlackSwanParryChance > 0 && Main.rand.Next(100) < BlackSwanParryChance)
             {
-                Player.ApplyDamageToNPC(npc, damage, 0, Player.direction, false);
+                Player.ApplyDamageToNPC(npc, hurtInfo.Damage, 0, Player.direction, false);
             }
         }
 
-        private void OnHitSolemnLament()
+        private void OnHitSolemnLament(double damage)
         {
             if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentR>())
             {
-                Player.AddBuff(ModContent.BuffType<Buffs.Lament>(), 180);
+                SolemnLamentDisableDamage += (int)damage;
+                if (SolemnLamentDisableDamage < Player.statLifeMax2 * 0.25f)
+                    return;
+                SolemnLamentDisableDamage = 0;
+                Player.AddBuff(ModContent.BuffType<Buffs.Lament>(), 300);
                 if (SolemnLamentDisable == 0)
                     SolemnLamentDisable = Main.rand.Next(2) + 1;
             }
@@ -604,42 +682,41 @@ namespace LobotomyCorp
             base.DrawEffects(drawInfo, ref r, ref g, ref b, ref a, ref fullBright);
         }
 
-        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
+        public override bool ImmuneTo(PlayerDeathReason damageSource, int cooldownCounter, bool dodgeable)
+        {
+            if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.LifeForADaredevilR>() && LifeForADareDevilCounterStance)
+            {
+                if (Player.channel)
+                {
+                    LifeForADareDevilCounterStance = false;
+                    Player.channel = false;
+                    /*
+                    foreach (Projectile p in Main.projectile)
+                    {
+                        if (p.type == ModContent.ProjectileType<Projectiles.Realized.LifeForADaredevilR>() && p.owner == Player.whoAmI)
+                        {
+                            p.Kill();
+                            break;
+                        }
+                    }*/
+                }
+                else
+                {
+                    Player.itemAnimation = Player.itemAnimationMax / 2;
+                    Player.itemTime = Player.itemAnimationMax / 2;
+                    LifeForADaredevilCounterAttack(Player.HeldItem.damage);
+                    LifeForADareDevilGift = 1800;
+                    Player.AddBuff(ModContent.BuffType<Buffs.InspiredBravery>(), 10);
+                    return false;
+                }
+            }
+
+            return base.ImmuneTo(damageSource, cooldownCounter, dodgeable);
+        }
+
+        public override bool ConsumableDodge(Player.HurtInfo info)
         {
             bool takeDamage = true;
-
-            if (damageSource.SourceNPCIndex >= 0)
-            {
-                if (RedShield || BlackShield && !Player.immune)
-                {
-                    damage = ShieldDamage(damage);
-                    if (damage <= 0)
-                        return false;
-                }
-            }
-
-            if (damageSource.SourceProjectileIndex >= 0)
-            {
-                if (WhiteShield || BlackShield && !Player.immune)
-                {
-                    damage = ShieldDamage(damage);
-                    if (damage <= 0)
-                        return false;
-                }
-            }
-
-            if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.History.ForgottenR>() && damageSource.SourceNPCIndex == ForgottenAffection)
-            {
-                damage = damage - (int)(damage * ForgottenAffectionResistance);
-                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Teddy_Guard") with { Volume = 0.5f }, Player.Center);
-                playSound = false;
-            }
-
-            if (Player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GreenStemArea>()] >= 1)
-            {
-                damage += (int)(damage * 0.3f);
-            }
-
             //Black Swan Nettle Damage Reduction
             if (BlackSwanNettleClothing > 0)
             {
@@ -662,7 +739,7 @@ namespace LobotomyCorp
                         Dust.NewDustPerfect(Player.MountedCenter, dustType, dustVel, 0, default, 1.5f).noGravity = true;
                     }
 
-                    int reflectDamage = damage;
+                    int reflectDamage = info.Damage;
 
                     if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Literature.BlackSwanR>())
                     {
@@ -678,17 +755,142 @@ namespace LobotomyCorp
                         }
                     }
 
-                    if (damageSource.SourceNPCIndex >= 0)
-                    {                        
-                        Player.ApplyDamageToNPC(Main.npc[damageSource.SourceNPCIndex], reflectDamage, 0f, Player.direction, false);
+                    if (info.DamageSource.SourceNPCIndex >= 0)
+                    {
+                        Player.ApplyDamageToNPC(Main.npc[info.DamageSource.SourceNPCIndex], reflectDamage, 0f, Player.direction, false);
                     }
                     if (!takeDamage)
                         return takeDamage;
-                    damage = (int)(damage * 0.25f);
+                    info.Damage = (int)(info.Damage * 0.25f);
                 }
             }
 
-            return base.PreHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource, ref cooldownCounter);
+            return base.ConsumableDodge(info);
+        }
+
+        public override void OnHurt(Player.HurtInfo info)
+        {
+            if (info.DamageSource.SourceNPCIndex >= 0)
+            {
+                if (RedShield || BlackShield && !Player.immune)
+                {
+                    info.Damage = ShieldDamage(info.Damage);
+                }
+            }
+
+            if (info.DamageSource.SourceProjectileLocalIndex >= 0)
+            {
+                if (WhiteShield || BlackShield && !Player.immune)
+                {
+                    info.Damage = ShieldDamage(info.Damage);
+                }
+            }
+        }
+
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+        {
+            if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.History.ForgottenR>() && modifiers.DamageSource.SourceNPCIndex == ForgottenAffection)
+            {
+                modifiers.FinalDamage -= ForgottenAffectionResistance;
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Teddy_Guard") with { Volume = 0.5f }, Player.Center);
+                modifiers.DisableSound();
+            }            
+
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GreenStemArea>()] >= 1)
+            {
+                modifiers.FinalDamage += 0.3f;
+            }
+        }
+
+        public void LifeForADaredevilCounterAttack(int damage)
+        {
+            SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Armor_HeadOff"), Player.position);
+
+            int Distance = 16 * 20;//Radius
+            //Additional Damage
+            int diff = Player.statLifeMax2 - Player.statLife;
+            damage += (int)Player.GetDamage(DamageClass.Melee).ApplyTo(diff);
+
+            foreach (Projectile p in Main.projectile)
+            {
+                if (p.active && p.hostile && !p.netImportant && p.damage > 0)
+                {
+                    if (p.Center.Distance(Player.Center) < Distance)
+                    {
+                        LifeForADareDevilPierceEffect(Player, p.Center, p.width, p.height);
+                        p.Kill();
+                    }
+                }
+            }
+
+            Dictionary<int, int> SegmentList = new Dictionary<int, int>();
+            float dmgMult = 1f;
+            bool NearNPC = false;
+
+            if (LifeForADareDevilGift < 1200)
+                dmgMult += .15f;
+            else
+                dmgMult += 0.1f;
+            foreach (NPC n in Main.npc)
+            {
+                if (n.active && !n.friendly)
+                {
+                    float npcDist = Distance * (n.boss ? 2 : 1);
+                    bool segmentLimit = false;
+                    if (n.realLife > -1 && SegmentList.ContainsKey(n.realLife) && SegmentList[n.realLife] > 5)
+                    {
+                        segmentLimit = true;
+                    }
+                    float distance = n.Center.Distance(Player.Center);
+                    float extra = + (n.width > n.height ? n.width / 2 : n.height / 2);
+                    if (distance < npcDist + extra && !segmentLimit)
+                    {
+                        if (distance < 30 + (n.width > n.height ? n.width / 2 : n.height / 2))
+                            NearNPC = true;
+                        int x = Math.Sign(Player.position.X - n.position.X) * -1;
+                        LifeForADareDevilPierceEffect(Player, n.Center, n.width, n.height);
+                        int hitDamage = (int)(damage * dmgMult);
+                        Player.ApplyDamageToNPC(n, hitDamage, 8f, x, true);
+                        n.immune[Player.whoAmI] = 15;
+                        if (n.realLife > -1)
+                        {
+                            if (SegmentList.ContainsKey(n.realLife))
+                            {
+                                SegmentList[n.realLife]++;
+                            }
+                            else
+                            {
+                                SegmentList.Add(n.realLife, 1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            float scale = 1f + 1.5f * (1f - Player.statLife / (float)Player.statLifeMax2);
+            if (Main.myPlayer == Player.whoAmI)
+                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LifeForADareDevilEffects>(), 0, 0, Player.whoAmI, scale, Player.direction);
+
+            Player.immune = true;
+            Player.immuneTime = 45;
+            if (NearNPC)
+                Player.immuneTime += 45;
+            //Player.immuneNoBlink = true;
+            LifeForADareDevilCounterStance = false;
+        }
+
+        public static void LifeForADareDevilPierceEffect(Player Player, Vector2 pos, int width, int height)
+        {
+            if (height > width)
+                width = height;
+
+            if (width < 16)
+                width = 16;
+
+            float scale = 1f + 1.5f * (1f - Player.statLife / (float)Player.statLifeMax2);
+
+            if (Main.myPlayer == Player.whoAmI)
+                Projectile.NewProjectile(Player.GetSource_FromThis(), pos, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LifeForADareDevilEffects>(), 0, 0, Player.whoAmI, 0, width * scale);
         }
 
         /// <summary>
@@ -704,15 +906,15 @@ namespace LobotomyCorp
             return BlackSwanNettleClothing >= NettleAmount;
         }
 
-        public override void PostHurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+        public override void PostHurt(Player.HurtInfo info)
         {
-            OnHitSolemnLament();
+            OnHitSolemnLament(info.Damage);
 
             int heldItem = Player.HeldItem.type;
             if (heldItem == ModContent.ItemType<Items.Censored>())
             {
-                float healing = (float)damage * 0.4f;
-                if (damage > 1)
+                float healing = (float)info.Damage * 0.4f;
+                if (info.Damage > 1)
                 {
                     Player.statLife += (int)healing;
                     Player.HealEffect((int)healing);
@@ -728,24 +930,24 @@ namespace LobotomyCorp
                     case 0://Happy
                         velocityMult *= 0.1f;
                         knockback *= 3f;
-                        projDamage = (int)(damage * 0.05f);
+                        projDamage = (int)(info.Damage * 0.05f);
                         break;
                     case 1://Smile
                         velocityMult *= 0.4f;
                         knockback *= 2f;
-                        projDamage = (int)(damage * 0.5f);
+                        projDamage = (int)(info.Damage * 0.5f);
                         break;
                     default://Neutral
                         break;
                     case 3://Sad
                         velocityMult *= 1.5f;
                         knockback *= 0.5f;
-                        projDamage = (int)(damage * 1.1f);
+                        projDamage = (int)(info.Damage * 1.1f);
                         break;
                     case 4://Angry
                         velocityMult *= 2.2f;
                         knockback *= 0f;
-                        projDamage = (int)(damage * 1.5f);
+                        projDamage = (int)(info.Damage * 1.5f);
                         break;
                 }
                 
@@ -758,19 +960,16 @@ namespace LobotomyCorp
 
                 SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/Shy_Strong_Guard") with { Volume = 0.5f }, Player.position);
             }
-
-
-            base.PostHurt(pvp, quiet, damage, hitDirection, crit, cooldownCounter);
         }
 
-        public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
+        public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
         {
             if (FaintAromaPetal > 0)
             {
                 if (FaintAromaPetal < FaintAromaPetalMax)
-                    damage = (int)(damage * (1.1f + ((float)FaintAromaPetal / (float)FaintAromaPetalMax)));
+                    modifiers.FinalDamage *= (1.1f + ((float)FaintAromaPetal / (float)FaintAromaPetalMax));
                 else
-                    damage = (int)(damage * 1.2f);
+                    modifiers.FinalDamage *= 1.2f;
             }
         }
 
@@ -945,6 +1144,22 @@ namespace LobotomyCorp
 
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
+            if (OurGalaxyStone)
+            {
+                foreach (Player p in Main.player)
+                {
+                    if (p.whoAmI != Player.whoAmI && p.team == Player.team && !p.dead)
+                    {
+                        LobotomyModPlayer modPlayer = ModPlayer(p);
+                        if (modPlayer.OurGalaxyStone && modPlayer.OurGalaxyOwner == OurGalaxyOwner)
+                        {
+                            damageSource.SourceCustomReason = p.name + "'s friends has died";
+                            p.KillMe(damageSource, p.statLifeMax2 * 4, 1);
+                        }
+                    }
+                }
+            }
+
             base.Kill(damage, hitDirection, pvp, damageSource);
         }
 
@@ -1275,6 +1490,7 @@ namespace LobotomyCorp
         private static Asset<Texture2D> MusicalAddiction;
         private static Asset<Texture2D> TodaysLook;
         private static Asset<Texture2D> BlackSwan;
+        private static Asset<Texture2D> OurGalaxy;
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {
@@ -1283,7 +1499,8 @@ namespace LobotomyCorp
                 ModPlayer.FaintAromaPetal > 0 || 
                 ModPlayer.HarmonyAddiction || 
                 ModPlayer.TodaysExpressionActive ||
-                ModPlayer.BlackSwanNettleClothing > 0);
+                ModPlayer.BlackSwanNettleClothing > 0 ||
+                ModPlayer.OurGalaxyStone);
         }
 
         public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FrontAccFront);
@@ -1294,6 +1511,7 @@ namespace LobotomyCorp
             MusicalAddiction = Mod.Assets.Request<Texture2D>("Misc/MusicalAddiction");
             TodaysLook = Mod.Assets.Request<Texture2D>("Misc/TodaysExpression");
             BlackSwan = Mod.Assets.Request<Texture2D>("Misc/Nettle");
+            OurGalaxy = Mod.Assets.Request<Texture2D>("Misc/OurGalaxyStone");
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
@@ -1405,6 +1623,18 @@ namespace LobotomyCorp
                     drawInfo.DrawDataCache.Add(data);
                 }
             }
+
+            if (ModPlayer.OurGalaxyStone)
+            {
+                Texture2D texture = OurGalaxy.Value;
+                int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
+                int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y) - 56;
+
+                Color color = Color.White;
+
+                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), texture.Frame(), color, 0, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
+                drawInfo.DrawDataCache.Add(data);
+            }
         }
     }
 
@@ -1496,6 +1726,46 @@ namespace LobotomyCorp
                 0,
                 0);
             drawInfo.DrawDataCache.Add(data);
+        }
+    }
+
+    public class LobotomyAura : PlayerDrawLayer
+    {
+        public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.MountBack);
+
+        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
+        {
+            return !Main.gameMenu;
+        }
+
+        protected override void Draw(ref PlayerDrawSet drawInfo)
+        {
+            LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(drawInfo.drawPlayer);
+            Utils.AuraParticle[] particle = modPlayer.AuraParticles;
+            if (particle != null)
+            {
+                for (int i = 0; i < particle.Length; i++)
+                {
+                    if (particle[i] != null && particle[i].Active)
+                    {
+                        drawInfo.DrawDataCache.Add(particle[i].Draw(ref drawInfo, Mod));
+                    }
+                }
+            }
+        }
+
+        public static void GenerateParticle(LobotomyModPlayer modPlayer)
+        {
+            Player player = modPlayer.Player;
+            for (int i = 0; i < modPlayer.AuraParticles.Length; i++)
+            {
+                Utils.AuraParticle particle = modPlayer.AuraParticles[i];
+                if (particle == null || !particle.Active)
+                {
+                    modPlayer.AuraParticles[i] = new Utils.AuraParticle(modPlayer.Player, player.direction, player.gravDir, (float)Main.timeForVisualEffects, modPlayer.CurrentAura);
+                    break;
+                }
+            }
         }
     }
 }

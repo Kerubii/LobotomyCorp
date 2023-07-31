@@ -12,12 +12,12 @@ namespace LobotomyCorp.Items
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("Just like how the ever-watching eyes...\n" +
+			/* Tooltip.SetDefault("Just like how the ever-watching eyes...\n" +
                                "The scale that could measure any and all sin...\n" +
                                "The beak that could swallow everything protected the peace of the Black Forest...\n" +
                                "The wielder of this armament may also bring peace as they did\n" +
 							   "Alternate attack to perform to leap forward and back and slash the target\n" +
-							   "Alternate attack be used again after 8 seconds while holding this weapon");
+							   "Alternate attack be used again after 8 seconds while holding this weapon"); */
 		}
 
 		public override void SetDefaults() 
@@ -136,7 +136,7 @@ namespace LobotomyCorp.Items
 			return true;
         }
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
 			/*
 			if (LobotomyModPlayer.ModPlayer(player).TwilightSpecial < 9)
@@ -159,7 +159,7 @@ namespace LobotomyCorp.Items
 			
 			float angle = Main.rand.NextFloat(6.28f);
 			Vector2 velocity = new Vector2(16f, 0f).RotatedBy(angle);
-			Projectile.NewProjectile(player.GetSource_FromThis(), target.Center - velocity * 15, velocity, ModContent.ProjectileType<Projectiles.TwilightStrikes>(), damage / (int)(4 * 1.5f), knockBack, player.whoAmI, target.whoAmI, 3);
+			Projectile.NewProjectile(player.GetSource_FromThis(), target.Center - velocity * 15, velocity, ModContent.ProjectileType<Projectiles.TwilightStrikes>(), hit.Damage / (int)(4 * 1.5f), hit.Knockback, player.whoAmI, target.whoAmI, 3);
 			//Main.NewText("Twilight Hit!");
 		}
 

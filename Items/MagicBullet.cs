@@ -9,9 +9,9 @@ namespace LobotomyCorp.Items
 	public class MagicBullet : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("Though the original's power couldn't be fully extracted, the magic this holds is still potent.\n" +
+			/* Tooltip.SetDefault("Though the original's power couldn't be fully extracted, the magic this holds is still potent.\n" +
                                "The weapon's bullets travel across the corridor, along the horizon.\n" +
-                               "Pierces through foes and friends alike");
+                               "Pierces through foes and friends alike"); */
         }
 
 		public override void SetDefaults() {

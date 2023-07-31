@@ -10,7 +10,7 @@ using LobotomyCorp;
 
 namespace LobotomyCorp
 {
-    abstract class AbnormalityData
+    class AbnormalityData
     {
         public string AbnormalityName;
         public int npcType;
@@ -39,5 +39,15 @@ namespace LobotomyCorp
         public bool EscapeInformation;
 
         public string[] FlavourText;
+
+        public AbnormalityData()
+        {
+            Load();
+        }
+
+        public virtual void Load()
+        {
+            
+        }
     }
 }

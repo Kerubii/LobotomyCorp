@@ -59,13 +59,13 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (Projectile.ai[0] > 8.5f)
-                damage *= 2;
+                modifiers.FinalDamage *= 2;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Projectile.localAI[0] == 0)
             {
@@ -75,7 +75,7 @@ namespace LobotomyCorp.Projectiles
             target.AddBuff(ModContent.BuffType<Buffs.Pleasure>(), 300);
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             target.AddBuff(ModContent.BuffType<Buffs.Pleasure>(), 300);
         }

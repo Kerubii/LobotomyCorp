@@ -1,0 +1,2 @@
+-Bug fixes
+-Test items are now in the server config, just open config on on the mod list and switch to next

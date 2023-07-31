@@ -138,7 +138,7 @@ namespace LobotomyCorp.Projectiles
             projOwner.itemAnimation = 2;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Projectile.ai[0] == 2)
             {
@@ -372,10 +372,9 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage += target.checkArmorPenetration(20);
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+            modifiers.ArmorPenetration += 20;
         }
     }
 }

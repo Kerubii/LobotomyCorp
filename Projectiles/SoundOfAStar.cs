@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles
 	public class SoundOfAStar : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Anime");
+            // DisplayName.SetDefault("Anime");
         }
 
 		public override void SetDefaults() {
@@ -159,11 +159,10 @@ namespace LobotomyCorp.Projectiles
             Dust.NewDustPerfect(Projectile.Center, 91).noGravity = true;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Projectile.ai[0]++;
             Projectile.velocity *= 0;
-            base.OnHitNPC(target, damage, knockback, crit);
         }
 
         public override void ModifyDamageHitbox(ref Rectangle hitbox)
@@ -179,12 +178,12 @@ namespace LobotomyCorp.Projectiles
             base.ModifyDamageHitbox(ref hitbox);
         }
 
-        public override void ModifyDamageScaling(ref float damageScale)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damageScale = 1f - Projectile.ai[0] / 5f;
-            if (damageScale < 0.1f)
-                damageScale = 0.1f;
-            base.ModifyDamageScaling(ref damageScale);
+            float multiplier = 1f - Projectile.ai[0] / 5f;
+            if (multiplier < 0.1f)
+                multiplier = 0.1f;
+            modifiers.FinalDamage *= multiplier;
         }
 
         public override void Kill(int timeLeft)

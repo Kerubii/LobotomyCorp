@@ -9,8 +9,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Hopeless");
-			Description.SetDefault("Cannot attack while moving, cannot move while attacking");
+			// DisplayName.SetDefault("Hopeless");
+			// Description.SetDefault("Cannot attack while moving, cannot move while attacking");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

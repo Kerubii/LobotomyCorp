@@ -9,8 +9,8 @@ namespace LobotomyCorp.Items
 	public class ScreamingWedge : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("Hair has grown on the crossbow as if to express that the woman's dejection will never be forgotten.\n" +
-                               "The sound of the projectile splitting the air is reminiscent of her piercing scream.");
+			/* Tooltip.SetDefault("Hair has grown on the crossbow as if to express that the woman's dejection will never be forgotten.\n" +
+                               "The sound of the projectile splitting the air is reminiscent of her piercing scream."); */
         }
 
 		public override void SetDefaults() {

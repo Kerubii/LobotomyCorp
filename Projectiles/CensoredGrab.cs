@@ -86,7 +86,7 @@ namespace LobotomyCorp.Projectiles
                 Projectile.Kill();
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player projOwner = Main.player[Projectile.owner];
             target.immune[Projectile.owner] = (int)(projOwner.itemAnimationMax * 0.3f);
@@ -239,7 +239,7 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Main.player[Projectile.owner].itemAnimation < Main.player[Projectile.owner].itemAnimationMax / 2)
                 target.immune[Projectile.owner] = Main.player[Projectile.owner].itemAnimation;
@@ -250,13 +250,6 @@ namespace LobotomyCorp.Projectiles
             scale /= 76f;
             if (Main.myPlayer == Projectile.owner)
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<Censored>(), 0, 0, Projectile.owner, scale, target.whoAmI);
-        }
-
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
-
-
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
         }
 
         public override bool? CanHitNPC(NPC target)

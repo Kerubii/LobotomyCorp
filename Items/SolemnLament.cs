@@ -11,9 +11,10 @@ namespace LobotomyCorp.Items
 	{
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("The somber design is a reminder that not a sliver of frivolity is allowed for the minds of those who mourn.\n" +
+            /* Tooltip.SetDefault("The somber design is a reminder that not a sliver of frivolity is allowed for the minds of those who mourn.\n" +
                                "One handgun symbolizes grief for the dead, while the other symbolizes early lament for the living.\n" +
-                               "Switches between range and magic depending on the gun used");
+                               "Switches between range and magic depending on the gun used"); */
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
 
         public override void SetDefaults() {
@@ -55,6 +56,18 @@ namespace LobotomyCorp.Items
                 TextureAssets.Item[Item.type] = Mod.Assets.Request<Texture2D>("Items/SolemnLament1");
             }
             return base.CanUseItem(player);
+        }
+
+        public override void HoldItem(Player player)
+        {
+            player.scope = false;
+        }
+
+        public override bool CanConsumeAmmo(Item ammo, Player player)
+        {
+            if (player.altFunctionUse == 2)
+                return false;
+            return base.CanConsumeAmmo(ammo, player);
         }
 
         public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color ItemColor, Vector2 origin, float scale)

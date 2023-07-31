@@ -8,8 +8,8 @@ namespace LobotomyCorp.Items
 	{
         public override void SetStaticDefaults()
         {
-			Tooltip.SetDefault("Absorbs an unknown energy around itself\n" +
-							   "Allows the creation of ZAYIN and TETH E.G.O");
+			/* Tooltip.SetDefault("Absorbs an unknown energy around itself\n" +
+							   "Allows the creation of ZAYIN and TETH E.G.O"); */
 		}
 
         public override void SetDefaults()

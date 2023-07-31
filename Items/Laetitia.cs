@@ -8,8 +8,8 @@ namespace LobotomyCorp.Items
 	public class Laetitia : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("The crude design appears to have been made a long time ago.\n" +
-                               "The small accessory remains like the wishes of a child who yearned for happiness.");
+			/* Tooltip.SetDefault("The crude design appears to have been made a long time ago.\n" +
+                               "The small accessory remains like the wishes of a child who yearned for happiness."); */
         }
 
 		public override void SetDefaults() {

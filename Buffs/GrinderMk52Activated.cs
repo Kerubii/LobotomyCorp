@@ -11,8 +11,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("All Around Helper");
-			Description.SetDefault("Cleaning tools active");
+			// DisplayName.SetDefault("All Around Helper");
+			// Description.SetDefault("Cleaning tools active");
             //BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 

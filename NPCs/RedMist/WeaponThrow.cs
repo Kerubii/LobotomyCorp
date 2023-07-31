@@ -18,7 +18,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Da Capo");
+            // DisplayName.SetDefault("Da Capo");
         }
 
         public override void SetDefaults()
@@ -97,7 +97,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Legato");
+            // DisplayName.SetDefault("Legato");
         }
 
         public override void SetDefaults()
@@ -186,7 +186,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Mimicry");
+            // DisplayName.SetDefault("Mimicry");
         }
 
         public override void SetDefaults()
@@ -241,7 +241,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Da Capo");
+            // DisplayName.SetDefault("Da Capo");
         }
 
         public override void SetDefaults()

@@ -29,7 +29,7 @@ namespace LobotomyCorp.Items
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault(GetTooltip());
+            // Tooltip.SetDefault(GetTooltip());
         }
 
         public sealed override bool CanUseItem(Player player)
@@ -41,6 +41,10 @@ namespace LobotomyCorp.Items
 
         public sealed override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            var RealizedEGOTooltip = new TooltipLine(Mod, "PositivePassive", $"{Language.GetTextValue("Mods.LobotomyCorp.EgoItemTooltip.RealizedEgo")}"){ OverrideColor = Color.Lerp(Color.Yellow, Color.Cyan, 0.5f + 0.5f * (float)Math.Sin(6.28f * (Main.timeForVisualEffects % 120 / 120f))) };
+            int index = tooltips.FindIndex(x => x.Mod == "Terraria" && x.Name == "Tooltip0");
+            tooltips.Insert(index, RealizedEGOTooltip);
+
             bool ExtraShow = ModContent.GetInstance<LobotomyConfig>().ExtraPassivesShow;
             //int tooltipIndex = tooltips.IndexOf()
             var Passive = new TooltipLine(Mod, "PositivePassive", $"{PassiveInitialize(ExtraShow)}"
@@ -101,7 +105,7 @@ namespace LobotomyCorp.Items
 
         public string ItemName()
         {
-            return Name.Remove(Name.Length - 1);
+            return Name;//.Remove(Name.Length - 1);
         }
 
         public string GetTooltip()
@@ -111,7 +115,7 @@ namespace LobotomyCorp.Items
 
         public virtual string GetPassiveList()
         {
-            string key = "Mods.LobotomyCorp.EgoItemTooltip." + ItemName() + ".PassiveList";
+            string key = "Mods.LobotomyCorp.Items." + ItemName() + ".PassiveList";
             string list = Language.GetTextValue(key);
             if (list == key)
                 list = PassiveText;

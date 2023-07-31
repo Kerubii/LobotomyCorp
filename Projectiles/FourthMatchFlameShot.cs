@@ -37,10 +37,9 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 180);
-            base.OnHitNPC(target, damage, knockback, crit);
         }
 
         public override void Kill(int timeLeft)
@@ -105,10 +104,9 @@ namespace LobotomyCorp.Projectiles
             gore.velocity.Y -= 1f;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 180);
-            base.OnHitNPC(target, damage, knockback, crit);
         }
     }
 
@@ -174,10 +172,9 @@ namespace LobotomyCorp.Projectiles
             player.KillMe(PlayerDeathReason.ByCustomReason(player.name + " was reduced to ashes..."), 4000, 1);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 180);
-            base.OnHitNPC(target, damage, knockback, crit);
         }
     }
 }

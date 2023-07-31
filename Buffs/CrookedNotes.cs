@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Crooked Notes");
-			Description.SetDefault("...What is that noise?");
+			// DisplayName.SetDefault("Crooked Notes");
+			// Description.SetDefault("...What is that noise?");
 		}
 
         public override void Update(Player player, ref int buffIndex)
