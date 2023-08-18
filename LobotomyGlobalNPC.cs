@@ -314,6 +314,12 @@ namespace LobotomyCorp
             }
         }
 
+        public override void ModifyIncomingHit(NPC npc, ref NPC.HitModifiers modifiers)
+        {
+            if (HarmonyMusicalAddiction)
+                modifiers.ArmorPenetration += 15;
+        }
+
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
             if (FragmentsFromSomewhereEnlightenment && projectile.owner == FragmentsFromSomewherePlayer)

@@ -25,14 +25,7 @@ namespace LobotomyCorp.Items.Ruina.Art
 
 		public override void SetDefaults() 
 		{
-            PassiveText = "Autumn's Passing - Hitting enemies or charging up grants a petal that dissapears overtime.\n" +
-              "Spring's Genesis - Each petal enhances your normal attacks and damage\n" +
-              "Magnificent End - Hitting an enemy with 3 petals removes them deal 300% of your weapon's damage to all enemies around you\n" +
-              "Doll Fashioned from the Earth - Negate any negative life regen while a petal is active\n" +
-              "|Winter's Inception - 10% increased damage taken from enemies with increased 10% per petals\n" +
-              "This Item is incomplete and unobtainable";
-
-            Item.damage = 40;
+            Item.damage = 128;
 			Item.DamageType = DamageClass.Melee;
 			Item.width = 40;
 			Item.height = 40;
@@ -66,6 +59,7 @@ namespace LobotomyCorp.Items.Ruina.Art
             {
                 Item.useTime = 26;
                 Item.useAnimation = 26;
+                Item.shootSpeed = 1f;
                 if (LobotomyModPlayer.ModPlayer(player).FaintAromaPetal > LobotomyModPlayer.ModPlayer(player).FaintAromaPetalMax)
                 {
                     Item.shoot = ModContent.ProjectileType<Projectiles.FaintAromaS>();
@@ -90,13 +84,13 @@ namespace LobotomyCorp.Items.Ruina.Art
                 }
                 else
                 {
-                    Item.shoot = 0;
+                    Item.shoot = ModContent.ProjectileType<Projectiles.Realized.FaintAromaSlash>();
+                    Item.shootSpeed = 24;
                     Item.useStyle = 1;
                     Item.noUseGraphic = false;
                     Item.noMelee = false;
                     Item.UseSound = SoundID.Item1;
                 }
-                Item.shootSpeed = 1f;
             }
             else
             {

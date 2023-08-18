@@ -50,20 +50,20 @@ namespace LobotomyCorp.Buffs
 
         public Color GetColor(PlayerDrawSet drawInfo, AuraParticle particle) { return Color.Blue * 0.9f * (1f - particle.particleTime / 13f); }
 
-        public void SpawnParam(Player player, int dir, float gravDir, float time, AuraParticle particle)
+        public void SpawnParam(Player player, int dir, float gravDir, float time, AuraParticle particle, int index)
         {
             particle.textureIndex = Main.rand.Next(4);
-            particle.position.Y -= 12;
-            particle.position.X += (8 * (float)Math.Sin(0.436332f * time));
-            particle.velocity.Y -= 2f;
-            particle.rotation = Main.rand.NextFloat(6.28f);
-            particle.scale = 1f;
+            particle.Position.Y -= 12;
+            particle.Position.X += (8 * (float)Math.Sin(0.436332f * time));
+            particle.Velocity.Y -= 2f;
+            particle.Rotation = Main.rand.NextFloat(6.28f);
+            particle.Scale = 1f;
         }
 
         public void Behavior(Player player, int dir, float gravDir, float time, AuraParticle particle)
         {
-            particle.position.Y += particle.velocity.Y;
-            particle.scale -= 0.04f;
+            particle.Position.Y += particle.Velocity.Y;
+            particle.Scale -= 0.04f;
 
             if (particle.particleTime > 10)
             {

@@ -23,6 +23,51 @@ namespace LobotomyCorp.Items
             Item.UseSound = LobotomyCorp.WeaponSound("katana");
 		}
 
+        public override void UseItemHitboxAlt(Player player, ref Rectangle hitbox, ref bool noHitbox)
+        {
+            hitbox = new Rectangle((int)player.itemLocation.X, (int)player.itemLocation.Y, 32, 32);
+            if (!Main.dedServ)
+            {
+                Rectangle hitboxSize = Item.GetDrawHitbox(Item.type, player);
+                hitbox = new Rectangle((int)player.itemLocation.X, (int)player.itemLocation.Y, hitboxSize.Width, hitboxSize.Height);
+            }
+            float adjustedItemScale = player.GetAdjustedItemScale(Item);
+            hitbox.Width = (int)((float)hitbox.Height * adjustedItemScale * 0.8f);
+            hitbox.Height = (int)((float)hitbox.Height * adjustedItemScale * 0.8f);
+            if (player.direction == -1)
+            {
+                hitbox.X -= hitbox.Width;
+            }
+            if (player.gravDir == 1f)
+            {
+                hitbox.Y -= hitbox.Height;
+            }
+
+            float prog = 1f - player.itemAnimation / (float)player.itemAnimationMax;
+            if (prog < .2f)
+            {
+                if (player.direction == 1)
+                {
+                    hitbox.X -= (int)(hitbox.Width * 1);
+                }
+                hitbox.Width *= 2;
+                hitbox.Y -= (int)((hitbox.Height * 1.4 - hitbox.Height) * player.gravDir);
+                hitbox.Height = (int)(hitbox.Height * 1.4);
+            }
+            else if (prog < .4f)
+            {
+                if (player.direction == -1)
+                {
+                    hitbox.X -= (int)((double)hitbox.Width * 1.4 - (double)hitbox.Width);
+                }
+                hitbox.Width = (int)((double)hitbox.Width * 1.4);
+                hitbox.Y += (int)((double)hitbox.Height * 0.5 * (double)player.gravDir);
+                hitbox.Height = (int)((double)hitbox.Height * 1.4);
+            }
+            else
+                noHitbox = true;
+        }
+
         public override void ModifyHitNPC(Player player, NPC target, ref NPC.HitModifiers modifiers)
         {
             modifiers.ScalingArmorPenetration += 1f;

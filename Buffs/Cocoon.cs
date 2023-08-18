@@ -15,7 +15,7 @@ namespace LobotomyCorp.Buffs
         public override void Update(NPC npc, ref int buffIndex)
         {
 			npc.GetGlobalNPC<LobotomyGlobalNPC>().RedEyesCocoon = true;
-			npc.defense -= 8;
+			//npc.defense -= 8;
             base.Update(npc, ref buffIndex);
         }
     }

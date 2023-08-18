@@ -76,6 +76,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
 
             if (Projectile.ai[0] >= 0 && Projectile.timeLeft > 10)
             {
+                //Teleport
                 foreach (NPC npc in Main.npc)
                 {
                     if (npc.active && npc.type == ModContent.NPCType<NPCs.RedMist.RedMist>() && Projectile.getRect().Intersects(npc.getRect()))
@@ -102,6 +103,16 @@ namespace LobotomyCorp.Projectiles.KingPortal
                             d = Main.dust[Dust.NewDust(otherPortal.Center - Box / 2, (int)Box.X, (int)Box.Y, 87)];
                             d.noGravity = true;
                             d.fadeIn = 1.8f;
+                        }
+
+                        if (Main.expertMode)
+                        {
+                            for (int i = -1; i < 2; i += 2)
+                            {
+                                float rot = otherPortal.velocity.ToRotation();
+                                Vector2 vel = new Vector2(4, 6 * i).RotatedBy(rot);
+                                Projectile.NewProjectile(Projectile.GetSource_FromAI(), otherPortal.Center, vel, ModContent.ProjectileType<NPCs.RedMist.GoldRushCrystal>(), 15, 2, -1, rot);
+                            }
                         }
                         break;
                     }
@@ -356,6 +367,8 @@ namespace LobotomyCorp.Projectiles.KingPortal
                     //Main.NewText("Teleport RM Success");
                     Projectile.timeLeft = 60;
                     pair.timeLeft = 60;
+
+                    
                     return;
                 }
             }

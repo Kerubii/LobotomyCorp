@@ -664,11 +664,15 @@ namespace LobotomyCorp.NPCs.RedMist
                 Timer--;
             else
             {
+                float attackRange = 128f;
+                if (Main.expertMode)
+                    attackRange *= 4;
+
                 if (delta.Length() > 2000f && Main.rand.NextBool(360))
                 {
                     AiState = GoldRushSmall;
                 }
-                else if (delta.Length() < 128f && Main.rand.NextBool(30))
+                else if (delta.Length() < attackRange && Main.rand.NextBool(30))
                 {
                     ChooseAttack1();
                 }
@@ -737,12 +741,52 @@ namespace LobotomyCorp.NPCs.RedMist
             }
 
             Timer++;
-            if (20 < Timer && Timer < 30)
+            if (Main.netMode != NetmodeID.MultiplayerClient)
             {
-                if (AiState != SwingRedEyes)
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), skelly.Weapon1.EndPoint(NPC.spriteDirection), Vector2.Zero, ModContent.ProjectileType<RedMistMelee>(), 25, 2);
-                if (AiState != SwingPenitence)
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), skelly.Weapon2.EndPoint(NPC.spriteDirection), Vector2.Zero, ModContent.ProjectileType<RedMistMelee>(), 25, 2);
+                if (20 < Timer && Timer < 30)
+                {
+                    if (AiState != SwingRedEyes)
+                    {
+                        Vector2 pos = skelly.Weapon1.EndPoint(NPC.spriteDirection);
+
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, Vector2.Zero, ModContent.ProjectileType<RedMistMelee>(), 25, 2);
+                        if (Main.expertMode && Timer == 28)
+                        {
+                            for (int i = 0; i < 3; i++)
+                            {
+                                Vector2 target = NPC.GetTargetData().Center;
+                                if (i > 0)
+                                {
+                                    int dir = i == 1 ? -1 : 1;
+                                    target.X += Main.rand.Next(100, 180) * dir;
+                                    target.Y += Main.rand.Next(-180, 180);
+                                }
+                                Vector2 speed = (target - pos) / PenitenceStar.TIME;
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, speed * 4, ModContent.ProjectileType<PenitenceStar>(), 15, 2);
+                            }
+                        }
+                    }
+                    if (AiState != SwingPenitence)
+                    {
+                        Vector2 pos = skelly.Weapon1.EndPoint(NPC.spriteDirection);
+
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), skelly.Weapon2.EndPoint(NPC.spriteDirection), Vector2.Zero, ModContent.ProjectileType<RedMistMelee>(), 25, 2);
+
+                        if (Main.expertMode && Timer == 28)
+                        {
+                            for (int i = 0; i < 3; i++)
+                            {
+                                Vector2 target = NPC.GetTargetData().Center;
+                                Vector2 speed = Vector2.Normalize(target - pos) * Main.rand.NextFloat(4f, 8f);
+                                if (i > 0)
+                                {
+                                    speed = speed.RotatedByRandom(0.08f);
+                                }
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, speed, ModContent.ProjectileType<RedEyesEgg>(), 15, 2);
+                            }
+                        }
+                    }
+                }
             }
             if (Timer >= 50)
             {
@@ -3240,9 +3284,9 @@ namespace LobotomyCorp.NPCs.RedMist
             {
                 Texture2D weapon = Mod.Assets.Request<Texture2D>("Projectiles/GoldRushPunches").Value;
                 position = skelly.Gauntlet.Position(NPC.spriteDirection, i);
-                rot = skelly.LowerArmL.GetRotation(NPC.spriteDirection, i) + (NPC.spriteDirection == -1 ? 0.785f : 0.785f + 1.57f);
+                rot = skelly.LowerArmL.GetRotation(NPC.spriteDirection, i) + (NPC.spriteDirection == -1 ? 2.355f : 2.355f - 1.57f);
                 Vector2 weaponOrigin = new Vector2(3, 28);
-                Draw(spriteBatch, weapon, position, weapon.Frame(), color, rot, weaponOrigin, skelly.Gauntlet.scale, NPC.spriteDirection * -1);
+                Draw(spriteBatch, weapon, position, weapon.Frame(), color, rot, weaponOrigin, skelly.Gauntlet.scale, NPC.spriteDirection);
             }
         }
 

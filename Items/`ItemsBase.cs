@@ -445,6 +445,7 @@ namespace LobotomyCorp.Items
         /// <summary>
         /// Use when overriding UseItem since its there :(, shouldn't really be used... unless
         /// Put it on UseStyleAlt
+        /// Im really angry they dont let you change this when you actually hit the fucking doods
         /// </summary>
         /// <param name="player"></param>
         public static void ResetPlayerAttackCooldown(Player player, double percent = 0.1)
@@ -452,6 +453,48 @@ namespace LobotomyCorp.Items
             int cooldown = Math.Max(1, (int)(player.itemAnimationMax * percent));
             if (player.attackCD > cooldown)
                 player.attackCD = cooldown;
+        }
+
+        /// <summary>
+        /// Changes IFrames, also changes AttackCooldown
+        /// Put it on UseStyleAlt or HoldItem maybe...
+        /// Jank, might cause problems
+        /// Im really angry they dont let you change this when you actually hit the fucking doods
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="target"></param>
+        /// <param name=""></param>
+        public static void ResetPlayerImmuneHit(Player player, ref int target, int immuneLimit, double percent = 0.1)
+        {
+            NPC npc = Main.npc[target];
+            if (player.itemAnimation > immuneLimit)
+            {
+                player.SetMeleeHitCooldown(target, 0);// player.itemAnimation - immuneLimit);
+                npc.immune[player.whoAmI] = player.itemAnimation - immuneLimit;
+            }
+
+            target = -1;
+            ResetPlayerAttackCooldown(player, percent);
+        }
+
+        /// <summary>
+        /// ResetPlayerMeleeCooldown, but as a number
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="target"></param>
+        /// <param name="immuneLimit"></param>
+        /// <param name="percent"></param>
+        public static void SetPlayerMeleeCooldown(Player player, ref int target, int immuneTime, double percent = 0.1)
+        {
+            NPC npc = Main.npc[target];
+            if (player.itemAnimation > immuneTime)
+            {
+                player.SetMeleeHitCooldown(target, 0);// player.itemAnimation - immuneLimit);
+                npc.immune[player.whoAmI] = immuneTime;
+            }
+
+            target = -1;
+            ResetPlayerAttackCooldown(player, percent);
         }
 
         public virtual bool? UseItemAlt(Player player)

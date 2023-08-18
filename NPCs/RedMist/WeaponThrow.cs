@@ -131,6 +131,13 @@ namespace LobotomyCorp.NPCs.RedMist
             {
                 Projectile.velocity *= 0.95f;
             }
+            
+            if (Main.expertMode && Projectile.ai[1] == 45 && !Main.player[(int)Projectile.ai[2]].dead)
+            {
+                Projectile.ai[1] = 0;
+                Vector2 delta = Main.player[(int)Projectile.ai[2]].Center - Projectile.Center;
+                Projectile.velocity = delta / 20;
+            }
 
             //int type = 88;
             Vector2 scythe = Projectile.Center + new Vector2(60f, 0).RotatedBy(Projectile.rotation);

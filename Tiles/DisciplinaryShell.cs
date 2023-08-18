@@ -27,11 +27,6 @@ namespace LobotomyCorp.Tiles
 			TileID.Sets.DisableSmartCursor[Type] = true;
 		}
 
-		public override void KillMultiTile(int i, int j, int frameX, int frameY)
-		{
-			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 32, ModContent.ItemType<Items.DisciplinaryShell>());
-		}
-
         public override bool RightClick(int i, int j)
         {
 			int redMistType = ModContent.NPCType<NPCs.RedMist.RedMist>();

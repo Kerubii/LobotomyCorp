@@ -25,7 +25,7 @@ namespace LobotomyCorp.Items
 			Item.useStyle = ItemUseStyleID.Swing;
 			Item.consumable = true;
 			Item.rare = ItemRarityID.Red;
-			Item.value = Item.buyPrice(0, 20, 0, 0);
+			Item.value = Item.buyPrice(0, 0, 10, 0);
 			Item.createTile = ModContent.TileType<Tiles.BlackBox2>();
 		}
 

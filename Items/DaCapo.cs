@@ -138,23 +138,29 @@ namespace LobotomyCorp.Items
                 Item.noMelee = false;
             }
 
-            if (Item.useStyle == 1)
+            if (PreviousTarget >= 0)
+            {
+                int immuneLimit = player.itemAnimationMax / 2 - 2;
+                LobCorpLight.ResetPlayerImmuneHit(player, ref PreviousTarget, immuneLimit);
+            }
+            /*
+            if (Item.useStyle == 1 && PreviousTarget >= 0)
             {
                 //Item.noUseGraphic = false;
                 //Just a way to make this thing hit twice :V
-                if (PreviousTarget >= 0)
+                NPC target = Main.npc[PreviousTarget];
+                int immuneLimit = player.itemAnimationMax / 2 - 2;
+                if (player.itemAnimation > immuneLimit)
                 {
-                    NPC target = Main.npc[PreviousTarget];
-                    int immuneLimit = player.itemAnimationMax / 2 - 2;
-                    if (player.itemAnimation > immuneLimit)
-                        target.immune[player.whoAmI] = player.itemAnimation - immuneLimit;
-                    PreviousTarget = -1;
+                    player.SetMeleeHitCooldown(target.whoAmI, 0);// player.itemAnimation - immuneLimit);
+                    target.immune[player.whoAmI] = player.itemAnimation - immuneLimit;
                 }
+
+                PreviousTarget = -1;
                 //This is a jank way of changing item's attack cooldown, thought it would better fit at onhit same as immune but I guess not since that ones before they change the immune time and attackCD
-                int cooldown = Math.Max(1, (int)((double)player.itemAnimationMax * 0.1f));
-                if (player.attackCD > cooldown)
-                    player.attackCD = cooldown;
-            }
+                //int cooldown = Math.Max(1, (int)((double)player.itemAnimationMax * 0.1f));
+                LobCorpLight.ResetPlayerAttackCooldown(player);
+            }*/
             return base.UseItem(player);
         }
 
@@ -175,15 +181,15 @@ namespace LobotomyCorp.Items
             if (progress < 0.3f)
             {
                 progress = progress / 0.3f;
-                rotation = (-45 + 135 * (float)Math.Sin(1.57f * progress)) * direction;
+                rotation += (-45 + 135 * (float)Math.Sin(1.57f * progress)) * direction;
             }
             else if (progress > 0.5f && progress < 0.8f)
             {
-                rotation = (94 + Main.rand.Next(-4, 5)) * direction;
+                rotation += (94 + Main.rand.Next(-4, 5)) * direction;
             }
             else
             {
-                rotation = 94 * direction;
+                rotation += 94 * direction;
             }
             return rotation;
         }

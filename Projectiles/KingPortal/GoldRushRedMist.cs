@@ -11,6 +11,8 @@ namespace LobotomyCorp.Projectiles.KingPortal
 {
 	public class GoldRushRedMist : ModProjectile
 	{
+        public override string Texture => "LobotomyCorp/Projectiles/GoldRushPunches";
+
         public override void SetStaticDefaults() {
             // DisplayName.SetDefault("Gold Rush");
         }

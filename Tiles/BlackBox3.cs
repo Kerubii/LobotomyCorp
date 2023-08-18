@@ -67,11 +67,11 @@ namespace LobotomyCorp.Tiles
 			}
 			NetMessage.SendTileSquare(-1, x, y + 1, 3);
 		}
-
+		/*
 		public override void KillMultiTile(int i, int j, int frameX, int frameY)
 		{
 			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 32, ModContent.ItemType<Items.BlackBox3>());
-		}
+		}*/
 
         public override void PostDraw(int i, int j, SpriteBatch spriteBatch)
         {

@@ -120,21 +120,21 @@ namespace LobotomyCorp.Projectiles
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                Tex = ModContent.Request<Texture2D>("LobotomyCorp/Projectiles/TwilightSlashes", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+                TwilightSlashTex = ModContent.Request<Texture2D>("LobotomyCorp/Projectiles/TwilightSlashes", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
                 Main.QueueMainThreadAction(() =>
                 {
-                    LobotomyCorp.PremultiplyTexture(Tex);
+                    LobotomyCorp.PremultiplyTexture(TwilightSlashTex);
                 });
             }
         }
 
         public override void Unload()
         {
-            Tex = null;
+            TwilightSlashTex = null;
         }
 
-        public static Texture2D Tex = null;
+        public static Texture2D TwilightSlashTex = null;
 
         public override void SetStaticDefaults()
         {
@@ -225,7 +225,7 @@ namespace LobotomyCorp.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = Tex;//TextureAssets.Projectile[Projectile.type].Value;
+            Texture2D tex = TwilightSlashTex;//TextureAssets.Projectile[Projectile.type].Value;
             Vector2 pos = Projectile.Center + Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
             Rectangle frame = tex.Frame();
             Vector2 origin = frame.Size() / 2;

@@ -28,20 +28,20 @@ namespace LobotomyCorp.Projectiles
 
         public override void AI()
         {
-            if (Projectile.ai[0] == 0)
+            if (Projectile.localAI[0] == 0)
             {
-                Projectile.rotation = Main.rand.NextFloat(6.28f);
-                Projectile.spriteDirection = Main.rand.Next(2) * 2 - 1;
-                Projectile.scale = 0.1f;
-                Projectile.ai[1] = MathHelper.ToRadians(Main.rand.Next(12, 18));
+                Projectile.localAI[1] = Main.rand.NextFloat(6.28f);
 
-                Projectile.ai[0]++;
+                Projectile.scale = Main.rand.NextFloat(0.6f, 1.2f);
+                Projectile.rotation = Projectile.localAI[1] - MathHelper.ToRadians(270f) * (Main.rand.NextBool(2) ? -1 : 1);
             }
-            Projectile.rotation += Projectile.ai[1] * Projectile.spriteDirection;
-            Projectile.scale += 0.035f;
-            
-            if (Projectile.timeLeft <= 10)
-                Projectile.alpha -= 25;
+            else
+                Projectile.rotation = Projectile.rotation + (Projectile.localAI[1] - Projectile.rotation) * 0.2f;
+
+            Projectile.localAI[0]++;
+
+            if (Projectile.timeLeft <= 5)
+                Projectile.alpha -= 50;
         }
 
         public override bool? CanDamage()
@@ -53,11 +53,11 @@ namespace LobotomyCorp.Projectiles
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
+            Texture2D tex = Projectiles.TwilightSlashes.TwilightSlashTex;//TextureAssets.Projectile[Projectile.type].Value;
             Vector2 pos = Projectile.Center + Vector2.UnitY * Projectile.gfxOffY - Main.screenPosition;
             Rectangle frame = tex.Frame();
             Vector2 origin = frame.Size() / 2;
-            Color color = lightColor * (float)(Projectile.alpha/255f);
+            Color color = Color.DarkRed * (float)(Projectile.alpha / 255f);
 
             Main.EntitySpriteDraw(tex, pos, frame, color, Projectile.rotation, origin, Projectile.scale, 0f, 0);
             return false;

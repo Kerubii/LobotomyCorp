@@ -433,7 +433,7 @@ namespace LobotomyCorp
             if (CurrentAura != null)
             {
                 if (Main.timeForVisualEffects % CurrentAura.intensity == 0)
-                    LobotomyAura.GenerateParticle(this);
+                    LobotomyAura.GenerateParticle(this, CurrentAura);
             }
             for (int i = 0; i < AuraParticles.Length; i++)
             {
@@ -1019,15 +1019,15 @@ namespace LobotomyCorp
             switch (TodaysExpressionFace)
             {
                 case 0://Happy
-                    return 0.25f;
+                    return Buffs.TodaysLook.TODAYDAMAGEHAPPY;
                 case 1://Smile
-                    return 0.5f;
+                    return Buffs.TodaysLook.TODAYDAMAGESMILE;
                 default://Neutral
-                    return 1f;
+                    return Buffs.TodaysLook.TODAYDAMAGENEUTRAL;
                 case 3://Sad
-                    return 1.2f;
+                    return Buffs.TodaysLook.TODAYDAMAGESAD;
                 case 4://Angry
-                    return 1.5f;
+                    return Buffs.TodaysLook.TODAYDAMAGEANGRY;
             }
         }
 
@@ -1754,7 +1754,7 @@ namespace LobotomyCorp
             }
         }
 
-        public static void GenerateParticle(LobotomyModPlayer modPlayer)
+        public static void GenerateParticle(LobotomyModPlayer modPlayer, Utils.AuraBehavior auraUsed)
         {
             Player player = modPlayer.Player;
             for (int i = 0; i < modPlayer.AuraParticles.Length; i++)
@@ -1762,7 +1762,7 @@ namespace LobotomyCorp
                 Utils.AuraParticle particle = modPlayer.AuraParticles[i];
                 if (particle == null || !particle.Active)
                 {
-                    modPlayer.AuraParticles[i] = new Utils.AuraParticle(modPlayer.Player, player.direction, player.gravDir, (float)Main.timeForVisualEffects, modPlayer.CurrentAura);
+                    modPlayer.AuraParticles[i] = new Utils.AuraParticle(modPlayer.Player, player.direction, player.gravDir, (float)Main.timeForVisualEffects, auraUsed, i);
                     break;
                 }
             }

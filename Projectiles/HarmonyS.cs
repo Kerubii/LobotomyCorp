@@ -19,6 +19,7 @@ namespace LobotomyCorp.Projectiles
 			Projectile.penetrate = -1;
 			Projectile.scale = 1f;
             
+
 			Projectile.ownerHitCheck = true;
 			Projectile.DamageType = DamageClass.Melee;
 			Projectile.tileCollide = false;
@@ -32,6 +33,11 @@ namespace LobotomyCorp.Projectiles
 		public override void AI() {
             
             Player player = Main.player[Projectile.owner];
+            if (player.dead || player.itemAnimation <= 0 || player.ItemTimeIsZero)
+            {
+                Projectile.Kill();
+            }
+
             Vector2 mountedCenter = player.RotatedRelativePoint(player.MountedCenter, true);
 
             if (!player.channel) //If Player stops holding m1 slow down the saw and slash infront 
@@ -129,7 +135,7 @@ namespace LobotomyCorp.Projectiles
                 {
                     LobotomyModPlayer.ModPlayer(p).HarmonyTime += 90;
                     if (LobotomyModPlayer.ModPlayer(p).HarmonyTime > 600)
-                        LobotomyModPlayer.ModPlayer(p).HarmonyTime = 600;
+                        LobotomyModPlayer.ModPlayer(p).HarmonyTime = 600;   
                     p.AddBuff(ModContent.BuffType<Buffs.MusicalAddiction>(), LobotomyModPlayer.ModPlayer(p).HarmonyTime, true);
                 }
             }

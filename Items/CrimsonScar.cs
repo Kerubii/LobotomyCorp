@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Terraria.GameContent;
 using Terraria.DataStructures;
 using Terraria.Audio;
+using System.Collections.Generic;
 
 namespace LobotomyCorp.Items
 {
@@ -18,6 +19,15 @@ namespace LobotomyCorp.Items
                                "50% increased damage under 50% health"); */
             ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
+
+        /*
+        public override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            var x = tooltips.Find(x => x.Name == "Damage");
+            x.Text = 
+
+            base.ModifyTooltips(tooltips);
+        }*/
 
         public override void SetDefaults() {
             Item.width = 32;
@@ -32,10 +42,12 @@ namespace LobotomyCorp.Items
             Item.useAnimation = 24;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.autoReuse = true;
+            Item.DamageType = DamageClass.Melee;
         }
 
         public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
         {
+            damage.CombineWith(player.GetDamage(DamageClass.Ranged));
             if (player.statLife <= player.statLifeMax / 2)
             {
                 damage += 0.5f;    
@@ -60,7 +72,7 @@ namespace LobotomyCorp.Items
         {
             if (player.altFunctionUse == 2)
             {
-                Item.DamageType = DamageClass.Ranged;
+                //Item.DamageType = DamageClass.Ranged;
                 Item.shoot = 10;
                 Item.useTime = 36;
                 Item.useAnimation = 36;
@@ -71,7 +83,7 @@ namespace LobotomyCorp.Items
             }
             else
             {   
-                Item.DamageType = DamageClass.Melee;
+                //Item.DamageType = DamageClass.Melee;
                 Item.shoot = 0;
                 Item.useTime = 18;
                 Item.useAnimation = 18;

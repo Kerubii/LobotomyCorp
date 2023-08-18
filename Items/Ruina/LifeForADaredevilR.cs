@@ -146,11 +146,7 @@ namespace LobotomyCorp.Items.Ruina
         {
 			if (PreviousTarget >= 0)
 			{
-				NPC target = Main.npc[PreviousTarget];
-				target.immune[player.whoAmI] = (player.itemAnimation - player.itemAnimationMax / 2);
-				PreviousTarget = -1;
-				Main.NewText("Cooldown Reduced");
-				LobCorpLight.ResetPlayerAttackCooldown(player);
+				LobCorpLight.ResetPlayerImmuneHit(player, ref PreviousTarget, player.itemAnimationMax / 2);
 			}
 		}
 

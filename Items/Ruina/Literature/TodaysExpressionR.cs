@@ -104,7 +104,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 					case 4://Angry
 						velocity *= 2.2f;
 						knockback *= 0f;
-						damage = (int)(damage * 1.5f); 
+						damage = (int)(damage * 1.6f); 
 						break;
 				}
 				if (face == 4)

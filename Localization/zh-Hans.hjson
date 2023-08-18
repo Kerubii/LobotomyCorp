@@ -102,6 +102,7 @@ Mods: {
 					'''
 					With steel in one hand and gunpowder in the other, there's nothing to fear in this place.
 					It's more important to deliver a decisive strike in blind hatred without hesitation than to hold on to insecure courage.
+					Benefits from Ranged damage increases
 					50% increased damage under 50% health
 					''' */
 				DisplayName: 郁蓝创痕
@@ -122,7 +123,7 @@ Mods: {
 					A scythe that swings silently and with discipline like a conductor's gestures and baton.
 					If there were a score for this song, it would be one that sings of the apocalypse.
 					''' */
-				DisplayName:  Da Capo
+				DisplayName: Da Capo
 			}
 
 			Ecstacy: {
@@ -236,13 +237,13 @@ Mods: {
 			}
 
 			Harmony: {
-				/* Tooltip:
+				Tooltip:
 					'''
 					每次攻击消耗一定生命值发动更加强大的攻击。
 					即使这把武器看起来很像一台已经锈蚀的机器，可他演奏出来的乐曲仍比普通的乐器更加悦耳动听。
 					而代价是，持有者要献出自己的肉体来使它演奏。
 					30% increased damage when consuming 2% hp while having above 2% maximum health
-					''' */
+					'''
 				DisplayName: 谐奏发射器
 			}
 
@@ -356,8 +357,8 @@ Mods: {
 			Lumber: {
 				/* Tooltip:
 					'''
-					用这把斧头来砍树和砍人真是在适合不过了。
-					布满猩红痕迹的斧刃总是锋利无比。
+					A versatile equipment made to cut down trees and people alike.
+					Perhaps sharpening the axe was the one thing it didn't neglect. The blade is always shiny.
 					''' */
 				DisplayName: 伐木者
 			}
@@ -379,7 +380,7 @@ Mods: {
 					As if it were a reminder that it should remain a mere desire.
 					It can deliver a powerful downswing that should be impossible for a human.
 					Can be charged for 300% increased damage
-					Recovers 25% damage dealt on hit
+					Recovers 25% damage dealt on the first hit
 					''' */
 				DisplayName: 拟态
 			}
@@ -449,8 +450,8 @@ Mods: {
 					'''
 					命中目标时给予自身"迅捷"buff。
 					在这座长有多眼睛的蜘蛛巢中，爬着许多饥肠辘辘却不知满足的后代。
-				    为了在夜间觅食，它的眼睛会发出微光。这把E.G.O武器可以增强持有者的追踪能力。
-					'''	
+					   为了在夜间觅食，它的眼睛会发出微光。这把E.G.O武器可以增强持有者的追踪能力。
+					'''
 				DisplayName: 赤瞳
 			}
 
@@ -476,8 +477,8 @@ Mods: {
 			ScreamingWedge: {
 				/* Tooltip:
 					'''
-					这是一把被充斥着复仇的妖妇所诅咒的十字弩。她的执念使她的长发沿着弩身生长
-					弩箭弹射所发出的声音令人联想起她那刺耳的尖叫。
+					Hair has grown on the crossbow as if to express that the woman's dejection will never be forgotten.
+					The sound of the projectile splitting the air is reminiscent of her piercing scream.
 					''' */
 				DisplayName: 刺耳尖叫
 			}
@@ -555,7 +556,7 @@ Mods: {
 					Even someone unskilled in dueling can rapidly puncture an enemy using this E.G.O with remarkable agility.
 					Alternate attack to perform a flurry of stabs
 					''' */
-				DisplayName: 盈泪之剑	
+				DisplayName: 盈泪之剑
 			}
 
 			Syrinx: {
@@ -622,7 +623,7 @@ Mods: {
 			#History
 			
 			FourthMatchFlameR: {
-				// DisplayName: 终末之光
+				DisplayName: 终末之光
 				// Tooltip: I am coming to you. You, who will be reduced to ash like me.
 				/* PassiveList:
 					'''
@@ -646,15 +647,15 @@ Mods: {
 			}
 
 			WingbeatR: {
-				// DisplayName: 翅振
-				// Tooltip: 在小精灵们的照顾下，一切都会很完美。
-				/* PassiveList:
+				DisplayName: 翅振
+				Tooltip: 在小精灵们的照顾下，一切都会很完美。
+				PassiveList:
 					'''
 					无尽的饥饿-命中第一个敌人时恢复10%的生命值。
 					精灵的照顾-右键派遣一名小精灵治疗你的敌人或队友。
 					储蓄粮-对精灵照顾的敌人增加15%伤害和20%生命值恢复量。
 					|捕食-你的生命值会缓速流失，击中敌人后暂时停止。
-					''' */
+					'''
 			}
 
 			HornetR: {
@@ -672,7 +673,7 @@ Mods: {
 
 			GreenStemR: {
 				DisplayName: 绞杀藤
-				Tooltip: "那一天，随着被诅咒的苹果遗落在公主与王子的花园里，女巫的内心也随之崩溃。"
+				Tooltip: 那一天，随着被诅咒的苹果遗落在公主与王子的花园里，女巫的内心也随之崩溃。
 				PassiveList:
 					'''
 					绞杀藤-慢慢在你周围蔓延藤蔓
@@ -686,7 +687,7 @@ Mods: {
 			
 			RegretR: {
 				DisplayName: 悔恨
-				Tooltip: "真正可悲的是，死在我手里的人，和你一样的人"
+				Tooltip: 真正可悲的是，死在我手里的人，和你一样的人
 				PassiveList:
 					'''
 					结束，开始，结束，开始-这个武器的第三次成功攻击造成铁块的回声
@@ -710,7 +711,7 @@ Mods: {
 
 			HarmonyR: {
 				DisplayName: 和弦
-				Tooltip: "由一个活人制造的旋律是最美妙的！！！"
+				Tooltip: 由一个活人制造的旋律是最美妙的！！！
 				PassiveList:
 					'''
 					绝望和弦-命中敌人会掉落和弦音符，拾取后给予自身"旋律"buff，抵消"成瘾"的负面效果。
@@ -722,7 +723,7 @@ Mods: {
 
 			SolemnLamentR: {
 				DisplayName: 庄严哀悼
-				Tooltip: "人死后会去何方？"
+				Tooltip: 人死后会去何方？
 				PassiveList:
 					'''
 					安息-第二把枪会使用第二种子弹，如果没有第二种子弹就射不出来。
@@ -734,7 +735,7 @@ Mods: {
 
 			MagicBulletR: {
 				DisplayName: 魔弹
-				Tooltip: "这颗神奇的子弹，能命中你指定的任何目标。"
+				Tooltip: 这颗神奇的子弹，能命中你指定的任何目标。
 				PassiveList:
 					'''
 					魔法子弹-每次射击都有一个特殊的伤害，弹无虚发。
@@ -748,7 +749,7 @@ Mods: {
 			
 			TodaysExpressionR: {
 				DisplayName: 此刻的神情
-				Tooltip: "今天天气不错！你今天依旧害羞吗？"
+				Tooltip: 今天天气不错！你今天依旧害羞吗？
 				PassiveList:
 					'''
 					今日的表情-在头顶出现一片脸皮，
@@ -773,7 +774,7 @@ Mods: {
 
 			RedEyesR: {
 				DisplayName: 赤瞳
-				Tooltip:  “不出所料，没有一个员工自愿去取回他们被茧包裹的同事的尸体。”
+				Tooltip: “不出所料，没有一个员工自愿去取回他们被茧包裹的同事的尸体。”
 				PassiveList:
 					'''
 					束缚-右键攻击传送并对标记的大餐结茧，一次只能结茧3个敌人。
@@ -794,7 +795,7 @@ Mods: {
 					奇趣恶作剧-此天赋对敌人造成足够的间接伤害后（与盟友或奴才）。礼物爆炸并造成伤害。
 					朋友-朋友从礼物中炸裂出来并成为一个召唤物，在造成足够的伤害后爆炸。
 					|孤独是可悲的-如果最后一个朋友趋势了，那你就会受到二倍伤害，直到你也趋势或者是有一个新的朋友诞生。
-					''' */
+					'''
 			}
 
 			BlackSwanR: {
@@ -841,7 +842,7 @@ Mods: {
 				// Tooltip: Bearing the hope to return to dust, it shall go back to the grave with all that desires to live.
 				/* PassiveList:
 					'''
-					Magnificent End - Hitting an enemy while having 3 petals consumes them and deal 300% of your weapon�'s damage to all enemies around you
+					Magnificent End - Hitting an enemy while having 3 petals consumes them and deal 300% of your weapon's damage to all enemies around you
 					Flower Petals - Hitting enemies or charging up with Right click grants a petal that dissapears overtime
 					Spring's Genesis - Each petal enhances your normal attacks and damage
 					Doll Fashioned from the Earth - Negate any negative life regen while a petal is active
@@ -872,7 +873,7 @@ Mods: {
 					A Tool to extract from the subconsciousness of mankind
 					Allows the creation of WAW and ALEPH E.G.O
 					''' */
-				// DisplayName: Black Box3
+				// DisplayName: Black Box - Extraction
 			}
 
 			BlackBox2: {
@@ -881,7 +882,7 @@ Mods: {
 					Contains an abnormal energy
 					Allows the creation of HE E.G.O
 					''' */
-				// DisplayName: Black Box2
+				// DisplayName: Black Box - Container
 			}
 
 			BlackBox: {
@@ -1740,11 +1741,11 @@ Mods: {
 			// TwilightSlash.DisplayName: Twilight Slash
 			// TwilightEye.DisplayName: Twilight Eye
 			// SyrinxShot.DisplayName: Syrinx Shot
-			// SwordSharpenedWithTearsProj.DisplayName: Sword Sharpened With Tears Proj
+			// SwordSharpenedWithTearsProj.DisplayName: Sword Sharpened With Tears
 			// StarShot.DisplayName: Star Shot
 			// Spore.DisplayName: Spore
-			// SpearExtender.DisplayName: Spear Extender
-			// SoundOfAStarShoot.DisplayName: Sound Of A Star Shoot
+			// SpearExtender.DisplayName: Sharp edge
+			// SoundOfAStarShoot.DisplayName: Sound Of A Star Blasts
 			// SoundOfAStar.DisplayName: Sound Of A Star
 			// SoCute.DisplayName: So Cute
 			// SmileSpecial.DisplayName: Smile Special
@@ -1875,7 +1876,14 @@ Mods: {
 			// WingbeatR.DisplayName: Wingbeat R
 			// WorkerBee.DisplayName: Worker Bee
 			// WristCutter.DisplayName: Wrist Cutter
-			// HeavenBoss.DisplayName: Heaven Boss
+			// HeavenBoss.DisplayName: Heaven
+			// FaintAromaSlash.DisplayName: Faint Aroma Slash
+			// PenitenceStar.DisplayName: Penitence Star
+			// PenitenceLight.DisplayName: Penitence Light
+			// RedEyesEgg.DisplayName: Red Eyes Egg
+			// RedEyesSpider.DisplayName: Red Eyes Spider
+			// GoldRushCrystal.DisplayName: Gold Rush Crystal
+			// GoldRushShot.DisplayName: Gold Rush Shot
 		}
 
 		Buffs: {
@@ -1940,7 +1948,8 @@ Mods: {
 			}
 
 			RecklessFoolishness: {
-				// Description: DisplayName: Reckless Foolishness
+				// Description: 15% increased movement speed, melee speed and counter damage and 10% decreased damage reduction
+				// Description2: 15% increased movement speed, melee speed and counter damage and 15% decreased damage reduction
 				// DisplayName: Reckless Foolishness
 			}
 
@@ -1956,6 +1965,17 @@ Mods: {
 
 			NettleClothing: {
 				// Description: Nettle regenerating, 75% reduced damage and Attackers also take damage
+				// Description2: After gaining a nettle, Black Swan gains various effects
+				/* Tooltip1:
+					'''
+					Black Swan gains the following effects:
+					15% increased attack speed
+					''' */
+				// Tooltip2: 20% increased movement speed
+				// Tooltip3: 20% increased reflection damage
+				// Tooltip4: 100% increased true melee damage and enhances melee range
+				// Tooltip5: Attacks and reflected projectiles inflict Ichor and Gooey Waste
+				// Tooltip6: Next attack is nullified and gain temporary invincibility
 				// DisplayName: Clothing of Nettle
 			}
 

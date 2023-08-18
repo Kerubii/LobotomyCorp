@@ -71,25 +71,45 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override bool PreDraw(ref Color lightColor)
         {
-            float rotation = Projectile.rotation;
-            if (Projectile.spriteDirection == -1)
+            Texture2D tex = ModContent.Request<Texture2D>("LobotomyCorp/Projectiles/JustitiaExtended").Value;
+            Texture2D texFlipped = ModContent.Request<Texture2D>("LobotomyCorp/Projectiles/JustitiaExtendedFlip").Value;
+
+            Texture2D brightTex = Projectiles.JustitiaExtended.JustitiaTexture(false);
+            Texture2D brighTexFlipped = Projectiles.JustitiaExtended.JustitiaTexture(true);
+
+            Rectangle frame = tex.Frame();
+            float originOffset = -60 * Projectile.spriteDirection;
+            Vector2 origin = frame.Size() / 2 + originOffset * Vector2.UnitX;
+            SpriteEffects spriteEffect = Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+
+            float YMult = 1f;
+            for (int i = 0; i < 3; i++)
             {
-                rotation += 3.14f;
+                Vector2 oldPos = Projectile.Center - Projectile.velocity * (i + 1) - Main.screenPosition + Projectile.gfxOffY * Vector2.UnitY;
+                float opacity = (Projectile.alpha / 255f) * (1f - i / 3f);
+                Vector2 scale = Projectile.scale * new Vector2(0.75f, 0.85f) * (1f - i / 3f);
+                scale.Y *= YMult;
+                if (Projectile.ai[0] == 0 || Projectile.ai[0] == 1)
+                    Main.EntitySpriteDraw(tex, oldPos, frame, Color.LightGray * opacity, Projectile.rotation, origin, scale, spriteEffect, 0);
+                if (Projectile.ai[0] == 0 || Projectile.ai[0] == 2)
+                    Main.EntitySpriteDraw(texFlipped, oldPos, frame, Color.LightGray * opacity, Projectile.rotation, origin, scale, spriteEffect, 0);
             }
-            Rectangle frame = TextureAssets.Projectile[Projectile.type].Frame();
-            //frame.Height /= 4;
-            //frame.Y = frame.Height * Projectile.frame;
-            Vector2 origin = frame.Size()/2;
-            Main.EntitySpriteDraw(TextureAssets.Projectile[Projectile.type].Value,
-                             Projectile.Center - Main.screenPosition + new Vector2(0, Projectile.gfxOffY),
-                             frame,
-                             lightColor,
-                             rotation,
-                             origin,
-                             Projectile.scale,
-                             Projectile.spriteDirection == 1 ? SpriteEffects.None : SpriteEffects.FlipHorizontally,
-                             0);
+
+            Vector2 position = Projectile.Center - Main.screenPosition + Projectile.gfxOffY * Vector2.UnitY;
+            if (Projectile.ai[0] == 0 || Projectile.ai[0] == 1)
+                Main.EntitySpriteDraw(tex, position, frame, Color.White * (Projectile.alpha / 255f), Projectile.rotation, origin, Projectile.scale, spriteEffect, 0);
+            if (Projectile.ai[0] == 0 || Projectile.ai[0] == 2)
+                Main.EntitySpriteDraw(texFlipped, position, frame, Color.White * (Projectile.alpha / 255f), Projectile.rotation, origin, Projectile.scale, spriteEffect, 0);
+            if (Projectile.alpha > 85)
+            {
+                float opacity = (Projectile.alpha - 85) / 170f;
+                if (Projectile.ai[0] == 0 || Projectile.ai[0] == 1)
+                    Main.EntitySpriteDraw(brightTex, position, frame, Color.White * opacity, Projectile.rotation, origin, Projectile.scale, spriteEffect, 0);
+                if (Projectile.ai[0] == 0 || Projectile.ai[0] == 2)
+                    Main.EntitySpriteDraw(brighTexFlipped, position, frame, Color.White * opacity, Projectile.rotation, origin, Projectile.scale, spriteEffect, 0);
+            }
+
             return false;
-		}
+        }
 	}
 }

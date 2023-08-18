@@ -460,7 +460,9 @@ namespace LobotomyCorp.Projectiles.Realized
                 Main.dust[d].fadeIn = 1f + Main.rand.NextFloat(0.4f);
             }
             LobotomyCorp.ScreenShake(15, amount * 0.5f, 0.05f, true);
-            modifiers.FinalDamage += LobotomyGlobalNPC.SanguineDesireConsumeBleed(target) * 2;
+            int damage = LobotomyGlobalNPC.SanguineDesireConsumeBleed(target) * 2;
+            Main.NewText(damage);
+            modifiers.SourceDamage.Base += damage;
         }
 
         public override bool ShouldUpdatePosition()

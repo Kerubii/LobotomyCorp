@@ -18,6 +18,8 @@ namespace LobotomyCorp.Items
 							   "Recovers 25% damage dealt on hit"); */
 		}
 
+		private bool MimicryHeal = false;
+
 		public override void SetDefaults() 
 		{
 			Item.damage = 43;
@@ -31,6 +33,7 @@ namespace LobotomyCorp.Items
 			Item.value = 10000;
 			Item.channel = true;
 			Item.rare = ItemRarityID.Red;
+			MimicryHeal = false;
 			//Item.UseSound = SoundID.Item1;
 		}
 
@@ -38,6 +41,7 @@ namespace LobotomyCorp.Items
         {
 			Item.scale = 1f;
 			LobotomyModPlayer.ModPlayer(player).ChargeWeaponHelper = 0;
+			MimicryHeal = false;
 			return true;
         }
 
@@ -87,6 +91,10 @@ namespace LobotomyCorp.Items
 
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
+			if (MimicryHeal || target.type == NPCID.TargetDummy)
+				return;
+
+			MimicryHeal = true;
 			int heal = (int)(damageDone * 0.25f);
 			player.HealEffect(heal);
 			player.statLife += heal;
@@ -106,7 +114,7 @@ namespace LobotomyCorp.Items
 
         public override void MeleeEffects(Player player, Rectangle hitbox)
         {
-            if (!player.channel && Main.rand.Next(3) == 0)
+            if (!player.channel && Main.rand.NextBool(3))
             {
 				Dust.NewDust(hitbox.TopLeft(), hitbox.Width, hitbox.Height, DustID.Blood);
             }

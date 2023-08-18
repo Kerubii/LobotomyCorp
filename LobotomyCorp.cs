@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
+using Terraria.Graphics.CameraModifiers;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
@@ -559,6 +560,24 @@ namespace LobotomyCorp
             modifiedScreenPosition.Y = position.Y - Main.screenHeight / 2;
             Main.SetCameraLerp(0.1f, 15);
             return position;
+        }
+    
+        private float impactZoom = 0;
+        private int impactTime = 0;
+
+        public const int ZOOMTYPE_QUICK = 0;
+        public const int ZOOMTYPE_SLOW = 0;
+
+        /// <summary>
+        /// Zoom is automatically calculated, Type
+        /// </summary>
+        /// <param name="Time"></param>
+        /// <param name="Intensity"></param>
+        /// <param name="targetPlayer"></param>
+        /// <param name="Forced"></param>
+        public void ImpactZoom(int Time, float Intensity, int Type, int TargetPlayer = -1, bool Forced = true)
+        {
+
         }
     }
 

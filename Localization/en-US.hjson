@@ -102,6 +102,7 @@ Mods: {
 					'''
 					With steel in one hand and gunpowder in the other, there's nothing to fear in this place.
 					It's more important to deliver a decisive strike in blind hatred without hesitation than to hold on to insecure courage.
+					Benefits from Ranged damage increases
 					50% increased damage under 50% health
 					'''
 				DisplayName: Crimson Scar
@@ -382,7 +383,7 @@ Mods: {
 					As if it were a reminder that it should remain a mere desire.
 					It can deliver a powerful downswing that should be impossible for a human.
 					Can be charged for 300% increased damage
-					Recovers 25% damage dealt on hit
+					Recovers 25% damage dealt on the first hit
 					'''
 				DisplayName: Mimicry
 			}
@@ -851,7 +852,7 @@ Mods: {
 				Tooltip: Bearing the hope to return to dust, it shall go back to the grave with all that desires to live.
 				PassiveList:
 					'''
-					Magnificent End - Hitting an enemy while having 3 petals consumes them and deal 300% of your weapon�'s damage to all enemies around you
+					Magnificent End - Hitting an enemy while having 3 petals consumes them and deal 300% of your weapon's damage to all enemies around you
 					Flower Petals - Hitting enemies or charging up with Right click grants a petal that dissapears overtime
 					Spring's Genesis - Each petal enhances your normal attacks and damage
 					Doll Fashioned from the Earth - Negate any negative life regen while a petal is active
@@ -882,7 +883,7 @@ Mods: {
 					A Tool to extract from the subconsciousness of mankind
 					Allows the creation of WAW and ALEPH E.G.O
 					'''
-				DisplayName: Black Box3
+				DisplayName: Black Box - Extraction
 			}
 
 			BlackBox2: {
@@ -891,7 +892,7 @@ Mods: {
 					Contains an abnormal energy
 					Allows the creation of HE E.G.O
 					'''
-				DisplayName: Black Box2
+				DisplayName: Black Box - Container
 			}
 
 			BlackBox: {
@@ -1751,11 +1752,11 @@ Mods: {
 			TwilightSlash.DisplayName: Twilight Slash
 			TwilightEye.DisplayName: Twilight Eye
 			SyrinxShot.DisplayName: Syrinx Shot
-			SwordSharpenedWithTearsProj.DisplayName: Sword Sharpened With Tears Proj
+			SwordSharpenedWithTearsProj.DisplayName: Sword Sharpened With Tears
 			StarShot.DisplayName: Star Shot
 			Spore.DisplayName: Spore
-			SpearExtender.DisplayName: Spear Extender
-			SoundOfAStarShoot.DisplayName: Sound Of A Star Shoot
+			SpearExtender.DisplayName: Sharp edge
+			SoundOfAStarShoot.DisplayName: Sound Of A Star Blasts
 			SoundOfAStar.DisplayName: Sound Of A Star
 			SoCute.DisplayName: So Cute
 			SmileSpecial.DisplayName: Smile Special
@@ -1886,7 +1887,14 @@ Mods: {
 			WingbeatR.DisplayName: Wingbeat R
 			WorkerBee.DisplayName: Worker Bee
 			WristCutter.DisplayName: Wrist Cutter
-			HeavenBoss.DisplayName: Heaven Boss
+			HeavenBoss.DisplayName: Heaven
+			FaintAromaSlash.DisplayName: Faint Aroma Slash
+			PenitenceStar.DisplayName: Penitence Star
+			PenitenceLight.DisplayName: Penitence Light
+			RedEyesEgg.DisplayName: Red Eyes Egg
+			RedEyesSpider.DisplayName: Red Eyes Spider
+			GoldRushCrystal.DisplayName: Gold Rush Crystal
+			GoldRushShot.DisplayName: Gold Rush Shot
 		}
 
 		Buffs: {
@@ -1951,7 +1959,8 @@ Mods: {
 			}
 
 			RecklessFoolishness: {
-				Description: DisplayName: Reckless Foolishness
+				Description: 15% increased movement speed, melee speed and counter damage and 10% decreased damage reduction
+				Description2: 15% increased movement speed, melee speed and counter damage and 15% decreased damage reduction
 				DisplayName: Reckless Foolishness
 			}
 
@@ -1967,6 +1976,17 @@ Mods: {
 
 			NettleClothing: {
 				Description: Nettle regenerating, 75% reduced damage and Attackers also take damage
+				Description2: After gaining a nettle, Black Swan gains various effects
+				Tooltip1:
+					'''
+					Black Swan gains the following effects:
+					15% increased attack speed
+					'''
+				Tooltip2: 20% increased movement speed
+				Tooltip3: 20% increased reflection damage
+				Tooltip4: 100% increased true melee damage and enhances melee range
+				Tooltip5: Attacks and reflected projectiles inflict Ichor and Gooey Waste
+				Tooltip6: Next attack is nullified and gain temporary invincibility
 				DisplayName: Clothing of Nettle
 			}
 

@@ -132,13 +132,13 @@ namespace LobotomyCorp.Projectiles.Realized
             {
 				Rotation += MathHelper.ToRadians(90) * dir + rotOffset(player.direction);
 				Vector2 sheathPos = pos;
-				sheathPos.Y -= 32;
+				sheathPos.Y -= 22;
 				sheathPos.X += 10 * dir;
 
 				if (Projectile.ai[0] > 4)
                 {
 					Vector2 swordPos = sheathPos;
-					swordPos.Y -= 0.33f * (Projectile.ai[0] - 4);
+					swordPos.Y -= 1.4f * (Projectile.ai[0] - 4);
 
 					Main.EntitySpriteDraw(sword, swordPos, Frame, lightColor, Rotation, originPoint, 1f, flip, 0);
 				}
@@ -147,8 +147,8 @@ namespace LobotomyCorp.Projectiles.Realized
 			else
             {
 				Vector2 swordPos = pos;
-				swordPos.X += 30f * dir;
-				swordPos.Y -= 14;
+				swordPos.X += 10f * dir;
+				swordPos.Y -= 2;
 				float sheathRot = rotOffset(dir) + MathHelper.ToRadians(150) * dir;
 				if (dir == -1)
 					sheathRot += 3.14f;

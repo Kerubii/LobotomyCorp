@@ -20,7 +20,7 @@ namespace LobotomyCorp.Items
 		public override void SetDefaults() 
 		{
 			Item.damage = 30;
-			Item.DamageType = DamageClass.Melee;
+			Item.DamageType = DamageClass.MeleeNoSpeed;
 			Item.width = 40;
 			Item.height = 40;
 			Item.useTime = 26;
@@ -89,9 +89,11 @@ namespace LobotomyCorp.Items
         {
 			if (PreviouslyHitNPC >= 0)
 			{
+				SetPlayerMeleeCooldown(player, ref PreviouslyHitNPC, 3, 0);
+				/*
 				Main.npc[PreviouslyHitNPC].immune[player.whoAmI] = 3;
 				player.attackCD = 1;
-				PreviouslyHitNPC = -1;
+				PreviouslyHitNPC = -1;*/
 			}
 		}
 
@@ -121,7 +123,6 @@ namespace LobotomyCorp.Items
 			{
 				velocity.Y = 0;
 				velocity.X = Item.shootSpeed * Math.Sign(velocity.X);
-				damage /= 3;
 			}
 			else
 			{

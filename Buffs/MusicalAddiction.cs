@@ -18,6 +18,7 @@ namespace LobotomyCorp.Buffs
 
         public override void Update(Player player, ref int buffIndex)
         {
+
             player.GetDamage(DamageClass.Generic) += 0.12f;
             player.GetAttackSpeed(DamageClass.Generic) += 0.08f;
             LobotomyModPlayer.ModPlayer(player).HarmonyAddiction = true;
