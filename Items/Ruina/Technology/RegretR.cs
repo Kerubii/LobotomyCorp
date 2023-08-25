@@ -4,11 +4,12 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using System.Collections.Generic;
+using LobotomyCorp.Items.Teth;
 
 namespace LobotomyCorp.Items.Ruina.Technology
 {
-	//[Autoload(LobotomyCorp.TestMode)]
-	public class RegretR : SEgoItem
+    //[Autoload(LobotomyCorp.TestMode)]
+    public class RegretR : SEgoItem
 	{
         public override void Load()
         {

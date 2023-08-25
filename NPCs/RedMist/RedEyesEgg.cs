@@ -69,7 +69,7 @@ namespace LobotomyCorp.NPCs.RedMist
                     }
                 }
                 Vector2 vel = Vector2.Normalize(target - Projectile.Center) * Projectile.velocity.Length();
-                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel * 3, ModContent.ProjectileType<RedEyesSpider>(), Projectile.damage, 0);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel * 2, ModContent.ProjectileType<RedEyesSpider>(), Projectile.damage, 0);
             }
         }
     }

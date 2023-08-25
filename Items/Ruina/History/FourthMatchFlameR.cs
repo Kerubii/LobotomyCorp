@@ -1,3 +1,5 @@
+using LobotomyCorp.Items.Teth;
+using LobotomyCorp.ModSystems;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -7,7 +9,7 @@ using static Terraria.Localization.Language;
 
 namespace LobotomyCorp.Items.Ruina.History
 {
-	public class FourthMatchFlameR : SEgoItem
+    public class FourthMatchFlameR : SEgoItem
 	{
         public override void SetStaticDefaults()
         {
@@ -73,7 +75,7 @@ namespace LobotomyCorp.Items.Ruina.History
                 Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/MatchGirl_Atk") with {Volume = 0.25f};
                 LobotomyModPlayer.ModPlayer(player).FourthMatchExplode();
                 LobotomyModPlayer.ModPlayer(player).FourthMatchFlameR = 0;
-                ModContent.GetInstance<LobSystem>().ScreenShake(15, 10f, 0.1f);
+                ModContent.GetInstance<ScreenSystem>().ScreenShake(15, 10f, 0.1f);
             }
             return true;
         }

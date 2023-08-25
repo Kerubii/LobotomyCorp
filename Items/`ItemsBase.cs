@@ -6,11 +6,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.Audio;
-using LobotomyCorp.Config;
+using LobotomyCorp.Configs;
 
 namespace LobotomyCorp.Items
 {
-	public abstract class SEgoItem : ModItem
+    public abstract class SEgoItem : ModItem
 	{
         //public override bool CloneNewInstances => true;
 

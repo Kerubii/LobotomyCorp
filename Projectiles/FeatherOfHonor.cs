@@ -99,7 +99,7 @@ namespace LobotomyCorp.Projectiles
             {
                 if (projOwner.whoAmI == Main.myPlayer)
                 {
-                    Items.FeatherOfHonor ModItem = (Items.FeatherOfHonor)projOwner.HeldItem.ModItem;
+                    Items.Waw.FeatherOfHonor ModItem = (Items.Waw.FeatherOfHonor)projOwner.HeldItem.ModItem;
                     if (ModItem.FeatherShoot == 0)
                     {
                         SoundEngine.PlaySound(LobotomyCorp.WeaponSound("Firebird"), Projectile.Center);

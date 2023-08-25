@@ -5,14 +5,15 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using System;
+using LobotomyCorp.Items.Waw;
 
 namespace LobotomyCorp.Items.Ruina.Art
 {
-	public class FragmentsFromSomewhereR : SEgoItem
+    public class FragmentsFromSomewhereR : SEgoItem
 	{
 		public override bool IsLoadingEnabled(Mod mod)
 		{
-			return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+			return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
 		}
 
 		public override void SetStaticDefaults() 

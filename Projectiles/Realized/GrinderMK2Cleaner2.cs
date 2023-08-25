@@ -54,6 +54,7 @@ namespace LobotomyCorp.Projectiles.Realized
         {
             Player player = Main.player[Projectile.owner];
             LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
+            LobotomyDashPlayer dashPlayer = player.GetModPlayer<LobotomyDashPlayer>();
 
             //Add Movespeed Buff
             int BuffType = ModContent.BuffType<Buffs.GrinderMk52Activated>();
@@ -106,12 +107,12 @@ namespace LobotomyCorp.Projectiles.Realized
                         if (order % 2 != 0)
                             angle += 90;
                         AttackRotation = (Main.MouseWorld - player.Center).ToRotation() + MathHelper.ToRadians(angle);
-                        modPlayer.GrinderMk2Dash = 0;
+                        dashPlayer.DashTimer = 0;
                     }
                 }
             }
 
-            bool IsDashing = modPlayer.GrinderMk2Dash > 0;
+            bool IsDashing = dashPlayer.DashTimer > 0;
             //When the player is slashing
             if (Projectile.ai[1] > 0)
             {
@@ -151,7 +152,7 @@ namespace LobotomyCorp.Projectiles.Realized
                         Main.dust[d].velocity = new Vector2(2, 0).RotatedBy(AttackRotation);
                     }
 
-                    if (Main.rand.Next(15) == 0)
+                    if (Main.rand.NextBool(15))
                     {
                         Vector2 dustSpeed = Projectile.velocity * -1;
                         dustSpeed.Normalize();
@@ -165,7 +166,7 @@ namespace LobotomyCorp.Projectiles.Realized
             //When the player is dashing
             else if (IsDashing)
             {
-                Vector2 offset = new Vector2(45 * dirX, 45 * dirY).RotatedBy(MathHelper.ToRadians(modPlayer.GrinderMk2Dash * 22 * -player.direction));
+                Vector2 offset = new Vector2(45 * dirX, 45 * dirY).RotatedBy(MathHelper.ToRadians(dashPlayer.DashTimer * 22 * -player.direction));
                 targetPos = ownerMountedCenter + offset;
                 speed = 48;
                 ChangeBatteryValue(-2);

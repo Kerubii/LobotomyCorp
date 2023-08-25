@@ -1,2 +1,16 @@
--Bug fixes
--Test items are now in the server config, just open config on on the mod list and switch to next
+Version 0.7.5
+Changes
+-Today's Look damage and damage reduction buffs adjusted to normal amounts
+-Crimson Scar does not change between melee and range anymore, now gets boosted by both at the same time
+-Justitia's Projectile Slashes' hitbox made a bit bigger
+-Justitia does not scale with melee attack speed to make damage consistent
+
+Bug Fixes
+-Multihit melee weapons now work properly again
+-Fixed Black Box and its upgrades duplicating when breaking
+-Black Box items now have their proper name
+-Lowered Black Box price
+-Sanguine Desire's 'I CANT RESIST IT!!!' bonus damage fixed
+-Harmony's 'Musical Addiction' and other defense lowering debuffs fixed
+-Fixed Crimson Scar and Solemn Lament inventory wackiness
+-Fixed GrinderMK52 'Clean' dash happening on one tap when equipped with another vanilla dash item

@@ -8,11 +8,11 @@ using System;
 
 namespace LobotomyCorp.Items.Ruina.Art
 {
-	public class OurGalaxyR : SEgoItem
+    public class OurGalaxyR : SEgoItem
 	{
 		public override bool IsLoadingEnabled(Mod mod)
 		{
-			return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+			return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
 		}
 
 		public override void SetStaticDefaults() 

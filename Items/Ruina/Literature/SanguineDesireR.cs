@@ -4,10 +4,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using LobotomyCorp.Items.He;
 
 namespace LobotomyCorp.Items.Ruina.Literature
 {
-	public class SanguineDesireR : SEgoItem
+    public class SanguineDesireR : SEgoItem
 	{
 		private int GlitterTimer = 0;
 

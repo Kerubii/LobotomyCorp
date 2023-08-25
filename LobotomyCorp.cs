@@ -1,4 +1,5 @@
-using LobotomyCorp.Config;
+using LobotomyCorp.Configs;
+using LobotomyCorp.ModSystems;
 using LobotomyCorp.UI;
 using LobotomyCorp.Utils;
 using Microsoft.Xna.Framework;
@@ -88,8 +89,6 @@ namespace LobotomyCorp
 
         public override void Load()
         {
-            SuppressionTextData.Initialize();
-
             if (!Main.dedServ)
             {
                 if (Main.netMode != NetmodeID.Server)
@@ -224,8 +223,6 @@ namespace LobotomyCorp
 
         public override void Unload()
         {
-            SuppressionTextData.Unload();
-
             ArcanaSlaveLaser = null;
             ArcanaSlaveBackground = null;
 
@@ -264,6 +261,8 @@ namespace LobotomyCorp
 
             base.Close();
         }*/
+
+        //General Static stuffs
 
         public static bool LamentValid(NPC t, Projectile p)
         {
@@ -353,7 +352,7 @@ namespace LobotomyCorp
 
         public static void ScreenShake(int Time, float Intensity, float decay = 0, bool Forced = true)
         {
-            ModContent.GetInstance<LobSystem>().ScreenShake(Time, Intensity, decay, Forced);
+            ModContent.GetInstance<ScreenSystem>().ScreenShake(Time, Intensity, decay, Forced);
         }
     }
 
@@ -436,358 +435,6 @@ namespace LobotomyCorp
             dot = (float)Math.Sin(Vector2.Dot(uv, new Vector2(142.7f * _variability * 0.84f, 421.3f * _variability * 0.2f)));
             float fract2 = dot - (float)Math.Floor(dot);
             return new Vector2(fract, fract2);
-        }
-    }
-
-    class LobSystem : ModSystem
-    {
-        public override void PostUpdateEverything()
-        {
-            if (Main.netMode != NetmodeID.Server && Filters.Scene["LobotomyCorp:RedMistOverlay"].IsActive() && !NPC.AnyNPCs(ModContent.NPCType<NPCs.RedMist.RedMist>()))
-            {
-                Filters.Scene["LobotomyCorp:RedMistOverlay"].Deactivate();
-            }
-
-            base.PostUpdateEverything();
-        }
-
-        public override void AddRecipeGroups()
-        {
-            RecipeGroup rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "EvilPowder", new[]
-            {
-                (int)ItemID.ViciousPowder,
-                (int)ItemID.VilePowder
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:EvilPowder", rec);
-
-            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Butterflies", new[]
-            {
-                (int)ItemID.JuliaButterfly,
-                ItemID.MonarchButterfly,
-                ItemID.PurpleEmperorButterfly,
-                ItemID.RedAdmiralButterfly,
-                ItemID.SulphurButterfly,
-                ItemID.TreeNymphButterfly,
-                ItemID.UlyssesButterfly,
-                ItemID.ZebraSwallowtailButterfly,
-                ItemID.GoldButterfly
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:Butterflies", rec);
-
-            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Dungeon Lanterns", new[]
-            {
-                (int)ItemID.AlchemyLantern,
-                (int)ItemID.BrassLantern,
-                ItemID.CagedLantern,
-                ItemID.CarriageLantern,
-                ItemID.AlchemyLantern,
-                ItemID.DiablostLamp,
-                ItemID.OilRagSconse
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:DungeonLantern", rec);
-
-            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Boss Masks", new[]
-           {
-                (int)ItemID.KingSlimeMask,
-                (int)2112,
-                2103,
-                2111,
-                2108,
-                1281,
-                5109,
-                2105,
-                4959,
-                2113,
-                2106,
-                2107,
-                2109,
-                2110,
-                4784,
-                2588,
-                3372,
-                3373,
-                3864,
-                3865,
-                3863
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:BossMasks", rec);
-        }
-
-        public override void ModifyScreenPosition()
-        {
-            if (modifiedCamera)
-            {
-                Main.screenPosition = modifiedScreenPosition;
-                modifiedCamera = false;
-            }
-            
-            if (ScreenShakeTimer > 0)
-            {
-                Main.screenPosition.X += Main.rand.NextFloat(-ScreenShakeIntensity, ScreenShakeIntensity);
-                Main.screenPosition.Y += Main.rand.NextFloat(-ScreenShakeIntensity, ScreenShakeIntensity);
-                ScreenShakeIntensity -= ScreenShakeDecay;
-                ScreenShakeTimer--;
-            }
-            base.ModifyScreenPosition();
-        }
-
-        private int ScreenShakeTimer;
-        private float ScreenShakeIntensity;
-        private float ScreenShakeDecay;
-
-        public void ScreenShake(int Time, float Intensity, float decay = 0, bool Forced = true)
-        {
-            if (!ModContent.GetInstance<LobotomyConfig>().ScreenShakeEnabled || (!Forced && ScreenShakeTimer > 0))
-                return;
-
-            ScreenShakeTimer = Time;
-            ScreenShakeIntensity = Intensity;
-            ScreenShakeDecay = decay;
-        }
-
-        private bool modifiedCamera;
-        private Vector2 modifiedScreenPosition;
-
-        public Vector2 RedEyesSpecialCamera(Vector2 cameraCenter, Vector2? lerpTo = null, float lerp = 0f)
-        {
-            modifiedCamera = true;
-            Vector2 position = cameraCenter + Vector2.UnitY * (Main.player[Main.myPlayer].gfxOffY - 1);
-            if (lerpTo != null)
-            {
-                position = Vector2.Lerp(position, (Vector2)lerpTo, lerp);
-            }
-            modifiedScreenPosition.X = position.X - Main.screenWidth / 2;
-            modifiedScreenPosition.Y = position.Y - Main.screenHeight / 2;
-            Main.SetCameraLerp(0.1f, 15);
-            return position;
-        }
-    
-        private float impactZoom = 0;
-        private int impactTime = 0;
-
-        public const int ZOOMTYPE_QUICK = 0;
-        public const int ZOOMTYPE_SLOW = 0;
-
-        /// <summary>
-        /// Zoom is automatically calculated, Type
-        /// </summary>
-        /// <param name="Time"></param>
-        /// <param name="Intensity"></param>
-        /// <param name="targetPlayer"></param>
-        /// <param name="Forced"></param>
-        public void ImpactZoom(int Time, float Intensity, int Type, int TargetPlayer = -1, bool Forced = true)
-        {
-
-        }
-    }
-
-    class SuppressionTextSystem : ModSystem
-    {
-        internal SupTextDisplay SupText;
-
-        public override void OnWorldLoad()
-        {
-            SupText = new SupTextDisplay();
-        }
-
-        public override void OnWorldUnload()
-        {
-            SupText.Unload();
-        }
-
-        public override void PostUpdateDusts()
-        {
-            SupText.Update();
-        }
-
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
-            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Tile Grid Option"));
-            if (mouseTextIndex != -1)
-            {
-                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                    "LobotomyCorp: Suppression Text",
-                    delegate
-                    {
-                        if (SupText.IsActive())
-                        {
-                            SupText.Draw(Main.spriteBatch);
-                        }
-                        return true;
-                    },
-                    InterfaceScaleType.Game)
-                );
-            }
-
-            base.ModifyInterfaceLayers(layers);
-        }
-    }
-
-    class LobWorkSystem : ModSystem
-    {
-        internal UserInterface LobWork;
-
-        public override void Load()
-        {
-            if (!Main.dedServ)
-            {
-                LobWork = new UserInterface();
-            }
-        }
-
-        public override void Unload()
-        {
-            LobWork = null;
-        }
-
-        public override void UpdateUI(GameTime gameTime)
-        {
-            if (Main.LocalPlayer.controlInv)
-            {
-                LobWork.SetState(new UI.LobWorkUI());
-            }
-            if (LobWork != null)
-            {
-                LobWork.Update(gameTime);
-            }
-        }
-
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
-            int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Resource Bars"));
-            if (MouseTextIndex != -1)
-            {
-                layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
-                    "LobotomyCorp: WorkUI",
-                    delegate
-                    {
-                        LobWork.Draw(Main.spriteBatch, new GameTime());
-                        return true;
-                    },
-                    InterfaceScaleType.UI)
-                );
-            }
-        }
-    }
-
-    class LobCustomDraw : ModSystem
-    {
-        private ScreenFilter[] screenFilters = new ScreenFilter[5];
-
-        public static LobCustomDraw Instance()
-        {
-            return ModContent.GetInstance<LobCustomDraw>();
-        }
-
-        public override void OnWorldLoad()
-        {
-            screenFilters = new ScreenFilter[5];
-            for (int i = 0; i < 5; i++)
-            {
-                screenFilters[i] = new ScreenFilter();
-            }
-
-            //ModContent.GetInstance<LobotomyCorp>().Logger.Info("ScreenFilterInitialized");
-        }
-
-        public override void OnWorldUnload()
-        {
-            screenFilters = null;
-
-            //ModContent.GetInstance<LobotomyCorp>().Logger.Info("ScreenFilterDeinitialized");
-        }
-
-        public override void PostUpdateEverything()
-        {
-            foreach (ScreenFilter ol in screenFilters)
-            {
-                if (ol.Active)
-                {
-                    ol.Update();
-                    ol.Active = !ol.DeActive();
-                }
-            }
-        }
-
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
-            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 1"));
-            if (mouseTextIndex != -1)
-            {
-                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                    "LobotomyCorp: ScreenFilter",
-                    delegate
-                    {
-                        foreach (ScreenFilter filter in screenFilters)
-                        {
-                            if (filter.Active)
-                            {
-                                filter.Draw(Main.spriteBatch);
-                            }
-                        }
-                        return true;
-                    },
-                    InterfaceScaleType.UI)
-                );
-            }
-
-            base.ModifyInterfaceLayers(layers);
-        }
-
-        /// <summary>
-        /// There are 5 Layers for screentextures, Replaces the layer as inteded limitation so as a General rule of thumb, lets say this
-        /// 0-2 Lower Layers, Used as visual effects for players, will occupy a spot inactive, if all slots active replaces preferred layer
-        /// 3   Used by NPCs to provide information, preferably bosses or special npcs
-        /// 4   Special Cases
-        /// Force to replace a specific layer, used for 0-2
-        /// </summary>
-        /// <param name="newLayer"></param>
-        /// <param name="layer"></param>
-        public void AddFilter(ScreenFilter newLayer, int layer = 0, bool force = false)
-        {
-            if (!force && layer < 3)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    if (screenFilters.GetType() == newLayer.GetType())
-                    {
-                        screenFilters[i] = null;
-                        screenFilters[i] = newLayer;
-                        return;
-                    }
-                }
-
-                {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        if (!screenFilters[i].Active)
-                        {
-                            screenFilters[i] = newLayer;
-                            return;
-                        }
-                    }
-                }
-            }
-
-            screenFilters[layer] = newLayer;
-        }
-
-        /// <summary>
-        /// There are 5 Layers for screentextures, Replaces the layer so as a General rule of thumb, lets say this
-        /// 0-2 Lower Layers, Used as visual effects for players, will occupy a spot inactive, if all slots active replaces preferred layer
-        /// 3   Used by NPCs to provide information, preferably bosses or special npcs
-        /// 4   Special Cases
-        /// </summary>
-        /// <param name="layer"></param>
-        /// <returns></returns>
-        public bool IsLayerActive(int layer)
-        {
-            return screenFilters[layer].Active;
-        }
-
-        public override void Unload()
-        {
-            screenFilters = null;
         }
     }
 }

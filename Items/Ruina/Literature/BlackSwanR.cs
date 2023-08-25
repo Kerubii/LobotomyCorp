@@ -5,10 +5,11 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using System;
+using LobotomyCorp.Items.Waw;
 
 namespace LobotomyCorp.Items.Ruina.Literature
 {
-	public class BlackSwanR : SEgoItem
+    public class BlackSwanR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{

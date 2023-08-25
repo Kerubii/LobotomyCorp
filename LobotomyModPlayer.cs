@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LobotomyCorp.PlayerDrawEffects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -129,8 +130,8 @@ namespace LobotomyCorp
         private Vector2 forcePlayerVelocityValue;
 
         //Aura Vanity
-        public Utils.AuraBehavior CurrentAura;
-        public Utils.AuraParticle[] AuraParticles = new Utils.AuraParticle[100];
+        public AuraBehavior CurrentAura;
+        public AuraParticle[] AuraParticles = new AuraParticle[100];
 
         public static LobotomyModPlayer ModPlayer(Player Player)
         {
@@ -274,7 +275,7 @@ namespace LobotomyCorp
             if (Player.HasBuff<Buffs.NettleClothing>())
                 Player.ClearBuff(ModContent.BuffType<Buffs.NettleClothing>());
 
-            Utils.AuraParticle[] AuraParticles = new Utils.AuraParticle[100];
+            AuraParticle[] AuraParticles = new AuraParticle[100];
         }
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
@@ -283,8 +284,8 @@ namespace LobotomyCorp
             {
                 return new[]
                 {
-                    new Item(ModContent.ItemType<Items.BlackBox>()),
-                    new Item(ModContent.ItemType<Items.Penitence>())
+                    new Item(ModContent.ItemType<Items.ItemTiles.BlackBox>()),
+                    new Item(ModContent.ItemType<Items.Zayin.Penitence>())
                 };
             }
             return Enumerable.Empty<Item>();
@@ -410,12 +411,13 @@ namespace LobotomyCorp
 
         public override void PostUpdateMiscEffects()
         {
+            /*
             if (Player.pulley)
                 DashMovement();
             else if (Player.grappling[0] == -1 && !Player.tongued)
             {
                 DashMovement();
-            }
+            }*/
 
             if (RegretBinded)
             {
@@ -441,6 +443,16 @@ namespace LobotomyCorp
                 {
                     AuraParticles[i].Update(Player, Player.direction, Player.gravDir, (float)Main.timeForVisualEffects);
                 }
+            }
+        }
+
+        public override void PostUpdateEquips()
+        {
+            if (TodaysExpressionActive && TodaysExpressionFace == 4)//If Angry, set def to 0
+            {
+                Player.statDefense -= 30;
+                if (Player.statDefense > 0)
+                    Player.statDefense *= 0;
             }
         }
 
@@ -485,7 +497,7 @@ namespace LobotomyCorp
                     {
                         Player.dashTime++;
                     }
-                    if (Player.controlRight && Player.releaseRight)
+                    if (Player.controlRight && Player.releaseRight && Player.doubleTapCardinalTimer[2] < 15)
                     {
                         if (Player.dashTime > 0)
                         {
@@ -499,7 +511,7 @@ namespace LobotomyCorp
                             Player.dashTime = 15;
                         }
                     }
-                    else if (Player.controlLeft && Player.releaseLeft)
+                    else if (Player.controlLeft && Player.releaseLeft && Player.doubleTapCardinalTimer[3] < 15)
                     {
                         if (Player.dashTime < 0)
                         {
@@ -911,7 +923,7 @@ namespace LobotomyCorp
             OnHitSolemnLament(info.Damage);
 
             int heldItem = Player.HeldItem.type;
-            if (heldItem == ModContent.ItemType<Items.Censored>())
+            if (heldItem == ModContent.ItemType<Items.Aleph.Censored>())
             {
                 float healing = (float)info.Damage * 0.4f;
                 if (info.Damage > 1)
@@ -1296,476 +1308,6 @@ namespace LobotomyCorp
             }
             else
                 shakeIntensity = 0;
-        }
-    }
-
-    public class DrawLobWeaponFront : PlayerDrawLayer
-    {
-        public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.HeldItem);
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
-        {
-            Player player = drawInfo.drawPlayer;
-            return player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentR>() || player.HeldItem.type == ModContent.ItemType<Items.ParadiseLost>();
-        }
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player Player = drawInfo.drawPlayer;
-            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType< Items.Ruina.Technology.SolemnLamentR >())
-            {
-                LobotomyGlobalItem item = Player.HeldItem.GetGlobalItem<LobotomyGlobalItem>();
-
-                if (!item.CustomDraw)
-                    return;
-
-                Texture2D texture = Mod.Assets.Request<Texture2D>("Items/Ruina/Technology/SolemnLamentS2").Value;
-
-                Color color = Lighting.GetColor((int)(Player.Center.X / 16f), (int)(Player.Center.Y / 16f));
-
-                Vector2 position = drawInfo.ItemLocation - Main.screenPosition;
-                Vector2 origin = new Vector2(Player.direction == 1 ? 0 : texture.Width, texture.Height);
-                float rot = Player.itemRotation;
-
-                if (Player.HeldItem.useStyle == 5)
-                {
-                    Vector2 textureCenter = new Vector2((float)(texture.Width / 2f), (float)(texture.Height / 2f));
-
-                    float num = 10f;
-                    Vector2 result = textureCenter;
-                    result.X = num;
-                    ItemLoader.HoldoutOffset(Player.gravDir, Player.HeldItem.type, ref result);
-
-
-                    Vector2 PlayerItemPos = result;
-
-                    int x = (int)PlayerItemPos.X;
-                    textureCenter.Y = PlayerItemPos.Y;
-                    origin = new Vector2(-x, texture.Height / 2);
-                    if (Player.direction == -1)
-                    {
-                        origin = new Vector2(texture.Width + x, texture.Height / 2);
-                    }
-                    position.X += textureCenter.X + (Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch ? -6 : 0) * Player.direction; ;
-                    position.Y += textureCenter.Y;
-
-                    if (Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch)
-                    {
-                        rot -= MathHelper.ToRadians(30 + 75 * (1 - (float)Player.itemAnimation / (float)Player.itemAnimationMax)) * Player.direction;
-                    }
-                }
-
-                drawInfo.DrawDataCache.Add(
-                    new DrawData(
-                        texture, //pass our glowmask's texture
-                        position, //pass the position we should be drawing at from the PlayerDrawInfo we pass into this method. Always use this and not Player.itemLocation.
-                        texture.Frame(), //our source rectangle should be the entire frame of our texture. If our mask was animated it would be the current frame of the animation.
-                        color, //since we want our glowmask to glow, we tell it to draw with Color.White. This will make it ignore all lighting
-                        rot, //the rotation of the Player's item based on how they used it. This allows our glowmask to rotate with swingng swords or guns pointing in a direction.
-                        origin, //the origin that our mask rotates about. This needs to be adjusted based on the Player's direction, thus the ternary expression.
-                        Player.HeldItem.scale, //scales our mask to match the item's scale
-                        drawInfo.playerEffect, //the PlayerDrawInfo that was passed to this will tell us if we need to flip the sprite or not.
-                        0 //we dont need to worry about the layer depth here
-                    ));
-            }
-
-            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType<Items.ParadiseLost>())
-            {
-                Texture2D tex = TextureAssets.Item[Player.HeldItem.type].Value;
-
-                float OffsetY = -46;
-                Vector2 position = Player.MountedCenter - Main.screenPosition + new Vector2(5 * Player.direction, OffsetY + Player.gfxOffY);
-                Vector2 origin = new Vector2(23, 65);
-                if (Player.direction < 0)
-                    origin.X = 39;
-
-
-                Color color = Lighting.GetColor((int)(Player.Center.X / 16f), (int)(Player.Center.Y / 16f));
-
-                drawInfo.DrawDataCache.Add(
-                    new DrawData(
-                        tex,
-                        position,
-                        tex.Frame(),
-                        color,
-                        MathHelper.ToRadians(-30 * Player.direction),
-                        tex.Size() / 2,
-                        Player.HeldItem.scale,
-                        drawInfo.playerEffect,
-                        0
-                    ));
-            }
-        }
-    }
-
-    public class DrawLobWeaponBack : PlayerDrawLayer
-    {
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.BackAcc);
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player Player = drawInfo.drawPlayer;
-            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentR>())
-            {
-                LobotomyGlobalItem item = Player.HeldItem.GetGlobalItem<LobotomyGlobalItem>();
-
-                if (!item.CustomDraw)
-                    return;
-
-                Texture2D texture = Mod.Assets.Request<Texture2D>("Items/Ruina/Technology/SolemnLamentS1").Value;
-
-                Color color = Lighting.GetColor((int)(Player.Center.X / 16f), (int)(Player.Center.Y / 16f));
-
-                Vector2 position = drawInfo.ItemLocation - Main.screenPosition;
-                Vector2 origin = new Vector2(Player.direction == 1 ? 0 : texture.Width, texture.Height);
-                float rot = Player.itemRotation;
-
-                if (Player.HeldItem.useStyle == 5)
-                {
-                    Vector2 textureCenter = new Vector2((float)(texture.Width / 2f), (float)(texture.Height / 2f));
-
-                    float num = 10f;
-                    Vector2 result = textureCenter;
-                    result.X = num;
-                    ItemLoader.HoldoutOffset(Player.gravDir, Player.HeldItem.type, ref result);
-
-                    /*if (Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch)
-                    {
-                        Player.itemRotation -= MathHelper.ToRadians(45) * Player.direction;
-                        rot += MathHelper.ToRadians(45) * Player.direction;
-                    }*/
-
-                    Vector2 PlayerItemPos = result;
-
-                    int x = (int)PlayerItemPos.X;
-                    textureCenter.Y = PlayerItemPos.Y;
-                    origin = new Vector2(-x, texture.Height / 2);
-                    if (Player.direction == -1)
-                    {
-                        origin = new Vector2(texture.Width + x, texture.Height / 2);
-                    }
-                    position.X += textureCenter.X + (!Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch ? 6 : 3) * Player.direction;
-                    position.Y += textureCenter.Y;
-
-                    if (!Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch)
-                    {
-                        rot -= MathHelper.ToRadians(30 + 75 * (1 - (float)Player.itemAnimation/(float)Player.itemAnimationMax)) * Player.direction;
-                    }
-                }
-
-                drawInfo.DrawDataCache.Add(
-                    new DrawData(
-                        texture, //pass our glowmask's texture
-                        position, //pass the position we should be drawing at from the PlayerDrawInfo we pass into this method. Always use this and not Player.itemLocation.
-                        texture.Frame(), //our source rectangle should be the entire frame of our texture. If our mask was animated it would be the current frame of the animation.
-                        color, //since we want our glowmask to glow, we tell it to draw with Color.White. This will make it ignore all lighting
-                        rot, //the rotation of the Player's item based on how they used it. This allows our glowmask to rotate with swingng swords or guns pointing in a direction.
-                        origin, //the origin that our mask rotates about. This needs to be adjusted based on the Player's direction, thus the ternary expression.
-                        Player.HeldItem.scale, //scales our mask to match the item's scale
-                        drawInfo.playerEffect, //the PlayerDrawInfo that was passed to this will tell us if we need to flip the sprite or not.
-                        0 //we dont need to worry about the layer depth here
-                    ));
-            }
-
-            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Art.FaintAromaS>() && Player.heldProj > -1 && Main.projectile[Player.heldProj].type == ModContent.ProjectileType<Projectiles.FaintAromaS>() )
-            {
-                Projectile projectile = Main.projectile[Player.heldProj];
-                
-                Texture2D tex = TextureAssets.Projectile[projectile.type].Value;
-                float rot = projectile.ai[1];
-                Vector2 ownerMountedCenter = Player.RotatedRelativePoint(Player.MountedCenter, true) + new Vector2(8, 0).RotatedBy(rot);
-                Vector2 position = ownerMountedCenter - Main.screenPosition;
-                position.X += 8f * Player.direction;
-                Vector2 origin = new Vector2(2, 42);
-
-                drawInfo.DrawDataCache.Add(
-                    new DrawData(tex, position, tex.Frame(), Lighting.GetColor((int)Player.position.X/16, (int)Player.position.Y/16), rot + MathHelper.ToRadians(45), origin, projectile.scale * 1.2f, 0, 0));
-            }
-        }
-    }
-
-    public class DrawFrontMiscellaneous : PlayerDrawLayer
-    {
-        private static Asset<Texture2D> AlriunePetal;
-        private static Asset<Texture2D> MusicalAddiction;
-        private static Asset<Texture2D> TodaysLook;
-        private static Asset<Texture2D> BlackSwan;
-        private static Asset<Texture2D> OurGalaxy;
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
-        {
-            LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(drawInfo.drawPlayer);
-            return !drawInfo.drawPlayer.dead && (
-                ModPlayer.FaintAromaPetal > 0 || 
-                ModPlayer.HarmonyAddiction || 
-                ModPlayer.TodaysExpressionActive ||
-                ModPlayer.BlackSwanNettleClothing > 0 ||
-                ModPlayer.OurGalaxyStone);
-        }
-
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FrontAccFront);
-
-        public override void Load()
-        {
-            AlriunePetal = Mod.Assets.Request<Texture2D>("Misc/AlriunePetal");
-            MusicalAddiction = Mod.Assets.Request<Texture2D>("Misc/MusicalAddiction");
-            TodaysLook = Mod.Assets.Request<Texture2D>("Misc/TodaysExpression");
-            BlackSwan = Mod.Assets.Request<Texture2D>("Misc/Nettle");
-            OurGalaxy = Mod.Assets.Request<Texture2D>("Misc/OurGalaxyStone");
-        }
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            /*
-            if (AlriunePetal == null)
-            {
-                AlriunePetal = Mod.Assets.Request<Texture2D>("Misc/AlriunePetal");
-            }
-            if ()*/
-
-            Player Player = drawInfo.drawPlayer;
-            LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(Player);
-            if (ModPlayer.FaintAromaPetal > 0)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    if (ModPlayer.FaintAromaPetal <= ModPlayer.FaintAromaPetalMax * i)
-                        continue;
-
-                    Texture2D texture = AlriunePetal.Value;
-                    int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
-                    int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y);
-
-                    float rot = 0f;
-                    if (i == 1)
-                        rot += 90;
-                    else if (i == 2)
-                        rot += 45;
-                    Vector2 Offset = new Vector2(-24 * Player.direction, 0).RotatedBy(MathHelper.ToRadians(rot * Player.direction));
-                    Offset.Y -= 14;
-
-                    rot = MathHelper.ToRadians(rot * Player.direction + (Player.direction == 1 ? 0 : 180)) - MathHelper.ToRadians(135);
-
-                    float alpha = Terraria.Utils.GetLerpValue(0, 1f, ((ModPlayer.FaintAromaPetal - ModPlayer.FaintAromaPetalMax * i) / ModPlayer.FaintAromaPetalMax));
-                    Color color = Lighting.GetColor((int)(Player.position.X / 16), (int)(Player.position.Y / 16)) * alpha;
-
-                    DrawData data = new DrawData(texture, new Vector2(drawX, drawY) + Offset, null, color, rot, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
-                    drawInfo.DrawDataCache.Add(data);
-                }
-            }
-
-            if (ModPlayer.HarmonyAddiction)
-            {
-                Texture2D texture = MusicalAddiction.Value;
-                int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X) + Main.rand.Next(2);
-                int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y) - 32;
-
-                Color color = Color.White;
-
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), null, color, 0, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
-                drawInfo.DrawDataCache.Add(data);
-            }
-
-            if (ModPlayer.TodaysExpressionActive)
-            {
-                Texture2D texture = TodaysLook.Value;
-                int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y) - 56;
-
-                Color color = Color.White;
-
-                float scale = 0.75f;
-                if (ModPlayer.TodaysExpressionTimer < 60)
-                {
-                    float prog = ModPlayer.TodaysExpressionTimer / 60f;
-                    float amount = 0.1f * (float)Math.Sin((3f * Math.PI) * prog);
-                    if (amount < 0)
-                        amount *= -1;
-
-                    scale += amount;
-                }
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), texture.Frame(5, 1, ModPlayer.TodaysExpressionFace), color, 0, new Vector2(texture.Width / 10f, texture.Height / 2f), scale, 0, 0);
-                drawInfo.DrawDataCache.Add(data);
-
-                int timer = ModPlayer.TodaysExpressionTimerMax - 30;
-                if (ModPlayer.TodaysExpressionTimer > timer)
-                {
-                    float prog = (ModPlayer.TodaysExpressionTimer - timer) / 30f;
-
-                    scale += 0.25f * (float)Math.Sin(1.57f * (1f - prog));
-                    float opacity = prog;
-                    data = new DrawData(texture, new Vector2(drawX, drawY), texture.Frame(5, 1, ModPlayer.TodaysExpressionFace), color * opacity, 0, new Vector2(texture.Width / 10f, texture.Height / 2f), scale, 0, 0);
-                    drawInfo.DrawDataCache.Add(data);
-                }
-            }
-        
-            if (ModPlayer.BlackSwanNettleClothing > 0)
-            {
-                float clothing = ModPlayer.BlackSwanNettleClothing;
-                int currentActive = (int)Math.Ceiling(clothing);
-                Texture2D texture = BlackSwan.Value;
-                int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y);
-                for (int i = 0; i < currentActive; i++)
-                {
-                    Vector2 pos = new Vector2(drawX, drawY) + new Vector2(30 + 3 * (float)Math.Sin(MathHelper.ToRadians(5 * (float)Main.timeForVisualEffects)), 0).RotatedBy(MathHelper.ToRadians(120 + 60 * i));
-
-                    float rotation = (float)Math.Atan2(pos.Y - drawY, pos.X - drawX) + 2.35619f;
-
-                    Color color = Color.White;
-                    if (clothing - i < 1f)
-                    {
-                        float opacity = clothing - i / 1f;
-                        color *= 0.5f * opacity;
-                    }
-
-                    DrawData data = new DrawData(texture, pos, null, color, rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
-                    drawInfo.DrawDataCache.Add(data);
-                }
-            }
-
-            if (ModPlayer.OurGalaxyStone)
-            {
-                Texture2D texture = OurGalaxy.Value;
-                int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y) - 56;
-
-                Color color = Color.White;
-
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), texture.Frame(), color, 0, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
-                drawInfo.DrawDataCache.Add(data);
-            }
-        }
-    }
-
-    public class LobShields : PlayerDrawLayer
-    {
-        public static Asset<Texture2D> RedShield;
-        public static Asset<Texture2D> WhiteShield;
-        public static Asset<Texture2D> BlackShield;
-        public static Asset<Texture2D> PaleShield;
-
-        public override void Load()
-        {
-            if (!Main.dedServ)
-            {
-                WhiteShield = Mod.Assets.Request<Texture2D>("Misc/BulletShield/WhiteShield");
-                RedShield = Mod.Assets.Request<Texture2D>("Misc/BulletShield/RedShield");
-                BlackShield = Mod.Assets.Request<Texture2D>("Misc/BulletShield/BlackShield");
-                PaleShield = Mod.Assets.Request<Texture2D>("Misc/BulletShield/PaleShield");
-
-                Main.QueueMainThreadAction(() =>
-                {
-                    LobotomyCorp.PremultiplyTexture(RedShield.Value);
-                    LobotomyCorp.PremultiplyTexture(WhiteShield.Value);
-                    LobotomyCorp.PremultiplyTexture(BlackShield.Value);
-                    LobotomyCorp.PremultiplyTexture(PaleShield.Value);
-                });
-            }
-        }
-
-        public override void Unload()
-        {
-            WhiteShield = null;
-            RedShield = null;
-            BlackShield = null;
-            PaleShield = null;
-        }
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
-        {
-            LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(drawInfo.drawPlayer);
-            return ModPlayer.ShieldActive;
-        }
-
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FrontAccFront);
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player Player = drawInfo.drawPlayer;
-            LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(Player);
-
-            Texture2D shieldTex = RedShield.Value;
-            if (ModPlayer.WhiteShield)
-                shieldTex = WhiteShield.Value;
-            if (ModPlayer.BlackShield)
-                shieldTex = BlackShield.Value;
-            if (ModPlayer.PaleShield)
-                shieldTex = PaleShield.Value;
-
-            //Current Shield state
-            bool broken = ModPlayer.ShieldAnim <= 60;
-
-            //Static positions etc
-            Rectangle frame = new Rectangle(0, shieldTex.Height / 2 * broken.ToInt(), shieldTex.Width, shieldTex.Height / 2);
-            Vector2 origin = frame.Size() / 2;
-            Vector2 drawPos = new Vector2((drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X), (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y));
-
-            //Shield%
-            float shieldHealth = ((float)ModPlayer.ShieldHP / (float)ModPlayer.ShieldHPMax);
-            //Color - Become less visible the lower the health
-            float colorOpacity = 0.6f + 0.2f * shieldHealth;
-            if (broken)
-                colorOpacity = 0.4f + 0.2f * shieldHealth;
-            Color color = Color.White * colorOpacity;
-            color = Player.GetImmuneAlpha(color, drawInfo.shadow);
-            color.A = (byte)(color.A * 0.7f);
-
-            //Scale - slowly beating, shrinks a bit when damaged
-            float progress = ((float)ModPlayer.ShieldAnim - (broken ? 0 : 60)) / 60f;
-            float scale = 0.8f + 0.2f * shieldHealth + 0.05f * (float)Math.Sin(2f * (float)Math.PI * progress);
-
-            DrawData data = new DrawData(
-                shieldTex,
-                drawPos,
-                frame,
-                color,
-                0f,
-                origin,
-                scale,
-                0,
-                0);
-            drawInfo.DrawDataCache.Add(data);
-        }
-    }
-
-    public class LobotomyAura : PlayerDrawLayer
-    {
-        public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.MountBack);
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
-        {
-            return !Main.gameMenu;
-        }
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(drawInfo.drawPlayer);
-            Utils.AuraParticle[] particle = modPlayer.AuraParticles;
-            if (particle != null)
-            {
-                for (int i = 0; i < particle.Length; i++)
-                {
-                    if (particle[i] != null && particle[i].Active)
-                    {
-                        drawInfo.DrawDataCache.Add(particle[i].Draw(ref drawInfo, Mod));
-                    }
-                }
-            }
-        }
-
-        public static void GenerateParticle(LobotomyModPlayer modPlayer, Utils.AuraBehavior auraUsed)
-        {
-            Player player = modPlayer.Player;
-            for (int i = 0; i < modPlayer.AuraParticles.Length; i++)
-            {
-                Utils.AuraParticle particle = modPlayer.AuraParticles[i];
-                if (particle == null || !particle.Active)
-                {
-                    modPlayer.AuraParticles[i] = new Utils.AuraParticle(modPlayer.Player, player.direction, player.gravDir, (float)Main.timeForVisualEffects, auraUsed, i);
-                    break;
-                }
-            }
         }
     }
 }

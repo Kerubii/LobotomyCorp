@@ -1,3 +1,4 @@
+using LobotomyCorp.Items.He;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -8,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Technology
 {
-	public class HarmonyR : SEgoItem
+    public class HarmonyR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{

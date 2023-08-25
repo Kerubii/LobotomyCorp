@@ -4,10 +4,11 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using LobotomyCorp.Items.Teth;
 
 namespace LobotomyCorp.Items.Ruina.Literature
 {
-	public class TodaysExpressionR : SEgoItem
+    public class TodaysExpressionR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{
@@ -73,7 +74,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 		{
 			if (player.altFunctionUse == 2)
 			{
-				mult *= 0.5f;
+				mult *= 2f;
 			}
 		}
 

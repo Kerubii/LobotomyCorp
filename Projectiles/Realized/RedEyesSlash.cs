@@ -44,7 +44,7 @@ namespace LobotomyCorp.Projectiles.Realized
 
 			float progress = owner.itemAnimation / (float)owner.itemAnimationMax;
 
-			if (progress < 0.1f)
+			if (owner.itemAnimation == 1)
 				Projectile.Kill();
         }
 

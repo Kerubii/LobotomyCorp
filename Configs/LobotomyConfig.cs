@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
-namespace LobotomyCorp.Config
+namespace LobotomyCorp.Configs
 {
     public class LobotomyConfig : ModConfig
     {
@@ -14,7 +14,7 @@ namespace LobotomyCorp.Config
 
         //[Label("Screenshake Enabled")]
         [DefaultValue(true)]
-        public bool ScreenShakeEnabled;        
+        public bool ScreenShakeEnabled;
     }
 
     public class LobotomyServerConfig : ModConfig

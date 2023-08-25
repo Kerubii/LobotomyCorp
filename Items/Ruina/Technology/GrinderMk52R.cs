@@ -3,10 +3,11 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using LobotomyCorp.Items.He;
 
 namespace LobotomyCorp.Items.Ruina.Technology
 {
-	public class GrinderMk52R : SEgoItem
+    public class GrinderMk52R : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{

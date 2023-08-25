@@ -14,7 +14,7 @@ namespace LobotomyCorp.NPCs.OneBadManyGood
     {
         public override bool IsLoadingEnabled(Mod mod)
         {
-            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
         }
 
         private bool SinsConfessed = false;

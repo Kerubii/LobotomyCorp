@@ -266,7 +266,7 @@ namespace LobotomyCorp.Projectiles.Realized
 		//Silent Bullet - Targets 5 nearest enemies inflicting debuffs
 		//Flooding Bullets - Target Nearest to Cursor and shoots them 5 times
 		//Bullet of Despair - Targets Town NPCs and yourself
-		private const int EFFECTIVEDISTANCE = 2500;
+		private readonly int EFFECTIVEDISTANCE = 2500;
 
 		private int FirstSixthBullet(Player player)
 		{

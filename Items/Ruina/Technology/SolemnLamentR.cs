@@ -9,10 +9,11 @@ using Terraria.ModLoader.IO;
 using LobotomyCorp.Utils;
 using ReLogic.Content;
 using Terraria.Audio;
+using LobotomyCorp.Items.Waw;
 
 namespace LobotomyCorp.Items.Ruina.Technology
 {
-	public class SolemnLamentR : SEgoItem
+    public class SolemnLamentR : SEgoItem
 	{
         public static Texture2D screenWhiteHit;
         public static Texture2D screenBlackHit;

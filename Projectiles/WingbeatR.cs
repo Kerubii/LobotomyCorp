@@ -1,4 +1,5 @@
-﻿using LobotomyCorp.Utils;
+﻿using LobotomyCorp.ModSystems;
+using LobotomyCorp.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -228,7 +229,7 @@ namespace LobotomyCorp.Projectiles
                 Main.player[Projectile.owner].AddBuff(ModContent.BuffType<Buffs.Festival>(), 300);
             }
 
-            ModContent.GetInstance<LobSystem>().ScreenShake(15, 4f, 0, false);
+            ModContent.GetInstance<ScreenSystem>().ScreenShake(15, 4f, 0, false);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

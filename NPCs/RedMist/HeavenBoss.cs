@@ -14,7 +14,7 @@ namespace LobotomyCorp.NPCs.RedMist
     {
         public override bool IsLoadingEnabled(Mod mod)
         {
-            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
         }
 
         public override void SetStaticDefaults()
@@ -29,7 +29,7 @@ namespace LobotomyCorp.NPCs.RedMist
             Projectile.width = 26;
             Projectile.height = 26;
             Projectile.tileCollide = false;
-            Projectile.timeLeft = 1200;
+            Projectile.timeLeft = 120;
 
             Projectile.extraUpdates = 5;
             Projectile.hostile = true;
@@ -38,6 +38,12 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void AI()
         {
+            Projectile.ai[2]++;
+            if (Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode && Projectile.ai[2] % 15 == 0)
+            {
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<HeavenBranchEye>(), Projectile.damage, Projectile.knockBack, -1, Projectile.ai[0]);
+            }
+
             Projectile.rotation = Projectile.velocity.ToRotation();
             Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
         }

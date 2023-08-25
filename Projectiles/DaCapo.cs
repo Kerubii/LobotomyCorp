@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles
 {
 	public class DaCapo : ModProjectile
 	{
-        public override string Texture => "LobotomyCorp/Items/DaCapo";
+        public override string Texture => "LobotomyCorp/Items/Aleph/DaCapo";
 
         public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");

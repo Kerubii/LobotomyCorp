@@ -11,6 +11,7 @@ using Terraria.UI;
 using ReLogic.Graphics;
 using System;
 using Terraria.GameContent;
+using LobotomyCorp.ModSystems;
 
 namespace LobotomyCorp.UI
 {
@@ -176,7 +177,7 @@ namespace LobotomyCorp.UI
                         pos.Y += CombatText.TargetScale;
                         break;
                     default:
-                        if (Main.rand.Next(30) == 0)
+                        if (Main.rand.NextBool(30))
                         {
                             offset.X += Main.rand.NextFloat(-1.0f, 1.0f) * scale;
                             offset.Y += Main.rand.NextFloat(-1.0f, 1.0f) * scale;

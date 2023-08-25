@@ -5,8 +5,8 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ID;
 using Terraria.DataStructures;
-using LobotomyCorp.Utils;
 using Terraria.Localization;
+using LobotomyCorp.PlayerDrawEffects;
 
 namespace LobotomyCorp.Buffs
 {

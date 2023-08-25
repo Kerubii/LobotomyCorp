@@ -11,9 +11,7 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
         {
-			// DisplayName.SetDefault("All Around Helper");
-			// Description.SetDefault("Cleaning tools active");
-            //BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
+            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override bool RightClick(int buffIndex)
@@ -29,6 +27,7 @@ namespace LobotomyCorp.Buffs
 
             LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
             modPlayer.GrinderMk2Active = true;
+            player.GetModPlayer<LobotomyDashPlayer>().SpecialDash = true;
 
             if (player.buffTime[buffIndex] > 0)
                 player.buffTime[buffIndex] = modPlayer.GrinderMk2Battery/4;

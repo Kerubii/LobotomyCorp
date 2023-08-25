@@ -5,10 +5,11 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using System;
+using LobotomyCorp.Items.Teth;
 
 namespace LobotomyCorp.Items.Ruina.Literature
 {
-	public class RedEyesR : SEgoItem
+    public class RedEyesR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{

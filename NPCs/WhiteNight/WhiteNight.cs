@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using LobotomyCorp;
 using Terraria.GameContent.ItemDropRules;
 
 namespace LobotomyCorp.NPCs.WhiteNight
@@ -14,7 +13,7 @@ namespace LobotomyCorp.NPCs.WhiteNight
     {
         public override bool IsLoadingEnabled(Mod mod)
         {
-            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
         }
 
         public override void SetStaticDefaults()
@@ -62,7 +61,7 @@ namespace LobotomyCorp.NPCs.WhiteNight
 
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.ParadiseLost>()));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Aleph.ParadiseLost>()));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

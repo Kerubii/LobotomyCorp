@@ -14,7 +14,7 @@ namespace LobotomyCorp.NPCs.RedMist
     //[AutoloadBossHead]
     class DaCapoThrow : ModProjectile
     {
-        public override string Texture => "LobotomyCorp/Items/DaCapo";
+        public override string Texture => "LobotomyCorp/Items/Aleph/DaCapo";
 
         public override void SetStaticDefaults()
         {
@@ -93,7 +93,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
     class DaCapoLegato : ModProjectile
     {
-        public override string Texture => "LobotomyCorp/Items/DaCapo";
+        public override string Texture => "LobotomyCorp/Items/Aleph/DaCapo";
 
         public override void SetStaticDefaults()
         {
@@ -189,7 +189,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
     class SwitchMimicryThrow : ModProjectile
     {
-        public override string Texture => "LobotomyCorp/Items/Mimicry";
+        public override string Texture => "LobotomyCorp/Items/Aleph/Mimicry";
 
         public override void SetStaticDefaults()
         {
@@ -244,7 +244,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
     class SwitchDaCapoThrow : ModProjectile
     {
-        public override string Texture => "LobotomyCorp/Items/DaCapo";
+        public override string Texture => "LobotomyCorp/Items/Aleph/DaCapo";
 
         public override void SetStaticDefaults()
         {

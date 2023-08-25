@@ -37,7 +37,7 @@ namespace LobotomyCorp.Projectiles
 
             Projectile.velocity = Projectile.velocity.RotatedBy(Projectile.ai[0]);
 
-            if (Main.rand.Next(3) == 0)
+            if (Main.rand.NextBool(3))
             {
                 int d = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Wraith);
                 Main.dust[d].noGravity = true;

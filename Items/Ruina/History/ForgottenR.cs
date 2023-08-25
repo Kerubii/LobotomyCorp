@@ -1,3 +1,4 @@
+using LobotomyCorp.Items.He;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -8,7 +9,7 @@ using static Terraria.Localization.Language;
 
 namespace LobotomyCorp.Items.Ruina.History
 {
-	public class ForgottenR : SEgoItem
+    public class ForgottenR : SEgoItem
 	{
         public int Swing = 1;
 
@@ -42,7 +43,7 @@ namespace LobotomyCorp.Items.Ruina.History
 			Item.value = 10000;
 			Item.rare = 2;
 			Item.UseSound = SoundID.Item1;
-            Item.shoot = ModContent.ProjectileType<Projectiles.ForgottenR>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.Realized.ForgottenR>();
             Item.shootSpeed = 1f;
             Item.noUseGraphic = true;
             Item.noMelee = true;
@@ -59,7 +60,7 @@ namespace LobotomyCorp.Items.Ruina.History
         {
             if (player.altFunctionUse == 2)
             {
-                type = ModContent.ProjectileType<Projectiles.ForgottenR2>();
+                type = ModContent.ProjectileType<Projectiles.Realized.ForgottenR2>();
             }
         }
 
@@ -69,7 +70,7 @@ namespace LobotomyCorp.Items.Ruina.History
             {
                 if (player.altFunctionUse == 2)
                 {
-                    Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<Projectiles.ForgottenR2Behind>(), damage, knockback, player.whoAmI, -1);
+                    Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<Projectiles.Realized.ForgottenR2Behind>(), damage, knockback, player.whoAmI, -1);
 
                     return true;
                 }

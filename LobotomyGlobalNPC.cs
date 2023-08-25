@@ -10,7 +10,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp
 {
-	public class LobotomyGlobalNPC : GlobalNPC
+    public class LobotomyGlobalNPC : GlobalNPC
     {
         public override void Load()
         {
@@ -524,15 +524,15 @@ namespace LobotomyCorp
             {
                 if (npc.type == NPCID.QueenBee)
                 {
-                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Hornet>(), 2));
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Waw.Hornet>(), 2));
                 }
                 if (npc.type == NPCID.WallofFlesh)
                 {
-                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType < Items.Censored>(), 4));
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType <Items.Aleph.Censored>(), 4));
                 }
                 if (npc.type == NPCID.EyeofCthulhu)
                 {
-                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType < Items.Syrinx>(), 5));
+                    npcLoot.Add(ItemDropRule.Common(ModContent.ItemType <Items.He.Syrinx>(), 5));
                 }
             }
         }
@@ -541,11 +541,11 @@ namespace LobotomyCorp
         {
             if (shop.NpcType == NPCID.Merchant)
             {
-                shop.Add(ModContent.ItemType<Items.WristCutter>(), Condition.BloodMoon);
+                shop.Add(ModContent.ItemType<Items.Teth.WristCutter>(), Condition.BloodMoon);
             }
             else if (shop.NpcType == NPCID.Dryad)
             {
-                shop.Add(new Item(ModContent.ItemType<Items.WristCutter>())
+                shop.Add(new Item(ModContent.ItemType<Items.Teth.WristCutter>())
                 {
                     shopCustomPrice = 100000
                 }, Condition.DownedQueenBee, Condition.DownedSkeletron);

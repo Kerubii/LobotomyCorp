@@ -12,7 +12,7 @@ namespace LobotomyCorp.Items.Ruina.Art
 	{
         public override bool IsLoadingEnabled(Mod mod)
         {
-            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
         }
 
         public override void SetStaticDefaults() 

@@ -10,7 +10,7 @@ using Terraria.ObjectData;
 
 namespace LobotomyCorp.Tiles
 {
-	public class QlipothDeterence : ModTile
+    public class QlipothDeterence : ModTile
 	{
 		public override void SetStaticDefaults()
 		{
@@ -26,12 +26,6 @@ namespace LobotomyCorp.Tiles
 			AddMapEntry(new Color(190, 230, 190), name);
 			DustType = 11;
 			TileID.Sets.DisableSmartCursor[Type] = true;
-		}
-
-		public override void KillMultiTile(int i, int j, int TileFrameX, int TileFrameY)
-		{
-			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 32, 48, ModContent.ItemType<Items.QlipothDetterenceField>());
-			//ModContent.GetInstance<TEQlipothDeterence>().Kill(i, j);
 		}
 
         public override bool RightClick(int i, int j)

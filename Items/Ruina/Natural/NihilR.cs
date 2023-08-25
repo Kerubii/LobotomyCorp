@@ -9,7 +9,7 @@ namespace LobotomyCorp.Items.Ruina.Natural
 	{
         public override bool IsLoadingEnabled(Mod mod)
         {
-            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
         }
 
         public int ArcanaManaCost = 500;

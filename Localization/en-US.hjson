@@ -1890,11 +1890,14 @@ Mods: {
 			HeavenBoss.DisplayName: Heaven
 			FaintAromaSlash.DisplayName: Faint Aroma Slash
 			PenitenceStar.DisplayName: Penitence Star
-			PenitenceLight.DisplayName: Penitence Light
+			PenitenceLight.DisplayName: Confession
 			RedEyesEgg.DisplayName: Red Eyes Egg
-			RedEyesSpider.DisplayName: Red Eyes Spider
+			RedEyesSpider.DisplayName: Spiderling
 			GoldRushCrystal.DisplayName: Gold Rush Crystal
-			GoldRushShot.DisplayName: Gold Rush Shot
+			GoldRushShot.DisplayName: Crystalized Bliss
+			HeavenBranch.DisplayName: Burrowing Branch
+			HeavenBranchEye.DisplayName: Burrowing Heaven
+			SmileBobs.DisplayName: Smile Bobs
 		}
 
 		Buffs: {
@@ -1910,6 +1913,11 @@ Mods: {
 
 			TodaysLook: {
 				Description: The Look for the Day
+				Happy: Happy - Reduce damage taken by 20%, +30 defense and 15% decreased final damage
+				Smile: Smiling - +15 defense and 10% decreased final damage
+				Neutral: Neutral - No Effect
+				Sad: Sad - 10% increased final damage and -15 defense
+				Angry: Angry - 20% increased final damage, increases damage taken by 30% and defense is set to 0
 				DisplayName: Look for the Day
 			}
 
@@ -2104,15 +2112,16 @@ Mods: {
 		Tiles: {
 			QlipothDeterence.MapEntry: Qlipoth Deterence
 			DisciplinaryShell.MapEntry: Disciplinary Shell
-			BlackBox3.MapEntry: Black Box3
-			BlackBox2.MapEntry: Black Box2
+			BlackBox3.MapEntry: Black Box - Extraction
+			BlackBox2.MapEntry: Black Box -
 			BlackBox.MapEntry: Black Box
 		}
 
 		NPCs: {
-			OneBadManyGood.DisplayName: One Bad Many Good
+			OneBadManyGood.DisplayName: One Sin and a Hundred of Good Deeds
 			RedMist.DisplayName: Red Mist
 			WhiteNight.DisplayName: White Night
+			SmileCorpses.DisplayName: Melted Corpses
 		}
 	}
 }

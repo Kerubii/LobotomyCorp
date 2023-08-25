@@ -86,7 +86,7 @@ namespace LobotomyCorp.NPCs.RedMist
             Projectile.hostile = true;
         }
 
-        const int LENGTH = 2000;
+        readonly int LENGTH = 2000;
 
         public override void AI()
         {

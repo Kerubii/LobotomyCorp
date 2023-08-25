@@ -1,3 +1,4 @@
+using LobotomyCorp.Items.Waw;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -8,7 +9,7 @@ using Terraria.ModLoader.IO;
 
 namespace LobotomyCorp.Items.Ruina.History
 {
-	public class GreenStemR : SEgoItem
+    public class GreenStemR : SEgoItem
 	{
         public override void SetStaticDefaults() 
 		{

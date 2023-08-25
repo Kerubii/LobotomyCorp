@@ -13,7 +13,7 @@ namespace LobotomyCorp.Projectiles
 {
     public class TwilightSpecial : ModProjectile
     {
-        public override string Texture => "LobotomyCorp/Items/Twilight";
+        public override string Texture => "LobotomyCorp/Items/Aleph/Twilight";
 
         public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");

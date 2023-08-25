@@ -8,7 +8,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp
 {
-	public class LobotomyGlobalItem : GlobalItem
+    public class LobotomyGlobalItem : GlobalItem
     {
         public static LobotomyGlobalItem LobItem(Item item)
         {
@@ -29,15 +29,15 @@ namespace LobotomyCorp
         {
             if (item.type == ItemID.QueenBeeBossBag)
             {
-                itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Hornet>(), 2));
+                itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Waw.Hornet>(), 2));
             }
             else if (item.type == ItemID.WallOfFleshBossBag)
             {
-                itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Censored>(), 4));
+                itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Aleph.Censored>(), 4));
             }
             if (item.type == ItemID.Present)
             {
-                itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Christmas>(), 100));
+                itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.He.Christmas>(), 100));
             }
         }
 

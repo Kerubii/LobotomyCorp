@@ -53,7 +53,7 @@ namespace LobotomyCorp.Projectiles
 
         public override void SetDefaults() {
             Projectile.width = 40;
-            Projectile.height = 120;
+            Projectile.height = 140;
             Projectile.aiStyle = -1;
             Projectile.penetrate = -1;
             Projectile.alpha = 0;
@@ -103,9 +103,9 @@ namespace LobotomyCorp.Projectiles
             if (Math.Abs(Projectile.velocity.Y) > Math.Abs(Projectile.velocity.X))
             {
                 hitbox.X -= 40;
-                hitbox.Width += 40;
-                hitbox.Y += 40;
-                hitbox.Height -= 40;
+                hitbox.Width += 100;
+                hitbox.Y += 60;
+                hitbox.Height -= 60;
             }
         }
 

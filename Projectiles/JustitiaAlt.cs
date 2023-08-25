@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles
 {
     public class JustitiaAlt : ModProjectile
     {
-        public override string Texture => "LobotomyCorp/Items/Justitia";
+        public override string Texture => "LobotomyCorp/Items/Aleph/Justitia";
 
         public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");

@@ -1,3 +1,4 @@
+using LobotomyCorp.Items.Waw;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -6,7 +7,7 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.History
 {
-	public class HornetR : SEgoItem
+    public class HornetR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{

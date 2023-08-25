@@ -1,4 +1,5 @@
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Buffs
@@ -18,19 +19,19 @@ namespace LobotomyCorp.Buffs
 			switch (todaysLook)
             {
 				case 0://Happy
-					tip = "Happy - Reduce damage taken by 20%, +30 defense and 15% decreased final damage";
+					tip = Language.GetTextValue("Mods.LobotomyCorp.Buffs.TodaysLook.Happy");
 					break;
 				case 1://Smile
-					tip = "Smiling - +15 defense and 10% decreased final damage";
+					tip = Language.GetTextValue("Mods.LobotomyCorp.Buffs.TodaysLook.Smile");
 					break;
 				default://Neutral
-					tip = "Neutral - No Effect";
+					tip = Language.GetTextValue("Mods.LobotomyCorp.Buffs.TodaysLook.Neutral");
 					break;
 				case 3://Sad
-					tip = "Sad - 10% increased final damage and -15 defense";
+					tip = Language.GetTextValue("Mods.LobotomyCorp.Buffs.TodaysLook.Sad");
 					break;
 				case 4://Angry
-					tip = "Angry - 20% increased final damage, increases damage taken by 30% and defense is set to 0";
+					tip = Language.GetTextValue("Mods.LobotomyCorp.Buffs.TodaysLook.Angry");
 					break;
             }
         }
@@ -63,9 +64,6 @@ namespace LobotomyCorp.Buffs
 					break;
 				case 4://Angry
 					player.endurance -= 0.3f;
-					player.statDefense -= 30;
-					if (player.statDefense > 0)
-						player.statDefense *= 0;
 					break;
             }
         }

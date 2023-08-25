@@ -8,6 +8,7 @@ using LobotomyCorp.Utils;
 using Terraria.GameContent;
 using System.Collections.Generic;
 using Terraria.Audio;
+using LobotomyCorp.ModSystems;
 
 namespace LobotomyCorp.Projectiles.Realized
 {
@@ -98,14 +99,14 @@ namespace LobotomyCorp.Projectiles.Realized
             {
 				if (Projectile.ai[0] < 30)
 				{
-					ModContent.GetInstance<LobSystem>().RedEyesSpecialCamera(Camera);
+					ModContent.GetInstance<ScreenSystem>().RedEyesSpecialCamera(Camera);
 				}
 				else 
 				{
 					if (Projectile.ai[1] > 0)
-						Camera = ModContent.GetInstance<LobSystem>().RedEyesSpecialCamera(Camera, new Vector2(owner.Center.X,Main.npc[(int)Projectile.ai[1] - 1].Center.Y), 0.2f);
+						Camera = ModContent.GetInstance<ScreenSystem>().RedEyesSpecialCamera(Camera, new Vector2(owner.Center.X,Main.npc[(int)Projectile.ai[1] - 1].Center.Y), 0.2f);
 					else
-						ModContent.GetInstance<LobSystem>().RedEyesSpecialCamera(Camera);
+						ModContent.GetInstance<ScreenSystem>().RedEyesSpecialCamera(Camera);
 				}
 			}
 

@@ -11,6 +11,8 @@ using LobotomyCorp.Utils;
 using LobotomyCorp.UI;
 using System.Collections.Generic;
 using Terraria.Graphics.Effects;
+using System.IO;
+using static Terraria.ModLoader.PlayerDrawLayer;
 
 namespace LobotomyCorp.NPCs.RedMist
 {
@@ -19,7 +21,7 @@ namespace LobotomyCorp.NPCs.RedMist
     {
         public override bool IsLoadingEnabled(Mod mod)
         {
-            return ModContent.GetInstance<Config.LobotomyServerConfig>().TestItemEnable;
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
         }
 
         public override void Load()
@@ -51,11 +53,6 @@ namespace LobotomyCorp.NPCs.RedMist
                     index = BossHead4;
                     break;
             }
-        }
-
-        public override void SetStaticDefaults()
-        {
-            // DisplayName.SetDefault("The Red Mist");
         }
 
         public override void SetDefaults()
@@ -102,8 +99,24 @@ namespace LobotomyCorp.NPCs.RedMist
             set { NPC.ai[2] = value; }
         }
 
+        private float DaCapoState
+        {
+            get { return NPC.ai[3]; }
+            set { NPC.ai[3] = value; }
+        }
+
+        // Aggression - Counts up when target player isn't in sight
+        private int Aggression = 0;
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+            writer.Write7BitEncodedInt(GoldRushCount);
+            writer.Write7BitEncodedInt(Aggression);
+        }
+
         public override void AI()
         {
+            // Initialize Skeleton Red Mist, This uses an older skeleton model than the Utils one so bear with it. Its their grandad
             if (skelly == null)
             {
                 skelly = new RedMistSkeletonHelper
@@ -122,8 +135,8 @@ namespace LobotomyCorp.NPCs.RedMist
             {
                 NPC.TargetClosest();
             }
-            Vector2 target = NPC.Center;/*
-            if (Main.player[NPC.target].dead && NPC.timeLeft > 2)
+            Vector2 target = NPC.Center;
+            /*if (Main.player[NPC.target].dead && NPC.timeLeft > 2)
             {
                 NPC.timeLeft = 2;
                 NPC.position = Vector2.Zero;
@@ -131,6 +144,8 @@ namespace LobotomyCorp.NPCs.RedMist
             }*/
             target = NPC.GetTargetData().Center;
             float healthPercent = NPC.life / (float)NPC.lifeMax;
+
+            // Uncomment these below to test out different phases
 
             //NPC.spriteDirection = 1;
             //ChangeAnimation(AnimationState.TwilightChase);
@@ -149,21 +164,21 @@ namespace LobotomyCorp.NPCs.RedMist
             }*/
 
 
-            //First Phase - Lobcorp Phase
+            // First Phase - Lobcorp Phase
             if (Phase == 0)
             {
-                //Follow Mode
+                // Follow Mode
                 if (AiState <= FollowState)
                 {
                     FollowMode1();
                 }
-                //EGO Swing
+                // EGO Swing
                 else if (AiState <= SwingBoth)
                 {
                     SwingWeapon();
                 }
-                //Transition to Phase 2
-                else if (AiState == 10)
+                // Transition to Phase 2
+                else if (AiState == SwitchPhase)
                 {
                     ChangeAnimation(AnimationState.Phase2Transition);
                     Timer++;
@@ -186,14 +201,14 @@ namespace LobotomyCorp.NPCs.RedMist
                 else
                     GoldRush1Sequence();
             }
-            //Second Phase
-            //Changes to Mimicry and DaCapo
-            //Allows Heaven Strikes as anti air
-            //Focused on closing her distance between you and her
-            //Allows DaCapo toss as anti range
-            //Dashes through incoming Projectiles, gaining Projectile invincibility
-            //Teleports to DaCapo and unleashes a 180 degree slash depending on player direction
-            //Range needed to deal full damage shrinks
+            // Second Phase
+            // Changes to Mimicry and DaCapo
+            // Allows Heaven Strikes as anti air
+            // Focused on closing her distance between you and her
+            // Allows DaCapo toss as anti range
+            // Dashes through incoming Projectiles, gaining Projectile invincibility
+            // Teleports to DaCapo and unleashes a 180 degree slash depending on player direction
+            // Range needed to deal full damage shrinks
             else if (Phase == 1)
             {
                 if (AiState == FollowState)
@@ -318,30 +333,30 @@ namespace LobotomyCorp.NPCs.RedMist
                     }
                 }
             }
-            //Third Phase
-            //Throw Mimicry and DaCapo forward and equip Smile and Justitia
-            //Back to normal walking speed
-            //Smile forces all players to plummet down if in midair or go through platforms if above
-            //Smile inflicts "Horrifying Screech", disabling wings and lowers movement speed by 8%
-            //Smile second hit releases shockwaves with infinite range that is blocked by direct line of sight, signified by black dust hitting tiles
-            //Getting hit by Smile shockwave reduces movement by 92% for 2 seconds
-            //Justitia Releases Energy Slashes, sometimes two or three hit combos, has a higher end lag when doing three hit combos
-            //Gold Rush has random center positions with different angles, ending with a strike from above
-            //Range needed to deal full damage expands
+            // Third Phase
+            // Throw Mimicry and DaCapo forward and equip Smile and Justitia
+            // Back to normal walking speed
+            // Smile forces all players to plummet down if in midair or go through platforms if above
+            // Smile inflicts "Horrifying Screech", disabling wings and lowers movement speed by 8%     
+            // Smile second hit releases shockwaves with infinite range that is blocked by direct line of sight, signified by black dust hitting tiles
+            // Getting hit by Smile shockwave reduces movement by 92% for 2 seconds
+            // Justitia Releases Energy Slashes, sometimes two or three hit combos, has a higher end lag when doing three hit combos
+            // Gold Rush has random center positions with different angles, ending with a strike from above
+            // Range needed to deal full damage expands
             else if (Phase == 2)
             {
                 RedMistPhase3();
             }
-            //Instead of using Gold Rush a third time before transitioning, begins transition immediently
-            //Smile gets used one last time, Justitia transforms into Twilight
-            //Gold Rush gets summoned, and thrown as a Projectile with half the speed of red mist, creating random barriers all around the player
-            //Red Mist gains semi flight with low gravity, runs as normal, can dash
-            //Red Mist leaves behind numerous slashes when dashing
-            //Red Mist deals NO contact damage at all
-            //Red Mist relies on passing through players
-            //Red Mist sometimes enters a portal to pass through it
-            //Red Mist sometimes stops and redirects her velocity towards the player
-            //After 25 seconds, she stops, falls to the ground, and lays motionless for 10 seconds with increased damage taken, before attacking again
+            // Instead of using Gold Rush a third time before transitioning, begins transition immediently
+            // Smile gets used one last time, Justitia transforms into Twilight
+            // Gold Rush gets summoned, and thrown as a Projectile with half the speed of red mist, creating random barriers all around the player
+            // Red Mist gains semi flight with low gravity, runs as normal, can dash
+            // Red Mist leaves behind numerous slashes when dashing
+            // Red Mist deals NO contact damage at all
+            // Red Mist relies on passing through players
+            // Red Mist sometimes enters a portal to pass through it
+            // Red Mist sometimes stops and redirects her velocity towards the player
+            // After 25 seconds, she stops, falls to the ground, and lays motionless for 10 seconds with increased damage taken, before attacking again
             else if (Phase == 3)
             {
                 if (AiState < 0)
@@ -576,16 +591,34 @@ namespace LobotomyCorp.NPCs.RedMist
                     */
                 }
             }
-            //Hidden Red Mist Phase??
-            //Hold Apocalypse up high, envelopes the area in darkness as it dissipates, red mist suddenly gets a burst of red mist, as Mimicry is summoned and blazes of red flames replaces her hair and gains a burning red cloak
-            //Can throw mimicry spear form multiple times when player is away
-            //Can Transform mimicry into a scythe to for wide slashes,
-            //Can Transform mimicry spear form to poke
-            //Can Transform mimicry hammer form as heavy hitter
+            // Hidden Red Mist Phase??
+            // For the worthy phase!
+            // Hold Apocalypse up high, envelopes the area in darkness as it dissipates, red mist suddenly gets a burst of red mist, as Mimicry is summoned and blazes of red flames replaces her hair and gains a burning red cloak
+            // Can throw mimicry spear form multiple times when player is away
+            // Can Transform mimicry into a scythe to for wide slashes,
+            // Can Transform mimicry spear form to poke
+            // Can Transform mimicry hammer form as heavy hitter
+
+            // Aggression
+            // Increases when direct line of sight between the Terrarian and the Red Mist is broken for a certain amount of time
+            // During phase 1 and phase 3, She does a quick one portal Gold Rush to a random target player
+            // In phase 2, After quick Gold Rush, it will do a mimicry slash
+            // In phase 3, it will do Smile Slam
+            // Increasing Aggression in phase 4 
+            if (!Collision.CanHit(NPC, NPC.GetTargetData()))
+            {
+                Aggression++;
+            }
+            else if (Aggression > 0)
+            {
+                Aggression -= 2;
+                if (Aggression < 0)
+                    Aggression = 0;
+            }
 
             ScreenFilterHandler();
 
-            //Music Changer???
+            // Music Changer
             if (Phase > 0)
             {
                 if (Phase < 3)
@@ -594,7 +627,7 @@ namespace LobotomyCorp.NPCs.RedMist
                     Music = MusicLoader.GetMusicSlot(Mod, "Sounds/Music/TilaridsInsigniaDecay");
             }
 
-            //Suppresion Text Maker
+            // Suppresion Text Maker
             if (Main.rand.NextBool(300))
             {
                 List<string> possibleText = new List<string>();
@@ -668,9 +701,10 @@ namespace LobotomyCorp.NPCs.RedMist
                 if (Main.expertMode)
                     attackRange *= 4;
 
-                if (delta.Length() > 2000f && Main.rand.NextBool(360))
+                if ((delta.Length() > 2000f && Main.rand.NextBool(360)) || Aggression > 300)
                 {
                     AiState = GoldRushSmall;
+                    Aggression = 0;
                 }
                 else if (delta.Length() < attackRange && Main.rand.NextBool(30))
                 {
@@ -782,7 +816,7 @@ namespace LobotomyCorp.NPCs.RedMist
                                 {
                                     speed = speed.RotatedByRandom(0.08f);
                                 }
-                                Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, speed, ModContent.ProjectileType<RedEyesEgg>(), 15, 2);
+                                Projectile.NewProjectile(NPC.GetSource_FromAI(), pos, speed * 2, ModContent.ProjectileType<RedEyesEgg>(), 15, 2);
                             }
                         }
                     }
@@ -874,11 +908,31 @@ namespace LobotomyCorp.NPCs.RedMist
                 Timer++;
                 if (Timer > 30)
                 {
-                    Timer = 45;
-                    AiState = 6;
+                    Timer = 30;
+                    AiState = 11;
                     NPC.velocity.X = 24f * NPC.spriteDirection;
                 }
                 SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Teleport_Start") with { Volume = 0.25f }, NPC.position);
+            }
+            else if (AiState == 11)
+            {
+                NPC.damage = 65;
+                Timer--;
+                if (Timer <= 0)
+                {
+                    NPC.damage = 0;
+                    ChangeAnimation(AnimationState.Idle1);
+                    AiState = 0;
+                    Timer = 0;
+                    NPC.noGravity = false;
+                    NPC.noTileCollide = false;
+
+                    NPC.velocity.X *= 0.3f;
+                }
+
+                Dust d = Dust.NewDustPerfect(new Vector2(Main.rand.NextFloat(NPC.position.X, NPC.position.X + NPC.width), NPC.position.Y + NPC.height), 57);
+                d.fadeIn = 1.4f;
+                d.noGravity = true;
             }
         }
 
@@ -1052,7 +1106,7 @@ namespace LobotomyCorp.NPCs.RedMist
                 {
                     delta = new Vector2(1 * NPC.spriteDirection, 0);
                 }
-                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -13), Vector2.Normalize(delta) * 12f, ModContent.ProjectileType<HeavenBoss>(), 25, 2, 0, NPC.whoAmI);
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + new Vector2(0, -13), Vector2.Normalize(delta) * 12f, ModContent.ProjectileType<HeavenBoss>(), 25, 2, -1, 15);
                 SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase2_Spear") with { Volume = 0.5f }, NPC.position);
             }
             if (Timer > 80)
@@ -1100,7 +1154,7 @@ namespace LobotomyCorp.NPCs.RedMist
                     //Shoot Justitia Slashes
                     Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
                     delta.Normalize();
-                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, 8 * delta, ModContent.ProjectileType<JustitiaSlashBoss>(), 15, 0);
+                    Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, 16 * delta, ModContent.ProjectileType<JustitiaSlashBoss>(), 15, 0);
                     if (AiState > 1)
                         AiState--;
                     SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Entity/Gebura/Gebura_Phase3_Atk3") with { Volume = 0.5f }, NPC.position);
@@ -1352,6 +1406,25 @@ namespace LobotomyCorp.NPCs.RedMist
                 Dust d = Dust.NewDustPerfect(hammerPos, DustID.Wraith, vel);
                 d.noGravity = true;
             }
+
+            if (Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode)
+            {
+                int amount = 4;
+                int corpseType = ModContent.NPCType<SmileCorpses>();
+                int limit = 10;
+                int amountAlive = NPC.CountNPCS(corpseType);
+                if (amountAlive + amount > limit)
+                {
+                    amount = limit - amountAlive;
+                }
+                if (amount > 0)
+                {
+                    for (int i = 0; i < amount; i++)
+                    {
+                        NPC.NewNPC(NPC.GetSource_FromThis(), (int)hammerPos.X, (int)hammerPos.Y, corpseType);
+                    }
+                }
+            }
         }
 
         void SmileScream()
@@ -1403,7 +1476,12 @@ namespace LobotomyCorp.NPCs.RedMist
             NPC.netUpdate = true;
         }
 
-        public bool WillHitTarget(Rectangle Target, float Time)
+        void GoldRushReposition()
+        {
+
+        }
+
+        private bool WillHitTarget(Rectangle Target, float Time)
         {
             for (int i = 0; i <= Time; i++)
             {
@@ -2920,62 +2998,72 @@ namespace LobotomyCorp.NPCs.RedMist
 
         private void fighterAI(Terraria.DataStructures.NPCAimedTarget target, float EffectiveRange, float speed, float maxSpeed)
         {
+            NPC.directionY = 1;
+            if (target.Position.Y + target.Height <= NPC.position.Y + (float)NPC.height)
+            {
+                NPC.directionY = -1;
+            }
             Vector2 delta = target.Center - NPC.Center;
-            bool moveLeft = false;
-            bool moveRight = false;
+
+            int dir = 0;
 
             if (delta.X + EffectiveRange < 0)
-                moveLeft = true;
+                dir = -1;
             if (delta.X - EffectiveRange > 0)
-                moveRight = true;
+                dir = 1;
 
-            if (moveLeft)
-            {
-                NPC.velocity.X -= speed;
-                if (NPC.velocity.X < -maxSpeed)
-                    NPC.velocity.X = -maxSpeed;
-                if (NPC.velocity.X > 0)
-                    NPC.velocity.X -= speed * 0.5f;
-
-                NPC.spriteDirection = -1;
-            }
-            else if (moveRight)
-            {
-                NPC.velocity.X += speed;
-                if (NPC.velocity.X > maxSpeed)
-                    NPC.velocity.X = maxSpeed;
-                if (NPC.velocity.X < 0)
-                    NPC.velocity.X += speed * 0.5f;
-                NPC.spriteDirection = 1;
-            }
-            else
+            // Slowly stop
+            if (dir == 0)
             {
                 NPC.velocity.X *= 0.8f;
                 if (NPC.velocity.X < speed || NPC.velocity.X > -speed)
                     NPC.velocity.X = 0;
             }
+            // Move towards direction
+            else
+            {
+                NPC.velocity.X += speed * dir;
+                if (Math.Abs(NPC.velocity.X) > maxSpeed)
+                    NPC.velocity.X = maxSpeed * dir;
+                if (Math.Abs(NPC.velocity.X) < 0)
+                    NPC.velocity.X += speed * dir * 0.5f;
 
-            Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY, 1, false);
+                NPC.spriteDirection = dir;
+            }
 
             int x = (int)NPC.Center.X, y = (int)(NPC.position.Y + NPC.height);
-            if (moveLeft)
-                x -= (int)(NPC.width / 2) - 1;
-            if (moveRight)
-                x += (int)(NPC.width / 2) + 1;
+
+            x += ((int)(NPC.width / 2) + 1 * dir) * dir;
 
             x /= 16;
             y /= 16;
 
-            //LookingAt(new Vector2(x * 16, y * 16));
+            NPC.stepSpeed = 2;
+            Collision.StepUp(ref NPC.position, ref NPC.velocity, NPC.width, NPC.height, ref NPC.stepSpeed, ref NPC.gfxOffY, 1, false);
 
-            if (NPC.velocity.Y == 0)
+            // Lets take 20 Tiles being the limit of when Red Mist can jump, If its above 20 Tiles, use the 'anti stuck' with aggression
+            if (NPC.velocity.Y == 0 && dir != 0)
             {
-                bool IsBelow = NPC.position.Y + NPC.height > target.Position.Y + target.Height;
-                if (!IsBelow)
+                //Checks for empty tiles in front
+                int x2 = x;
+                x2 += NPC.width * dir;
+                if (dir < 0)
                 {
-
+                    int tempX = 
+                    x = x2;
                 }
             }
+        }
+
+        public override bool? CanFallThroughPlatforms()
+        {
+            if (NPC.directionY == 1)
+            {
+                NPC.directionY = -1;
+                return true;
+            }
+
+            return base.CanFallThroughPlatforms();
         }
 
         private AnimationState animState
@@ -3087,10 +3175,10 @@ namespace LobotomyCorp.NPCs.RedMist
                 {
                     float distance = NPC.Distance(Main.LocalPlayer.Center);
                     float minDist = 120;
-                    float maxDist = 1000;
+                    float maxDist = 250;
 
                     distance = (distance - minDist) / (maxDist - minDist);
-                    Math.Clamp(distance, 0, 1);
+                    Math.Clamp(distance, 0.1f, 1f);
 
                     Filters.Scene["LobotomyCorp:RedMistOverlay"].GetShader().UseIntensity(distance);
 
@@ -3168,17 +3256,17 @@ namespace LobotomyCorp.NPCs.RedMist
             if (skelly.Weapon2.Visible && NPC.localAI[1] < 3)
             {
                 int dir = NPC.spriteDirection;
-                Texture2D weapon = Mod.Assets.Request<Texture2D>("Items/Penitence").Value;
+                Texture2D weapon = Mod.Assets.Request<Texture2D>("Items/Zayin/Penitence").Value;
                 Vector2 weaponOrigin = new Vector2(4, 49);
                 if (NPC.localAI[1] == 1)
                 {
                     dir *= -1;
-                    weapon = Mod.Assets.Request<Texture2D>("Items/DaCapo").Value;
+                    weapon = Mod.Assets.Request<Texture2D>("Items/Aleph/DaCapo").Value;
                     weaponOrigin = new Vector2(45, 63);
                 }
                 if (NPC.localAI[1] == 2)
                 {
-                    weapon = Mod.Assets.Request<Texture2D>("Items/Smile").Value;
+                    weapon = Mod.Assets.Request<Texture2D>("Items/Aleph/Smile").Value;
                     weaponOrigin = new Vector2(39, weapon.Height - 39);
                 }
                 position = skelly.Weapon2.Position(NPC.spriteDirection, i);
@@ -3235,21 +3323,21 @@ namespace LobotomyCorp.NPCs.RedMist
             //Weapon 1
             if (skelly.Weapon1.Visible)
             {
-                Texture2D weapon = Mod.Assets.Request<Texture2D>("Items/RedEyes").Value;
+                Texture2D weapon = Mod.Assets.Request<Texture2D>("Items/Teth/RedEyes").Value;
                 Vector2 weaponOrigin = new Vector2(5, weapon.Height - 5);
                 if (NPC.localAI[1] == 1)
                 {
-                    weapon = Mod.Assets.Request<Texture2D>("Items/Mimicry").Value;
+                    weapon = Mod.Assets.Request<Texture2D>("Items/Aleph/Mimicry").Value;
                     weaponOrigin = new Vector2(9, weapon.Height - 9);
                 }
                 if (NPC.localAI[1] == 2)
                 {
-                    weapon = Mod.Assets.Request<Texture2D>("Items/Justitia").Value;
+                    weapon = Mod.Assets.Request<Texture2D>("Items/Aleph/Justitia").Value;
                     weaponOrigin = new Vector2(12, weapon.Height - 12);
                 }
                 if (NPC.localAI[1] == 3)
                 {
-                    weapon = Mod.Assets.Request<Texture2D>("Items/Twilight").Value;
+                    weapon = Mod.Assets.Request<Texture2D>("Items/Aleph/Twilight").Value;
                     weaponOrigin = new Vector2(12, weapon.Height - 12);
                 }
                 if (animState == AnimationState.HeavenThrow)

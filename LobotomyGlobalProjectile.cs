@@ -5,6 +5,7 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
 using LobotomyCorp.Utils;
+using LobotomyCorp.ModSystems;
 
 namespace LobotomyCorp
 {
