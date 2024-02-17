@@ -12,8 +12,8 @@ namespace LobotomyCorp.Projectiles
 {
     /// <summary>
     /// Negative ai0 for arc type, Positive ai0 for Shotgun type. Number is how many bits it releases. 0 is none
-    /// ai1 controls speed bobs release
-    /// ai2 target, if target exists Gravity is enabled
+    /// positive ai1 controls speed bobs release and applies gravity, negative ai1 makes it explode at a certain time, zero makes it a normal non velocity projectile
+    /// ai2 target, if negative it inherits velocity
     /// </summary>
     internal class SmileBobs : ModProjectile
     {
@@ -28,8 +28,8 @@ namespace LobotomyCorp.Projectiles
             Projectile.width = 32;
             Projectile.height = 32;
             Projectile.aiStyle = -1;
-            Projectile.timeLeft = 30;
-            Projectile.scale = 0.5f;
+            Projectile.timeLeft = 300;
+            Projectile.scale = 1f;
             Projectile.hostile = true;
             Projectile.tileCollide = true;
             Projectile.ignoreWater = true;
@@ -40,8 +40,9 @@ namespace LobotomyCorp.Projectiles
             if (Projectile.localAI[0] == 0)
             {
                 Projectile.frame = Main.rand.Next(3);
+                Projectile.localAI[0]++;
             }
-            Projectile.rotation += 0.01f;
+            Projectile.rotation += 0.01f;// athHelper.ToRadians(3);
 
             if (Main.rand.NextBool(3))
             {
@@ -49,9 +50,15 @@ namespace LobotomyCorp.Projectiles
                 Main.dust[d].noGravity = true;
             }
 
-            if (Projectile.ai[2] >= 0)
+            if (Projectile.ai[1] < 0)
             {
-                Projectile.velocity.Y += 0.02f;
+                Projectile.ai[1]++;
+                if (Projectile.ai[1] >= 0)
+                    Projectile.Kill();
+            }
+            else if (Projectile.ai[1] > 0)
+            {
+                Projectile.velocity.Y += 0.2f;
             }
 
             if (Projectile.timeLeft < 10)
@@ -61,6 +68,14 @@ namespace LobotomyCorp.Projectiles
         public override bool CanHitPlayer(Player target)
         {
             return false;
+        }
+
+        public override bool TileCollideStyle(ref int width, ref int height, ref bool fallThrough, ref Vector2 hitboxCenterFrac)
+        {
+            if (Projectile.velocity.Y > 0)
+                fallThrough = false;
+
+            return base.TileCollideStyle(ref width, ref height, ref fallThrough, ref hitboxCenterFrac);
         }
 
         public override void Kill(int timeLeft)
@@ -76,6 +91,10 @@ namespace LobotomyCorp.Projectiles
                 return;
 
             Vector2 delta = Projectile.velocity;
+            float velSpeed = Projectile.ai[1];
+            if (velSpeed < 0)
+                velSpeed = Projectile.velocity.Length();
+
             if ((int)Projectile.ai[2] >= 0)
             {
                 Player player = Main.player[(int)Projectile.ai[2]];
@@ -92,9 +111,8 @@ namespace LobotomyCorp.Projectiles
 
                 for (int i = 0; i < amount; i++)
                 {
-                    float angle = MathHelper.ToRadians(-45 + 90 * (i / (amount - 1)));
-                    Vector2 vel = (delta * Projectile.ai[0]).RotatedBy(angle);
-
+                    float angle = MathHelper.ToRadians(-45f + 90f * (i / (amount - 1f)));
+                    Vector2 vel = (delta * velSpeed).RotatedBy(angle);
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel, ModContent.ProjectileType<SmileBits>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                 }
             }
@@ -105,8 +123,8 @@ namespace LobotomyCorp.Projectiles
 
                 for (int i = 0; i < amount; i++)
                 {
-                    float speed = Projectile.ai[1] * Main.rand.NextFloat(-0.8f, 1.2f);
-                    Vector2 vel = (delta * Projectile.ai[0]).RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-45, 45)));
+                    float speed = velSpeed * Main.rand.NextFloat(0.8f, 1.2f);
+                    Vector2 vel = (delta * speed).RotatedByRandom(MathHelper.ToRadians(45));
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel, ModContent.ProjectileType<SmileBits>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                 }
             }

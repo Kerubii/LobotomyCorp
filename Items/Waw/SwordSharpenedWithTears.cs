@@ -18,7 +18,7 @@ namespace LobotomyCorp.Items.Waw
 
         public override void SetDefaults()
         {
-            Item.damage = 32;
+            Item.damage = 38;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
@@ -113,7 +113,7 @@ namespace LobotomyCorp.Items.Waw
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.Swordfish)
+            .AddIngredient(ItemID.Gladius)
             .AddIngredient(ItemID.Sapphire)
             .AddIngredient(ItemID.FallenStar, 8)
             .AddTile(Mod, "BlackBox3")

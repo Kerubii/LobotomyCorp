@@ -31,9 +31,8 @@ namespace LobotomyCorp.Items.Zayin
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.Firefly, 5)
+            .AddIngredient(ItemID.Firefly, 3)
             .AddIngredient(ItemID.Bottle)
-            .AddIngredient(ItemID.Sapphire, 3)
             .AddIngredient(ItemID.Sunflower)
             .AddTile(Mod, "BlackBox")
             .Register();

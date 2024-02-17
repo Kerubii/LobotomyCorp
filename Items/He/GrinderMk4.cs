@@ -53,7 +53,7 @@ namespace LobotomyCorp.Items.He
         {
             CreateRecipe()
             .AddIngredient(ItemID.WoodYoyo)
-            .AddIngredient(ItemID.Lens, 5)
+            .AddIngredient(ItemID.Lens, 1)
             .AddIngredient(ItemID.IronBar, 10)
             .AddTile(Mod, "BlackBox2")
             .Register();

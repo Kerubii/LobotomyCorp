@@ -68,6 +68,7 @@ namespace LobotomyCorp.Projectiles
                     if (Main.myPlayer == Projectile.owner)
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel * 4, ModContent.ProjectileType<SoundOfAStarShoot>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
                     Projectile.velocity = vel * -4f;
+                    Projectile.netUpdate = true;
 
                     SoundEngine.PlaySound(SoundID.Item72, Projectile.Center);
                 }

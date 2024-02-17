@@ -93,6 +93,26 @@ namespace LobotomyCorp.Utils
             return spring;
         }
     }
+    
+    class LobHelper
+    {
+        /// <summary>
+        /// Time is the time it reaches END from START
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="end"></param>
+        /// <param name="gravity"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public static Vector2 ProjectileMotion(Vector2 start, Vector2 end, float time, float gravity)
+        {
+            Vector2 delta = start - end;
+            Vector2 velocity;
+            velocity.Y = (delta.Y - 0.5f * gravity * time * time) / time;
+            velocity.X = delta.X / time;
+            return velocity;
+        }
+    }
     /*
     abstract class Fighter : NPC
 	{

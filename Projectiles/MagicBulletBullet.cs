@@ -46,6 +46,30 @@ namespace LobotomyCorp.Projectiles
 			}
         }
 
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+			Projectile.ai[2]++;
+            base.OnHitNPC(target, hit, damageDone);
+        }
+
+        public override bool CanHitPlayer(Player target)
+        {
+			return true;
+        }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+			if (Projectile.ai[2] > 0)
+			{
+				float markiplier = 1f - Projectile.ai[2] / 10f * 0.25f;
+				if (markiplier < 0.25f)
+					markiplier = 0.25f;
+				modifiers.FinalDamage *= markiplier;
+			}
+
+            base.ModifyHitNPC(target, ref modifiers);
+        }
+
         public override bool PreDraw(ref Color lightColor)
 		{
 			Texture2D texture = LobotomyCorp.MagicBulletBullet.Value;
@@ -59,7 +83,7 @@ namespace LobotomyCorp.Projectiles
 				if (k > 0)
 					frame.Y = frame.Height;
 				Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-				Color color = Color.White;//Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+				Color color = Projectile.GetAlpha(Color.White) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
 				Main.EntitySpriteDraw(texture, drawPos, frame, color, Projectile.rotation - 1.57f, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
 			}
 

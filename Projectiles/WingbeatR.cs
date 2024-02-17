@@ -228,8 +228,8 @@ namespace LobotomyCorp.Projectiles
             {
                 Main.player[Projectile.owner].AddBuff(ModContent.BuffType<Buffs.Festival>(), 300);
             }
-
-            ModContent.GetInstance<ScreenSystem>().ScreenShake(15, 4f, 0, false);
+            if (Main.myPlayer == Projectile.owner)
+                ModContent.GetInstance<ScreenSystem>().ScreenShake(15, 4f, 0, false);
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

@@ -15,6 +15,10 @@ namespace LobotomyCorp.Configs
         //[Label("Screenshake Enabled")]
         [DefaultValue(true)]
         public bool ScreenShakeEnabled;
+
+        [DefaultValue(1f)]
+        [Range(0f, 1f)]
+        public float ScreenEffectOpacity;
     }
 
     public class LobotomyServerConfig : ModConfig

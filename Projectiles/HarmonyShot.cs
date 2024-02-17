@@ -12,13 +12,16 @@ namespace LobotomyCorp.Projectiles
 			Projectile.width = 24;
 			Projectile.height = 24;
 			Projectile.aiStyle = -1;
-			Projectile.penetrate = 1;
+			Projectile.penetrate = 3;
 			Projectile.scale = 1f;
 
             Projectile.alpha = 255;
 			Projectile.DamageType = DamageClass.Magic;
 			Projectile.tileCollide = false;
 			Projectile.friendly = true;
+
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = -1;
 		}
 
 		public override void AI() {
@@ -36,12 +39,31 @@ namespace LobotomyCorp.Projectiles
 			}
 		}
 
-        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
-        {
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+		{
 			for (int i = 0; i < 8; i++)
 			{
 				Main.dust[Dust.NewDust(target.position, target.width, target.height, ModContent.DustType<Misc.Dusts.NoteDust>())].velocity.Y -= 1f;
 			}
+
+            float bounceDistance = 1000;
+			bool hasTarget = false;
+            foreach (NPC n in Main.npc)
+			{
+				float nDist = n.Center.Distance(Projectile.Center);
+				if (n.active && n.CanBeChasedBy(this) && Projectile.localNPCImmunity[n.whoAmI] >= 0 && nDist < bounceDistance)
+				{
+					bounceDistance = nDist;
+					float speed = Projectile.velocity.Length();
+					Projectile.velocity = n.Center - Projectile.Center;
+					Projectile.velocity.Normalize();
+					Projectile.velocity *= speed;
+					hasTarget = true;
+					//TargetPos = n.Center;
+				}
+			}
+			if (!hasTarget)
+				Projectile.Kill();
 		}
     }
 

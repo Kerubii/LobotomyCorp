@@ -42,15 +42,15 @@ namespace LobotomyCorp.Items.Teth
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.Silk, 20)
-            .AddIngredient(ItemID.GoldBar, 10)
+            .AddIngredient(ItemID.Silk, 5)
+            .AddIngredient(ItemID.GoldBar, 5)
             .AddIngredient(ItemID.IllegalGunParts)
             .AddTile(Mod, "BlackBox")
             .Register();
 
             CreateRecipe()
-            .AddIngredient(ItemID.Silk, 20)
-            .AddIngredient(ItemID.PlatinumBar, 10)
+            .AddIngredient(ItemID.Silk, 5)
+            .AddIngredient(ItemID.PlatinumBar, 5)
             .AddIngredient(ItemID.IllegalGunParts)
             .AddTile(Mod, "BlackBox")
             .Register();

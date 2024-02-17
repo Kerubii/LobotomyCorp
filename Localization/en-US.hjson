@@ -103,6 +103,7 @@ Mods: {
 					With steel in one hand and gunpowder in the other, there's nothing to fear in this place.
 					It's more important to deliver a decisive strike in blind hatred without hesitation than to hold on to insecure courage.
 					Benefits from Ranged damage increases
+					Empowers next Range attack after hitting with a Normal Melee attack and vice versa
 					50% increased damage under 50% health
 					'''
 				DisplayName: Crimson Scar
@@ -113,6 +114,7 @@ Mods: {
 					'''
 					To see this E.G.O, one must thoroughly concentrate.
 					You can ignore the ridiculous advice that you can see it with your mind.
+					Randomizes enemy stats on first hit
 					'''
 				DisplayName: Diffraction
 			}
@@ -363,7 +365,7 @@ Mods: {
 					A versatile equipment made to cut down trees and people alike.
 					Perhaps sharpening the axe was the one thing it didn't neglect. The blade is always shiny.
 					'''
-				DisplayName: Lumber
+				DisplayName: Logging
 			}
 
 			MagicBullet: {
@@ -383,7 +385,7 @@ Mods: {
 					As if it were a reminder that it should remain a mere desire.
 					It can deliver a powerful downswing that should be impossible for a human.
 					Can be charged for 300% increased damage
-					Recovers 25% damage dealt on the first hit
+					Recovers 25% damage dealt on the first enemy hit on swing
 					'''
 				DisplayName: Mimicry
 			}
@@ -577,7 +579,7 @@ Mods: {
 			TodaysExpression: {
 				Tooltip:
 					'''
-					Many different expressions are pdamageed on the equipment like patches.
+					Many different expressions are padded on the equipment like patches.
 					The inability to show one's face is perhaps a form of shyness.
 					'''
 				DisplayName: Todays Expression
@@ -805,6 +807,7 @@ Mods: {
 					Funny Prank - After dealing enough indirect damage (with allies or minions) against enemies with Gift. The Gift explodes and deals damage
 					Friend - Friends spawn from Gift explosion and becomes a minion, after dealing enough damage they explode
 					|Being Lonely is Sad - If the last Friend explodes, 100% increased damage taken until death or a new Friend spawns
+					This Item is incomplete and unobtainable
 					'''
 			}
 
@@ -828,10 +831,11 @@ Mods: {
 				Tooltip: You see a song in front of you. It's approaching, becoming more colorful by the second.
 				PassiveList:
 					'''
-					Echoes from the Beyond - Alternate attack to damage enemies around you, Inflicts Enlightenment for 20 seconds
-					Enlightenment - True melee attacks and other allies deal 20% increased damage, Immune to Echoes from the Beyond
-					Tentacles - Pierced enemies has less damage resistance from Echoes from the Beyond (Up to 200%)
-					|Understand - The user deals 50% decreased damage with any projectiles against enemies with Enlightenment
+					Echoes from the Beyond - Alternate attack to Echo. after 5 seconds, remove Tentacles and inflict Enlightenment on those hit for 20 seconds
+					Enlightenment - True melee, Spears and other allies deal 20% increased damage, Immune to Echoes from the Beyond and Tentacles
+					Tentacles - Hitting enemies decreases their damage resistance to Echoes from the Beyond (from 10% to 400% damage)
+					|Understand - The user deals decreased damage with any projectiles against enemies with Enlightenment
+					This Item is incomplete and unobtainable
 					'''
 			}
 
@@ -840,25 +844,133 @@ Mods: {
 				Tooltip: A teardrop fell from the child's dewy eyes, as stars showered from the sky. The world falls into a slumber, trapped in an ecstatic lullaby.
 				PassiveList:
 					'''
-					An Eternal Farewell - Summon comets that explodes, healing the user and its allies on hit
+					An Eternal Farewell - Summon multiple comets that explodes, healing the nearest injured ally on hit
 					A Token of Friendship - Allies healed by this weapon gain a Pebble that is only removed when they die
-					Pebble - Gain increased life regeneration based on how many other allies have Pebble
+					Pebble - Gain increased life regeneration based on how many other allies have Pebble, Regeneration disabled under Potion Sickness
 					|Teardrop - If an ally with a Pebble die, the user and all other allies with Pebble also die
+					This Item is incomplete and unobtainable
 					'''
 			}
 
-			FaintAromaR: {
+			FaintAromaS: {
 				DisplayName: Faint Aroma
 				Tooltip: Bearing the hope to return to dust, it shall go back to the grave with all that desires to live.
 				PassiveList:
 					'''
-					Magnificent End - Hitting an enemy while having 3 petals consumes them and deal 300% of your weapon's damage to all enemies around you
-					Flower Petals - Hitting enemies or charging up with Right click grants a petal that dissapears overtime
-					Spring's Genesis - Each petal enhances your normal attacks and damage
+					Spring's Genesis - Alternate attack lunges forwards, hit enemies gain a Laurel Wreath
+					Magnificent End - Holding Alternate attack while having 3 petals consumes all of it and applies 300% damage to all enemies nearby and removes Laurel Wreath
+					Flower Petals - Hitting enemies charges up to 3 petal that dissapears after a short time, enhancing this weapon's attacks and damage
 					Doll Fashioned from the Earth - Negate any negative life regen while a petal is active
-					|Autumn's Passing - 10% increased contact damage taken per petals
+					|Laurel Wreath - 15% increased contact damage per full petals on the user
 					This Item is incomplete and unobtainable
 					'''
+			}
+
+			PleasureR: {
+				DisplayName: Pleasure
+				Tooltip: Now it's time for my head to burst. Good day.
+				PassiveList:
+					'''
+					Time for the Head to Burst - Summon a tail that attacks enemy marked by this EGO, or nearby enemies while using other items. Disabling the EGO costs 50% of your maximum Mana
+					Pleasure - 20% Chance to inflict Pleasure to enemies that can be ruptured.
+					Thrill - After an enemy has enough Pleasure, take damage equal to the 300% damage of this EGO or 5% of their maximum health (Whichever is greater)
+					Fluttering - Chance to dodge Projectiles, Increased chances while no enemy is nearby or no boss is alive. 15% increased Wing acceleration
+					A Game of Trust - 60% of the damage taken is converted into mana damage
+					|Laughing Powder - Heavily decreased Mana Regen and disables Mana Potion heal. When reaching 0 Mana, take 50% maximum health damage and restore Max Mana
+					This Item is incomplete and unobtainable
+					'''
+			}
+
+			DaCapoR: {
+				DisplayName: Da Capo
+				Tooltip: From break and ruin, the most beautiful performance begins.
+				PassiveList:
+					'''
+					Ever-repeating Performance - Alternate attack to start a Performance with each movement inflicting buffs to allies and debuffs against enemies and summons Chairs that attack nearby enemies
+					Accelerando - True melee hits enhances this EGO's combo, During Movement 3 and above, further enhances this EGO
+					Finale - During Finale, all damage done by this weapon during the peformance is distributed to all enemies
+					|Al Fine - The Performance never ends. Repeating intensifies its effects and applies buffs and debuffs to everyone
+					Fervent Adoration - After repeating, all allies and enemies are affected by the Performance and this weapon's effects
+					This Item is incomplete and unobtainable
+					'''
+			}
+
+			#Language
+			
+			MimicryR: {
+				Tooltip: And the many shells cried out one word, "Manager".
+				DisplayName: Mimicry
+				PassiveList:
+					'''
+					GoDdByE - Can be charged and deal up to 1000% increased damage
+					heLLo? - Alternate attack shoots a piercing Projectile and reduces Shell timer
+					Mimic - After killing an enemy with this EGO while not having Shell, Restore 20% of your maximum health and gain Shell
+					Shell - Gain increased stats from a killed enemy, Allows the use of Goodbye and Hello?
+					|Cocoon - When Shell runs out, transform into a Cocoon disabling movement with Life Regeneration and gain Hollow Husk
+					Hollow Husk - Permanently gain a debuff that increases its debuff the longer time you have no Shell
+					This Item is incomplete and unobtainable
+					'''
+			}
+
+			#Natural Science
+			
+			SwordSharpenedWithTearsR: {
+				Tooltip: All that remains is the hollow pride of a weathered knight.
+				PassiveList:
+					'''
+					Heart-piercing sword - Summon three swords that floats around you
+					Whetted with Teardrops - Critical hits ignores defense
+					Blessing - When a teammate stands near you while using with this weapon, they gain Blessed buff. Only one Blessed at a time
+					Blessed - 50% decreased damage taken, 10% chance to recieve double damage with no reduction instead, Only active while this weapon is held
+					|Despair - If no Blessed teammate is present, Attacks deals a flat amount of damage, -10 defense and if a sword misses, it impales the user
+					This Item is incomplete and unobtainable
+					'''
+				DisplayName: Sword Sharpened With Tears
+			}
+
+			NihilR: {
+				Tooltip: If you're confused because there doesn't seem to be a correct method at the moment, just trust your intuition!
+				PassiveList:
+					'''
+					All Returns to Nihil - When held or equipped, Grants Flight and major increase to defense, speed, life regeneration, and defense
+					Nix - The weapon has 5 different modes listed below and Starts at Will of Nihil, different modes changes All Returns to Nihil buffs
+					Will of Nihil - Summon all other modes as playing cards. Attack to apply a debuff to all enemies, Permanently decreasing their damage and defense by 5%, and switch to a chosen mode for 10 seconds
+					Worthless Greed - Summon multiple fists, Dash to hit enemies, Create portals and dash through them to teleport
+					Pointless Hate - Shoot stars. After doing enough damage, shoot a laser beam to the nearest high health enemy
+					Meaningless Despair - Create three swords that attacks nearby enemies, Swords deal true damage
+					Senseless Wrath - Rapidly swing an acidic hammer, creating splashes of Acid that inflicts Erosion
+					|Void - Only usable and active when inventory, armor and accessories slots are empty except for this item or Encumbering Stone
+					This Item is incomplete and unobtainable
+					'''
+				DisplayName: Nihil
+			}
+
+			InTheNameOfLoveAndHateR: {
+				Tooltip: In the name of Love and Justice~ Here comes Magical Girl!
+				PassiveList:
+					'''
+					Arcana Slave - Summon a laser of Love and Justice that costs {0} mana, Resets to maximum when used
+					Justice - Hitting an enemy or getting hit reduces Arcana Slave cost, resets when used
+					Villain - Hitting an enemy with Arcana Beats marks them, increasing Justice and Hate gained
+					Love - Increases defense and lowers damage when hitting enemies
+					|Hate - Getting hit reduces defense and increases damage. After getting hit enough times, turns all attacks of this weapon into lasers
+					This Item is incomplete and unobtainable
+					'''
+				DisplayName: In The Name Of Love And Hate
+			}
+
+			#Social
+			
+			TheHomingInstinctS: {
+				Tooltip: ""
+				DisplayName: The Homing Instinct
+			}
+
+			#Philosophy
+			
+			BeakR: {
+				Tooltip: ""
+				DisplayName: Beak
 			}
 
 			#Originals
@@ -927,41 +1039,6 @@ Mods: {
 				Tooltip: ""
 			}
 
-			TheHomingInstinctS: {
-				Tooltip: ""
-				DisplayName: The Homing Instinct S
-			}
-
-			BeakR: {
-				Tooltip: ""
-				DisplayName: Beak R
-			}
-
-			SwordSharpenedWithTearsR: {
-				Tooltip: ""
-				DisplayName: Sword Sharpened With Tears R
-			}
-
-			NihilR: {
-				Tooltip: ""
-				DisplayName: Nihil R
-			}
-
-			InTheNameOfLoveAndHateR: {
-				Tooltip: ""
-				DisplayName: In The Name Of Love And Hate R
-			}
-
-			MimicryR: {
-				Tooltip: ""
-				DisplayName: Mimicry R
-			}
-
-			FaintAromaS: {
-				Tooltip: ""
-				DisplayName: Faint Aroma S
-			}
-
 			HeartOfAspiration: {
 				DisplayName: Heart Of Aspiration
 				Tooltip: ""
@@ -976,72 +1053,26 @@ Mods: {
 				Tooltip: ""
 				DisplayName: Harmony Note
 			}
+
+			RegretChestplate: {
+				DisplayName: Regret Chestplate
+				Tooltip: ""
+			}
+
+			RegretGift: {
+				DisplayName: Regret Gift
+				Tooltip: ""
+			}
+
+			RegretPants: {
+				DisplayName: Regret Pants
+				Tooltip: ""
+			}
 		}
 
 		#DONT transfer this to Items it deletes them :V
 		EgoItemTooltip: {
 			RealizedEgo: A Realized E.G.O
-
-			#Art
-			
-			FragmentsFromSomewhere: {
-				ItemTooltip: You see a song in front of you. It's approaching, becoming more colorful by the second.
-				PassiveList:
-					'''
-					Echoes from the Beyond - Alternate attack to damage enemies around you, Inflicts Enlightenment for 20 seconds
-					Enlightenment - True melee attacks and other allies deal 20% increased damage, Immune to Echoes from the Beyond
-					Tentacles - Pierced enemies has less damage resistance from Echoes from the Beyond (Up to 200%)
-					|Understand - The user deals 50% decreased damage with any projectiles against enemies with Enlightenment
-					'''
-			}
-
-			OurGalaxy: {
-				ItemTooltip: A teardrop fell from the child's dewy eyes, as stars showered from the sky. The world falls into a slumber, trapped in an ecstatic lullaby.
-				PassiveList:
-					'''
-					An Eternal Farewell - Summon comets that explodes, healing the user and its allies on hit
-					A Token of Friendship - Allies healed by this weapon gain a Pebble that is only removed when they die
-					Pebble - Gain increased life regeneration based on how many other allies have Pebble
-					|Teardrop - If an ally with a Pebble die, the user and all other allies with Pebble also die
-					'''
-			}
-
-			Pleasure: {
-				ItemTooltip: Now it's time for my head to burst. Good day.
-				PassiveList:
-					'''
-					Time for the Head to Burst - Alternate attack use 20 Mana, Forcefully explodes Pleasure
-					Pleasure - Attacks inflict Pleasure to enemies, increasing damage taken from this weapon
-					Thorns - If the attacker has Pleasure, reflect 60% of damage taken and heal 10% of the damage back
-					Elation - After an enemy has enough Pleasure, they explode taking additional damage and bleed
-					Fluttering - Dodges Projectiles if no enemy is nearby
-					|Laughing Powder - Heavily decreased Mana regeneration, Mana decreases when taking damage. When Mana reaches 0 take 50% damage from your health and set Mana to max
-					'''
-			}
-
-			FaintAroma: {
-				ItemTooltip: Bearing the hope to return to dust, it shall go back to the grave with all that desires to live.
-				PassiveList:
-					'''
-					Magnificent End - Hitting an enemy while having 3 petals consumes them and deal 300% of your weapon�'s damage to all enemies around you
-					Flower Petals - Hitting enemies or charging up with Right click grants a petal that dissapears overtime
-					Spring's Genesis - Each petal enhances your normal attacks and damage
-					Doll Fashioned from the Earth - Negate any negative life regen while a petal is active
-					|Autumn's Passing - 10% increased contact damage taken per petals
-					This Item is incomplete and unobtainable
-					'''
-			}
-
-			DaCapo: {
-				ItemTooltip: From break and ruin, the most beautiful performance begins.
-				PassiveList:
-					'''
-					Ever-repeating Performance - Alternate attack to start a Performance, Automatically moves to the next movement
-					Finale - During Finale, all damage done by this weapon during the peformance is distributed to all enemies, Fully heal all allies
-					Fervent Adoration - Enemy Projectiles can hit other Enemies during a Performance
-					|From the Beginning - After performance ends, start again. If the Performance is stopped except during Finale, the user gains a debuff
-					'''
-			}
 
 			#Natural
 			
@@ -1049,11 +1080,12 @@ Mods: {
 				ItemTooltip: In the name of Love and Justice~ Here comes Magical Girl!
 				PassiveList:
 					'''
-					Arcana Slave - Summon a laser of Love and Justice that costs {$0} mana, Resets to maximum when used
+					Arcana Slave - Summon a laser of Love and Justice that costs {0} mana, Resets to maximum when used
 					Justice - Hitting an enemy or getting hit reduces Arcana Slave cost, resets when used
 					Villain - Hitting an enemy with Arcana Beats marks them, increasing Justice and Hate gained
 					Love - Increases defense and lowers damage when hitting enemies
 					|Hate - Getting hit reduces defense and increases damage. After getting hit enough times, turns all attacks of this weapon into lasers
+					This Item is incomplete and unobtainable
 					'''
 			}
 
@@ -1078,6 +1110,7 @@ Mods: {
 					Fragment of Bliss - Attacked enemies are given a Brilliant Bliss, Up to 5 active Bliss at a time. If an enemy dies it stays on its current spot
 					Intemperance - Critical hits heal 10% of its damage and temporarily reduces enemy defense
 					|Greed - While under 50% health, 40% decreased attack speed and movement and gain 30% critical strike chance, Road of king only targets 1 enemy
+					This Item is incomplete and unobtainable
 					'''
 			}
 
@@ -1089,6 +1122,7 @@ Mods: {
 					Acidic Sludge - Up to 15% increased damage taken and deals up to 15 damage when hit
 					Companion - Alternate attack marks an ally with Companion, Gain 10% increased damage when hitting enemies attacked by Companion. Removed if Wrath is activated
 					|Wrath - After taking a total damage equal to 25% of your health, Increased splash radius, attacks erratically and be able to hit allies
+					This Item is incomplete and unobtainable
 					'''
 			}
 
@@ -1104,6 +1138,7 @@ Mods: {
 					Meaningless Despair - Create three swords that attacks nearby enemies, Swords deal true damage
 					Senseless Wrath - Rapidly swing an acidic hammer, creating splashes of Acid that inflicts Erosion
 					|Void - Only usable and active when inventory, armor and accessories slots are empty except for this item or Encumbering Stone
+					This Item is incomplete and unobtainable
 					'''
 			}
 
@@ -1114,7 +1149,7 @@ Mods: {
 				PassiveList:
 					'''
 					Bullet Shower - Alternate attack to shoot a barrage of bullets, First enemy hit by a bullet is marked as Prey and shows its general direction
-					Strike without Hesitation - Under 50% health, attacks turn into thrown sickles and Bullet Shower increases in intensity and inaccuracy, Can hit allies
+					Strike without Hesitation - Under 50% health, Two additional sickles are thrown to nearby enemies and Bullet Shower increases in intensity and inaccuracy, Can hit allies
 					Prey - Deal 20% increased damage to marked Prey, 50% if hitting with a true melee
 					Rudded Welts - Gain increased damage depending on health loss, up to 20% at 25% health
 					Vengeance - Getting hit by Prey temporarily increases damage by 20%
@@ -1126,10 +1161,10 @@ Mods: {
 				ItemTooltip: Still, it didn�t matter to him. After all, he was "destined" to be a big bad wolf.
 				PassiveList:
 					'''
-					Uncontrollable Instinct - Dealing damage inflicts Scars
-					Scars - Up to 20% Increased damage taken from this weapon, Maximum of 10 Stacks
-					Howl - Alternate attack to Howl, Rupturing all inflicted Scars that deals damage and applies damage over time
-					Claws of Savagery - After dealing enough damage by Rupturing Scars, temporarily turn into an invincible black mist for 5 seconds and deal contact damage
+					Uncontrollable Instinct - Each hit inflicts Scars
+					Scars - Up to 20% Increased damage taken from this weapon, Maximum of 10 Stacks. Removes itself after 5 seconds
+					Howl - Alternate attack to Howl, Rupturing all inflicted Scars dealing damage and applies damage over time
+					Claws of Savagery - After Howl deals enough damage, temporarily turn into an invincible black mist for 5 seconds, gain 10% lifesteal and deal contact damage
 					|Role of the Wolf - After using this weapon, be unable to use any other weapons before activating Claws of Savagery
 					'''
 			}
@@ -1142,7 +1177,8 @@ Mods: {
 					Mountain of Corpses - Gain increase damage and slower attack speed while equal to current Corpse stack
 					Horrid Screech - While having 12 Corpses, Alternate attack to scream and consume 2 Corpses
 					Vomit - While having more than 6 Corpses, Alternate attack to do a long range vomit and consume 1 Corpse
-					|In Search of Corpses - Getting hit reduces 1 Corpse stack. After reaching 0 Corpses, die instantly
+					|In Search of Corpses - After gaining atleast 1 Corpse stack, Getting hit reduces 1 Corpse stack. Die instantly when it reaches 0
+					Division - 
 					'''
 			}
 
@@ -1182,7 +1218,7 @@ Mods: {
 					'''
 			}
 
-			Lumber: {
+			Logging: {
 				ItemTooltip: This is a forest full of hearts. No matter how many he cuts down, the forest still remains dense.
 				PassiveList:
 					'''
@@ -1231,10 +1267,11 @@ Mods: {
 				ItemTooltip: Soon, Oz came to be called a wizard by the people.
 				PassiveList:
 					'''
-					Emerald - While standing still, spawn 
-					Magic Trick - All weapons cost 0 mana for 10 seconds
-					Playtime is Over!!! - a
-					|False Present - a
+					Emerald - Create emerald shards that attack nearby enemies and recovers 2 Mana on hit when using a magic weapon or holding a Summoner weapon 
+					Magic Trick - All weapons cost 0% mana while this EGO is active
+					False Present - Any random ally present gets a buff and debuff depending on their highest damage stat
+					Playtime is Over!!! - Mana drains when moving. When reaching 0 mana enter an Anger state
+					|Anger - Become Stationary,
 					'''
 			}
 
@@ -1295,7 +1332,7 @@ Mods: {
 					'''
 					Lean, Bloody Wings - Alternate attack to damage all enemies in the screen
 					Gaze of Others - a
-					|Attention and Focus - Cannot use this weapon if atleast 1 enemy is targeting you
+					|Attention and Focus - Cannot damage enemies targeting you and in line of sight
 					'''
 			}
 
@@ -1651,11 +1688,131 @@ Mods: {
 				Common: Common
 				Low: Low
 				VeryLow: Very Low
-				RedText.1: 2:
+			}
+
+			WorkProcess: {
+				R: {
+					1: Check Vitals
+					2: Check Nutrition Demands
+					3: Activate Nourishing Sequence
+					4: Allocate 37% Cogito
+					5: Examine Fear Indices
+					6: Adjust Fluid Intake
+					7: Check Epidermal Strength
+					8: Adjust Homeostatic Integrity
+					9: Repair Collapsed Tissues
+					10: Analyze Nervous System
+					11: Analyze Decomposition Rate
+					12: Analyze Organic Composition
+					13: Check Innate Traits
+					14: Empower Self-Preservation
+					15: Adopt Ethological Approach
+					16: Relieve Instinctual Needs
+					17: Suppress Static Bodily Responses
+					18: Check Innate Inducers
+					19: Analyze Environmental Stimulation
+					20: Classical Conditioning
+					21: Instrumental Conditioning
+					22: Test Conditioned Stimulus
+					23: Reinforce Neutral Stimulation
+					24: Alleviate Physiological Needs
+					25: Induce Physiological Satisfaction
+					26: Operant Conditioning
+				}
+
+				W: {
+					1: Analyze Air Quality
+					2: Filter Air
+					3: Begin Grooming Procedure
+					4: Decontaminate Floor
+					5: Adjust Light Intensity
+					6: Commence Multilateral Bioanalysis
+					7: Analyze Behavioural Patterns
+					8: Check Containment Unit Functions
+					9: Check Aesthetic Pleasing of Environment
+					10: Review Optimum Environment
+					11: Check Sound System
+					12: Assess Calming Sound Efficiency
+					13: Examine Stressors
+					14: Analyze Existential Awareness
+					15: Analyze Environment-Cognition Model
+					16: Check Sentience and Selective Memory
+					17: Test Heuristic Skills
+					18: Test Objective Thinking
+					19: Test Cognitive Development
+					20: Analyze Perceptive Reactions
+					21: Check Voluntary Motives
+					22: Check Intellectual Demand
+					23: Check Formative Estimation
+					24: Commence Phenomenological Observation
+					25: Monitor Gestalt Indices
+					26: Analyze Psychological and Physical Isomorphism
+					27: Check Methodical Gradient
+				}
+
+				B: {
+					1: Analyze Emotional State
+					2: Analyze Individual Preferences
+					3: List Friendly Behaviours
+					4: Test Stress
+					5: Attempt Direct Contact
+					6: Attempt Emotional Communion
+					7: Attempt Rational Conversation
+					8: Check Attachment Level
+					9: Adjust Target of Attachment Behaviours
+					10: Analyze Attachment Type
+					11: Check Level of Attachment as Means to Escape Insecurity
+					12: Check Attachment Stability Levels
+					13: Check Level of Attachment as Means to Resist Insecurity
+					14: Analyze Psychological Mechanisms
+					15: Check Internal Working Model
+					16: Attempt to Materialize Internal Representations
+					17: Analyze Relation Formation Mechanics
+					18: Apply Cognitive Theory
+					19: Check Oxytocin and Vasopressin Receptor Activities
+					20: Test Mutual Trust Levels
+					21: Test Alternative Estrangement
+					22: Examine Awareness
+					23: Analyze Active Expression Traits
+					24: Resolve Social Needs
+					25: Reinforce the Ego
+				}
+
+				P: {
+					1: Upgrade Qliphoth Deterrence
+					2: Delete Memories
+					3: Evict Consciousness
+					4: Repress Abstraction
+					5: Repress Neurosis
+					6: Repress Regression
+					7: Perform Secondary Repression
+					8: Perform Eradication of Desire
+					9: Evict Impulsive Behaviors
+					10: Repress Instinct
+					11: Disrupt Attachment
+					12: Dualize Desires
+					13: Eliminate Impulsive Circuits
+					14: Repress Death Drive
+					15: Terminate Desires
+					16: Imprint Superego
+					17: Accelerate Energy Polarity
+					18: Repress Archetype
+					19: Attempt Ideological Isolation
+					20: Neutralize Origin Configuration
+					21: Treat Hysteria
+					22: Disassemble Complex Ideas
+					23: Evict Symbolism
+					24: Break Recursive Chains
+					25: Differentiate Libido
+					26: Accelerate Single-Point Regression
+				}
+
+				End: All Work Termination Algorithms Operational
 			}
 
 			2: {
 				Name: Scorched Girl
+				NameOld: Match Girl
 
 				Story: {
 					1: It takes the form of a girl burnt to ashes. Even though there's nothing left to burn, the fire still doesn't extinguish.
@@ -1672,13 +1829,51 @@ Mods: {
 				}
 
 				FlavourText: {
-					1: Please be advised that Scorched Girl's Encyclopedia is incomplete, so anything undocumented could occur.
-					2: AAAA
+					Start: {
+						1: Please be advised that Scorched Girl's Encyclopedia is incomplete, so anything undocumented could occur.
+						2: The entries on {0} are almost complete, so as long as we remain cautious, work will successfully finish with her.
+					}
+
+					Mid1: {
+						1: "{0} hides in the corner as soon as {1} enters the unit."
+						2: "{0} observes how {1} responds but backs up towards the wall."
+						3: "{0} watches {1} work while standing in the corner."
+						4: "{0} seems frightened and moves to one of the corners of the unit."
+					}
+
+					Mid2: {
+						1: "{0} stands perfectly still, as if the burning flames do not hurt her one bit."
+						2: Only the match piercing {0} burns wildly.
+						3: Unlike the fiery and vibrant match, {0} stands motionless in the Containment Unit.
+						4: The match burns ever brightly, but {0} does not move an inch.
+					}
+
+					Mid3: {
+						1: "{0} closely examines the remaining length of the match."
+						2: If the match is almost burned through, it will be very dangerous. {1} tensely watches {0}.
+						3: Fortunately, there’s still enough of the match left to burn. But when the flame’s fuel finally runs out...
+						4: Ashes scatter around the Containment Unit. Half of the match still seems unburnt.
+					}
+
+					Mid4: {
+						1: "{0} completes their work while the fire gently flickers."
+						2: There is no one inside the fire, however, {0}’s eyes gleam as if she sees someone.
+						3: There is nothing and nobody inside that flame.
+						4: Only the ashes of the burnt match scatter over {0}.
+					}
+
+					Special1: {
+					}
+
+					Special2: {
+					}
 				}
 			}
 
 			3: {
 				Name: One Sin and Hundreds of Good Deeds
+				NameOld: One Sin and Hundreds of Good Deeds
+				CodeNo: O-03-03
 
 				Story: {
 					1:
@@ -1722,87 +1917,118 @@ Mods: {
 				}
 
 				Tips: {
-					1: "{$0} will restore the employee�s mental state when the work result is Good. Joshua, who received this benediction, commented that it felt refreshing."
+					1: $0} will restore the employee's mental state when the work result is Good. Joshua, who received this benediction, commented that it felt refreshing.
 					2: After the maximum number of PE-Boxes was produced with {$0}, it restored the mental health of every employee in the department.
 				}
 
 				FlavourText: {
 					Start: {
+						1: "{0} is understandably terrified of entering the Containment Unit."
+						2: Depending on the situation, {0} may have a positive effect on employees.
+						3: It may be best to send an “honest” employee to tend to {0}
+						4: "{0} can see straight through you."
 					}
 
 					Mid1: {
+						1: "{0} awaits humanity’s sin."
+						2: The sins of {1} shall reach {0} soon.
+						3: At times, {0} will menacingly click its teeth, but it’s nothing to worry about.
+						4: "{0} floats gently in the air, moving sluggishly."
 					}
 
 					Mid2: {
+						1: Although {0} has no eyes, it recognizes the presence of {1} in the room.
+						2: "{0} is your punisher"
+						3: "{1} witnesses the solemnity of {0}, and reveres it."
 					}
 
 					Mid3: {
+						1: "{1} has completed the task, but {0} was indifferent."
+						2: As {1}’s work proceeded, {0} did not respond at all.
+						3: "{1} failed to elicit a response from {0}."
 					}
 
 					Mid4: {
+						1: To be willing to bear pain is half the atonement.
+						2: Only those who deceive themselves can live truly happy lives. Ignorance is bliss.
+						3: Is it not possible to just once forgive an act of evil, as long as the intentions behind it were pure?
 					}
+
+					Special1: {
+						1: "{1} confesses about missing work to {0}"
+						2: "{1} confesses about lying to their parents to {0}."
+						3: "{1} confesses about being jealous of a friend to {0}."
+						4: "{1} confessed about “The Incident of Last July” to {0}."
+					}
+
+					Special2: {
+						1: Punishment shall begin to rain down
+						2: Eternal guilt will likely be the greatest of punishment for {0}
+					}
+
+					Special3.3: All Thoughts are extinguished from {0}, Agony and anxiety press upon them, with no outlet
 				}
 			}
 		}
 
 		Projectiles: {
-			TwilightStrikes.DisplayName: Twilight Strikes
-			TwilightSpecial.DisplayName: Twilight Special
-			TwilightSlashes.DisplayName: Twilight Slashes
-			TwilightSlash.DisplayName: Twilight Slash
-			TwilightEye.DisplayName: Twilight Eye
-			SyrinxShot.DisplayName: Syrinx Shot
+			TwilightStrikes.DisplayName: Twilight
+			TwilightSpecial.DisplayName: Twilightl
+			TwilightSlashes.DisplayName: Twilight
+			TwilightSlash.DisplayName: Twilight
+			TwilightEye.DisplayName: Twilight
+			SyrinxShot.DisplayName: Syrinx
 			SwordSharpenedWithTearsProj.DisplayName: Sword Sharpened With Tears
-			StarShot.DisplayName: Star Shot
+			StarShot.DisplayName: In the Name of Love and Hate
 			Spore.DisplayName: Spore
-			SpearExtender.DisplayName: Sharp edge
-			SoundOfAStarShoot.DisplayName: Sound Of A Star Blasts
+			SpearExtender.DisplayName: Edge
+			SoundOfAStarShoot.DisplayName: Sound Of A Star
 			SoundOfAStar.DisplayName: Sound Of A Star
 			SoCute.DisplayName: So Cute
-			SmileSpecial.DisplayName: Smile Special
-			SmileShockwave.DisplayName: Smile Shockwave
+			SmileSpecial.DisplayName: Smile Scream
+			SmileShockwave.DisplayName: Smile
 			SmileScream.DisplayName: Smile Scream
-			SmileBits.DisplayName: Smile Bits
-			RedMistSlashSpawner.DisplayName: Red Mist Slash Spawner
-			RedMistSlashes.DisplayName: Red Mist Slashes
-			RealizedSwordSharpenedWithTearsProj.DisplayName: Realized Sword Sharpened With Tears Proj
-			RealizedHornet.DisplayName: Realized Hornet
-			TodaysExpressionWall.DisplayName: Todays Expression Wall
-			Spiderling.DisplayName: Spiderling
-			Spiderbud.DisplayName: Spiderbud
-			SanguineDesireRHeavy.DisplayName: Sanguine Desire R Heavy
-			SanguineDesireR.DisplayName: Sanguine Desire R
-			RegretShockwave.DisplayName: Regret Shockwave
-			RegretShock.DisplayName: Regret Shock
-			RegretR4.DisplayName: Regret R4
-			RegretR3.DisplayName: Regret R3
-			RegretR2.DisplayName: Regret R2
-			RegretR.DisplayName: Regret R
-			RedEyesSlash.DisplayName: Red Eyes Slash
-			OurGalaxyComet.DisplayName: Our Galaxy Comet
+			SmileBits.DisplayName: Corpse bits
+			RedMistSlashSpawner.DisplayName: Twilight
+			RedMistSlashes.DisplayName: Twilight
+			RealizedSwordSharpenedWithTearsProj.DisplayName: Sword Sharpened With Tears
+			RealizedHornet.DisplayName: Hornet
+			TodaysExpressionWall.DisplayName: Today's Expression
+			Spiderling.DisplayName: Red Eyes
+			Spiderbud.DisplayName: Red Eyes
+			SanguineDesireRHeavy.DisplayName: Sanguine Desire
+			SanguineDesireR.DisplayName: Sanguine Desire
+			RegretShockwave.DisplayName: Regret
+			RegretShock.DisplayName: Regret
+			RegretR4.DisplayName: Regret
+			RegretR3.DisplayName: Regret
+			RegretR2.DisplayName: Regret
+			RegretR.DisplayName: Regret
+			RedEyesSlash.DisplayName: Red Eyes
+			OurGalaxyComet.DisplayName: Our Galaxy
 			NihilSOW.DisplayName: Nihil S O W
 			NihilQOH.DisplayName: Nihil Q O H
 			NihilKOGFists.DisplayName: Nihil K O G Fists
 			NihilKOG.DisplayName: Nihil K O G
 			NihilKODSwords.DisplayName: Nihil K O D Swords
 			NihilKOD.DisplayName: Nihil K O D
-			MagicBulletSpawner.DisplayName: Magic Bullet Spawner
-			MagicBulletRGun.DisplayName: Magic Bullet R Gun
-			MagicBulletR.DisplayName: Magic Bullet R
-			LifeForADaredevilR.DisplayName: Life For A Daredevil R
-			LifeForADareDevilEffects.DisplayName: Life For A Dare Devil Effects
-			LaetitiaR.DisplayName: Laetitia R
-			LaetitiaFriend.DisplayName: Laetitia Friend
-			GrinderMk2Cleaner2.DisplayName: Grinder Mk2 Cleaner2
-			FragmentsFromSomewhereSong.DisplayName: Fragments From Somewhere Song
-			FragmentsFromSomewhereRSpear.DisplayName: Fragments From Somewhere R Spear
-			FragmentsFromSomewhereEffect.DisplayName: Fragments From Somewhere Effect
+			MagicBulletSpawner.DisplayName: Magic Bullet
+			MagicBulletRGun.DisplayName: Magic Bullet
+			MagicBulletR.DisplayName: Magic Bullet
+			LifeForADaredevilR.DisplayName: Life For A Daredevil
+			LifeForADareDevilEffects.DisplayName: Life For A Dare Devil
+			LaetitiaR.DisplayName: Laetitia
+			LaetitiaFriend.DisplayName: Friend
+			GrinderMk2Cleaner2.DisplayName: Grinder Mk2 Cleaner
+			FragmentsFromSomewhereSong.DisplayName: Fragments From Somewhere
+			FragmentsFromSomewhereRSpear.DisplayName: Fragments From Somewhere
+			FragmentsFromSomewhereEffect.DisplayName: Fragments From Somewhere
 			FragmentsFromSomewhere.DisplayName: Fragments From Somewhere
-			BlackSwanScream.DisplayName: Black Swan Scream
-			BlackSwanRExtended.DisplayName: Black Swan R Extended
-			BlackSwanR.DisplayName: Black Swan R
-			BlackSwanGooeyWaste.DisplayName: Black Swan Gooey Waste
-			BlackSwanAlternate.DisplayName: Black Swan Alternate
+			BlackSwanScream.DisplayName: Black Swan
+			BlackSwanRExtended.DisplayName: Black Swan
+			BlackSwanR.DisplayName: Black Swan
+			BlackSwanGooeyWaste.DisplayName: Gooey Waste
+			BlackSwanAlternate.DisplayName: Black Swan
 			Circle1.DisplayName: Circle1
 			ArcanaBeats.DisplayName: Arcana Beats
 			PleasureSpear.DisplayName: Pleasure Spear
@@ -1864,7 +2090,7 @@ Mods: {
 			Discord2.DisplayName: Discord2
 			DespairSword.DisplayName: Despair Sword
 			DaCapo.DisplayName: Da Capo
-			CherryBlossomsPetal.DisplayName: Cherry Blossoms Petal
+			CherryBlossomsPetal.DisplayName: Cherry Blossoms
 			CensoredSpike.DisplayName: Censored Spike
 			CensoredGrab.DisplayName: Censored Grab
 			Censored.DisplayName: Censored
@@ -1872,32 +2098,51 @@ Mods: {
 			BearPaw.DisplayName: Bear Paw
 			AngryWorkerBee.DisplayName: Angry Worker Bee
 			Amrita.DisplayName: Amrita
-			AlriuneDeathAnimation.DisplayName: Alriune Death Animation
+			AlriuneDeathAnimation.DisplayName: Faint Aroma
 			PaleRing.DisplayName: Pale Ring
-			SwitchMimicryThrow.DisplayName: Switch Mimicry Throw
-			SwitchDaCapoThrow.DisplayName: Switch Da Capo Throw
-			RedMistMimicry.DisplayName: Red Mist Mimicry
-			RedMistMelee.DisplayName: Red Mist Melee
+			SwitchMimicryThrow.DisplayName: Mimicry
+			SwitchDaCapoThrow.DisplayName: Da Capo
+			RedMistMimicry.DisplayName: Mimicry
+			RedMistMelee.DisplayName: EGO
 			RedMistEye.DisplayName: Red Mist Eye
-			RedMistDaCapo.DisplayName: Red Mist Da Capo
-			JustitiaSlashBoss.DisplayName: Justitia Slash Boss
-			DaCapoThrow.DisplayName: Da Capo Throw
-			DaCapoLegato.DisplayName: Da Capo Legato
-			WingbeatFairy.DisplayName: Wingbeat Fairy
-			WingbeatR.DisplayName: Wingbeat R
+			RedMistDaCapo.DisplayName: Da Capo
+			JustitiaSlashBoss.DisplayName: Justitia
+			DaCapoThrow.DisplayName: Da Capo
+			DaCapoLegato.DisplayName: Da Capo
+			WingbeatFairy.DisplayName: Wingbeat
+			WingbeatR.DisplayName: Wingbeat
 			WorkerBee.DisplayName: Worker Bee
 			WristCutter.DisplayName: Wrist Cutter
 			HeavenBoss.DisplayName: Heaven
-			FaintAromaSlash.DisplayName: Faint Aroma Slash
-			PenitenceStar.DisplayName: Penitence Star
+			FaintAromaSlash.DisplayName: Faint Aroma
+			PenitenceStar.DisplayName: Penitence
 			PenitenceLight.DisplayName: Confession
-			RedEyesEgg.DisplayName: Red Eyes Egg
-			RedEyesSpider.DisplayName: Spiderling
+			RedEyesEgg.DisplayName: Red Eyes
+			RedEyesSpider.DisplayName: Red Eyes
 			GoldRushCrystal.DisplayName: Gold Rush Crystal
 			GoldRushShot.DisplayName: Crystalized Bliss
-			HeavenBranch.DisplayName: Burrowing Branch
+			HeavenBranch.DisplayName: Burrowing Heaven
 			HeavenBranchEye.DisplayName: Burrowing Heaven
-			SmileBobs.DisplayName: Smile Bobs
+			SmileBobs.DisplayName: Smile
+			GreenStemPoke.DisplayName: Green Stem
+			GreenStemTrap.DisplayName: Green Stem
+			FrostSplinterShard.DisplayName: Frost Splinter
+			HeavenBranchPlayer.DisplayName: Heaven
+			GrinderMk4Spark.DisplayName: Grinder Mk4 Spark
+			PleasureSpike.DisplayName: Pleasure
+			SyrinxSound.DisplayName: Syrinx
+			BlackSwanGlob.DisplayName: Gooey Waste
+			CrimsonScarScythe.DisplayName: Crimson Scar Sickle
+			FaintAromaShot.DisplayName: Faint Aroma
+			HypocrisyHeal.DisplayName: Hypocrisy Heal
+			GoldRushFlurry.DisplayName: Gold Rush
+			GoldRushHold.DisplayName: Gold Rush Uppercut
+			DiscordInkShot.DisplayName: Discord Ink Shot
+			DaCapoMusicSlash.DisplayName: Da Capo Music Slash
+			DaCapoPerformance.DisplayName: Da Capo Performance
+			LampProjectile.DisplayName: Lamp Projectile
+			OurGalaxyHeal.DisplayName: Our Galaxy Heal
+			FragmentsFromSomewhereProjectile.DisplayName: Fragments From Somewhere Projectile
 		}
 
 		Buffs: {
@@ -2107,13 +2352,43 @@ Mods: {
 				Description: What careless fool stepped on my baby?
 				DisplayName: Alerted
 			}
+
+			Enlightenment: {
+				DisplayName: Enlightenment
+				Description: The secrets of the universe
+			}
+
+			EnlightenmentPre: {
+				DisplayName: Understanding
+				Description: $&@*!&%*%&@
+			}
+
+			PleasureTail: {
+				DisplayName: Pleasure Tail
+				Description: A tail of your very own
+			}
+
+			Husk: {
+				DisplayName: Husk
+				Description: Mods.LobotomyCorp.Buffs.Husk.Description
+			}
+
+			Shell: {
+				DisplayName: Shell
+				Description: Mods.LobotomyCorp.Buffs.Shell.Description
+			}
+
+			SilentMusic: {
+				DisplayName: Silent Music
+				Description: Mods.LobotomyCorp.Buffs.SilentMusic.Description
+			}
 		}
 
 		Tiles: {
 			QlipothDeterence.MapEntry: Qlipoth Deterence
 			DisciplinaryShell.MapEntry: Disciplinary Shell
 			BlackBox3.MapEntry: Black Box - Extraction
-			BlackBox2.MapEntry: Black Box -
+			BlackBox2.MapEntry: Black Box - Container
 			BlackBox.MapEntry: Black Box
 		}
 

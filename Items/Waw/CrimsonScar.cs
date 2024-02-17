@@ -31,7 +31,7 @@ namespace LobotomyCorp.Items.Waw
 
         public override void SetDefaults()
         {
-            Item.width = 32;
+            Item.width = 34;
             Item.height = 32;
             Item.value = 3000;
             Item.rare = ItemRarityID.Purple;
@@ -75,7 +75,6 @@ namespace LobotomyCorp.Items.Waw
             if (player.altFunctionUse == 2)
             {
                 //Item.DamageType = DamageClass.Ranged;
-                Item.shoot = 10;
                 Item.useTime = 36;
                 Item.useAnimation = 36;
                 Item.useStyle = ItemUseStyleID.Shoot;
@@ -86,7 +85,6 @@ namespace LobotomyCorp.Items.Waw
             else
             {
                 //Item.DamageType = DamageClass.Melee;
-                Item.shoot = 0;
                 Item.useTime = 18;
                 Item.useAnimation = 18;
                 Item.useStyle = 15;
@@ -141,19 +139,62 @@ namespace LobotomyCorp.Items.Waw
 
         public override bool CanShoot(Player player)
         {
-            return player.altFunctionUse == 2;
+            return player.altFunctionUse == 2 || LobotomyModPlayer.ModPlayer(player).CrimsonScarEmpower == 1;
         }
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            damage = (int)(damage * 0.7f);
-            knockback *= 0.7f;
-            base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
+            if (player.altFunctionUse == 2)
+            {
+                damage = (int)(damage * 0.7f);
+                knockback *= 0.7f;
+            }
+            else if (LobotomyModPlayer.ModPlayer(player).CrimsonScarEmpower == 1)
+                type = ModContent.ProjectileType<Projectiles.CrimsonScarScythe>();
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            int empower = LobotomyModPlayer.ModPlayer(player).CrimsonScarEmpower;
+            EmpowerReset(player);
+
+            if (player.altFunctionUse != 2)
+            {
+                return true;
+            }
+
+            int p = Projectile.NewProjectile(source, position, velocity, type, damage, knockback, player.whoAmI);
+            Main.projectile[p].GetGlobalProjectile<LobotomyGlobalProjectile>().CrimsonScarBullet = true;
+            if (empower == 2)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    Vector2 vel = velocity.RotatedByRandom(0.349066f) * Main.rand.NextFloat(0.8f, 1f);
+                    Projectile.NewProjectile(source, position, vel, type, damage / 2, knockback, player.whoAmI);
+                }
+            }
+            return false;
+        }
+
+        private void EmpowerReset(Player player)
+        {
+            LobotomyModPlayer.ModPlayer(player).CrimsonScarEmpower = 0;
+        }
+
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            LobotomyModPlayer.ModPlayer(player).CrimsonScarEmpower = 2;
+            base.OnHitNPC(player, target, hit, damageDone);
+        }
+
+        public override bool CanConsumeAmmo(Item ammo, Player player)
+        {
+            return player.altFunctionUse == 2;
         }
 
         /*public override bool ConsumeAmmo(Player player)
         {
-            return player.altFunctionUse != 2;
+            return 
         }*/
 
         public override void AddRecipes()
@@ -161,7 +202,7 @@ namespace LobotomyCorp.Items.Waw
             CreateRecipe()
             .AddIngredient(ItemID.FlintlockPistol)
             .AddIngredient(ItemID.Sickle)
-            .AddIngredient(ItemID.RedHusk, 2)
+            .AddIngredient(ItemID.RedHusk)
             .AddTile(Mod, "BlackBox3")
             .Register();
         }

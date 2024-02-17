@@ -65,7 +65,7 @@ namespace LobotomyCorp.Items.Aleph
             CreateRecipe()
             .AddIngredient(ItemID.Musket)
             .AddIngredient(ItemID.ClockworkAssaultRifle)
-            .AddIngredient(ItemID.PinkDye, 3)
+            .AddIngredient(ItemID.PinkDye)
             .AddIngredient(ItemID.PinkThread, 3)
             .AddTile(Mod, "BlackBox3")
             .Register();

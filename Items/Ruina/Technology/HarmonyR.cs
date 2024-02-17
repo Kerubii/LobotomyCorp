@@ -80,7 +80,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			{
 				Item.shootSpeed = 16;
 				Item.shoot = ModContent.ProjectileType<Projectiles.HarmonyShotR>();
-				Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/Singing_Shot") with { Volume = 0.5f };
+				Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/Singing_Shot") with { Volume = 0.5f, MaxInstances = 1, SoundLimitBehavior = SoundLimitBehavior.IgnoreNew};
 				Item.useStyle = ItemUseStyleID.Guitar;
 				Item.noUseGraphic = false;
 				return true;

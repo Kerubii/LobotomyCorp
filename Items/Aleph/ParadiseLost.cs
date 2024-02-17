@@ -80,7 +80,7 @@ namespace LobotomyCorp.Items.Aleph
             .AddIngredient(ItemID.SoulofNight, 5)
             .AddIngredient(ItemID.SoulofLight, 10)
             .AddIngredient(ItemID.LightShard)
-            .AddTile(TileID.Anvils)
+            .AddTile(Mod, "BlackBox3")
             .Register();
         }
     }

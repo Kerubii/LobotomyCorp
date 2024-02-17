@@ -15,7 +15,7 @@ namespace LobotomyCorp.Items.He
 
         public override void SetDefaults()
         {
-            Item.damage = 38; // Sets the Item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage damageed together.
+            Item.damage = 50; // Sets the Item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage damageed together.
             Item.DamageType = DamageClass.Ranged; // sets the damage type to ranged
             Item.width = 40; // hitbox width of the Item
             Item.height = 42; // hitbox height of the Item

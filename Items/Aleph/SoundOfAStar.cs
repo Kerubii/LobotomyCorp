@@ -52,9 +52,9 @@ namespace LobotomyCorp.Items.Aleph
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.FallenStar, 50)
-            .AddIngredient(ItemID.SoulofLight, 8)
-            .AddIngredient(ItemID.SoulofNight, 8)
+            .AddIngredient(ItemID.FallenStar, 10)
+            .AddIngredient(ItemID.SoulofLight, 4)
+            .AddIngredient(ItemID.SoulofNight, 4)
             .AddIngredient(ItemID.SapphireGemsparkBlock, 25)
             .AddTile(Mod, "BlackBox3")
             .Register();

@@ -8,14 +8,6 @@ namespace LobotomyCorp.Items.Teth
 {
     public class CherryBlossoms : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            // DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            /* Tooltip.SetDefault("Petals scatter from the fan like afterimages...\n" +
-                               "The spring breeze clad in cherry blossom petals is still cold and painful."); */
-
-        }
-
         public override void SetDefaults()
         {
             Item.damage = 24;
@@ -61,7 +53,6 @@ namespace LobotomyCorp.Items.Teth
             CreateRecipe()
             .AddIngredient(ItemID.Acorn, 3)
             .AddIngredient(ItemID.DynastyWood, 20)
-            .AddIngredient(ItemID.SharkToothNecklace)
             .AddTile(Mod, "BlackBox")
             .Register();
         }

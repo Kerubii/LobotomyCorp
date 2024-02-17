@@ -55,7 +55,7 @@ namespace LobotomyCorp.Items.Waw
 
             Recipe recipe = Recipe.Create(ItemID.TaxCollectorsStickOfDoom);
             recipe.AddIngredient(ItemID.IronBar, 10);
-            recipe.AddTile(ItemID.Hellforge);
+            recipe.AddTile(TileID.Hellforge);
             recipe.Register();
         }
     }

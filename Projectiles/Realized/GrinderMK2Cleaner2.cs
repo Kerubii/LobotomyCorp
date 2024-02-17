@@ -29,7 +29,7 @@ namespace LobotomyCorp.Projectiles.Realized
             Projectile.scale = 1f;
             Projectile.timeLeft = 1000;
 
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.DamageType = DamageClass.Summon;
             Projectile.tileCollide = false;
             Projectile.friendly = true;
 
@@ -354,7 +354,7 @@ namespace LobotomyCorp.Projectiles.Realized
                 dir = player.direction;
 
             //7/3, 41
-            Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/GrinderMk2Arm").Value;
+            Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/Realized/GrinderMk2Arm").Value;
             Vector2 pos = ownerMountedCenter - Main.screenPosition;
             Vector2 origin = new Vector2(texture.Width / 2, 5);
             Rectangle frame = texture.Frame();
@@ -367,7 +367,7 @@ namespace LobotomyCorp.Projectiles.Realized
 
             texture = TextureAssets.Projectile[Projectile.type].Value;
             if (order < 3 && order > 0)
-                texture = Mod.Assets.Request<Texture2D>("Projectiles/GrinderMk2Cleaner").Value;
+                texture = Mod.Assets.Request<Texture2D>("Projectiles/Realized/GrinderMk2Cleaner").Value;
 
             pos = Projectile.Center - Main.screenPosition;
             origin = texture.Size() / 2;
@@ -413,7 +413,7 @@ namespace LobotomyCorp.Projectiles.Realized
             if (order > 0)
                 return false;
 
-            texture = Mod.Assets.Request<Texture2D>("Projectiles/GrinderMk2Battery").Value;
+            texture = Mod.Assets.Request<Texture2D>("Projectiles/Realized/GrinderMk2Battery").Value;
             ownerMountedCenter.Y -= 48;
             pos = ownerMountedCenter - Main.screenPosition;
             origin = texture.Size() / 2;
@@ -421,7 +421,7 @@ namespace LobotomyCorp.Projectiles.Realized
             lightColor = Lighting.GetColor((int)ownerMountedCenter.X / 16, (int)ownerMountedCenter.Y / 16);
             Main.EntitySpriteDraw(texture, pos, new Rectangle?(frame), lightColor, 0, origin, Projectile.scale, SpriteEffects.None, 0);
 
-            texture = Mod.Assets.Request<Texture2D>("Projectiles/GrinderMk2Bar").Value;
+            texture = Mod.Assets.Request<Texture2D>("Projectiles/Realized/GrinderMk2Bar").Value;
             LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(player);
             int frameY = (int)((ModPlayer.GrinderMk2BatteryMax - (float)ModPlayer.GrinderMk2Battery) / ((float)ModPlayer.GrinderMk2BatteryMax / 5)) * texture.Height / 6;
             if (ModPlayer.GrinderMk2Battery < ModPlayer.GrinderMk2BatteryMax / 5 && ModPlayer.GrinderMk2Battery % 30 < 15)

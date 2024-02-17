@@ -42,12 +42,18 @@ namespace LobotomyCorp.Projectiles
             }
             Projectile.rotation += 0.008f * Math.Sign(Projectile.velocity.X);
 
-            if (Main.rand.Next(15) == 0)
+            if (Main.rand.NextBool(15))
             {
                 int d = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GreenMoss);
                 Main.dust[d].noGravity = true;
                 Main.dust[d].fadeIn = 1.2f;
             }
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            target.AddBuff(BuffID.Poisoned, 300);
+            base.OnHitNPC(target, hit, damageDone);
         }
     }
 }

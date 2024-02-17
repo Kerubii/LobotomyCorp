@@ -17,7 +17,7 @@ namespace LobotomyCorp.Items.Waw
 
         public override void SetDefaults()
         {
-            Item.damage = 16;
+            Item.damage = 41;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
@@ -49,7 +49,7 @@ namespace LobotomyCorp.Items.Waw
             CreateRecipe()
             .AddIngredient(ItemID.GlowingMushroom, 75)
             .AddIngredient(ItemID.JungleSpores, 4)
-            .AddTile(Mod, "BlackBox2")
+            .AddTile(Mod, "BlackBox3")
             .Register();
         }
     }

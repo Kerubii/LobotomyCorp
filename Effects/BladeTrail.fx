@@ -23,18 +23,30 @@ float4 uCustomData;
 
 float4 Blade(float4 color : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
+    float2 alphaCoords = coords;
+    if (uCustomData.z > 0)
+    {
+        coords.x *= uCustomData.z / uImageSize1.x;
+    }
+    if (uCustomData.w > 0)
+    {
+        coords.x += uCustomData.w / uImageSize1.x;
+        if (coords.x > 1)
+            coords.x -= 1;
+    }
+
     float4 tex = tex2D(uImage1, coords); //Main image
 
     float4 alpha = tex2D(uImage2, coords); //Alpha image 1, used for general alpha
     color *= alpha.r / 1;//Apply Alpha to Main image
 
-    coords += float2(uCustomData.x, uCustomData.y);
-    if (coords.x > 1)
-        coords.x -= 1;
-    if (coords.y > 1)
-        coords.y -= 1;
+    alphaCoords += float2(uCustomData.x, uCustomData.y);
+    if (alphaCoords.x > 1)
+        alphaCoords.x -= 1;
+    if (alphaCoords.y > 1)
+        alphaCoords.y -= 1;
 
-    alpha = tex2D(uImage3, coords); //Alpha image 2, used for fading
+    alpha = tex2D(uImage3, alphaCoords); //Alpha image 2, used for fading
     float top = (1 - uOpacity) * 1.1;
     if (alpha.r < top - 0.1)
     {

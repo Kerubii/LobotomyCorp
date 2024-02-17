@@ -26,4 +26,9 @@ LobotomyConfig: {
 
 	Header.GeneralConfiguration: General Configuration
 	Headers.GeneralConfiguration: General Configuration Header
+
+	ScreenEffectOpacity: {
+		Label: Screen Effect Opacity
+		Tooltip: ""
+	}
 }

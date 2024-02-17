@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -27,6 +28,18 @@ namespace LobotomyCorp.Items.He
             Item.rare = ItemRarityID.Yellow;
             SwingSound = new SoundStyle("LobotomyCorp/Sounds/Item/Lumberjack_Atk2") with { Volume = 0.5f, PitchVariance = 0.1f }; ;
             Item.autoReuse = true;
+        }
+
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (target.life < 0 && target.lifeMax > 20)
+            {
+                int number = Item.NewItem(target.GetSource_FromThis(), target.position, target.Size, ItemID.Heart);
+                if (Main.netMode == 1)
+                {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
+                }
+            }
         }
 
         public override void AddRecipes()

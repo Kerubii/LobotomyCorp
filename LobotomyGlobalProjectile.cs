@@ -6,6 +6,7 @@ using Terraria.Audio;
 using Terraria.ModLoader;
 using LobotomyCorp.Utils;
 using LobotomyCorp.ModSystems;
+using LobotomyCorp.Projectiles;
 
 namespace LobotomyCorp
 {
@@ -17,6 +18,8 @@ namespace LobotomyCorp
         public byte Lament = 0;
 
         public bool BlackSwanReflected = false;
+        public bool CrimsonScarBullet = false;
+        public bool HypocrisyArrow = false;
 
         public override bool PreAI(Projectile projectile)
         {
@@ -84,6 +87,20 @@ namespace LobotomyCorp
                         d.noGravity = true;
                         d.scale = 0.5f;
                     }
+                }
+            }
+        
+            if (CrimsonScarBullet)
+            {
+                LobotomyModPlayer.ModPlayer(Main.player[projectile.owner]).CrimsonScarEmpower = 1;
+            }
+
+            if (projectile.owner == Main.myPlayer)
+            {
+                if (HypocrisyArrow)
+                {
+                    int heal = (int)(damageDone * 0.1f);
+                    Projectile.NewProjectile(projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<HypocrisyHeal>(), 0, 0, projectile.owner, projectile.owner, heal);
                 }
             }
         }

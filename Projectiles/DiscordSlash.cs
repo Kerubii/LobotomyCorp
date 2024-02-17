@@ -53,6 +53,16 @@ namespace LobotomyCorp.Projectiles
             if (projOwner.itemAnimation == 1)
                 Projectile.Kill();
 
+            if (projOwner.itemAnimation % (projOwner.itemAnimationMax / 6) == 0 && Main.myPlayer == Projectile.owner)
+            {
+                Vector2 delta = Projectile.Center - projOwner.Center;
+                delta.Normalize();
+                delta *= 20;
+
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, delta, ModContent.ProjectileType<DiscordLingeringSlash>(), 0, Projectile.knockBack, Projectile.owner);
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, delta, ModContent.ProjectileType<DiscordInkShot>(), Projectile.damage * 2 / 3, Projectile.knockBack, Projectile.owner);
+            }
+
             if (0.14f < progress && progress < 0.63f)
                 for (int i = 0; i < 16; i++)
                 {

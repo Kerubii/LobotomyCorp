@@ -108,7 +108,7 @@ namespace LobotomyCorp.Projectiles.QueenLaser
             var rotateShader = GameShaders.Misc["LobotomyCorp:Rotate"];
             float rotateprog = Projectile.rotation / (2 * (float)Math.PI);
             rotateShader.UseShaderSpecificData(LobotomyCorp.ShaderRotation(rotateprog));
-            Main.NewText(Projectile.rotation / (2 * (float)Math.PI));
+            //Main.NewText(Projectile.rotation / (2 * (float)Math.PI));
             rotateShader.Apply();
 
             Main.EntitySpriteDraw(circle);

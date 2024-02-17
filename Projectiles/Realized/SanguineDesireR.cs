@@ -459,9 +459,9 @@ namespace LobotomyCorp.Projectiles.Realized
                 Main.dust[d].noGravity = true;
                 Main.dust[d].fadeIn = 1f + Main.rand.NextFloat(0.4f);
             }
-            LobotomyCorp.ScreenShake(15, amount * 0.5f, 0.05f, true);
+            if (Main.myPlayer == Projectile.owner)
+                LobotomyCorp.ScreenShake(15, amount * 0.5f, 0.05f, true);
             int damage = LobotomyGlobalNPC.SanguineDesireConsumeBleed(target) * 2;
-            Main.NewText(damage);
             modifiers.SourceDamage.Base += damage;
         }
 

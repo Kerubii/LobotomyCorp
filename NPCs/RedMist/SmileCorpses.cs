@@ -101,11 +101,14 @@ namespace LobotomyCorp.NPCs.RedMist
                 {
                     NPC.TargetClosest(false);
 
-                    Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
-                    delta.Normalize();
+                    //Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
+                    //delta.Normalize();
+                    Vector2 delta = new Vector2(0, -1f).RotatedByRandom(MathHelper.ToRadians(5));
                     if (Main.netMode != NetmodeID.MultiplayerClient)
                     {
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, delta * 12f, ModContent.ProjectileType<Projectiles.SmileBits>(), 16, 0, Main.myPlayer);//, Main.rand.NextFloat(0.26f));
+                        float ai0 = Main.rand.Next(5, 12) * (Main.rand.NextBool(2) ? -1 : 1);
+                        //Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, delta * 12f, ModContent.ProjectileType<Projectiles.SmileBits>(), 16, 0, Main.myPlayer);//, Main.rand.NextFloat(0.26f));
+                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, delta * 8f, ModContent.ProjectileType<Projectiles.SmileBobs>(), 16, 0, -1, ai0, 8f, NPC.target);
                     }
 
                     for (int i = 0; i < 8; i++)

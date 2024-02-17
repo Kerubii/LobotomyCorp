@@ -5,6 +5,25 @@ using Terraria.ID;
 
 namespace LobotomyCorp.Projectiles.Realized
 {
+	class FragmentsFromSomewhereRSpear : LobcorpSpear
+	{
+		protected override float HoldoutRangeMax => 224; 
+		
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            LobotomyGlobalNPC.ApplyTentacles(target, 0.2f, 4f);
+        }
+
+        public override void ProjectileSpawn(int duration)
+        {
+            if (Projectile.timeLeft == 2 * duration / 3 && Main.myPlayer == Projectile.owner)
+            {
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 4, ModContent.ProjectileType<FragmentsFromSomewhereProjectile>(), (int)(Projectile.damage * 0.75f), Projectile.knockBack, Projectile.owner);
+            }
+        }
+    }
+
+    /*
 	public class FragmentsFromSomewhereRSpear : ModProjectile
 	{
 		public override void SetDefaults() {
@@ -90,5 +109,5 @@ namespace LobotomyCorp.Projectiles.Realized
         {
 			LobotomyGlobalNPC.ApplyTentacles(target, 0.1f);
         }
-    }
+    }*/
 }

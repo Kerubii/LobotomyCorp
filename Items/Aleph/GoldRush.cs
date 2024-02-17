@@ -27,7 +27,7 @@ namespace LobotomyCorp.Items.Aleph
             Item.reuseDelay = 18;
 
             Item.useStyle = ItemUseStyleID.Shoot;
-            Item.knockBack = 2;
+            Item.knockBack = 4;
             Item.value = 10000;
             Item.rare = ItemRarityID.Red;
             Item.shootSpeed = 11f;
@@ -37,6 +37,7 @@ namespace LobotomyCorp.Items.Aleph
             Item.UseSound = SoundID.Item1;
             Item.noMelee = true;
             Item.autoReuse = true;
+            Item.channel = true;
         }
 
         public override bool AltFunctionUse(Player player)
@@ -46,18 +47,24 @@ namespace LobotomyCorp.Items.Aleph
 
         public override bool CanUseItem(Player player)
         {
-            if (player.altFunctionUse == 2)
+            if (player.altFunctionUse != 2)
             {
+                /*
                 Item.useTime = 28;
                 Item.useAnimation = 28;
                 Item.shootSpeed = 4f;
                 Item.UseSound = LobotomyCorp.WeaponSound("greed2");
-                Item.shoot = ModContent.ProjectileType<Projectiles.GoldRushPunch>();
+                Item.shoot = ModContent.ProjectileType<Projectiles.GoldRushPunch>();*/
+
+                Item.UseSound = null;
+                Item.shoot = ModContent.ProjectileType<Projectiles.GoldRushHold>();
+                Item.shootSpeed = 11f;
             }
             else
             {
-                Item.useTime = 5;
-                Item.useAnimation = 16;
+                
+                //Item.useTime = 5;
+                //Item.useAnimation = 16;
                 Item.shootSpeed = 7f;
                 Item.UseSound = LobotomyCorp.WeaponSound("greed1_", false, 2);
                 Item.shoot = ModContent.ProjectileType<Projectiles.GoldRushPunches>();
@@ -67,10 +74,10 @@ namespace LobotomyCorp.Items.Aleph
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
-            if (type == ModContent.ProjectileType<Projectiles.GoldRushPunch>())
+            if (type == ModContent.ProjectileType<Projectiles.GoldRushHold>())
             {
-                damage *= 4;
-                knockback *= 9;
+                damage *= 2;
+                return;
             }
         }
 

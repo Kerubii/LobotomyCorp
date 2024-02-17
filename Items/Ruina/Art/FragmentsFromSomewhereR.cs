@@ -51,7 +51,10 @@ namespace LobotomyCorp.Items.Ruina.Art
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
 			if (player.altFunctionUse == 2)
+			{
 				type = ModContent.ProjectileType<Projectiles.Realized.FragmentsFromSomewhereSong>();
+				//damage /= 2;
+			}
 			base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
         }
 
@@ -67,6 +70,24 @@ namespace LobotomyCorp.Items.Ruina.Art
 			return true;//base.UseItem(player);
         }
 
+        public override float UseTimeMultiplier(Player player)
+        {
+            if (player.altFunctionUse == 2)
+            {
+                return 3.4f;
+            }
+            return base.UseTimeMultiplier(player);
+        }
+
+        public override float UseAnimationMultiplier(Player player)
+        {
+			if (player.altFunctionUse == 2)
+			{
+				return 3.4f;
+			}
+			return base.UseAnimationMultiplier(player);
+        }
+
         public override bool AltFunctionUse(Player player)
         {
 			return true;
@@ -74,12 +95,6 @@ namespace LobotomyCorp.Items.Ruina.Art
 
         public override void AddRecipes() 
 		{
-			CreateRecipe()
-			.AddIngredient(ModContent.ItemType<BlackSwan>())
-			.AddIngredient(ItemID.Feather, 8)
-			.AddIngredient(ItemID.Ectoplasm, 2)
-			.AddTile<Tiles.BlackBox3>()
-			.Register();
 		}
 	}
 }

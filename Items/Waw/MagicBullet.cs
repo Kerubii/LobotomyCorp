@@ -38,7 +38,7 @@ namespace LobotomyCorp.Items.Waw
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
             position += Vector2.Normalize(velocity) * 54f;
-
+            velocity = Vector2.Normalize(velocity) * 12f;
             type = ModContent.ProjectileType<Projectiles.MagicBulletBullet>();
         }
 

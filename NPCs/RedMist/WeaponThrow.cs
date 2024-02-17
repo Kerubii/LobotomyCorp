@@ -165,7 +165,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override bool PreDraw(ref Color lightColor)
         {
-            CustomShaderData shader = LobotomyCorp.LobcorpShaders["GenericTrail"];
+            CustomShaderData shader = LobotomyCorp.LobcorpShaders["GenericTrail"].UseImage1(Mod, "Misc/GenTrail");
             TaperingTrail trail = new TaperingTrail();
             trail.ColorStart = Color.LightBlue;
             trail.ColorEnd = Color.Blue;

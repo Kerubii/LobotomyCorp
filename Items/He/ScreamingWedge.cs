@@ -16,12 +16,12 @@ namespace LobotomyCorp.Items.He
 
         public override void SetDefaults()
         {
-            Item.damage = 14;
+            Item.damage = 30;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 40;
             Item.height = 20;
-            Item.useTime = 26;
-            Item.useAnimation = 26;
+            Item.useTime = 23;
+            Item.useAnimation = 23;
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.noMelee = true;
             Item.knockBack = 4;
@@ -53,14 +53,14 @@ namespace LobotomyCorp.Items.He
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.Ebonwood, 30)
+            .AddIngredient(ItemID.Ebonwood, 10)
             .AddIngredient(ItemID.BlackString)
             .AddIngredient(ItemID.EbonstoneBlock, 10)
             .AddTile(Mod, "BlackBox2")
             .Register();
 
             CreateRecipe()
-            .AddIngredient(ItemID.Shadewood, 30)
+            .AddIngredient(ItemID.Shadewood, 10)
             .AddIngredient(ItemID.BlackString)
             .AddIngredient(ItemID.CrimstoneBlock, 10)
             .AddTile(Mod, "BlackBox2")

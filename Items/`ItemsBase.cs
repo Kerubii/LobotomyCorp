@@ -164,7 +164,6 @@ namespace LobotomyCorp.Items
             rotation = Math.Clamp(rotation, -180, 180);
             rotation = MathHelper.ToRadians(rotation);
             float x = (float)Math.Cos(rotation) * direction;
-            //Main.NewText(x);
             float y = (float)Math.Sin(rotation);
 
             Vector2 location = new Vector2();
@@ -351,7 +350,6 @@ namespace LobotomyCorp.Items
             rotation = Math.Clamp(rotation, -180, 180);
             rotation = MathHelper.ToRadians(rotation);
             float x = (float)Math.Cos(rotation) * direction;
-            //Main.NewText(x);
             float y = (float)Math.Sin(rotation);
             
             if (y < 0)
@@ -469,8 +467,8 @@ namespace LobotomyCorp.Items
             NPC npc = Main.npc[target];
             if (player.itemAnimation > immuneLimit)
             {
-                player.SetMeleeHitCooldown(target, 0);// player.itemAnimation - immuneLimit);
-                npc.immune[player.whoAmI] = player.itemAnimation - immuneLimit;
+                player.SetMeleeHitCooldown(target, player.itemAnimation - immuneLimit);// player.itemAnimation - immuneLimit);
+                //npc.immune[player.whoAmI] = player.itemAnimation - immuneLimit;
             }
 
             target = -1;
@@ -490,7 +488,7 @@ namespace LobotomyCorp.Items
             if (player.itemAnimation > immuneTime)
             {
                 player.SetMeleeHitCooldown(target, 0);// player.itemAnimation - immuneLimit);
-                npc.immune[player.whoAmI] = immuneTime;
+                //npc.immune[player.whoAmI] = immuneTime;
             }
 
             target = -1;

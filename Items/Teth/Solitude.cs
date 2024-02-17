@@ -15,7 +15,7 @@ namespace LobotomyCorp.Items.Teth
 
         public override void SetDefaults()
         {
-            Item.damage = 18;
+            Item.damage = 20;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 18;
             Item.height = 20;
@@ -43,7 +43,7 @@ namespace LobotomyCorp.Items.Teth
         {
             CreateRecipe()
             .AddIngredient(ItemID.Revolver)
-            .AddRecipeGroup("LobotomyCorp:EvilPowder", 12)
+            .AddRecipeGroup("LobotomyCorp:EvilPowder", 5)
             .AddTile(Mod, "BlackBox")
             .Register();
         }

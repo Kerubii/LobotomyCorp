@@ -70,7 +70,7 @@ namespace LobotomyCorp.Items.Ruina.Language
                 Item.useAnimation = 24;
                 Item.shoot = ModContent.ProjectileType<Projectiles.MimicrySHello>();
                 Item.shootSpeed = 8;
-            }
+            }   
             return base.SafeCanUseItem(player);
         }
 

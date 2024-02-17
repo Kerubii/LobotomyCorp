@@ -55,14 +55,14 @@ namespace LobotomyCorp.Utils
             return Opacity <= 0;
         }
 
-        public virtual void Draw(SpriteBatch sp)
+        public virtual void Draw(SpriteBatch sp, float configOpacity)
         {
             Color color = Color.White * Opacity;
             Vector2 screenSize = new Vector2(Main.screenWidth, Main.screenHeight);
             Vector2 textureSize = FilterTexture.Size();
             Vector2 scale = screenSize / textureSize;
 
-            sp.Draw(FilterTexture, Vector2.Zero, FilterTexture.Frame(), color, 0, Vector2.Zero, scale, 0, 0);
+            sp.Draw(FilterTexture, Vector2.Zero, FilterTexture.Frame(), color * configOpacity, 0, Vector2.Zero, scale, 0, 0);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace LobotomyCorp.Items.Teth
 
         public override void SetDefaults()
         {
-            Item.damage = 9;
+            Item.damage = 12;
             Item.DamageType = DamageClass.Magic; ;
             Item.mana = 3;
             Item.width = 26;
@@ -42,8 +42,8 @@ namespace LobotomyCorp.Items.Teth
         {
             CreateRecipe()
             .AddIngredient(ItemID.Cloud, 30)
-            .AddIngredient(ItemID.Feather, 3)
-            .AddIngredient(ItemID.FallenStar, 8)
+            .AddIngredient(ItemID.Feather)
+            .AddIngredient(ItemID.FallenStar, 2)
             .AddTile(Mod, "BlackBox")
             .Register();
         }

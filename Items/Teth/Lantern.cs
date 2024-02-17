@@ -31,8 +31,8 @@ namespace LobotomyCorp.Items.Teth
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.Coral, 8)
-            .AddIngredient(ItemID.Topaz, 4)
+            .AddIngredient(ItemID.Coral, 5)
+            .AddIngredient(ItemID.Amber, 3)
             .AddIngredient(ItemID.AntlionMandible, 4)
             .AddTile<Tiles.BlackBox>()
             .Register();

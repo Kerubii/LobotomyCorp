@@ -26,11 +26,29 @@ float4 uCustomData;
 float4 FragmentUniverse(float4 color : COLOR0, float2 coords : TEXCOORD0) : COLOR0
 {
     float4 tex = tex2D(uImage0, coords);
-    //float2 frame = (float2)(uSourceRect.z / uImageSize0.x, uSourceRect.w / uImageSize0.y);
-    //coords = coords % (1 / frame);
-    //float2 imageCoords = uWorldPosition / uImageSize1 + coords;
+    /*
+    float pixelx = 1 / uImageSize0.x;
+    float pixely = 1 / uImageSize0.y;
+    if (uSaturation == 1 && tex.a == 1 &&
+        (tex2D(uImage0, float2(coords.x - pixelx, coords.y)).a == 0 ||
+         tex2D(uImage0, float2(coords.x + pixelx, coords.y)).a == 0 ||
+         tex2D(uImage0, float2(coords.x, coords.y - pixely)).a == 0 ||
+         tex2D(uImage0, float2(coords.x, coords.y + pixely)).a == 0))
+            return float4 (1, 0, 1, 1);
+    */
+    float alpha = uOpacity;
+    tex.rgb *= uColor * alpha;
+    tex.a *= alpha;
+    float2 frame = (float2)(uSourceRect.z, uSourceRect.w);
+    float2 trueCoords = coords * uImageSize0;
+    coords = trueCoords % frame;
+    float2 imageCoords = (uWorldPosition + coords) / uImageSize1;
     if (tex.a > 0)
-        return tex2D(uImage1, coords);
+    {
+        float4 tex2 = tex2D(uImage1, imageCoords);
+        tex.rgb = tex.rgb * (1 - uSaturation) + tex2.rgb * (uSaturation);
+        return tex;
+    }
 	return tex;
 }
 

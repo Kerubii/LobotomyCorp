@@ -73,7 +73,6 @@ namespace LobotomyCorp
             //Initial Burst
             if (CanUseDash() && DashDir != -1 && DashDelay == 0)
             {
-                Main.NewText("Help");
                 Vector2 newVelocity = Player.velocity;
                 float dashDirection = -1;
 

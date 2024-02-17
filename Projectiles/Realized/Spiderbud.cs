@@ -154,21 +154,20 @@ namespace LobotomyCorp.Projectiles.Realized
 			}
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
-			Player owner = Main.player[Projectile.owner];
-			if (Collision.SolidCollision(owner.position, owner.width, owner.height))
-			{
-				owner.Center = initialPosition;
-				for (int i = 0; i < 16; i++)
-				{
-					int d = Dust.NewDust(owner.position, owner.width, owner.head, DustID.Wraith);
-					Main.dust[d].noGravity = true;
-					Main.dust[d].fadeIn = 1.5f;
-				}
-			}
-			owner.immuneNoBlink = false;
-            base.Kill(timeLeft);
+            Player owner = Main.player[Projectile.owner];
+            if (Collision.SolidCollision(owner.position, owner.width, owner.height))
+            {
+                owner.Center = initialPosition;
+                for (int i = 0; i < 16; i++)
+                {
+                    int d = Dust.NewDust(owner.position, owner.width, owner.head, DustID.Wraith);
+                    Main.dust[d].noGravity = true;
+                    Main.dust[d].fadeIn = 1.5f;
+                }
+            }
+            owner.immuneNoBlink = false;
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)

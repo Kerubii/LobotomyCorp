@@ -16,7 +16,7 @@ namespace LobotomyCorp.Items.Teth
 
         public override void SetDefaults()
         {
-            Item.damage = 18;
+            Item.damage = 22;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
@@ -44,7 +44,7 @@ namespace LobotomyCorp.Items.Teth
         {
             CreateRecipe()
             .AddIngredient(ItemID.Cobweb, 100)
-            .AddIngredient(ItemID.Ruby, 8)
+            .AddIngredient(ItemID.Ruby, 3)
             .AddTile(Mod, "BlackBox")
             .Register();
         }

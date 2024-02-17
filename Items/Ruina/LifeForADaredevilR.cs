@@ -132,12 +132,6 @@ namespace LobotomyCorp.Items.Ruina
 			{
 				LobotomyModPlayer.LifeForADareDevilPierceEffect(player, target.Center, 20, 20);
 			}
-			/*
-			if (player.itemAnimation > player.itemAnimationMax / 2)
-			{
-				target.immune[player.whoAmI] = (player.itemAnimation - player.itemAnimationMax / 2);
-				Main.NewText(target.immune[player.whoAmI]);
-			}*/
         }
 
         private int PreviousTarget = -1;

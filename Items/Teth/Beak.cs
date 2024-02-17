@@ -7,16 +7,9 @@ namespace LobotomyCorp.Items.Teth
 {
     public class Beak : ModItem
     {
-        public override void SetStaticDefaults()
-        {
-            /* Tooltip.SetDefault("As if to prove that size doesn't matter when it comes to force,\n" +
-                               "The weapon has high firepower despite its small size."); */
-
-        }
-
         public override void SetDefaults()
         {
-            Item.damage = 12;
+            Item.damage = 16;
             Item.knockBack = 4;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 40;
@@ -46,7 +39,7 @@ namespace LobotomyCorp.Items.Teth
         {
             CreateRecipe()
             .AddIngredient(ItemID.FlintlockPistol)
-            .AddIngredient(ItemID.Feather, 5)
+            .AddIngredient(ItemID.Feather, 2)
             .AddTile(Mod, "BlackBox")
             .Register();
         }

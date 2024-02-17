@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Dynamic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -58,13 +61,50 @@ namespace LobotomyCorp.Projectiles.Realized
 			return false;
         }
 
-		public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        public override bool? CanHitNPC(NPC target)
+        {
+            LobotomyGlobalNPC Lnpc = LobotomyGlobalNPC.LNPC(target);
+			if (Lnpc.FragmentsFromSomewhereEnlightenment || Lnpc.FragmentsFromSomewhereTentacles == 0)
+				return false;
+            return base.CanHitNPC(target);
+        }
+
+		Dictionary<int, int> ResistanceList = new Dictionary<int, int>();
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
 		{
-			modifiers.FinalDamage += LobotomyGlobalNPC.LNPC(target).FragmentsFromSomewhereTentacles;
-			LobotomyGlobalNPC.ApplyEnlightenment(target, Projectile.owner);
+			if (LobotomyGlobalNPC.LNPC(target).FragmentsFromSomewhereTentacles == 0)
+			{
+				modifiers.FinalDamage *= 0.1f;
+                return;
+			}
+			float damage = LobotomyGlobalNPC.LNPC(target).FragmentsFromSomewhereTentacles;
+			if (ResistanceList.ContainsKey(target.realLife) )
+			{
+				damage *= (1f / ResistanceList[target.realLife]) * 0.25f;
+				ResistanceList[target.realLife]++;
+			}
+			else if (ResistanceList.ContainsKey(target.whoAmI))
+            {
+                damage *= (1f / ResistanceList[target.whoAmI]) * 0.25f;
+                ResistanceList[target.whoAmI]++;
+            }
+			else if (target.realLife > 0)
+			{
+				ResistanceList.Add(target.realLife, 1);
+			}
+			damage -= 1f;
+			if (damage < -1f)
+				damage = -1f;
+
+            modifiers.FinalDamage += damage;
 		}
 
-		public override void ModifyDamageHitbox(ref Rectangle hitbox)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            LobotomyGlobalNPC.ApplyPreEnlightenment(target, Projectile.owner);
+        }
+
+        public override void ModifyDamageHitbox(ref Rectangle hitbox)
 		{
 			float radius = Projectile.ai[1] * (float)Math.Sin(Projectile.ai[0] / 20f * (0.5f + 0.5f * (1f / 3f)) * 1.57f) * 128f;
 

@@ -4,9 +4,18 @@ using MonoMod.Cil;
 using System;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameContent;
 using Terraria.GameContent.ItemDropRules;
+using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
+using LobotomyCorp;
+using log4net.Util;
+using LobotomyCorp.Buffs;
+using LobotomyCorp.Items.Ruina.Art;
+using Microsoft.CodeAnalysis;
+using System.Transactions;
+using Terraria.Audio;
 
 namespace LobotomyCorp
 {
@@ -52,6 +61,14 @@ namespace LobotomyCorp
         public int BeakTarget = 0;
 		public bool BODExecute = false;
 
+        public int DaCapoSilentMusicPhase = 0;
+        public bool DaCapoSilentMusic = false;
+
+        public bool DiffractionDiffracted = false;
+        public float DiffractionDamage = 1f;
+        public float DiffractionDefense = 1f;
+        public float DiffractionHealth = 1f;
+
         public float FragmentsFromSomewhereTentacles = 0;
         public bool FragmentsFromSomewhereEnlightenment = false;
         public int FragmentsFromSomewherePlayer = -1;
@@ -65,6 +82,7 @@ namespace LobotomyCorp
         public int MatchstickBurnTime = 0;
 
         public bool PleasureDebuff = false;
+        public int PleasureCount = 0;
 
         public bool QueenBeeSpore = false;
         public bool QueenBeeLarva = true;
@@ -101,7 +119,9 @@ namespace LobotomyCorp
             if (BeakTarget > 0)
                 BeakTarget--;
 
-            //FragmentsFromSomewhereEnlightenment = false;
+            DaCapoSilentMusic = false;
+
+            FragmentsFromSomewhereEnlightenment = false;
 
             HarmonyMusicalAddiction = false;
 
@@ -223,6 +243,17 @@ namespace LobotomyCorp
                 npc.lifeRegen -= 10;
                 damage += 2;
             }
+
+            if (DaCapoSilentMusic)
+            {
+                npc.lifeRegen -= 35;
+                damage += 35;
+                if (DaCapoSilentMusicPhase % 4 > 1)
+                {
+                    npc.lifeRegen -= 10;
+                    damage += 10;
+                }
+            }
         }
 
         public override void ModifyHitPlayer(NPC npc, Player target, ref Player.HurtModifiers modifiers)
@@ -243,6 +274,11 @@ namespace LobotomyCorp
             if (RedEyesCocoon)
             {
                 modifiers.FinalDamage *= 0.88f;
+            }
+
+            if (DiffractionDiffracted)
+            {
+                modifiers.SourceDamage *= DiffractionDamage;
             }
         }
 
@@ -318,14 +354,51 @@ namespace LobotomyCorp
         {
             if (HarmonyMusicalAddiction)
                 modifiers.ArmorPenetration += 15;
+
+            if (DiffractionDiffracted)
+            {
+                modifiers.SourceDamage *= DiffractionDefense;
+            }
+
+            if (DaCapoSilentMusic)
+            {
+                modifiers.ArmorPenetration += 15;
+                if (DaCapoSilentMusicPhase % 4 > 2)
+                {
+                    modifiers.SourceDamage *= 1.15f;
+                }
+            }
+        }
+
+        public override void ModifyHitByItem(NPC npc, Player player, Item item, ref NPC.HitModifiers modifiers)
+        {
+            if (FragmentsFromSomewhereEnlightenment && player.whoAmI == FragmentsFromSomewherePlayer)
+            {
+                modifiers.SourceDamage += 0.2f;
+            }
         }
 
         public override void ModifyHitByProjectile(NPC npc, Projectile projectile, ref NPC.HitModifiers modifiers)
         {
-            if (FragmentsFromSomewhereEnlightenment && projectile.owner == FragmentsFromSomewherePlayer)
+            if (FragmentsFromSomewhereEnlightenment)
             {
-                modifiers.FinalDamage /= 2;
+                if (projectile.owner == FragmentsFromSomewherePlayer)
+                {
+                    if (FragmentEnlightenmentBlacklist(projectile))
+                        modifiers.FinalDamage /= 2;
+                    else
+                        modifiers.SourceDamage += 0.2f;
+                }
+                else
+                    modifiers.SourceDamage += 0.2f;
             }
+        }
+
+        bool FragmentEnlightenmentBlacklist(Projectile projectile)
+        {
+            if (projectile.type != ModContent.ProjectileType<Projectiles.Realized.FragmentsFromSomewhereRSpear>() || projectile.aiStyle == ProjAIStyleID.Spear)
+                return true;
+            return false;
         }
 
         public override void DrawEffects(NPC npc, ref Color drawColor)
@@ -394,8 +467,64 @@ namespace LobotomyCorp
             }
         }
 
+        public override bool PreDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+        {
+            if (FragmentsFromSomewhereTentacles > 0f && Main.LocalPlayer.HeldItem.type == ModContent.ItemType<FragmentsFromSomewhereR>())
+            {
+                spriteBatch.End();
+                spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, (Effect)null, Main.Transform);
+                Color color = drawColor;
+                Color def = default(Color);
+                if (color != def)
+                {
+                    //color = npc.GetColor(drawColor);
+                    //color.R = (byte)(color.R * drawColor.R / 255f);
+                    //color.G = (byte)(color.G * drawColor.G / 255f);
+                    //color.B = (byte)(color.B * drawColor.B / 255f);
+                    //color.A = (byte)(color.A * drawColor.A / 255f);
+                }
+
+                DrawData drawData = new DrawData(TextureAssets.Npc[npc.type].Value, npc.position - screenPos, npc.frame, drawColor);
+                LobotomyCorp.LobcorpShaders["Fragment"].UseSaturation(FragmentsFromSomewhereTentacles / 4f);
+                LobotomyCorp.LobcorpShaders["Fragment"].UseColor(color.R / 255f, color.G / 255f, color.B / 255f);
+                LobotomyCorp.LobcorpShaders["Fragment"].UseOpacity(color.A / 255f);
+                LobotomyCorp.LobcorpShaders["Fragment"].Apply(drawData);
+            }
+            else if (FragmentsFromSomewhereEnlightenment && Main.myPlayer == FragmentsFromSomewherePlayer)
+            {
+                spriteBatch.End();
+                spriteBatch.Begin((SpriteSortMode)1, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, (Effect)null, Main.Transform);
+
+                Color color = npc.color;
+                color.R = (byte)(color.R * drawColor.R / 255f);
+                color.G = (byte)(color.G * drawColor.G / 255f);
+                color.B = (byte)(color.B * drawColor.B / 255f);
+                color.A = (byte)(color.A * drawColor.A / 255f);
+
+                float width = 1f;
+                float maxWidth = npc.width * 0.1f < 3 ? 3 : npc.width * 0.1f;
+                maxWidth /= 2;
+                width += maxWidth;
+
+                DrawData drawData = new DrawData(TextureAssets.Npc[npc.type].Value, npc.position - screenPos, npc.frame, drawColor);
+                LobotomyCorp.LobcorpShaders["FragmentEnlightened"].UseColor(drawColor.R / 255f, drawColor.G / 255f, drawColor.B / 255f);
+                LobotomyCorp.LobcorpShaders["FragmentEnlightened"].UseOpacity(drawColor.A / 255f);
+                LobotomyCorp.LobcorpShaders["FragmentEnlightened"].UseCustomShaderDate(width + maxWidth * (float)Math.Sin(6.28f * Main.timeForVisualEffects / 60f));
+                LobotomyCorp.LobcorpShaders["FragmentEnlightened"].Apply(drawData);
+            }
+
+            return base.PreDraw(npc, spriteBatch, screenPos, drawColor);
+        }
+
         public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
         {
+            if (FragmentsFromSomewhereTentacles > 0f ||
+                FragmentsFromSomewhereEnlightenment)
+            {
+                spriteBatch.End();
+                spriteBatch.Begin((SpriteSortMode)0, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, (Effect)null, Main.Transform);
+            }
+
             if (WingbeatFairyMeal)
             {
                 Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/WingbeatFairy").Value;
@@ -545,7 +674,7 @@ namespace LobotomyCorp
             }
             else if (shop.NpcType == NPCID.Dryad)
             {
-                shop.Add(new Item(ModContent.ItemType<Items.Teth.WristCutter>())
+                shop.Add(new Item(ModContent.ItemType<Items.Waw.Hypocrisy>())
                 {
                     shopCustomPrice = 100000
                 }, Condition.DownedQueenBee, Condition.DownedSkeletron);
@@ -642,16 +771,88 @@ namespace LobotomyCorp
         public static void ApplyTentacles(NPC npc, float amount, float amountLimit = 2)
         {
             LobotomyGlobalNPC Lnpc = LNPC(npc);
+            if (Lnpc.FragmentsFromSomewhereEnlightenment)
+                return;
+
             Lnpc.FragmentsFromSomewhereTentacles += amount;
             if (Lnpc.FragmentsFromSomewhereTentacles > amountLimit)
                 Lnpc.FragmentsFromSomewhereTentacles = amountLimit;
+
+            if (npc.realLife > -1)
+            {
+                foreach (NPC n in Main.npc)
+                {
+                    if (n.active && npc.whoAmI != n.whoAmI && (n.whoAmI == npc.realLife || n.realLife == npc.realLife))
+                    {
+                        Lnpc = LNPC(n);
+                        Lnpc.FragmentsFromSomewhereTentacles += amount;
+                        if (Lnpc.FragmentsFromSomewhereTentacles > amountLimit)
+                            Lnpc.FragmentsFromSomewhereTentacles = amountLimit;
+                    }
+                }
+            }
         }
 
-        public static void ApplyEnlightenment(NPC npc, int player)
+        public static void ApplyPreEnlightenment(NPC npc, int player)
         {
             LobotomyGlobalNPC Lnpc = LNPC(npc);
-            Lnpc.FragmentsFromSomewhereEnlightenment = true;
+            if (Lnpc.FragmentsFromSomewhereEnlightenment || npc.HasBuff<EnlightenmentPre>())
+                return;
+
+            int buffType = ModContent.BuffType<EnlightenmentPre>();
+            npc.AddBuff(buffType, 60 * 2);
             Lnpc.FragmentsFromSomewherePlayer = player;
+
+            if (npc.realLife > -1)
+            {
+                foreach (NPC n in Main.npc)
+                {
+                    if (n.active && npc.whoAmI != n.whoAmI && (n.whoAmI == npc.realLife || n.realLife == npc.realLife))
+                    {
+                        Lnpc = LNPC(n);
+                        if (Lnpc.FragmentsFromSomewhereEnlightenment || n.HasBuff<EnlightenmentPre>())
+                            continue;
+
+                        n.AddBuff(buffType, 60 * 2);
+                        Lnpc.FragmentsFromSomewherePlayer = player;
+                    }
+                }
+            }
+        }
+
+        public static void ApplyEnlightenment(NPC npc)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                Dust.NewDust(npc.position, npc.width, npc.height, DustID.DemonTorch);
+            }
+
+            npc.AddBuff(ModContent.BuffType<Enlightenment>(), 60 * 20);
+            LobotomyGlobalNPC Lnpc = LNPC(npc);
+            Lnpc.FragmentsFromSomewhereTentacles = 0;
+            Lnpc.FragmentsFromSomewhereEnlightenment = true;
+        }
+
+        public static void PleasureApplyPleasure(Projectile proj, NPC npc, Player player, int damage, float maxMult = 1f)
+        {
+            LobotomyGlobalNPC Lnpc = LNPC(npc);
+            // Increase Pleasure Count by damage given
+            Lnpc.PleasureCount += damage;
+            // Check if Pleasure reaches a certain Threshold for bonus damage
+            float maximum = npc.lifeMax * 0.15f;
+            if (Lnpc.PleasureCount > maximum * maxMult)
+            {
+                Lnpc.PleasureCount = 0;
+
+                // Check if Pleasure damage (3 times more damage) is lower than 5% of enemy health, allows for true damage
+                int pleasureDamage = proj.damage * 3;
+                int minDamage = (int)(npc.lifeMax * 0.05f);
+                if (pleasureDamage < minDamage)
+                    pleasureDamage = minDamage;
+                    
+                player.ApplyDamageToNPC(npc, pleasureDamage, 0f, 1, false, DamageClass.Summon, true);
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Art/Porccu_Special") with { Volume = 0.25f }, npc.Center);
+            }
         }
     }
 }

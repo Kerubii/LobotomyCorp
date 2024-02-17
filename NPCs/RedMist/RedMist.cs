@@ -1378,7 +1378,7 @@ namespace LobotomyCorp.NPCs.RedMist
                     ChangeAnimation(AnimationState.Phase4Transition);
                     return;
                 }
-                Main.NewText(healthPercent);
+                //Main.NewText(healthPercent);
                 AiState = 6;//Gold Rush!
                 NPC.velocity *= 0;
                 Talk("GoldRush1", NPC.spriteDirection);
@@ -1409,7 +1409,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
             if (Main.netMode != NetmodeID.MultiplayerClient && Main.expertMode)
             {
-                int amount = 4;
+                int amount = 1 + Main.rand.Next(2);
                 int corpseType = ModContent.NPCType<SmileCorpses>();
                 int limit = 10;
                 int amountAlive = NPC.CountNPCS(corpseType);
@@ -3049,9 +3049,10 @@ namespace LobotomyCorp.NPCs.RedMist
                 x2 += NPC.width * dir;
                 if (dir < 0)
                 {
-                    int tempX = 
+                    int tempX = 0;
                     x = x2;
                 }
+
             }
         }
 
@@ -3820,7 +3821,7 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override bool PreDraw(ref Color lightColor)
         {
-            CustomShaderData shader = LobotomyCorp.LobcorpShaders["GenericTrail"];
+            CustomShaderData shader = LobotomyCorp.LobcorpShaders["GenericTrail"].UseImage1(Mod, "Misc/GenTrail");
             TaperingTrail Trail = new TaperingTrail();
             Trail.ColorStart = Color.Red;
             Trail.ColorEnd = Color.Red;

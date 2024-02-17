@@ -58,7 +58,7 @@ namespace LobotomyCorp.ModSystems
                         {
                             if (filter.Active)
                             {
-                                filter.Draw(Main.spriteBatch);
+                                filter.Draw(Main.spriteBatch, ModContent.GetInstance<Configs.LobotomyConfig>().ScreenEffectOpacity);
                             }
                         }
                         return true;

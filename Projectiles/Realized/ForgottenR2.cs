@@ -85,8 +85,8 @@ namespace LobotomyCorp.Projectiles.Realized
                         Gore g = Main.gore[Gore.NewGore(Projectile.GetSource_FromAI(), Projectile.Center, circle * Main.rand.NextFloat(6f), Main.rand.Next(61, 64))];
                         g.scale = 0.4f;
                     }
-
-                    ModContent.GetInstance<ScreenSystem>().ScreenShake(10, 8f * resistance, 0.1f);
+                    if (Main.myPlayer == Projectile.owner)
+                        ModContent.GetInstance<ScreenSystem>().ScreenShake(10, 8f * resistance, 0.1f);
                 }
 
                 if (Projectile.ai[0] >= 60 + 210 * (resistance / 0.4f))

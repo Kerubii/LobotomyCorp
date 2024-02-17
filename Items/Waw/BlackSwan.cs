@@ -1,3 +1,4 @@
+using LobotomyCorp.Projectiles;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -18,7 +19,7 @@ namespace LobotomyCorp.Items.Waw
 
         public override void SetDefaults()
         {
-            Item.damage = 32;
+            Item.damage = 38;
             Item.knockBack = 6;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
@@ -32,6 +33,9 @@ namespace LobotomyCorp.Items.Waw
             Item.rare = ItemRarityID.Purple;
             Item.UseSound = LobotomyCorp.WeaponSound("blackSwan", false, 2);
             Item.autoReuse = true;
+
+            Item.shoot = ModContent.ProjectileType<BlackSwanGlob>();
+            Item.shootSpeed = 12f;  
         }
 
         public override void HoldItem(Player player)
@@ -42,9 +46,8 @@ namespace LobotomyCorp.Items.Waw
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.Umbrella)
-            .AddIngredient(ItemID.BlackDye, 2)
-            .AddIngredient(ItemID.Feather, 8)
+            .AddIngredient(ItemID.TragicUmbrella)
+            .AddIngredient(ItemID.Feather, 2)
             .AddTile(Mod, "BlackBox3")
             .Register();
         }

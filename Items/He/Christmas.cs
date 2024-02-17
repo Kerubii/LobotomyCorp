@@ -19,7 +19,7 @@ namespace LobotomyCorp.Items.He
 
         public override void SetDefaults()
         {
-            Item.damage = 24;
+            Item.damage = 38;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
@@ -31,6 +31,9 @@ namespace LobotomyCorp.Items.He
             Item.rare = ItemRarityID.Yellow;
             Item.UseSound = LobotomyCorp.WeaponSounds.Mace;
             Item.autoReuse = true;
+
+            Item.shoot = ProjectileID.OrnamentFriendly;
+            Item.shootSpeed = 16f;
         }
 
         public override void AddRecipes()

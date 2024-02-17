@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LobotomyCorp.Buffs;
+using LobotomyCorp.Items.Waw;
 using LobotomyCorp.PlayerDrawEffects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -20,6 +22,9 @@ namespace LobotomyCorp
     {
         public int SynchronizedEGO = -1;
         public bool Desync = false;
+
+        public int AttackComboOrder = 0;
+        public int AttackComboOrderCooldown = 0;
 
         public int HeavyWeaponHelper = 0;
         public float ChargeWeaponHelper = 0;
@@ -54,6 +59,14 @@ namespace LobotomyCorp
         public static int BlackSwanNettleClothingMax = 6;
         public bool BlackSwanBrokenDream = false;
 
+        /// <summary>
+        /// Use 1 to empower Melee, Use 2 to empower Range
+        /// </summary>
+        public int CrimsonScarEmpower = 0;
+
+        public int DaCapoSilentMusicPhase = 0;
+        public bool DaCapoSilentMusic = false;
+
         public float FaintAromaPetal = 0;
         public int FaintAromaPetalMax = 60;
         public float FaintAromaDecay = 0.1f;
@@ -71,6 +84,7 @@ namespace LobotomyCorp
         public int MatchstickBurnTime = 0;
 
         public bool PleasureDebuff = false;
+        public bool PleasureTail = false;
 
         public int RegretShockwave = 0;
         public bool RegretChainedWrath = false;
@@ -94,6 +108,13 @@ namespace LobotomyCorp
         public int MagicBulletNthShot = 0;
         public int MagicBulletRequest = -1;
         public bool MagicBulletDarkFlame = false;
+
+        public bool MimicryShell = false;
+        public int MimicryShellHealth = 0;
+        public float MimicryShellDamage = 1f;
+        public int MimicryShellDefense = 0;
+        public bool MimicryHusk = false;
+        public int MimicryHuskDeficit = 0;
 
         public bool NihilActive = false;
         public int NihilMode = 0;
@@ -148,6 +169,8 @@ namespace LobotomyCorp
             if (Player.itemAnimation == 0)
                 ChargeWeaponHelper = 0;
 
+            ResetAttackCombo();
+
             RedShield = false;
             WhiteShield = false;
             BlackShield = false;
@@ -178,6 +201,8 @@ namespace LobotomyCorp
                 }
             }
 
+            DaCapoSilentMusic = false;
+
             GrinderMk2Active = false;
 
             if (LifeForADareDevilGift > 0)
@@ -200,6 +225,8 @@ namespace LobotomyCorp
             OurGalaxyStone = false;
 
             PleasureDebuff = false;
+
+            PleasureTail = false;
 
             RegretChainedWrath = false;
             RegretBinded = false;
@@ -228,6 +255,15 @@ namespace LobotomyCorp
             //RemoveMaxFallSpeed = false;
 
             CurrentAura = null;
+        }
+
+        private void ResetAttackCombo()
+        {
+            if (AttackComboOrderCooldown <= 0)
+            {
+                AttackComboOrder = 0; return;
+            }
+            AttackComboOrderCooldown--;
         }
 
         public override void OnRespawn()
@@ -407,7 +443,20 @@ namespace LobotomyCorp
             {
                 Player.statDefense -= 15;
             }
-        }   
+        }
+
+        public override void PostUpdateBuffs()
+        {
+            if (PleasureTail)
+            {
+                Player.manaRegenBuff = false;
+                if (Player.manaRegenBonus > 0)
+                    Player.manaRegenBonus = 0;
+                Player.manaRegenBonus = -10;
+                Player.manaRegenDelayBonus = 0;
+                Player.wingAccRunSpeed += 0.15f;
+            }
+        }
 
         public override void PostUpdateMiscEffects()
         {
@@ -610,8 +659,13 @@ namespace LobotomyCorp
 
         public override void UpdateLifeRegen()
         {
-            if (OurGalaxyStone)
-                Player.lifeRegen += 10 + 10 * OurGalaxyStoneAllies();
+            if (OurGalaxyStone && !(Player.HasBuff(BuffID.PotionSickness) || Player.potionDelay > 0))
+            {
+                int value = 5 + 5 * OurGalaxyStoneAllies();
+                if (value > 30)
+                    value = 30;
+                Player.lifeRegen += value;
+            }
 
             if (FaintAromaPetal > 0 && Player.lifeRegen < 0)
                 Player.lifeRegen = 0;
@@ -642,6 +696,13 @@ namespace LobotomyCorp
             return base.PreItemCheck();
         }
 
+        public override void GetHealMana(Item item, bool quickHeal, ref int healValue)
+        {
+            if (PleasureTail)
+                healValue = 0;
+            base.GetHealMana(item, quickHeal, ref healValue);
+        }
+
         public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
         {
             /*if (Player.HeldItem.type == ModContent.ItemType<Items.BeakS>())
@@ -656,7 +717,7 @@ namespace LobotomyCorp
                 BeakPunish = 180;
                 LobotomyGlobalNPC.LNPC(npc).BeakTarget = 180;
             }*/
-            if (BlackSwanParryChance > 0 && Main.rand.Next(100) < BlackSwanParryChance)
+            if (Player.HeldItem.type == ModContent.ItemType<BlackSwan>() && Main.rand.Next(100) < 10)
             {
                 Player.ApplyDamageToNPC(npc, hurtInfo.Damage, 0, Player.direction, false);
             }
@@ -724,6 +785,54 @@ namespace LobotomyCorp
             }
 
             return base.ImmuneTo(damageSource, cooldownCounter, dodgeable);
+        }
+
+        public override bool FreeDodge(Player.HurtInfo info)
+        {
+            // Pleasure has a bonus chance to dodge Projectiles when no enemies are near or a boss is active, should NOT prevent contact damage
+            if (PleasureTail && info.Dodgeable && info.DamageSource.SourceProjectileType > 0 && Main.rand.NextFloat(1f) < PleasureDodgeChance())
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector2 velocity = new Vector2(4, 0).RotatedBy(6.28f * i / 8f);
+                    Gore.NewGore(Player.GetSource_FromThis(), Player.MountedCenter, velocity, 331, Main.rand.NextFloat(0.9f, 1.1f));
+                }
+                Player.immune = true;
+                Player.AddImmuneTime(ImmunityCooldownID.General, 45);
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Art/Porccu_Nodmg") with { Volume = 0.5f }, Player.Center);
+                return true;
+            }
+            return base.FreeDodge(info);
+        }
+
+        private float PleasureDodgeChance()
+        {
+            // Default Dodge Chance
+            float dodge = 20f;
+
+            // If a boss is alive at any point in time, Dodge chance is normal
+            if (Main.CurrentFrameFlags.AnyActiveBossNPC)
+                return dodge;
+
+
+            // When an enemy is near, reduce chance to dodge which range from 100% to 20% (20% is impossible since they need to be inside you)
+            // 15 Tiles?
+            float maxDist = 15 * 16;
+            float distance = maxDist;
+            foreach (NPC n in Main.npc)
+            {
+                if (n.active && !n.friendly)
+                {
+                    float npcDist = n.Center.Distance(Player.Center);
+                    if (npcDist < distance)
+                    {
+                        distance = npcDist;
+                    }
+                }
+            }
+            dodge += (1f - dodge) * distance / maxDist;
+
+            return dodge;
         }
 
         public override bool ConsumableDodge(Player.HurtInfo info)
@@ -797,6 +906,31 @@ namespace LobotomyCorp
                     info.Damage = ShieldDamage(info.Damage);
                 }
             }
+
+            if (PleasureTail)
+            {
+                float lifePercent = (float)info.Damage * 2 / Player.statLifeMax2;
+                int manaLost = (int)(lifePercent * Player.statManaMax2);
+                int max = info.Damage * 2;
+                if (manaLost < max)
+                {
+                    manaLost = max;
+                }
+
+                Main.NewText(manaLost);
+                if (!Player.CheckMana(manaLost, true, true))
+                {
+                    Player.statMana = Player.statManaMax2;
+                    int damage = Player.statLifeMax2 / 2;
+                    Player.statLife -= damage;
+                    CombatText.NewText(Player.getRect(), CombatText.DamagedHostile, damage, true);
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Art/Porccu_Special") with { Volume = 0.5f }, Player.Center);
+                }
+                else
+                {
+                    Player.manaRegenDelay = 900;
+                }
+            }
         }
 
         public override void ModifyHurt(ref Player.HurtModifiers modifiers)
@@ -811,6 +945,11 @@ namespace LobotomyCorp
             if (Player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GreenStemArea>()] >= 1)
             {
                 modifiers.FinalDamage += 0.3f;
+            }
+
+            if (PleasureTail)
+            {
+                modifiers.FinalDamage *= 0.33f;
             }
         }
 
@@ -1016,7 +1155,9 @@ namespace LobotomyCorp
             Player.AddBuff(BuffID.OnFire, 120);
             if (Main.myPlayer == Player.whoAmI && forced)// || (Main.rand.Next(100) == 0 && (Player.statLife == Player.statLifeMax2 || (float)(Player.statLife / (float)Player.statLifeMax2) < 0.25f)))
             {
-                Projectile.NewProjectile(Player.GetSource_Misc("ItemUse_FourthMatchFlameExplosion"), Player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.FourthMatchFlameSelfExplosion>(), 500, 10f, Player.whoAmI);
+                int i = Projectile.NewProjectile(Player.GetSource_Misc("ItemUse_FourthMatchFlameExplosion"), Player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.FourthMatchFlameSelfExplosion>(), 1600, 10f, Player.whoAmI);
+
+                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, i);
             }
         }
 
@@ -1062,35 +1203,6 @@ namespace LobotomyCorp
 
                 SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/BlackSwan_Revive") with { Volume = 0.1f }, Player.Center);
             }
-        }
-
-        public void BlackSwanNettleRemove(int val)
-        {
-            BlackSwanNettleClothing = (int)Math.Floor(BlackSwanNettleClothing - val);
-        }
-
-        public bool NihilCheckActive()
-        {
-            bool checkActive = false;
-
-            for (int slot = 0; slot < Main.InventorySlotsTotal; slot++)
-            {
-                if (!Player.inventory[slot].IsAir && Player.inventory[slot].type != ModContent.ItemType<Items.Ruina.Natural.NihilR>())
-                {
-                    checkActive = true;
-                }
-            }
-
-            for (int slot = 0; slot < 8 + Player.extraAccessorySlots; slot++)
-            {
-                if (!Player.armor[slot].IsAir && Player.armor[slot].type != ModContent.ItemType<Items.Ruina.Natural.NihilR>())
-                {
-                    checkActive = true;
-                }
-            }
-
-            NihilActive = checkActive;
-            return NihilActive;
         }
 
         /*
@@ -1187,9 +1299,72 @@ namespace LobotomyCorp
                 return x * (1 - progress) + x2 * progress;
         }
 
+        #region R EGO STUFF
         /// <summary>
-		/// Apply the RWBP shields use the buffs.
-		/// </summary>
+        /// Soft Limits are HP = 500, Damage = 50%, Defense = 30
+        /// </summary>
+        /// <param name="n"></param>
+        public void MimicryWearShell(NPC n)
+        {
+            if (Player.HasBuff<Husk>())
+            {
+                Player.ClearBuff(ModContent.BuffType<Husk>());
+            }
+            int time = Math.Min(n.lifeMax * 2, 60 * 60);
+            Player.AddBuff(ModContent.BuffType<Shell>(), time);
+            MimicryShell = true;
+            MimicryShellDamage = Math.Min(n.damage / 10f, .8f);
+            MimicryShellDefense = Math.Min(n.defense, 30);
+            MimicryShellHealth = Math.Min((int)(n.lifeMax * 0.1f), 500);
+        }
+
+        public static void PleasureManaConsume(Player player, int cost)
+        {
+            bool Mana = player.CheckMana(Main.LocalPlayer.statManaMax2 / 5, true, true);
+
+            if (!Mana)
+            {
+                player.statMana = player.statManaMax2;
+                player.ManaEffect(player.statManaMax2);
+                player.statLife -= player.statLifeMax / 2;
+                player.HealEffect(-player.statLifeMax / 2);
+            }
+        }
+
+        public void BlackSwanNettleRemove(int val)
+        {
+            BlackSwanNettleClothing = (int)Math.Floor(BlackSwanNettleClothing - val);
+        }
+
+        public bool NihilCheckActive()
+        {
+            bool checkActive = false;
+
+            for (int slot = 0; slot < Main.InventorySlotsTotal; slot++)
+            {
+                if (!Player.inventory[slot].IsAir && Player.inventory[slot].type != ModContent.ItemType<Items.Ruina.Natural.NihilR>())
+                {
+                    checkActive = true;
+                }
+            }
+
+            for (int slot = 0; slot < 8 + Player.extraAccessorySlots; slot++)
+            {
+                if (!Player.armor[slot].IsAir && Player.armor[slot].type != ModContent.ItemType<Items.Ruina.Natural.NihilR>())
+                {
+                    checkActive = true;
+                }
+            }
+
+            NihilActive = checkActive;
+            return NihilActive;
+        }
+        #endregion
+
+        #region SHIELD STUFF
+        /// <summary>
+        /// Apply the RWBP shields, use the buff IDs.
+        /// </summary>
         public void ApplyShield(int type, int time, int shieldHP, bool forceApply = false)
         {
             if (!forceApply && ShieldActive)
@@ -1309,5 +1484,7 @@ namespace LobotomyCorp
             else
                 shakeIntensity = 0;
         }
+
+        #endregion
     }
 }

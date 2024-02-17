@@ -38,11 +38,12 @@ namespace LobotomyCorp.UI
         }
     }
 
-    enum WorkType
+    public enum WorkType
     {
         Instinct,
         Insight,
         Attachment,
-        Repression
+        Repression,
+        None
     }
 }

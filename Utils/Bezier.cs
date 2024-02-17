@@ -1,10 +1,12 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
+using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.Graphics.Shaders;
 using Terraria.ModLoader;
+using static tModPorter.ProgressUpdate;
 
 namespace LobotomyCorp.Utils
 {
@@ -120,6 +122,34 @@ namespace LobotomyCorp.Utils
             return p;
         }
 
+        public float DerivativeRotation(float progress)
+        {
+            return CalculateDerivativeRotation(progress, startPoint, point1, point2, endPoint);
+        }
+
+        /// <summary>
+        /// What in the fuck is this I have no Idea its just derivative I don't know how they work it scares me
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="p0"></param>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <param name="p3"></param>
+        /// <returns></returns>
+        public static float CalculateDerivativeRotation(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
+        {
+            float tt = t * t;
+            float u = 1f - t;
+            float uu = u * u;
+
+            Vector2 p = uu * (p1 - p0);//first term
+            p += 2 * u * t *(p2 - p1);//Second term
+            p += tt * (p3 - p2);//Third term
+            p *= 3;
+
+            return (float)Math.Atan2(p.Y, p.X);
+        }
+
         /// <summary>
         /// Get BezierLength from Divisions
         /// </summary>
@@ -207,6 +237,29 @@ namespace LobotomyCorp.Utils
         {
             Vector2 position = BezierPoint(curveProgress) - Main.screenPosition;
             return new DrawData(tex, position, frame, color, rotation, frameOrigin, scale, spEffect, 0);
+        }
+
+        
+        public Vector2[] GetCurveVectors(int divisions)
+        {
+            Vector2[] array = new Vector2[divisions + 1];
+            for (int i = 0; i <= divisions; i++)
+            {
+                float t = (float)i / divisions;
+                array[i] = BezierPoint(t);
+            }
+            return array;
+        }
+
+        public float[] GetAngleVectors(int divisions)
+        {
+            float[] array = new float[divisions + 1];
+            for (int i = 0; i <= divisions; i++)
+            {
+                float t = (float)i / divisions;
+                array[i] = DerivativeRotation(t);
+            }
+            return array;
         }
 
         public void DustTest()

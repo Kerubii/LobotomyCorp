@@ -22,7 +22,7 @@ namespace LobotomyCorp.ModSystems
 
         public override void AddRecipeGroups()
         {
-            RecipeGroup rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "EvilPowder", new[]
+            RecipeGroup rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Evil Powder", new[]
             {
                 (int)ItemID.ViciousPowder,
                 (int)ItemID.VilePowder
@@ -39,14 +39,15 @@ namespace LobotomyCorp.ModSystems
                 ItemID.TreeNymphButterfly,
                 ItemID.UlyssesButterfly,
                 ItemID.ZebraSwallowtailButterfly,
-                ItemID.GoldButterfly
+                ItemID.GoldButterfly,
+                ItemID.HellButterfly
             });
             RecipeGroup.RegisterGroup("LobotomyCorp:Butterflies", rec);
 
             rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Dungeon Lanterns", new[]
             {
-                (int)ItemID.AlchemyLantern,
-                (int)ItemID.BrassLantern,
+                (int)ItemID.ChainLantern,
+                ItemID.BrassLantern,
                 ItemID.CagedLantern,
                 ItemID.CarriageLantern,
                 ItemID.AlchemyLantern,
@@ -104,6 +105,13 @@ namespace LobotomyCorp.ModSystems
         private float ScreenShakeIntensity;
         private float ScreenShakeDecay;
 
+        /// <summary>
+        /// Local Version, Screenshakes everyone's screen unless Main.myPlayer == whoAmI
+        /// </summary>
+        /// <param name="Time"></param>
+        /// <param name="Intensity"></param>
+        /// <param name="decay"></param>
+        /// <param name="Forced"></param>
         public void ScreenShake(int Time, float Intensity, float decay = 0, bool Forced = true)
         {
             if (!ModContent.GetInstance<LobotomyConfig>().ScreenShakeEnabled || (!Forced && ScreenShakeTimer > 0))
@@ -112,6 +120,21 @@ namespace LobotomyCorp.ModSystems
             ScreenShakeTimer = Time;
             ScreenShakeIntensity = Intensity;
             ScreenShakeDecay = decay;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="origin"></param>
+        /// <param name="player"></param>
+        /// <param name="Time"></param>
+        /// <param name="Intensity"></param>
+        /// <param name="decay"></param>
+        /// <param name="falloff"></param>
+        /// <param name="Forced"></param>
+        public void ScreenShakeGlobal( Vector2 origin, Player player, int Time, float Intensity, float decay = 0, bool Forced = true)
+        {
+
         }
 
         private bool modifiedCamera;

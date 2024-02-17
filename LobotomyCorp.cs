@@ -1,5 +1,6 @@
 using LobotomyCorp.Configs;
 using LobotomyCorp.ModSystems;
+using LobotomyCorp.Projectiles;
 using LobotomyCorp.UI;
 using LobotomyCorp.Utils;
 using Microsoft.Xna.Framework;
@@ -62,8 +63,6 @@ namespace LobotomyCorp
 
         public static ModKeybind SynchronizeEGO;
 
-        public static bool TestMode = false;
-
         public class WeaponSounds
         {
             public static SoundStyle Axe;
@@ -93,8 +92,6 @@ namespace LobotomyCorp
             {
                 if (Main.netMode != NetmodeID.Server)
                 {
-                    TestMode = ModContent.GetInstance<LobotomyConfig>().ScreenShakeEnabled;
-
                     ArcanaSlaveLaser = Assets.Request<Texture2D>("Projectiles/QueenLaser/Laser", AssetRequestMode.ImmediateLoad);
                     ArcanaSlaveBackground = Assets.Request<Texture2D>("Projectiles/QueenLaser/CircleBackground", AssetRequestMode.ImmediateLoad);
                     KingPortal1 = Assets.Request<Texture2D>("Projectiles/KingPortal/KingPortal1", AssetRequestMode.ImmediateLoad);
@@ -137,6 +134,7 @@ namespace LobotomyCorp
                     Ref<Effect> BrokenScreen = new Ref<Effect>(Assets.Request<Effect>("Effects/BrokenShader", AssetRequestMode.ImmediateLoad).Value);
                     Ref<Effect> RedMistEffect = new Ref<Effect>(Assets.Request<Effect>("Effects/OverlayShader", AssetRequestMode.ImmediateLoad).Value);
                     Ref<Effect> Fragment = new Ref<Effect>(Assets.Request<Effect>("Effects/FragmentUniverse", AssetRequestMode.ImmediateLoad).Value);
+                    Ref<Effect> Fragment2 = new Ref<Effect>(Assets.Request<Effect>("Effects/FragmentEnlightened", AssetRequestMode.ImmediateLoad).Value);
                     //GameShaders.Misc["Punish"] = new MiscShaderData(punishingRef, "PunishingBird");
 
                     GameShaders.Misc["LobotomyCorp:Rotate"] = new MiscShaderData(new Ref<Effect>(ArcanaSlaveRef.Value), "ArcanaResize").UseSaturation(0f);
@@ -204,6 +202,11 @@ namespace LobotomyCorp
                     shader = new CustomShaderData(Fragment, "Fragment");
                     shader.UseImage1(this, "Misc/PurpleNebula5");
                     LobcorpShaders["Fragment"] = shader;
+
+                    shader = new CustomShaderData(Fragment2, "FragmentEn");
+                    shader.UseImage1(this, "Misc/PurpleNebula5");
+                    LobcorpShaders["FragmentEnlightened"] = shader;
+                    // Use CustomShaderDate to define the length of the border :3
 
                     WeaponSounds.Axe = WeaponSound("axe", true, 2);
                     WeaponSounds.BowGun = WeaponSound("bowGun");
@@ -274,7 +277,6 @@ namespace LobotomyCorp
                 if (n.active && !n.dontTakeDamage && !n.friendly && n.life > 0 && n.whoAmI != t.whoAmI && health2 < health && n.chaseable && n.CanBeChasedBy(p) && n.realLife < 0)
                 {
                     valid = false;
-                    //Main.NewText(n.type);
                     break;
                 }
             }

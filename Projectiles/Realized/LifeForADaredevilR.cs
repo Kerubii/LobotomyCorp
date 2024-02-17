@@ -215,4 +215,45 @@ namespace LobotomyCorp.Projectiles.Realized
 			return 1.0472f * 2;
 		}
 	}
+
+	public class LifeForADaredevilRAlt : ModProjectile
+	{
+        public override void SetDefaults()
+        {
+            Projectile.width = 24;
+            Projectile.height = 24;
+            Projectile.aiStyle = -1;
+            Projectile.penetrate = -1;
+
+            Projectile.DamageType = DamageClass.Melee;
+            Projectile.tileCollide = true;
+            Projectile.friendly = true;
+            Projectile.hide = true;
+        }
+
+        public override void AI()
+        {
+			Player player = Main.player[Projectile.owner];
+			Projectile.ai[0]++;
+
+
+
+			if (Projectile.ai[1] == 0)
+			{
+				if (Projectile.ai[0] > player.itemAnimationMax)
+				{
+					Projectile.Kill();
+				}
+			}
+			else
+			{
+
+			}
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            base.OnHitNPC(target, hit, damageDone);
+        }
+    }
 }

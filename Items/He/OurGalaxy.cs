@@ -15,7 +15,7 @@ namespace LobotomyCorp.Items.He
 
         public override void SetDefaults()
         {
-            Item.damage = 13;
+            Item.damage = 25;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
@@ -34,7 +34,7 @@ namespace LobotomyCorp.Items.He
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.FallenStar, 10)
+            .AddIngredient(ItemID.FallenStar, 4)
             .AddIngredient(ItemID.Glass, 5)
             .AddIngredient(ItemID.MeteoriteBar, 8)
             .AddTile(Mod, "BlackBox2")

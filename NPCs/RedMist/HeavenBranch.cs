@@ -25,6 +25,8 @@ namespace LobotomyCorp.NPCs.RedMist
             Projectile.scale = 0;
 
             Projectile.hide = true;
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
         }
 
         public override void AI()

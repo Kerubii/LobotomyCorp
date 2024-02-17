@@ -18,7 +18,7 @@ namespace LobotomyCorp.Items.Teth
         {
             Item.CloneDefaults(ItemID.CopperShortsword);
             Item.shoot = ModContent.ProjectileType<Projectiles.SoCute>();
-            Item.damage = 24;
+            Item.damage = 28;
             Item.useAnimation = 12;
             Item.useTime = 12;
             Item.autoReuse = true;

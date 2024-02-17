@@ -15,7 +15,7 @@ namespace LobotomyCorp.Items.Teth
 
         public override void SetDefaults()
         {
-            Item.damage = 42;
+            Item.damage = 52;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;

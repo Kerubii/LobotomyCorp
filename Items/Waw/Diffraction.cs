@@ -1,3 +1,4 @@
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -41,6 +42,29 @@ namespace LobotomyCorp.Items.Waw
             .AddIngredient(ItemID.InvisibilityPotion, 4)
             .AddTile(Mod, "BlackBox3")
             .Register();
+        }
+
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            DiffractionApply(target);
+        }
+
+        public static void DiffractionApply(NPC npc)
+        {
+            LobotomyGlobalNPC Lnpc = LobotomyGlobalNPC.LNPC(npc);
+            if (Lnpc.DiffractionDiffracted)
+                return;
+
+            Lnpc.DiffractionDiffracted = true;
+            float range = 0.5f;
+            if (npc.boss)
+                range = 0.5f - 0.5f * 0.8f;
+
+            Lnpc.DiffractionDamage = Main.rand.NextFloat(1f - range, 1f + range);
+            Lnpc.DiffractionDefense = Main.rand.NextFloat(1f - range, 1f + range);
+            Lnpc.DiffractionHealth = Main.rand.NextFloat(1f - range, 1f + range);
+
+            npc.lifeMax = (int)(npc.lifeMax * Lnpc.DiffractionHealth);
         }
     }
 }

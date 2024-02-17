@@ -17,13 +17,13 @@ namespace LobotomyCorp.Items.Waw
 
         public override void SetDefaults()
         {
-            Item.damage = 16;
+            Item.damage = 38;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
 
-            Item.useTime = 22;
-            Item.useAnimation = 20;
+            Item.useTime = 28;
+            Item.useAnimation = 28;
 
             Item.useStyle = ItemUseStyleID.Shoot;
             Item.knockBack = 6;
@@ -50,14 +50,14 @@ namespace LobotomyCorp.Items.Waw
             .AddIngredient(ItemID.Javelin)
             .AddIngredient(ItemID.TheRottedFork)
             .AddIngredient(ItemID.CrimtaneBar, 5)
-            .AddTile(Mod, "BlackBox2")
+            .AddTile(Mod, "BlackBox3")
             .Register();
 
             CreateRecipe()
             .AddIngredient(ItemID.Javelin)
             .AddIngredient(ItemID.BallOHurt)
             .AddIngredient(ItemID.DemoniteBar, 5)
-            .AddTile(Mod, "BlackBox2")
+            .AddTile(Mod, "BlackBox3")
             .Register();
         }
     }

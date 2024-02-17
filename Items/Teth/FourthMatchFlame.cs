@@ -50,13 +50,13 @@ namespace LobotomyCorp.Items.Teth
         {
             CreateRecipe()
             .AddIngredient(ItemID.Torch, 99)
-            .AddIngredient(ItemID.GoldBar, 15)
+            .AddIngredient(ItemID.GoldBar, 4)
             .AddTile(Mod, "BlackBox")
             .Register();
 
             CreateRecipe()
             .AddIngredient(ItemID.Torch, 99)
-            .AddIngredient(ItemID.PlatinumBar, 15)
+            .AddIngredient(ItemID.PlatinumBar, 4)
             .AddTile(Mod, "BlackBox")
             .Register();
         }

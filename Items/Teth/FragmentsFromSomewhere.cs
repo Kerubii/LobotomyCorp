@@ -18,7 +18,7 @@ namespace LobotomyCorp.Items.Teth
 
         public override void SetDefaults()
         {
-            Item.damage = 14;
+            Item.damage = 16;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
@@ -50,16 +50,14 @@ namespace LobotomyCorp.Items.Teth
             //On hit, 10% chance to increase sp by 40% for 30 seconds
         }
 
+        
         public override void AddRecipes()
         {
             CreateRecipe()
             .AddIngredient(ItemID.FallenStar, 10)
             .AddIngredient(ItemID.Amethyst)
             .AddIngredient(ItemID.Topaz)
-            .AddIngredient(ItemID.Emerald)
             .AddIngredient(ItemID.Ruby)
-            .AddIngredient(ItemID.Sapphire)
-            .AddIngredient(ItemID.Diamond)
             .AddTile(Mod, "BlackBox")
             .Register();
         }

@@ -1,4 +1,7 @@
+using LobotomyCorp.Projectiles;
 using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -14,7 +17,7 @@ namespace LobotomyCorp.Items.Waw
 
         public override void SetDefaults()
         {
-            Item.damage = 6;
+            Item.damage = 38;
             Item.DamageType = DamageClass.Ranged;
             Item.width = 40;
             Item.height = 20;
@@ -31,6 +34,19 @@ namespace LobotomyCorp.Items.Waw
             Item.shootSpeed = 10f;
             Item.useAmmo = AmmoID.Arrow;
             Item.scale = 0.8f;
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            for (int i = -1; i <= 1; i++)
+            {
+                float rotation = MathHelper.ToRadians(30) * i;
+
+                Vector2 vel = velocity.RotatedBy(rotation) * 0.8f;
+                Projectile.NewProjectile(source, position, vel, ModContent.ProjectileType<FaintAromaShot>(), damage / 3, knockback, player.whoAmI);
+            }
+
+            return base.Shoot(player, source, position, velocity, type, damage, knockback);
         }
 
         public override Vector2? HoldoutOffset()

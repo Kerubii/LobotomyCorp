@@ -67,8 +67,8 @@ namespace LobotomyCorp.Items.Waw
         {
             CreateRecipe()
             .AddIngredient(ItemID.Feather, 5)
-            .AddIngredient(ItemID.InfernoPotion, 2)
-            .AddIngredient(ItemID.Fireblossom, 10)
+            .AddIngredient(ItemID.InfernoPotion)
+            .AddIngredient(ItemID.Fireblossom, 4)
             .AddTile(Mod, "BlackBox3")
             .Register();
         }

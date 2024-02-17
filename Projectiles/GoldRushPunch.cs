@@ -56,7 +56,12 @@ namespace LobotomyCorp.Projectiles
 				Projectile.ai[0]++;
 			}
 
-			Projectile.rotation = Projectile.velocity.ToRotation();
+            if (Projectile.timeLeft == 4 && Main.myPlayer == Projectile.owner)
+            {
+                int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 2, ModContent.ProjectileType<GoldRushFlurry>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
+            }
+
+            Projectile.rotation = Projectile.velocity.ToRotation();
 			if (Projectile.spriteDirection < 0)
 				Projectile.rotation += MathHelper.ToRadians(180);
 

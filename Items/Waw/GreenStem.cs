@@ -16,8 +16,8 @@ namespace LobotomyCorp.Items.Waw
 
         public override void SetDefaults()
         {
-            Item.damage = 16;
-            Item.DamageType = DamageClass.Melee;
+            Item.damage = 36;
+            Item.DamageType = DamageClass.MeleeNoSpeed;
             Item.width = 40;
             Item.height = 40;
 
@@ -48,7 +48,7 @@ namespace LobotomyCorp.Items.Waw
             CreateRecipe()
             .AddIngredient(ItemID.ThornChakram)
             .AddIngredient(ItemID.JungleSpores, 4)
-            .AddIngredient(ItemID.Vine, 90)
+            .AddIngredient(ItemID.Vine, 2)
             .AddTile(Mod, "BlackBox3")
             .Register();
         }

@@ -18,7 +18,7 @@ namespace LobotomyCorp.Items.He
         {
             Item.CloneDefaults(ItemID.CopperShortsword);
             Item.shoot = ModContent.ProjectileType<Projectiles.BearPaw>();
-            Item.damage = 24;
+            Item.damage = 40;
             Item.useAnimation = 12;
             Item.useTime = 12;
             Item.autoReuse = true;
@@ -42,7 +42,7 @@ namespace LobotomyCorp.Items.He
         {
 
             CreateRecipe()
-            .AddIngredient(ItemID.Silk, 30)
+            .AddIngredient(ItemID.Silk, 10)
             .AddIngredient(ItemID.Cobweb, 20)
             .AddIngredient(ItemID.BrownDye, 3)
             .AddTile(Mod, "BlackBox")

@@ -18,7 +18,7 @@ namespace LobotomyCorp.Items.Waw
 
         public override void SetDefaults()
         {
-            Item.damage = 28;
+            Item.damage = 84;
             Item.DamageType = DamageClass.Melee;
             Item.width = 40;
             Item.height = 40;
@@ -48,9 +48,13 @@ namespace LobotomyCorp.Items.Waw
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
             if (player.altFunctionUse != 2)
+            {
                 type = ModContent.ProjectileType<Projectiles.DiscordSlash>();
-            if (type == ModContent.ProjectileType<Projectiles.DiscordSlash>())
-                damage *= 3;
+            }
+            else
+            {
+                damage /= 3;
+            }
         }
 
         public override bool CanUseItem(Player player)

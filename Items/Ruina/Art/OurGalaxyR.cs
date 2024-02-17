@@ -31,19 +31,20 @@ namespace LobotomyCorp.Items.Ruina.Art
 			Item.damage = 90;
 			Item.DamageType = DamageClass.Magic;
 			Item.knockBack = 1f;
-			Item.useTime = 20;
-			Item.useAnimation = 20;
+			Item.useTime = 11;
+			Item.reuseDelay = 48;
+			Item.useAnimation = 33;
 			Item.useStyle = ItemUseStyleID.Shoot;
 
 			Item.value = 100000;
             Item.noMelee = true;
             Item.noUseGraphic = true;
-			//Item.UseSound = SoundID.Item1;
-			Item.autoReuse = true;
+			Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/Art/Galaxy_Strong_Big_Shot") with { Volume = 0.25f };
+            Item.autoReuse = true;
 			Item.rare = ItemRarityID.Yellow;
 
 			Item.shoot = ModContent.ProjectileType<Projectiles.Realized.OurGalaxyComet>();
-			Item.shootSpeed = 12;
+			Item.shootSpeed = 14;
 		}
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)

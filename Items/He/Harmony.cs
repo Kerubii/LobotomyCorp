@@ -51,7 +51,7 @@ namespace LobotomyCorp.Items.He
             }
 
             type = ModContent.ProjectileType<Projectiles.HarmonyShot>();
-            if (player.statLifeMax2 > player.statLifeMax2 * 0.02f)
+            if (player.statLife > player.statLifeMax2 * 0.02f)
             {
                 damage = (int)(damage * 1.3f);
                 player.statLife -= (int)(player.statLifeMax2 * 0.02f);
@@ -68,17 +68,17 @@ namespace LobotomyCorp.Items.He
         {
             CreateRecipe()
             .AddIngredient(ItemID.Sawmill)
-            .AddIngredient(ItemID.SilverBar, 15)
-            .AddIngredient(ItemID.Chain, 16)
-            .AddIngredient(ItemID.RottenChunk, 5)
+            .AddIngredient(ItemID.SilverBar, 8)
+            .AddIngredient(ItemID.Chain, 10)
+            .AddIngredient(ItemID.RottenChunk, 2)
             .AddTile(Mod, "BlackBox2")
             .Register();
 
             CreateRecipe()
             .AddIngredient(ItemID.Sawmill)
-            .AddIngredient(ItemID.SilverBar, 15)
-            .AddIngredient(ItemID.Chain, 16)
-            .AddIngredient(ItemID.Vertebrae, 5)
+            .AddIngredient(ItemID.SilverBar, 8)
+            .AddIngredient(ItemID.Chain, 10)
+            .AddIngredient(ItemID.Vertebrae, 2)
             .AddTile(Mod, "BlackBox2")
             .Register();
         }

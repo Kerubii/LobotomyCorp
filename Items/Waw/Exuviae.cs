@@ -52,7 +52,7 @@ namespace LobotomyCorp.Items.Waw
         {
             CreateRecipe()
             .AddIngredient(ItemID.Hive, 25)
-            .AddIngredient(ItemID.Worm, 10)
+            .AddIngredient(ItemID.Worm, 3)
             .AddTile(Mod, "BlackBox3")
             .Register();
         }
