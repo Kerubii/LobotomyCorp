@@ -89,7 +89,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
                 lobItem.CustomTexture = Mod.Assets.Request<Texture2D>("Items/Ruina/Technology/SolemnLamentS1").Value;
                 modPlayer(player).SolemnSwitch = true;
                 if (PerfectSwitch)
-                    Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_Black");
+                    Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_Black") with { Volume = 0.2f};
                 return modPlayer(player).SolemnLamentDisable != 2;
             }
             else if (modPlayer(player).SolemnSwitch || player.itemTime == 0)
@@ -98,7 +98,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
                 lobItem.CustomTexture = Mod.Assets.Request<Texture2D>("Items/Ruina/Technology/SolemnLamentS2").Value;
                 modPlayer(player).SolemnSwitch = false;
                 if (PerfectSwitch)
-                    Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_White");
+                    Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_White") with { Volume = 0.2f };
                 return modPlayer(player).SolemnLamentDisable != 1;
             }
             return false;
@@ -332,6 +332,11 @@ namespace LobotomyCorp.Items.Ruina.Technology
             if (Time > 10)
             Opacity -= 0.1f;
         }
+
+        public override bool DeActive()
+        {
+            return Opacity <= 0;
+        }
     }
 
     class SolemnLamentBlack : ScreenFilter
@@ -347,6 +352,11 @@ namespace LobotomyCorp.Items.Ruina.Technology
             Time++;
             if (Time > 10)
                 Opacity -= 0.1f;
+        }
+
+        public override bool DeActive()
+        {
+            return Opacity <= 0;
         }
     }
 }

@@ -28,6 +28,7 @@ namespace LobotomyCorp.Items.Teth
             Item.rare = ItemRarityID.Blue;
             Item.UseSound = LobotomyCorp.WeaponSounds.Mace;
             Item.autoReuse = true;
+            Item.scale = 1.3f;
         }
 
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)

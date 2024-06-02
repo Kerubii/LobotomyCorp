@@ -149,12 +149,14 @@ namespace LobotomyCorp.Items.Ruina.History
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<FourthMatchFlame>())
             .AddIngredient(ItemID.CursedTorch, 99)
+            .AddIngredient(ItemID.CursedFlame, 5)
             .AddTile<Tiles.BlackBox3>()
             .Register();
 
             CreateRecipe()
             .AddIngredient(ModContent.ItemType<FourthMatchFlame>())
             .AddIngredient(ItemID.IchorTorch, 99)
+            .AddIngredient(ItemID.Ichor, 5)
             .AddTile<Tiles.BlackBox3>()
             .Register();
         }

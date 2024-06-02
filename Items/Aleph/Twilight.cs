@@ -159,7 +159,7 @@ namespace LobotomyCorp.Items.Aleph
 
             float angle = Main.rand.NextFloat(6.28f);
             Vector2 velocity = new Vector2(16f, 0f).RotatedBy(angle);
-            Projectile.NewProjectile(player.GetSource_FromThis(), target.Center - velocity * 15, velocity, ModContent.ProjectileType<Projectiles.TwilightStrikes>(), hit.Damage / (int)(4 * 1.5f), hit.Knockback, player.whoAmI, target.whoAmI, 3);
+            Projectile.NewProjectile(player.GetSource_FromThis(), target.Center - velocity * 15, velocity, ModContent.ProjectileType<Projectiles.TwilightStrikes>(), hit.Damage / (int)(4 * 1.5f), 0, player.whoAmI, target.whoAmI, 3);
         }
 
         public override bool? CanHitNPC(Player player, NPC target)

@@ -88,7 +88,14 @@ namespace LobotomyCorp.Projectiles.Realized
                 Vector2 velocity = new Vector2(Main.rand.NextFloat(6f, 16f), 0).RotatedByRandom(6.28);
                 Dust.NewDustPerfect(Projectile.Center, DustID.SilverCoin).fadeIn = Main.rand.NextFloat(0.5f, 2f);
 			}
-
+			for (int i = 0; i < 3; i++)
+			{
+				Vector2 vel = new Vector2(Main.rand.Next(4, 8), 0).RotatedByRandom(6.28f);
+				if (Projectile.owner == Main.myPlayer)
+				{
+					Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel, ModContent.ProjectileType<OurGalaxySparkle>(), 0, 0, Projectile.owner);
+				}
+			}
 			SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Art/Galaxy_Strong_Big_Boom") with { Volume = 0.25f });
 		}
 

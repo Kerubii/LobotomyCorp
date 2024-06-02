@@ -58,16 +58,20 @@ namespace LobotomyCorp.Items.Ruina.Art
             {
                 return true;
             }
-
-
-            if (GetPlayerCombo(player) <= 2)
-            {
-                Projectile.NewProjectile(source, position, new Vector2(player.direction, 0), type, damage, knockback, player.whoAmI, -1, player.itemAnimationMax);
-                return false;
-            }
             if (GetPlayerCombo(player) == 6)
             {
                 Projectile.NewProjectile(source, position, new Vector2(player.direction, 0), type, damage, knockback, player.whoAmI, 0, player.itemAnimationMax);
+                return false;
+            }
+
+            if (LobotomyModPlayer.ModPlayer(player).DaCapoSilentMusicPhase % 5 > 1)
+            {
+                int extraType = ModContent.ProjectileType<DaCapoClef>();
+                Projectile.NewProjectile(source, position, velocity * 14, extraType, damage / 2, knockback, player.whoAmI);
+            }
+            if (GetPlayerCombo(player) <= 2)
+            {
+                Projectile.NewProjectile(source, position, new Vector2(player.direction, 0), type, damage, knockback, player.whoAmI, -1, player.itemAnimationMax);
                 return false;
             }
             Projectile.NewProjectile(source, position, new Vector2(player.direction, 0), type, damage, knockback, player.whoAmI, 1, player.itemAnimationMax);
@@ -232,6 +236,10 @@ namespace LobotomyCorp.Items.Ruina.Art
                 SetPlayerCombo(player, 4, 60);
             }
 
+            LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
+            if (modPlayer.DaCapoSilentMusic)
+                modPlayer.DaCapoTotalDamage += damageDone;
+
             base.OnHitNPC(player, target, hit, damageDone);
         }
 
@@ -245,6 +253,17 @@ namespace LobotomyCorp.Items.Ruina.Art
 			LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
 			modPlayer.AttackComboOrder = combo;
 			modPlayer.AttackComboOrderCooldown = cooldown;
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<Aleph.DaCapo>())
+            .AddIngredient(ItemID.DeathSickle)
+            .AddIngredient(ItemID.LightShard)
+            .AddIngredient(ItemID.BeetleHusk)
+            .AddTile<Tiles.BlackBox3>()
+            .Register();
         }
     }
 }

@@ -66,6 +66,7 @@ namespace LobotomyCorp
 
         public int DaCapoSilentMusicPhase = 0;
         public bool DaCapoSilentMusic = false;
+        public int DaCapoTotalDamage = 0;
 
         public float FaintAromaPetal = 0;
         public int FaintAromaPetalMax = 60;
@@ -95,6 +96,8 @@ namespace LobotomyCorp
         public int GrinderMk2BatteryMax = 1400;
         public int GrinderMk2Battery = 1400;
         public bool GrinderMk2Recharging = false;
+        public int GrinderMk2AttackCooldown = 0;
+        public int GrinderMk2AttackRandom = 0;
 
         public int LifeForADareDevilGift = 0;
         public bool LifeForADareDevilGiftActive = false;
@@ -204,6 +207,8 @@ namespace LobotomyCorp
             DaCapoSilentMusic = false;
 
             GrinderMk2Active = false;
+            if (GrinderMk2AttackCooldown > 0)
+                GrinderMk2AttackCooldown--;
 
             if (LifeForADareDevilGift > 0)
             {
@@ -808,14 +813,14 @@ namespace LobotomyCorp
         private float PleasureDodgeChance()
         {
             // Default Dodge Chance
-            float dodge = 20f;
+            float dodge = .2f;
 
             // If a boss is alive at any point in time, Dodge chance is normal
             if (Main.CurrentFrameFlags.AnyActiveBossNPC)
                 return dodge;
 
 
-            // When an enemy is near, reduce chance to dodge which range from 100% to 20% (20% is impossible since they need to be inside you)
+            // When an enemy is near, reduce chance to dodge which range from 80% to 20% (20% is impossible since they need to be inside you)
             // 15 Tiles?
             float maxDist = 15 * 16;
             float distance = maxDist;
@@ -830,7 +835,7 @@ namespace LobotomyCorp
                     }
                 }
             }
-            dodge += (1f - dodge) * distance / maxDist;
+            dodge += (0.8f - dodge) * distance / maxDist;
 
             return dodge;
         }
@@ -917,7 +922,7 @@ namespace LobotomyCorp
                     manaLost = max;
                 }
 
-                Main.NewText(manaLost);
+                //Main.NewText(manaLost);
                 if (!Player.CheckMana(manaLost, true, true))
                 {
                     Player.statMana = Player.statManaMax2;
@@ -1003,6 +1008,13 @@ namespace LobotomyCorp
                         int hitDamage = (int)(damage * dmgMult);
                         Player.ApplyDamageToNPC(n, hitDamage, 8f, x, true);
                         n.immune[Player.whoAmI] = 15;
+                        if (LifeForADareDevilGift <= 1200)
+                        {
+                            int slashes = 2;
+                            if (LifeForADareDevilGift <= 600)
+                                slashes += 2;
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LifeForADareDevilEffectsSlashes>(), hitDamage, 0, Player.whoAmI, 60, slashes, n.whoAmI);
+                        }
                         if (n.realLife > -1)
                         {
                             if (SegmentList.ContainsKey(n.realLife))
@@ -1041,7 +1053,9 @@ namespace LobotomyCorp
             float scale = 1f + 1.5f * (1f - Player.statLife / (float)Player.statLifeMax2);
 
             if (Main.myPlayer == Player.whoAmI)
-                Projectile.NewProjectile(Player.GetSource_FromThis(), pos, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LifeForADareDevilEffects>(), 0, 0, Player.whoAmI, 0, width * scale);
+            {
+                Projectile.NewProjectile(Player.GetSource_FromThis(), pos, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LifeForADareDevilEffects>(), 0, 0, Player.whoAmI, -Main.rand.NextFloat(6.28f), width * scale);
+            }
         }
 
         /// <summary>

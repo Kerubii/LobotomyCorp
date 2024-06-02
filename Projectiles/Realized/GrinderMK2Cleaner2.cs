@@ -50,6 +50,17 @@ namespace LobotomyCorp.Projectiles.Realized
 
         private Vector2 HitboxExtension => new Vector2(Projectile.width / 2, 0).RotatedBy(Projectile.rotation);
 
+        private bool CanAttack(Player player, LobotomyModPlayer modPlayer, Item heldItem)
+        {
+            if (player.altFunctionUse != 2 && heldItem.type == ModContent.ItemType<Items.Ruina.Technology.GrinderMk52R>() && ((Items.Ruina.Technology.GrinderMk52R)heldItem.ModItem).GrinderWeaponOrder == order)
+                return true;
+
+            if (modPlayer.GrinderMk2AttackCooldown <= 0 && Main.rand.NextBool(10) && modPlayer.GrinderMk2AttackRandom == order && player.itemAnimation == player.itemAnimationMax - 1)
+                return true;
+
+            return false;
+        }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
@@ -80,17 +91,19 @@ namespace LobotomyCorp.Projectiles.Realized
 
             Item heldItem = player.HeldItem;
             if (Projectile.owner == Main.myPlayer &&
-                heldItem.type == ModContent.ItemType<Items.Ruina.Technology.GrinderMk52R>() &&
                 Projectile.ai[1] <= 0)
             {
-                if (player.altFunctionUse != 2 && player.itemAnimation > player.itemAnimation / 2 &&((Items.Ruina.Technology.GrinderMk52R)heldItem.ModItem).GrinderWeaponOrder == order)
+                if (CanAttack(player, modPlayer, heldItem) && player.itemAnimation > player.itemAnimation / 2)
                 {
                     ChangeBatteryValue(-8, false);
                     Projectile.ai[1] = AttackSwingTime;
 
                     AttackRotation = (Main.MouseWorld - player.Center).ToRotation() + Main.rand.NextFloat(-0.08f, 0.08f);
+
+                    modPlayer.GrinderMk2AttackCooldown = 60 * 2;
+                    modPlayer.GrinderMk2AttackRandom = Main.rand.Next(4);
                 }
-                else if (player.altFunctionUse == 2 && player.itemAnimation > 0)
+                else if (player.altFunctionUse == 2 && heldItem.type == ModContent.ItemType<Items.Ruina.Technology.GrinderMk52R>() && player.itemAnimation > 0)
                 {
                     float playerAnimation = (float)player.itemAnimation / player.itemAnimationMax;
                     /*if ((order == 0 && playerAnimation > 0.75f) ||

@@ -54,10 +54,13 @@ namespace LobotomyCorp.Items.Teth
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.FallenStar, 10)
+            .AddIngredient(ItemID.FallenStar, 8)
             .AddIngredient(ItemID.Amethyst)
             .AddIngredient(ItemID.Topaz)
+            .AddIngredient(ItemID.Emerald)
+            .AddIngredient(ItemID.Sapphire)
             .AddIngredient(ItemID.Ruby)
+            .AddIngredient(ItemID.Diamond)
             .AddTile(Mod, "BlackBox")
             .Register();
         }

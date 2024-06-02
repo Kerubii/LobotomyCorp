@@ -7,6 +7,7 @@ using Terraria.ModLoader;
 using LobotomyCorp.Utils;
 using LobotomyCorp.ModSystems;
 using LobotomyCorp.Projectiles;
+using LobotomyCorp.Items.Waw;
 
 namespace LobotomyCorp
 {
@@ -56,6 +57,7 @@ namespace LobotomyCorp
                 SoundStyle ding = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_Black");
                 int dustType = 91;
                 ScreenFilter screenFilter = new Items.Ruina.Technology.SolemnLamentWhite();
+                ScreenFilter screenFilter2 = new Items.Ruina.Technology.SolemnLamentBlack();
 
                 if (Lament == 1)
                 {
@@ -63,12 +65,13 @@ namespace LobotomyCorp
                     dustType = 109;
 
                     screenFilter = new Items.Ruina.Technology.SolemnLamentBlack();
+                    screenFilter2 = new Items.Ruina.Technology.SolemnLamentWhite();
                 }
                 ding.Volume = 0.5f;
                 //SoundEngine.PlaySound(ding, target.Center);
 
-                if (projectile.owner == Main.myPlayer)
-                    LobCustomDraw.Instance().AddFilter(screenFilter);
+                if (projectile.owner == Main.myPlayer && !LobCustomDraw.Instance().ContainsFilter(screenFilter2))
+                    LobCustomDraw.Instance().AddFilter(screenFilter, 0, false, false);
 
                 for (int i = 0; i < 3; i++)
                 {

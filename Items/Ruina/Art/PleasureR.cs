@@ -5,16 +5,13 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using System;
+using LobotomyCorp.Items.He;
+using LobotomyCorp.Items.Waw;
 
 namespace LobotomyCorp.Items.Ruina.Art
 {
     public class PleasureR : SEgoItem
 	{
-		public override bool IsLoadingEnabled(Mod mod)
-		{
-			return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
-		}
-
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Our Galaxy");
@@ -62,6 +59,16 @@ namespace LobotomyCorp.Items.Ruina.Art
         public override bool CanShoot(Player player)
         {
             return player.ownedProjectileCounts[Item.shoot] < 1;
+        }
+
+        public override void AddRecipes()
+        {
+			CreateRecipe()
+			   .AddIngredient(ModContent.ItemType<Pleasure>())
+			   .AddIngredient(ItemID.LifeFruit)
+			   .AddIngredient(ItemID.GreaterHealingPotion, 5)
+               .AddTile<Tiles.BlackBox3>()
+               .Register();
         }
     }
 }

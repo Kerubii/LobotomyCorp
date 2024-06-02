@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Projectiles
@@ -139,10 +140,15 @@ namespace LobotomyCorp.Projectiles
 			for (int i = 0; i < 3; i++)
 			{
 				Vector2 spe = new Vector2(16f, 0).RotatedByRandom(6.28f);
-				Main.item[Item.NewItem(Projectile.GetSource_DropAsItem(), target.getRect(), ModContent.ItemType<Items.Ruina.Technology.HarmonyNote>(), 1, true, 0)].velocity = spe;
-			}
+                int number = Item.NewItem(Projectile.GetSource_DropAsItem(), target.getRect(), ModContent.ItemType<Items.Ruina.Technology.HarmonyNote>(), 1, true, 0);
+                Main.item[number].velocity = spe;
+                if (Main.netMode == 1)
+                {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
+                }
+            }
 
-			for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
 			{
 				Main.dust[Dust.NewDust(target.position, target.width, target.height, ModContent.DustType<Misc.Dusts.NoteDust>())].velocity.Y -= 1f;
 			}

@@ -69,7 +69,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
         public override float UseTimeMultiplier(Player player)
         {
 			if (player.altFunctionUse == 2)
-				return 4;
+				return 6;
 
             return base.UseTimeMultiplier(player);
         }

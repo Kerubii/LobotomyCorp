@@ -18,7 +18,7 @@ namespace LobotomyCorp.Items.Teth
 
         public override void SetDefaults()
         {
-            Item.damage = 22; // Sets the Item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage damageed together.
+            Item.damage = 18; // Sets the Item's damage. Note that projectiles shot by this weapon will use its and the used ammunition's damage damageed together.
             Item.DamageType = DamageClass.Ranged; // sets the damage type to ranged
             Item.width = 40; // hitbox width of the Item
             Item.height = 38; // hitbox height of the Item

@@ -23,7 +23,7 @@ namespace LobotomyCorp.NPCs.RedMist
             NPC.width = 24;
             NPC.height = 24;
 
-            NPC.lifeMax = 250;
+            NPC.lifeMax = 120;
             NPC.damage = 60;
             NPC.defense = 12;
 
@@ -101,21 +101,24 @@ namespace LobotomyCorp.NPCs.RedMist
                 {
                     NPC.TargetClosest(false);
 
-                    //Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
-                    //delta.Normalize();
-                    Vector2 delta = new Vector2(0, -1f).RotatedByRandom(MathHelper.ToRadians(5));
-                    if (Main.netMode != NetmodeID.MultiplayerClient)
+                    if (NPC.position.Y - 300 < NPC.GetTargetData().Position.Y)
                     {
-                        float ai0 = Main.rand.Next(5, 12) * (Main.rand.NextBool(2) ? -1 : 1);
-                        //Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, delta * 12f, ModContent.ProjectileType<Projectiles.SmileBits>(), 16, 0, Main.myPlayer);//, Main.rand.NextFloat(0.26f));
-                        Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, delta * 8f, ModContent.ProjectileType<Projectiles.SmileBobs>(), 16, 0, -1, ai0, 8f, NPC.target);
-                    }
+                        //Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
+                        //delta.Normalize();
+                        Vector2 delta = new Vector2(0, -1f).RotatedByRandom(MathHelper.ToRadians(5));
+                        if (Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            float ai0 = Main.rand.Next(5, 12) * (Main.rand.NextBool(2) ? -1 : 1);
+                            //Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, delta * 12f, ModContent.ProjectileType<Projectiles.SmileBits>(), 16, 0, Main.myPlayer);//, Main.rand.NextFloat(0.26f));
+                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, delta * 8f, ModContent.ProjectileType<Projectiles.SmileBobs>(), 16, 0, -1, ai0, 8f, NPC.target);
+                        }
 
-                    for (int i = 0; i < 8; i++)
-                    {
-                        Vector2 dustVel = delta.RotatedByRandom(0.1f) * Main.rand.NextFloat(2,4);
-                        int d = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Wraith, delta.X, delta.Y);
-                        Main.dust[d].noGravity = true;
+                        for (int i = 0; i < 8; i++)
+                        {
+                            Vector2 dustVel = delta.RotatedByRandom(0.1f) * Main.rand.NextFloat(2, 4);
+                            int d = Dust.NewDust(NPC.position, NPC.width, NPC.height, DustID.Wraith, delta.X, delta.Y);
+                            Main.dust[d].noGravity = true;
+                        }
                     }
                 }
                 else if (AiCounter == 60)

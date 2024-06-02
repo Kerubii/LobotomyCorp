@@ -50,7 +50,7 @@ namespace LobotomyCorp.Items.Teth
             .AddIngredient(RecipeGroupID.IronBar, 10)
             .AddIngredient(ItemID.Glass, 5)
             .AddIngredient(ItemID.StoneSlab, 10)
-            .AddIngredient(ItemID.Lens, 20)
+            .AddIngredient(ItemID.Lens, 2)
             .AddTile(Mod, "BlackBox")
             .Register();
         }

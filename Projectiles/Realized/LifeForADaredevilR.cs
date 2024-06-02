@@ -218,6 +218,8 @@ namespace LobotomyCorp.Projectiles.Realized
 
 	public class LifeForADaredevilRAlt : ModProjectile
 	{
+        public override string Texture => "LobotomyCorp/Projectiles/Realized/LifeForADaredevilR";
+
         public override void SetDefaults()
         {
             Projectile.width = 24;
@@ -228,32 +230,157 @@ namespace LobotomyCorp.Projectiles.Realized
             Projectile.DamageType = DamageClass.Melee;
             Projectile.tileCollide = true;
             Projectile.friendly = true;
-            Projectile.hide = true;
+            //Projectile.hide = true;
+        }
+        
+		protected virtual float HoldoutRangeMin => 24f;
+        protected virtual float HoldoutRangeMax => 76f;
+
+        public override bool PreAI()
+        {
+            Player player = Main.player[Projectile.owner]; // Since we access the owner player instance so much, it's useful to create a helper local variable for this
+            int duration = player.itemAnimationMax/2; // Define the duration the projectile will exist in frames
+
+            player.heldProj = Projectile.whoAmI; // Update the player's held projectile id
+
+            Projectile.velocity = Vector2.Normalize(Projectile.velocity); // Velocity isn't used in this spear implementation, but we use the field to store the spear's attack direction.
+
+            float halfDuration = duration / 2f;
+            float progress;
+
+			if (Projectile.localAI[0] == 0)
+			{
+				SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Armor_Cut") with { Pitch = Main.rand.NextFloat(-0.5f, 0.5f) }, player.position);
+                Projectile.localAI[0]++;
+            }
+
+            if (Projectile.ai[0] > 0)
+			{
+				float rotation = 120f;
+				if (Projectile.ai[0] == 1)
+					rotation -= 240 * (float)Math.Sin(1.57f * (Projectile.timeLeft / halfDuration));
+				rotation *= player.direction;
+
+				Vector2 newVel = Projectile.velocity.RotatedBy(MathHelper.ToRadians(rotation));
+                Projectile.Center = player.MountedCenter + newVel * HoldoutRangeMax;
+                Projectile.rotation = newVel.ToRotation();
+				if (Projectile.ai[0] == 1 && Projectile.timeLeft == 1)
+				{
+					Projectile.timeLeft += 20;
+					Projectile.ai[0]++;
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Armor_HeadOff") with { Pitch = Main.rand.NextFloat(-0.05f, 0.05f) }, player.position);
+                }
+                return false;
+			}
+
+            // Reset projectile time left if necessary
+            if (Projectile.timeLeft > duration)
+            {
+                Projectile.timeLeft = duration;
+            }
+
+            // Here 'progress' is set to a value that goes from 0.0 to 1.0 and back during the item use animation.
+            if (Projectile.timeLeft < halfDuration)
+            {
+				progress = 1f;
+            }
+            else
+            {
+                progress = (float)Math.Sin(1.57f * (duration - Projectile.timeLeft) / halfDuration);
+            }
+
+			if (Projectile.timeLeft == (int)(halfDuration + halfDuration / 2f))
+			{
+				float rot = Projectile.rotation + 6.28f;
+                if (Main.myPlayer == Projectile.owner)
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center + new Vector2(80,0).RotatedBy(Projectile.rotation), Vector2.Zero, ModContent.ProjectileType<LifeForADareDevilEffects>(), 0, 0, Projectile.owner, -rot, 100f);
+
+            }
+
+            // Move the projectile from the HoldoutRangeMin to the HoldoutRangeMax and back, using SmoothStep for easing the movement
+            Projectile.Center = player.MountedCenter + Vector2.SmoothStep(Projectile.velocity * HoldoutRangeMin, Projectile.velocity * HoldoutRangeMax, progress);
+
+			Projectile.rotation = Projectile.velocity.ToRotation();
+			Projectile.spriteDirection = player.direction;
+
+            return false; // Don't execute vanilla AI.
         }
 
-        public override void AI()
+        public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+
+			if (Projectile.ai[0] < 2)
+			{
+                Player player = Main.player[Projectile.owner];
+                Vector2 endpoint = player.MountedCenter + new Vector2(270, 0).RotatedBy(Projectile.rotation);
+				float x = 0;
+                return Collision.CheckAABBvLineCollision(targetHitbox.TopLeft(), targetHitbox.Size(), player.MountedCenter, endpoint, 16, ref x);
+            }
+
+            return base.Colliding(projHitbox, targetHitbox);
+        }
+
+        public override bool PreDraw(ref Color lightColor)
+        {
+			Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
+			Rectangle Frame = tex.Frame();
+            Texture2D sheath = ModContent.Request<Texture2D>("LobotomyCorp/Projectiles/Realized/LifeForADaredevilRSheath").Value;
+
+            Vector2 origin = new Vector2(tex.Width, 0);
+			float rotation = Projectile.rotation + 1.14416883f;
+			if (Projectile.spriteDirection == -1)
+			{
+				origin.X = 0;
+				rotation += 0.785398f;
+			}
+
+            int dir = Main.player[Projectile.owner].direction;
+            Vector2 pos = Main.player[Projectile.owner].Center - Main.screenPosition + Projectile.gfxOffY * Vector2.UnitY;
+            Vector2 originPoint = new Vector2(0, Frame.Height);
+            pos.X += 10f * dir;
+            pos.Y -= 2;
+            float sheathRot = rotOffset(dir) + MathHelper.ToRadians(150) * dir;
+			SpriteEffects flip = 0;
+			if (dir == -1)
+			{
+                originPoint.X = Frame.Width;
+                flip = SpriteEffects.FlipHorizontally;
+                sheathRot += 3.14f;
+			}
+            Main.EntitySpriteDraw(sheath, pos, Frame, lightColor, sheathRot, originPoint, 1f, flip, 0);
+            Main.EntitySpriteDraw(tex, Projectile.Center - Main.screenPosition, Frame, lightColor, rotation, origin, Projectile.scale, Projectile.spriteDirection >= 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally);
+            return false;
+        }
+
+        private float rotOffset(int direction)
+        {
+            if (direction == 1)
+                return 1.0472f;
+            return 1.0472f * 2;
+        }
+
+        public override bool? CanHitNPC(NPC target)
         {
 			Player player = Main.player[Projectile.owner];
-			Projectile.ai[0]++;
+            int duration = player.itemAnimationMax / 4;
 
-
-
-			if (Projectile.ai[1] == 0)
-			{
-				if (Projectile.ai[0] > player.itemAnimationMax)
-				{
-					Projectile.Kill();
-				}
-			}
-			else
-			{
-
-			}
+			if (Projectile.timeLeft == duration + duration / 2)
+                return base.CanHitNPC(target);
+			return false;
         }
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            base.OnHitNPC(target, hit, damageDone);
+			int gift = LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).LifeForADareDevilGift;
+			if (gift > 600)
+			{
+				int slashes = 1;
+				if (gift > 1300)
+					slashes += 1;
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.position, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LifeForADareDevilEffectsSlashes>(), Projectile.damage, 0, Projectile.owner, 20, slashes, target.whoAmI);
+            }
+			if (Projectile.ai[0] < 1 && gift > 600)
+				Projectile.ai[0] = 1;
         }
     }
 }

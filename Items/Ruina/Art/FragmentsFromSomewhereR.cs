@@ -11,11 +11,6 @@ namespace LobotomyCorp.Items.Ruina.Art
 {
     public class FragmentsFromSomewhereR : SEgoItem
 	{
-		public override bool IsLoadingEnabled(Mod mod)
-		{
-			return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
-		}
-
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Fragmnents from Somewhere"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
@@ -95,6 +90,13 @@ namespace LobotomyCorp.Items.Ruina.Art
 
         public override void AddRecipes() 
 		{
-		}
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<Items.Teth.FragmentsFromSomewhere>())
+            .AddIngredient(ItemID.ArcaneCrystal)
+            .AddIngredient(ItemID.MeteoriteBar, 8)
+            .AddIngredient(ItemID.CrystalShard, 12)
+            .AddTile<Tiles.BlackBox3>()
+            .Register();
+        }
 	}
 }

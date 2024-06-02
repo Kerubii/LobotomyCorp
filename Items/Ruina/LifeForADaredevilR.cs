@@ -1,6 +1,10 @@
+using LobotomyCorp.Items.He;
+using LobotomyCorp.Items.Teth;
+using LobotomyCorp.Projectiles.Realized;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -8,11 +12,6 @@ namespace LobotomyCorp.Items.Ruina
 {
     public class LifeForADaredevilR : SEgoItem
 	{
-		public override bool IsLoadingEnabled(Mod mod)
-		{
-			return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
-		}
-
 		public override void SetStaticDefaults()
 		{
 			// DisplayName.SetDefault("Life For a Daredevil"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
@@ -46,6 +45,33 @@ namespace LobotomyCorp.Items.Ruina
 			//Item.holdStyle = 7;
 
 			PreviousTarget = -1;
+		}
+
+        public override float UseAnimationMultiplier(Player player)
+        {
+			if (player.altFunctionUse == 2)
+				return 1.75f;
+
+            return base.UseAnimationMultiplier(player);
+        }
+
+        public override float UseTimeMultiplier(Player player)
+        {
+            if (player.altFunctionUse == 2)
+                return 1.75f;
+
+            return base.UseTimeMultiplier(player);
+        }
+
+        public override bool AltFunctionUse(Player player)
+        {
+			return LobotomyModPlayer.ModPlayer(player).LifeForADareDevilGiftActive;
+        }
+
+		public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
+		{
+			if (player.altFunctionUse == 2)
+				type = ModContent.ProjectileType<LifeForADaredevilRAlt>();
 		}
 
         public override bool SafeCanUseItem(Player player)
@@ -144,6 +170,8 @@ namespace LobotomyCorp.Items.Ruina
 			}
 		}
 
+		
+
         public override void UseItemFrame(Player player)
 		{
 			if (player.channel)
@@ -152,7 +180,8 @@ namespace LobotomyCorp.Items.Ruina
 
         public override void HoldStyle(Player player, Rectangle heldItemFrame)
         {
-			player.itemLocation = player.position;
+			if (player.altFunctionUse != 2)
+				player.itemLocation = player.position;
 			//heldItemFrame.X = (int)player.position.X;
 
 			//heldItemFrame.Y = (int)player.position.Y;
@@ -166,14 +195,42 @@ namespace LobotomyCorp.Items.Ruina
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)
 		{
-			if (player.ownedProjectileCounts[Item.shoot] != 0)
+			if (player.altFunctionUse == 2)
+				Item.useStyle = ItemUseStyleID.Shoot;
+			else
 			{
-				if (player.itemAnimation == player.itemAnimationMax - 2)
-					SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Armor_Cut") with { Pitch = Main.rand.NextFloat(0.05f, 0.15f) }, player.position);
-				else if (player.itemAnimation == player.itemAnimationMax / 2 - 1)
-					SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Armor_Cut") with { Pitch = Main.rand.NextFloat(-0.15f, -0.05f) }, player.position);
+                if (player.ownedProjectileCounts[Item.shoot] != 0)
+                {
+                    if (player.itemAnimation == player.itemAnimationMax - 2)
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Armor_Cut") with { Pitch = Main.rand.NextFloat(0.05f, 0.15f) }, player.position);
+                    else if (player.itemAnimation == player.itemAnimationMax / 2 - 1)
+                        SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Armor_Cut") with { Pitch = Main.rand.NextFloat(-0.15f, -0.05f) }, player.position);
+
+                }
+                Item.useStyle = 1;
 			}
             base.UseStyle(player, heldItemFrame);
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+               .AddIngredient(ModContent.ItemType<LifeForADaredevil>())
+			   .AddIngredient(ItemID.OrichalcumBar)
+               .AddIngredient(ItemID.SoulofNight)
+			   .AddIngredient(ItemID.SoulofLight)
+			   .AddIngredient(ItemID.SoulofFlight)
+               .AddTile<Tiles.BlackBox3>()
+               .Register();
+
+            CreateRecipe()
+               .AddIngredient(ModContent.ItemType<LifeForADaredevil>())
+               .AddIngredient(ItemID.MythrilBar)
+               .AddIngredient(ItemID.SoulofNight)
+               .AddIngredient(ItemID.SoulofLight)
+               .AddIngredient(ItemID.SoulofFlight)
+               .AddTile<Tiles.BlackBox3>()
+               .Register();
         }
     }
 }

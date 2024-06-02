@@ -1,3 +1,7 @@
+using Microsoft.Xna.Framework;
+using System.Globalization;
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -29,6 +33,18 @@ namespace LobotomyCorp.Items.He
             Item.shootSpeed = 10f;
             Item.UseSound = LobotomyCorp.WeaponSound("Galaxy");
             Item.autoReuse = true;
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            int num = 3 + Main.rand.Next(2);
+            for (int i = 0; i < num; i++)
+            {
+                Vector2 vel = velocity.RotatedByRandom(MathHelper.ToRadians(30));
+                Projectile.NewProjectile(player.GetSource_FromThis(), position, vel, type, (int)(damage * 0.4f), knockback, player.whoAmI);
+            }
+            return false;
+            //return base.Shoot(player, source, position, velocity, type, damage, knockback);
         }
 
         public override void AddRecipes()

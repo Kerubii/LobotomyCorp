@@ -10,6 +10,7 @@ using Terraria.GameContent;
 using LobotomyCorp.Items.Ruina.Art;
 using Steamworks;
 using static Humanizer.In;
+using LobotomyCorp.Items.He;
 
 namespace LobotomyCorp.Projectiles.Realized
 {

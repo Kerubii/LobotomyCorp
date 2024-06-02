@@ -10,11 +10,6 @@ namespace LobotomyCorp.Items.Ruina.Art
 {
     public class OurGalaxyR : SEgoItem
 	{
-		public override bool IsLoadingEnabled(Mod mod)
-		{
-			return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
-		}
-
 		public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Our Galaxy");
@@ -23,7 +18,7 @@ namespace LobotomyCorp.Items.Ruina.Art
 
 		public override void SetDefaults() 
 		{
-			EgoColor = LobotomyCorp.TethRarity;
+			EgoColor = LobotomyCorp.HeRarity;
 
 			Item.width = 64;
 			Item.height = 64;
@@ -59,6 +54,17 @@ namespace LobotomyCorp.Items.Ruina.Art
 			}
 
             base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
+        }
+
+        public override void AddRecipes()
+        {
+            CreateRecipe()
+            .AddIngredient(ModContent.ItemType<He.OurGalaxy>())
+			.AddIngredient(ItemID.PearlstoneBlock, 50)
+			.AddIngredient(ItemID.FallenStar, 6)
+            .AddIngredient(ItemID.HallowedBar, 2)
+            .AddTile<Tiles.BlackBox3>()
+            .Register();
         }
     }
 }

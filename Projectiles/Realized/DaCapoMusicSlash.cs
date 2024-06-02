@@ -79,6 +79,17 @@ namespace LobotomyCorp.Projectiles.Realized
             hitbox.Y = (int)(target.Y - hitbox.Height / 2);
         }
 
+        /*public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+        {
+            if (Projectile.ai[0] == 0)
+                return base.Colliding(projHitbox, targetHitbox);
+
+            for (int i = -2; i < 3; i++)
+            {
+
+            }
+        }*/
+
         public override bool? CanHitNPC(NPC target)
         {
             if (Projectile.ai[2] > (int)Projectile.ai[1] || (Projectile.ai[0] != 0 && Main.player[Projectile.owner].attackCD != 0))
@@ -101,6 +112,10 @@ namespace LobotomyCorp.Projectiles.Realized
             {
                 Items.Ruina.Art.DaCapoR.SetPlayerCombo(player, 4, 60);
             }
+
+            LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
+            if (modPlayer.DaCapoSilentMusic)
+                modPlayer.DaCapoTotalDamage += damageDone;
         }
 
         private float Rotation(float progress, int direction)

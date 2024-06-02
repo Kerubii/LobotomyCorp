@@ -25,7 +25,7 @@ namespace LobotomyCorp.Utils
 		private Asset<Texture2D> _uImage2;
 		private Asset<Texture2D> _uImage3;
 
-		public CustomShaderData(Ref<Effect> shader, string passName)
+		public CustomShaderData(Asset<Effect> shader, string passName)
 			: base(shader, passName)
 		{
 		}

@@ -2,6 +2,8 @@ using Microsoft.Xna.Framework;
 using Terraria.ID;
 using Terraria.ModLoader;
 using LobotomyCorp.Projectiles;
+using Terraria;
+using System;
 
 namespace LobotomyCorp.Items.Aleph
 {
@@ -27,15 +29,27 @@ namespace LobotomyCorp.Items.Aleph
             Item.knockBack = 4;
             Item.value = 8000;
             Item.rare = ItemRarityID.Red;
-            Item.UseSound = LobotomyCorp.WeaponSound("Slime");
+            //Item.UseSound = LobotomyCorp.WeaponSound("Slime");
             Item.autoReuse = true;
             Item.shoot = ModContent.ProjectileType<MeltyLove>();
             Item.shootSpeed = 7.6f;
+            Item.channel = true;
         }
 
-        public override Vector2? HoldoutOffset()
+        public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
-            return new Vector2(-2, 0);
+            heldItemFrame.Y = 1000;
+            heldItemFrame.X -= 1000;
+            /*int half = player.itemAnimationMax / 2;
+            if (player.itemAnimation > half)
+            {
+                float prog = (player.itemAnimation - half) / (float)half;
+                float rot = player.itemRotation;
+
+                Vector2 heldOffset = new Vector2(-10 * (float)Math.Sin(prog * 3.14f), 0).RotatedBy(rot);
+                heldItemFrame.X += (int)heldOffset.X;
+                heldItemFrame.Y += (int)heldOffset.Y;
+            }*/
         }
 
         public override void AddRecipes()

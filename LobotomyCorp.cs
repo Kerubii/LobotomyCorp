@@ -125,19 +125,19 @@ namespace LobotomyCorp
                     });
 
                     //Ref<Effect> punishingRef = new Ref<Effect>(GetEffect("Effects/PunishingBird"));
-                    Ref<Effect> TrailRef = new Ref<Effect>(Assets.Request<Effect>("Effects/SwordTrail", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> GlowTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/GlowTrail", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> ArcanaSlaveRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ArcanaSlave", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> FourthMatchFlame = new Ref<Effect>(Assets.Request<Effect>("Effects/FourthMatchFlame", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> GenericTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/GenericTrail", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> BladeTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/BladeTrail", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> BrokenScreen = new Ref<Effect>(Assets.Request<Effect>("Effects/BrokenShader", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> RedMistEffect = new Ref<Effect>(Assets.Request<Effect>("Effects/OverlayShader", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> Fragment = new Ref<Effect>(Assets.Request<Effect>("Effects/FragmentUniverse", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> Fragment2 = new Ref<Effect>(Assets.Request<Effect>("Effects/FragmentEnlightened", AssetRequestMode.ImmediateLoad).Value);
+                    Asset<Effect> TrailRef = Assets.Request<Effect>("Effects/SwordTrail", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> GlowTrail = Assets.Request<Effect>("Effects/GlowTrail", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> ArcanaSlaveRef = Assets.Request<Effect>("Effects/ArcanaSlave", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> FourthMatchFlame = Assets.Request<Effect>("Effects/FourthMatchFlame", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> GenericTrail = Assets.Request<Effect>("Effects/GenericTrail", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> BladeTrail = Assets.Request<Effect>("Effects/BladeTrail", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> BrokenScreen = Assets.Request<Effect>("Effects/BrokenShader", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> RedMistEffect = Assets.Request<Effect>("Effects/OverlayShader", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> Fragment = Assets.Request<Effect>("Effects/FragmentUniverse", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> Fragment2 = Assets.Request<Effect>("Effects/FragmentEnlightened", AssetRequestMode.ImmediateLoad);
                     //GameShaders.Misc["Punish"] = new MiscShaderData(punishingRef, "PunishingBird");
 
-                    GameShaders.Misc["LobotomyCorp:Rotate"] = new MiscShaderData(new Ref<Effect>(ArcanaSlaveRef.Value), "ArcanaResize").UseSaturation(0f);
+                    GameShaders.Misc["LobotomyCorp:Rotate"] = new MiscShaderData(ArcanaSlaveRef, "ArcanaResize").UseSaturation(0f);
 
                     ScreenShaderData shaderData = new ScreenShaderData(BrokenScreen, "BrokenScreenShader");
                     shaderData.UseImage(Assets.Request<Texture2D>("Misc/CameraFilterPack_TV_BrokenGlass5", AssetRequestMode.ImmediateLoad).Value, 0, SamplerState.LinearWrap);

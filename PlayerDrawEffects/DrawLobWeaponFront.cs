@@ -54,7 +54,7 @@ namespace LobotomyCorp.PlayerDrawEffects
                     {
                         origin = new Vector2(texture.Width + x, texture.Height / 2);
                     }
-                    position.X += textureCenter.X + (Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch ? -6 : 0) * Player.direction; ;
+                    position.X += textureCenter.X + (Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch ? -6 : 0) * Player.direction - 28;
                     position.Y += textureCenter.Y;
 
                     if (Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch)

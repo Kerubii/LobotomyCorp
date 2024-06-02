@@ -1,5 +1,6 @@
 ﻿using LobotomyCorp.Utils;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -79,33 +80,45 @@ namespace LobotomyCorp.ModSystems
         /// </summary>
         /// <param name="newLayer"></param>
         /// <param name="layer"></param>
-        public void AddFilter(ScreenFilter newLayer, int layer = 0, bool force = false)
+        public void AddFilter(ScreenFilter newLayer, int layer = 0, bool force = false, bool refresh = true)
         {
             if (!force && layer < 3)
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    if (screenFilters.GetType() == newLayer.GetType())
+                    if (screenFilters[i].Active && screenFilters[i].GetType() == newLayer.GetType())
                     {
-                        screenFilters[i] = null;
-                        screenFilters[i] = newLayer;
+                        if (refresh)
+                        {
+                            screenFilters[i] = null;
+                            screenFilters[i] = newLayer;
+                        }
                         return;
                     }
                 }
 
+                for (int i = 0; i < 3; i++)
                 {
-                    for (int i = 0; i < 3; i++)
+                    if (!screenFilters[i].Active)
                     {
-                        if (!screenFilters[i].Active)
-                        {
-                            screenFilters[i] = newLayer;
-                            return;
-                        }
+                        screenFilters[i] = newLayer;
+                        return;
                     }
                 }
+                return;
             }
 
             screenFilters[layer] = newLayer;
+        }
+
+        public bool ContainsFilter(ScreenFilter filterCheck)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                if (screenFilters[i].Active && screenFilters[i].GetType() == filterCheck.GetType())
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>

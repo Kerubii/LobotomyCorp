@@ -46,6 +46,16 @@ namespace LobotomyCorp.Projectiles
                 progress = (duration - Projectile.timeLeft) / QuarterDuration;
             }
 
+            if (Projectile.timeLeft == QuarterDuration)
+            {
+                if (Main.myPlayer == Projectile.owner)
+                {
+                    Vector2 velNorm = Vector2.Normalize(Projectile.velocity);
+                    Vector2 projPos = Projectile.Center - velNorm * 11;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), projPos, velNorm * 5, ModContent.ProjectileType<AmritaLight>(), Projectile.damage * 2 / 3, Projectile.knockBack, Projectile.owner);
+                }
+            }
+
             // Move the projectile from the HoldoutRangeMin to the HoldoutRangeMax and back, using SmoothStep for easing the movement
             Projectile.Center = player.MountedCenter + Vector2.SmoothStep(Projectile.velocity * HoldoutRangeMin, Projectile.velocity * HoldoutRangeMax, progress);
 

@@ -824,7 +824,6 @@ Mods: {
 					Enlightenment - True melee, Spears and other allies deal 20% increased damage, Immune to Echoes from the Beyond and Tentacles
 					Tentacles - Hitting enemies decreases their damage resistance to Echoes from the Beyond (from 10% to 400% damage)
 					|Understand - The user deals decreased damage with any projectiles against enemies with Enlightenment
-					This Item is incomplete and unobtainable
 					''' */
 			}
 
@@ -833,11 +832,10 @@ Mods: {
 				// Tooltip: A teardrop fell from the child's dewy eyes, as stars showered from the sky. The world falls into a slumber, trapped in an ecstatic lullaby.
 				/* PassiveList:
 					'''
-					An Eternal Farewell - Summon multiple comets that explodes, healing the nearest injured ally on hit
+					An Eternal Farewell - Heal the nearest injured ally on hit
 					A Token of Friendship - Allies healed by this weapon gain a Pebble that is only removed when they die
 					Pebble - Gain increased life regeneration based on how many other allies have Pebble, Regeneration disabled under Potion Sickness
 					|Teardrop - If an ally with a Pebble die, the user and all other allies with Pebble also die
-					This Item is incomplete and unobtainable
 					''' */
 			}
 
@@ -866,7 +864,6 @@ Mods: {
 					Fluttering - Chance to dodge Projectiles, Increased chances while no enemy is nearby or no boss is alive. 15% increased Wing acceleration
 					A Game of Trust - 60% of the damage taken is converted into mana damage
 					|Laughing Powder - Heavily decreased Mana Regen and disables Mana Potion heal. When reaching 0 Mana, take 50% maximum health damage and restore Max Mana
-					This Item is incomplete and unobtainable
 					''' */
 			}
 
@@ -875,12 +872,11 @@ Mods: {
 				// Tooltip: From break and ruin, the most beautiful performance begins.
 				/* PassiveList:
 					'''
-					Ever-repeating Performance - Alternate attack to start a Performance with each movement inflicting buffs to allies and debuffs against enemies and summons Chairs that attack nearby enemies
+					Ever-repeating Performance - Alternate attack to start a Performance with each movement inflicting buffs to allies and debuffs against enemies
 					Accelerando - True melee hits enhances this EGO's combo, During Movement 3 and above, further enhances this EGO
-					Finale - During Finale, all damage done by this weapon during the peformance is distributed to all enemies
-					|Al Fine - The Performance never ends. Repeating intensifies its effects and applies buffs and debuffs to everyone
-					Fervent Adoration - After repeating, all allies and enemies are affected by the Performance and this weapon's effects
-					This Item is incomplete and unobtainable
+					Finale - During Finale, Fully heal and 5% of the damange done by this weapon during the peformance is distributed to all enemies being affecte by the Performance. Maximum of 10000% of this weapon's damage
+					|Al Fine - The Performance never ends, Requires to be in a town to disable
+					Fervent Adoration - After repeating the Performance, all allies and enemies are affected by both buffs and non damaging debuffs
 					''' */
 			}
 
@@ -969,10 +965,11 @@ Mods: {
 				// Tooltip: Life is only granted to those who hold no fear of death.
 				/* PassiveList:
 					'''
-					No Fear for Death - Channeling the attack holds a stance. When released before being hit, kill nearby projectiles and do a Counter attack
-					Mortal Life - Successful counters deal additional true damage equal to missing health and increased radius
+					No Fear for Death - Channeling the EGO holds a stance. When released before being hit, kill nearby projectiles and do a Counter attack. Cancels when hit
 					Inspired Bravery - After successfully countering an attack, applies a buff that enhances movement speed, melee swing speed and counter damage by 10% and improves this EGO
-					|Reckless Foolishness - Failing to counter any attack for a period of time decreases damage reduction up to 15%
+					Courage - While having Inspired Bravery, gain an alternate attack with a longer range and damage. Becomes weaker with Reckless Foolishness
+					Mortal Life - No Fear for Death deal additional true damage equal to missing health and increased radius
+					|Reckless Foolishness - Failing to counter any attack for a period of time increases damage taken up to 15% and makes No Fear for Death stronger
 					''' */
 			}
 
@@ -2125,6 +2122,14 @@ Mods: {
 			// LampProjectile.DisplayName: Lamp Projectile
 			// OurGalaxyHeal.DisplayName: Our Galaxy Heal
 			// FragmentsFromSomewhereProjectile.DisplayName: Fragments From Somewhere Projectile
+			// LifeForADaredevilRAlt.DisplayName: Life For A Daredevil R Alt
+			// LifeForADareDevilEffectsSlashes.DisplayName: Life For A Dare Devil Effects Slashes
+			// DaCapoClef.DisplayName: Da Capo Clef
+			// RedMistMimicryHello.DisplayName: Red Mist Mimicry Hello
+			// RedMistMovement.DisplayName: Red Mist Movement
+			// RedMistNote.DisplayName: Red Mist Note
+			// MeltyLoveSmall.DisplayName: Melty Love Small
+			// AmritaLight.DisplayName: Amrita Light
 		}
 
 		Buffs: {
@@ -2362,7 +2367,13 @@ Mods: {
 
 			SilentMusic: {
 				// DisplayName: Silent Music
-				// Description: Mods.LobotomyCorp.Buffs.SilentMusic.Description
+				// Description: Music no one can hear but everyone can listen to
+				// Tooltip1: Movement 1(Adagio): +10 Defense
+				// Tooltip1Alt: Movement 1(Adagio): -10 Defense
+				// Tooltip2: Movement 2(Sostenuto): 10% increased movement speed
+				// Tooltip3: Movement 3(Accelerando): 12% increased damage and melee attack speed
+				// Tooltip4: Movement 4(Stringendo): 15% decreased damage taken
+				// Tooltip4Alt: Movement 4(Stringendo): 15% increased damage taken
 			}
 		}
 

@@ -105,6 +105,7 @@ namespace LobotomyCorp
         public int WingbeatRotation = Main.rand.Next(360);
         public int WingbeatTarget = -1;
         public int WingbeatIndicator = 0;
+        public bool WingbeatFairyAnger = false;
         public int RiskLevel = 0;
 
         public bool WristCutterScars = false;
@@ -248,7 +249,7 @@ namespace LobotomyCorp
             {
                 npc.lifeRegen -= 35;
                 damage += 35;
-                if (DaCapoSilentMusicPhase % 4 > 1)
+                if (DaCapoSilentMusicPhase % 5 > 1)
                 {
                     npc.lifeRegen -= 10;
                     damage += 10;
@@ -363,10 +364,12 @@ namespace LobotomyCorp
             if (DaCapoSilentMusic)
             {
                 modifiers.ArmorPenetration += 15;
-                if (DaCapoSilentMusicPhase % 4 > 2)
+                if (DaCapoSilentMusicPhase % 5 > 2)
                 {
                     modifiers.SourceDamage *= 1.15f;
                 }
+                if (DaCapoSilentMusicPhase > 4 && DaCapoSilentMusicPhase % 5 > 2)
+                    modifiers.SourceDamage *= 0.9f;
             }
         }
 
@@ -396,7 +399,7 @@ namespace LobotomyCorp
 
         bool FragmentEnlightenmentBlacklist(Projectile projectile)
         {
-            if (projectile.type != ModContent.ProjectileType<Projectiles.Realized.FragmentsFromSomewhereRSpear>() || projectile.aiStyle == ProjAIStyleID.Spear)
+            if (projectile.type != ModContent.ProjectileType<Projectiles.Realized.FragmentsFromSomewhereRSpear>() || projectile.aiStyle != ProjAIStyleID.Spear)
                 return true;
             return false;
         }

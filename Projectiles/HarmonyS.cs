@@ -1,4 +1,5 @@
-﻿using LobotomyCorp.Utils;
+﻿using LobotomyCorp.Items.He;
+using LobotomyCorp.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -153,7 +154,15 @@ namespace LobotomyCorp.Projectiles
                 Dust.NewDust(target.position, target.width, target.height, 5);
             }
             Vector2 spe = new Vector2(16f, 0).RotatedByRandom(6.28f);
-            Main.item[Item.NewItem(Projectile.GetSource_DropAsItem(),target.getRect(), ModContent.ItemType<Items.Ruina.Technology.HarmonyNote>(), 1, true, 0)].velocity = spe;
+            if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                int number = Item.NewItem(Projectile.GetSource_DropAsItem(), target.getRect(), ModContent.ItemType<Items.Ruina.Technology.HarmonyNote>(), 1, true, 0);
+                Main.item[number].velocity = spe;
+                if (Main.netMode == 1)
+                {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
+                }
+            }
 
             if (Projectile.localAI[0] <= 0)
             {

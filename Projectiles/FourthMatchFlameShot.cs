@@ -40,6 +40,7 @@ namespace LobotomyCorp.Projectiles
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(BuffID.OnFire, 180);
+            target.immune[Projectile.owner] = 5;
         }
 
         public override void Kill(int timeLeft)
