@@ -12,11 +12,6 @@ namespace LobotomyCorp.NPCs.RedMist
 {
     class HeavenBoss : ModProjectile
     {
-        public override bool IsLoadingEnabled(Mod mod)
-        {
-            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
-        }
-
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Heaven");

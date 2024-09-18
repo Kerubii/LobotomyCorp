@@ -116,27 +116,49 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void AI()
         {
+            if (Projectile.localAI[0] == 0)
+            {
+                Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
+                Projectile.localAI[0]++;
+            }
+
             int trail = 30;
             if (trail1 == null)
                 trail1 = new Trailhelper(trail);
             if (trail2 == null)
                 trail2 = new Trailhelper(trail);
 
-            Projectile.spriteDirection = Math.Sign(Projectile.velocity.X);
             Projectile.rotation += (MathHelper.ToRadians(15) * (Projectile.velocity.Length() / 16f)) * Projectile.spriteDirection;
 
             Projectile.ai[1]++;
 
-            if (Projectile.ai[1] > 30)
+            if (!Main.expertMode)
             {
-                Projectile.velocity *= 0.95f;
+                if (Projectile.ai[1] > 30)
+                {
+                    Projectile.velocity *= 0.95f;
+                }
             }
-            
-            if (Main.expertMode && Projectile.ai[1] == 45 && !Main.player[(int)Projectile.ai[2]].dead)
+            else
             {
-                Projectile.ai[1] = 0;
-                Vector2 delta = Main.player[(int)Projectile.ai[2]].Center - Projectile.Center;
-                Projectile.velocity = delta / 20;
+                Vector2 pos = Main.player[(int)Projectile.ai[2]].Center - Projectile.Center;
+                if (pos.Length() > 4 * 16 && !Main.player[(int)Projectile.ai[2]].dead)
+                {
+                    /*Projectile.ai[1] = 0;
+                    Vector2 delta = Main.player[(int)Projectile.ai[2]].Center - Projectile.Center;
+                    Projectile.velocity = delta / 20;*/
+
+                    Vector2 delta = Main.player[(int)Projectile.ai[2]].Center - Projectile.Center;
+                    float num1 = delta.Length();
+                    float Speed = 16f;
+                    Speed += num1 / 50f;
+
+                    int num2 = 50;
+                    delta.Normalize();
+                    delta *= Speed;
+                    Projectile.velocity = (Projectile.velocity * (float)(num2 - 1) + delta) / num2;
+                }
+
             }
 
             //int type = 88;

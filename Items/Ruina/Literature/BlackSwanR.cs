@@ -129,7 +129,8 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			.AddIngredient(ItemID.Feather, 8)
 			.AddIngredient(ItemID.Ectoplasm, 2)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 		}
 	}
 }

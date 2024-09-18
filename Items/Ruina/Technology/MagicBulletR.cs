@@ -97,7 +97,8 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			   .AddIngredient(ItemID.SoulofSight, 2)
 			   .AddIngredient(ItemID.Teleporter, 2)
 			   .AddTile<Tiles.BlackBox3>()
-			   .Register();
+               .AddCondition(RedMistCond)
+               .Register();
 		}
 	}
 }

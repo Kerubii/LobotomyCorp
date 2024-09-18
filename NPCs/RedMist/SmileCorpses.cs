@@ -23,7 +23,7 @@ namespace LobotomyCorp.NPCs.RedMist
             NPC.width = 24;
             NPC.height = 24;
 
-            NPC.lifeMax = 120;
+            NPC.lifeMax = 60;
             NPC.damage = 60;
             NPC.defense = 12;
 
@@ -100,17 +100,21 @@ namespace LobotomyCorp.NPCs.RedMist
                 if (AiCounter == 30)
                 {
                     NPC.TargetClosest(false);
-
-                    if (NPC.position.Y - 300 < NPC.GetTargetData().Position.Y)
+                    float dist = (NPC.Center - NPC.GetTargetData().Center).LengthSquared();
+                    if (NPC.position.Y - 300 < NPC.GetTargetData().Position.Y && dist > 300 * 300)
                     {
                         //Vector2 delta = NPC.GetTargetData().Center - NPC.Center;
                         //delta.Normalize();
                         Vector2 delta = new Vector2(0, -1f).RotatedByRandom(MathHelper.ToRadians(5));
                         if (Main.netMode != NetmodeID.MultiplayerClient)
                         {
-                            float ai0 = Main.rand.Next(5, 12) * (Main.rand.NextBool(2) ? -1 : 1);
+                            int type = (Main.rand.NextBool(2) ? -1 : 1);
+
+                            float ai0 = Main.rand.Next(5, 10);
+                            if (type < 0)
+                                ai0 = Main.rand.Next(3, 8) * type;
                             //Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, delta * 12f, ModContent.ProjectileType<Projectiles.SmileBits>(), 16, 0, Main.myPlayer);//, Main.rand.NextFloat(0.26f));
-                            Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, delta * 8f, ModContent.ProjectileType<Projectiles.SmileBobs>(), 16, 0, -1, ai0, 8f, NPC.target);
+                                Projectile.NewProjectile(NPC.GetSource_FromThis(), NPC.Center, delta * 8f, ModContent.ProjectileType<Projectiles.SmileBobs>(), 1, 0, -1, ai0, 8f, NPC.target);
                         }
 
                         for (int i = 0; i < 8; i++)
@@ -124,11 +128,21 @@ namespace LobotomyCorp.NPCs.RedMist
                 else if (AiCounter == 60)
                 {
                     AiState = CORPSESTATE;
-                    AiCounter = -Main.rand.Next(120, 300);
+                    AiCounter = -Main.rand.Next(500, 720);
                 }
             }
 
             NPC.localAI[0]++;
+        }
+
+        public override void OnKill()
+        {
+            Player closestPlayer = Main.player[Player.FindClosest(NPC.position, NPC.width, NPC.height)];
+
+            if (closestPlayer.statLife < closestPlayer.statLifeMax2)
+            {
+                Item.NewItem(NPC.GetSource_Loot(), NPC.getRect(), ItemID.Heart);
+            }
         }
 
         public override void FindFrame(int frameHeight)

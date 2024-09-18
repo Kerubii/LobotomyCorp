@@ -64,6 +64,7 @@ namespace LobotomyCorp.Items.Ruina.Art
 			.AddIngredient(ItemID.FallenStar, 6)
             .AddIngredient(ItemID.HallowedBar, 2)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
     }

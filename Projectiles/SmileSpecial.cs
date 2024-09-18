@@ -106,10 +106,12 @@ namespace LobotomyCorp.Projectiles
             }
             else if (Projectile.ai[0] == 3) //Hit a tile/Hit an enemy cause a shockwave
             {
-                if (Projectile.ai[1] == 0)
+                if (Projectile.ai[1] == 0 && Main.myPlayer == Projectile.owner)
                 {
                     Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center + new Vector2(20, 0).RotatedBy(Projectile.rotation + 1.57f * dir), Vector2.Zero, ModContent.ProjectileType<SmileShockwave>(), Projectile.damage, Projectile.knockBack, Projectile.owner, Projectile.rotation);
                     SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Danggo_Lv3_Atk") with { Volume = 0.5f }, Projectile.Center);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, ModContent.ProjectileType<SmileScream>(), Projectile.damage / 5, 0.1f, Projectile.owner, 0, 5, 1);
+
                 }
                 Projectile.ai[1]++;
                 if (Projectile.ai[1] > projOwner.itemAnimationMax * 1.5f)
@@ -308,15 +310,11 @@ namespace LobotomyCorp.Projectiles
                 Projectile.localAI[0] = 1 + Main.rand.Next(3);
             }
 
-            if (player.itemAnimation > player.itemAnimationMax * 0.6f)
+            if (Projectile.ai[2] == 1)
             {
-                //Projectile.velocity = new Vector2(100, 0).RotatedBy(player.itemRotation - MathHelper.ToRadians(45) + (player.direction < 0 ? -1.57f : 0));
-                //Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) + Projectile.velocity;
-
-                if (Projectile.ai[0] == 5 && Main.myPlayer == Projectile.owner)
+                if (Projectile.ai[0] == 5 && Main.myPlayer == Projectile.owner && Projectile.ai[1] > 0)
                 {
-                    Vector2 offset = new Vector2(120, 0).RotatedBy(player.itemRotation - MathHelper.ToRadians(45) + (player.direction < 0 ? -1.57f : 0));
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center + offset, offset, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Vector2.Zero, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner, 0, Projectile.ai[1] - 1, 1);
 
                     float random = Main.rand.NextFloat(1.00f);
                     for (int i = 0; i < 28; i++)
@@ -327,6 +325,28 @@ namespace LobotomyCorp.Projectiles
                     }
                 }
             }
+            else
+            {
+                if (player.itemAnimation > player.itemAnimationMax * 0.6f)
+                {
+                    //Projectile.velocity = new Vector2(100, 0).RotatedBy(player.itemRotation - MathHelper.ToRadians(45) + (player.direction < 0 ? -1.57f : 0));
+                    //Projectile.Center = player.RotatedRelativePoint(player.MountedCenter) + Projectile.velocity;
+
+                    if (Projectile.ai[0] == 5 && Main.myPlayer == Projectile.owner)
+                    {
+                        Vector2 offset = new Vector2(120, 0).RotatedBy(player.itemRotation - MathHelper.ToRadians(45) + (player.direction < 0 ? -1.57f : 0));
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), player.Center + offset, offset, Projectile.type, Projectile.damage, Projectile.knockBack, Projectile.owner);
+
+                        float random = Main.rand.NextFloat(1.00f);
+                        for (int i = 0; i < 28; i++)
+                        {
+                            Vector2 vel = new Vector2(16, 0).RotatedBy(random + MathHelper.ToRadians((360 / 28f) * i));
+                            Dust d = Dust.NewDustPerfect(Projectile.Center, DustID.Wraith, vel);
+                            d.noGravity = true;
+                        }
+                    }
+                }
+            }            
 
             Projectile.scale = 1f - (Projectile.timeLeft / 15f);// (float)Math.Sin(1.57f * (1f - (Projectile.timeLeft / 15f)));
             Projectile.alpha = 255 - (int)(255 * (1f - (Projectile.timeLeft / 15f)));

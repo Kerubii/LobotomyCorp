@@ -99,6 +99,7 @@ namespace LobotomyCorp.Items.Ruina.History
             .AddIngredient(ItemID.Stinger, 20)
             .AddIngredient(ItemID.VialofVenom, 20)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
 	}

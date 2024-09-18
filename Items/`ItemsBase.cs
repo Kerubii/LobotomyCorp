@@ -7,6 +7,8 @@ using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.Audio;
 using LobotomyCorp.Configs;
+using log4net.Util;
+using Steamworks;
 
 namespace LobotomyCorp.Items
 {
@@ -121,12 +123,64 @@ namespace LobotomyCorp.Items
                 list = PassiveText;
             return list;
         }
+
+        public static Condition RedMistCond = new Condition("Mods.LobotomyCorp.LobotomyRedMistRequirement", () => ModSystems.LobEventFlags.downedRedMist);
+    }
+
+    public abstract class LobItemBase : ModItem
+    {
+        public RiskLevel EGORiskLevel;
+
+        public bool RedMistMaskUpgrade(Player player)
+        {
+            if (LobotomyModPlayer.ModPlayer(player).RedMistMask)
+            {
+                switch (EGORiskLevel)
+                {
+                    case RiskLevel.Zayin:
+                    case RiskLevel.Teth:
+                        return true;
+                    case RiskLevel.He:
+                        if (NPC.downedMechBossAny) return true;
+                        break;
+                    case RiskLevel.Waw:
+                        if (NPC.downedPlantBoss) return true;
+                        break;
+                    case RiskLevel.Aleph:
+                        if (NPC.downedGolemBoss) return true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Return Base to keep Red Mist Mask Upgrade tooltip :) 
+        /// </summary>
+        /// <param name="tooltips"></param>
+        public virtual void LobModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (RedMistMaskUpgrade(Main.LocalPlayer))
+            {
+                string text = Language.GetTextValue("Mods.LobotomyCorp.Items." + Name + ".Tooltip2");
+                TooltipLine tooltip2 = new TooltipLine(Mod, "RedMistMask", text);
+                tooltip2.OverrideColor = Color.Maroon;
+                tooltips.Add(tooltip2);
+            }
+        }
+
+        public sealed override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            LobModifyTooltips(tooltips);
+        }
     }
 
     /// <summary>
     /// Use useStyle = 15 to use the light animation :)
     /// </summary>
-    public abstract class LobCorpLight : ModItem
+    public abstract class LobCorpLight : LobItemBase
     {
         public sealed override void UseStyle(Player player, Rectangle heldItemFrame)
         {
@@ -537,7 +591,7 @@ namespace LobotomyCorp.Items
     /// <summary>
     /// Use useStyle = 15 to use the animation :)
     /// </summary>
-    public abstract class LobCorpHeavy : ModItem
+    public abstract class LobCorpHeavy : LobItemBase
     {
         public SoundStyle? SwingSound = null;
 

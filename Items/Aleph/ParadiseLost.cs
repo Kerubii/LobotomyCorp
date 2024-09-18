@@ -22,7 +22,7 @@ namespace LobotomyCorp.Items.Aleph
         {
             Item.damage = 66;
             Item.DamageType = DamageClass.Magic; ;
-            Item.mana = 4;
+            Item.mana = 15;
             Item.width = 40;
             Item.height = 40;
             Item.useTime = 34;

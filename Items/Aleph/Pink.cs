@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.ID;
@@ -21,8 +22,8 @@ namespace LobotomyCorp.Items.Aleph
             Item.DamageType = DamageClass.Ranged; // sets the damage type to ranged
             Item.width = 40; // hitbox width of the Item
             Item.height = 42; // hitbox height of the Item
-            Item.useTime = 38; // The Item's use time in ticks (60 ticks == 1 second.)
-            Item.useAnimation = 38; // The length of the Item's use animation in ticks (60 ticks == 1 second.)
+            Item.useTime = 30; // The Item's use time in ticks (60 ticks == 1 second.)
+            Item.useAnimation = 30; // The length of the Item's use animation in ticks (60 ticks == 1 second.)
             Item.useStyle = ItemUseStyleID.Shoot; // how you use the Item (swinging, holding out, etc)
             Item.noMelee = true; //so the Item's animation doesn't do damage
             Item.knockBack = 4; // Sets the Item's knockback. Note that projectiles shot by this weapon will use its and the used ammunition's knockback damageed together.
@@ -35,10 +36,10 @@ namespace LobotomyCorp.Items.Aleph
             Item.useAmmo = AmmoID.Bullet; // The "ammo Id" of the ammo Item that this weapon uses. Note that this is not an Item Id, but just a magic value.
         }
 
-        public override bool CanUseItem(Player player)
+        /*public override bool CanUseItem(Player player)
         {
             return player.velocity.X == 0 && player.velocity.Y == 0;
-        }
+        }*/
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
@@ -50,9 +51,25 @@ namespace LobotomyCorp.Items.Aleph
 
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
+            float velVar = velocityVariance(player);
+            Main.NewText(velVar);
+            velocity = velocity.RotatedBy(velVar * MathHelper.ToRadians(Main.rand.Next(-30, 31)));
 
             if (type == ProjectileID.Bullet)
                 type = ProjectileID.BulletHighVelocity;
+        }
+
+        public override float UseSpeedMultiplier(Player player)
+        {
+            float baseMult = 1f - 0.66f * velocityVariance(player);
+            return baseMult;
+        }
+
+        private float velocityVariance(Player player)
+        {
+            float maxVel = 16;
+            float vel = player.velocity.Length();
+            return (float)Math.Min(1f, vel / maxVel);
         }
 
         public override Vector2? HoldoutOffset()

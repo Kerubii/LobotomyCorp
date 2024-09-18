@@ -39,6 +39,8 @@ namespace LobotomyCorp.Items.Waw
             Item.autoReuse = true;
         }
 
+        private bool AlternateAttack;
+
         /*public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
             velocity = velocity.RotatedByRandom((float)MathHelper.ToRadians(player.altFunctionUse == 2 ? 30 : 15));
@@ -51,10 +53,10 @@ namespace LobotomyCorp.Items.Waw
 
         public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
         {
-            if (player.altFunctionUse == 2)
+            if (AlternateAttack)
             {
                 knockback = 6f;
-                damage = (int)(damage * 0.4f);
+                damage = (int)(damage * 0.8f);
                 if (player.itemAnimation != player.itemAnimationMax)
                 {
                     type = ModContent.ProjectileType<Projectiles.SpearExtender>();
@@ -71,13 +73,14 @@ namespace LobotomyCorp.Items.Waw
             return base.Shoot(player, source, position, velocity, type, damage, knockback);
         }
 
-        public override bool AltFunctionUse(Player player)
+        /*public override bool AltFunctionUse(Player player)
         {
             return true;
-        }
+        }*/
 
         public override bool CanUseItem(Player player)
         {
+            /*
             if (player.altFunctionUse == 2)
             {
                 Item.UseSound = LobotomyCorp.WeaponSound("rapier1", false);
@@ -87,6 +90,18 @@ namespace LobotomyCorp.Items.Waw
             {
                 Item.UseSound = LobotomyCorp.WeaponSound("rapier2", false);
                 Item.reuseDelay = 0;
+            }*/
+            if (Main.rand.NextBool(8))
+            {
+                Item.UseSound = LobotomyCorp.WeaponSound("rapier1", false);
+                Item.reuseDelay = 4;
+                AlternateAttack = true;
+            }
+            else
+            {
+                Item.UseSound = LobotomyCorp.WeaponSound("rapier1", false);
+                Item.reuseDelay = 4;
+                AlternateAttack = false;
             }
 
             return base.CanUseItem(player);
@@ -94,7 +109,7 @@ namespace LobotomyCorp.Items.Waw
 
         public override float UseSpeedMultiplier(Player player)
         {
-            if (player.altFunctionUse == 2)
+            if (AlternateAttack)
             {
                 return 16 / 30f;
             }
@@ -103,7 +118,7 @@ namespace LobotomyCorp.Items.Waw
 
         public override float UseTimeMultiplier(Player player)
         {
-            if (player.altFunctionUse == 2)
+            if (AlternateAttack)
             {
                 return 2 / 16f;
             }

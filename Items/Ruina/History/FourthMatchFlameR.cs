@@ -151,6 +151,7 @@ namespace LobotomyCorp.Items.Ruina.History
             .AddIngredient(ItemID.CursedTorch, 99)
             .AddIngredient(ItemID.CursedFlame, 5)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
 
             CreateRecipe()
@@ -158,6 +159,7 @@ namespace LobotomyCorp.Items.Ruina.History
             .AddIngredient(ItemID.IchorTorch, 99)
             .AddIngredient(ItemID.Ichor, 5)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
 	}

@@ -27,15 +27,34 @@ namespace LobotomyCorp.Tiles
 			TileID.Sets.DisableSmartCursor[Type] = true;
 		}
 
+        public override bool CanDrop(int i, int j)
+        {
+            int redMistType = ModContent.NPCType<NPCs.RedMist.RedMist>();
+            if (NPC.AnyNPCs(redMistType))
+			{
+				return false;
+			}
+			return base.CanDrop(i, j);
+        }
+
         public override bool RightClick(int i, int j)
         {
 			int redMistType = ModContent.NPCType<NPCs.RedMist.RedMist>();
 			if (!NPC.AnyNPCs(redMistType))
-			{
-				WorldGen.KillTile(i, j);
-
-				NPC.SpawnBoss(i * 16, (j + 1) * 16, redMistType, Main.myPlayer);
-				Gore.NewGore(null, new Vector2(i * 16, j * 16), new Vector2(-1, 0), ModContent.Find<ModGore>("LobotomyCorp/ShellGore").Type);
+            {
+                WorldGen.KillTile(i, j, false, false, true);
+				if (Main.netMode == NetmodeID.MultiplayerClient)
+				{
+                    NPC.SpawnBoss(i * 16, (j + 1) * 16, redMistType, 0);
+					int who = NPC.FindFirstNPC(redMistType);
+                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, who);
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+				}
+				else
+				{
+                    NPC.SpawnBoss(i * 16, (j + 1) * 16, redMistType, 0);
+                }
+                Gore.NewGore(null, new Vector2(i * 16, j * 16), new Vector2(-1, 0), ModContent.Find<ModGore>("LobotomyCorp/ShellGore").Type);
 				Gore.NewGore(null, new Vector2(i * 16, j * 16), new Vector2(1, 0), ModContent.Find<ModGore>("LobotomyCorp/ShellGore2").Type);
 
 				return true;

@@ -221,6 +221,7 @@ namespace LobotomyCorp.Items.Ruina
 			   .AddIngredient(ItemID.SoulofLight)
 			   .AddIngredient(ItemID.SoulofFlight)
                .AddTile<Tiles.BlackBox3>()
+               .AddCondition(RedMistCond)
                .Register();
 
             CreateRecipe()
@@ -230,6 +231,7 @@ namespace LobotomyCorp.Items.Ruina
                .AddIngredient(ItemID.SoulofLight)
                .AddIngredient(ItemID.SoulofFlight)
                .AddTile<Tiles.BlackBox3>()
+			   .AddCondition(RedMistCond)
                .Register();
         }
     }

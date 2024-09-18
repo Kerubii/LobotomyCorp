@@ -126,7 +126,8 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			   .AddIngredient(ItemID.SoulofNight, 8)
 			   .AddRecipeGroup("LobotomyCorp:BossMasks")
 			   .AddTile<Tiles.BlackBox3>()
-			   .Register();
+               .AddCondition(RedMistCond)
+               .Register();
 		}
 	}
 }

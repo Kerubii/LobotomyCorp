@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using System;
 using Terraria;
 using Terraria.Audio;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -35,10 +36,12 @@ namespace LobotomyCorp.Items.Aleph
 
             SwingSound = LobotomyCorp.WeaponSounds.Hammer;
             Item.autoReuse = true;
-            Item.shoot = ModContent.ProjectileType<Projectiles.SmileScream>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.SmileBitsFriendly>();
             Item.shootSpeed = 1f;
             Item.noUseGraphic = false;
             Item.noMelee = false;
+
+            hasHitEnemy = false;
         }
 
         public override bool AltFunctionUse(Player player)
@@ -83,6 +86,7 @@ namespace LobotomyCorp.Items.Aleph
 
         public override bool? UseItem(Player player)
         {
+            hasHitEnemy = false;
             if (player.altFunctionUse == 2)
             {
                 Item.noMelee = true;
@@ -104,7 +108,7 @@ namespace LobotomyCorp.Items.Aleph
             }
             else
             {
-                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/Danggo_Lv2") with { Volume = 0.25f }, player.Center);
+                //SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/Danggo_Lv2") with { Volume = 0.25f }, player.Center);
                 Item.useStyle = 15;
                 Item.noUseGraphic = false;
             }
@@ -115,10 +119,26 @@ namespace LobotomyCorp.Items.Aleph
             return base.CanShoot(player);
         }
 
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            if (player.altFunctionUse != 2)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    Vector2 vel = velocity.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-15, 15))) * Main.rand.Next(10, 14);
+                    Projectile.NewProjectile(player.GetSource_FromThis(), position, vel, type, damage / 3, 0, player.whoAmI);
+                }
+                return false;
+            }
+            return true;
+        }
+
         public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)
         {
             if (player.altFunctionUse != 2)
             {
+                
+                /*
                 float scale = Item.scale;
                 ItemLoader.ModifyItemScale(Item, player, ref scale);
                 Vector2 offset = new Vector2(100 * scale, 0).RotatedBy(player.itemRotation - MathHelper.ToRadians(45) + (player.direction < 0 ? -1.57f : 0));
@@ -127,6 +147,7 @@ namespace LobotomyCorp.Items.Aleph
                 type = ModContent.ProjectileType<Projectiles.SmileScream>();
                 damage = (int)(damage * 0.2f);
                 knockback *= 0.1f;
+                */
             }
             else
             {
@@ -134,6 +155,22 @@ namespace LobotomyCorp.Items.Aleph
             }
 
             base.ModifyShootStats(player, ref position, ref velocity, ref type, ref damage, ref knockback);
+        }
+
+        private bool hasHitEnemy = false;
+
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (!hasHitEnemy && Main.myPlayer == player.whoAmI)
+            {
+                Vector2 velocity = target.Center - player.Center;
+                velocity.Normalize();
+                for (int i = 0; i < 7; i++)
+                {
+                    Vector2 vel = velocity.RotatedBy(MathHelper.ToRadians(Main.rand.NextFloat(-15, 15))) * Main.rand.Next(10, 14);
+                    Projectile.NewProjectile(player.GetSource_FromThis(), target.Center, vel, Item.shoot, Item.damage / 3, 0, player.whoAmI, target.whoAmI);
+                }
+            }
         }
 
         public override void AddRecipes()

@@ -14,7 +14,7 @@ namespace LobotomyCorp.NPCs.RedMist
         {
             Projectile.width = 16;
             Projectile.height = 16;
-            Projectile.tileCollide = true;
+            Projectile.tileCollide = false;
 
             Projectile.hostile = true;
             Projectile.timeLeft = 30;
@@ -54,8 +54,9 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override void Kill(int timeLeft)
         {
+            Projectiles.GoldRushHold.DiamondDust(Projectile.Center, DustID.GoldCoin, 5, 8, 4, 1.2f, Projectile.ai[0]);
             if (Main.netMode != NetmodeID.MultiplayerClient)
-            {
+            { 
                 Vector2 vel = new Vector2(4f, 0).RotatedBy(Projectile.ai[0]);
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel * 3, ModContent.ProjectileType<GoldRushShot>(), Projectile.damage, 0);
             }

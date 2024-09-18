@@ -16,6 +16,7 @@ namespace LobotomyCorp.Items.Aleph
 							   "It can deliver a powerful downswing that should be impossible for a human.\n" +
 							   "Can be charged for 300% increased damage\n" +
 							   "Recovers 25% damage dealt on hit"); */
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
 
         private bool MimicryHeal = false;
@@ -42,6 +43,16 @@ namespace LobotomyCorp.Items.Aleph
             Item.scale = 1f;
             LobotomyModPlayer.ModPlayer(player).ChargeWeaponHelper = 0;
             MimicryHeal = false;
+            return true;
+        }
+
+        public override void HoldItem(Player player)
+        {
+            
+        }
+
+        public override bool AltFunctionUse(Player player)
+        {
             return true;
         }
 
@@ -96,6 +107,10 @@ namespace LobotomyCorp.Items.Aleph
 
             MimicryHeal = true;
             int heal = (int)(damageDone * 0.25f);
+            if (heal > 40)
+            {
+                heal = 40; 
+            }
             player.HealEffect(heal);
             player.statLife += heal;
             if (Main.myPlayer == player.whoAmI && LobotomyModPlayer.ModPlayer(player).ChargeWeaponHelper >= 0.9f)

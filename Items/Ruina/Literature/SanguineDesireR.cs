@@ -96,14 +96,16 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			.AddIngredient(ItemID.SoulofFright, 3)
 			.AddIngredient(ItemID.AdamantiteWaraxe)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 
 			CreateRecipe()
 			.AddIngredient(ModContent.ItemType<SanguineDesire>())
 			.AddIngredient(ItemID.SoulofFright, 3)
 			.AddIngredient(ItemID.TitaniumWaraxe)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 		}
 
         public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)

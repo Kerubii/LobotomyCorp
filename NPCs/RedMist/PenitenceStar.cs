@@ -44,7 +44,8 @@ namespace LobotomyCorp.NPCs.RedMist
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
+            //Texture2D tex = TextureAssets.Projectile[Projectile.type].Value;
+            Texture2D tex = TextureAssets.Projectile[927].Value;
             Vector2 pos = Projectile.Center - Main.screenPosition + Vector2.UnitY * Projectile.gfxOffY;
             Vector2 origin = tex.Size() / 2;
             Rectangle frame = tex.Frame();
@@ -57,12 +58,21 @@ namespace LobotomyCorp.NPCs.RedMist
             }
 
             float starscale = (1f + 0.1f * (float)Math.Sin(3.14f * Projectile.localAI[0]/20)) * scale;
-            Main.EntitySpriteDraw(tex, pos, frame, Color.White * opacity, 0, origin, starscale, 0, 0);
+            //Main.EntitySpriteDraw(tex, pos, frame, Color.White * opacity, 0, origin, starscale, 0, 0);
+            drawStar(tex, pos, Color.Yellow * opacity, 0, origin, starscale);
 
             starscale = 1f * scale;
-            Main.EntitySpriteDraw(tex, pos, frame, Color.White * 0.4f * opacity, Projectile.rotation, origin, starscale, 0, 0);
-            Main.EntitySpriteDraw(tex, pos, frame, Color.White * 0.4f * opacity, -Projectile.rotation, origin, starscale, 0, 0);
+            //Main.EntitySpriteDraw(tex, pos, frame, Color.White * 0.4f * opacity, Projectile.rotation, origin, starscale, 0, 0);
+            drawStar(tex, pos, Color.White * 0.4f, Projectile.rotation, origin, starscale);
+            //Main.EntitySpriteDraw(tex, pos, frame, Color.White * 0.4f * opacity, -Projectile.rotation, origin, starscale, 0, 0);
+            drawStar(tex, pos, Color.White * 0.4f, -Projectile.rotation, origin, starscale);
             return false;
+        }
+
+        private void drawStar(Texture2D tex, Vector2 pos, Color color, float rotation, Vector2 origin, float scale)
+        {
+            Main.EntitySpriteDraw(tex, pos, tex.Frame(), color, rotation, origin, scale * 0.6f, 0, 0);
+            Main.EntitySpriteDraw(tex, pos, tex.Frame(), color, rotation + 1.57f, origin, scale * 0.6f, 0, 0);
         }
 
         public override void Kill(int timeLeft)
@@ -121,8 +131,8 @@ namespace LobotomyCorp.NPCs.RedMist
             //origin.X -= Projectile.frame % 36;
             int length = tex.Width;
 
-            Color white = Color.White;
-            white.A = 100;
+            //Color white = Color.White;
+            //white.A = 100;
 
             if (Projectile.ai[0] < 15)
                 scale.Y *= Projectile.ai[0] / 13f;
@@ -151,7 +161,9 @@ namespace LobotomyCorp.NPCs.RedMist
                         }
                         else break;
                     }
-                    Main.EntitySpriteDraw(tex, pos, frame, Color.White * laserOpacity, 1.57f, origin, laserScale, 0, 0);
+                    Color white = Color.Lerp(Color.White, Color.Yellow, laserOpacity);
+                    white.A = 100;
+                    Main.EntitySpriteDraw(tex, pos, frame, white * laserOpacity, 1.57f, origin, laserScale, 0, 0);
                 }
             }
 

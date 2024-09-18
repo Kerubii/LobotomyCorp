@@ -96,6 +96,7 @@ namespace LobotomyCorp.Items.Ruina.Art
             .AddIngredient(ItemID.MeteoriteBar, 8)
             .AddIngredient(ItemID.CrystalShard, 12)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
 	}

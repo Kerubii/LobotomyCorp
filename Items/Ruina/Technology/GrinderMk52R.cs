@@ -90,6 +90,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
             .AddIngredient(ItemID.IronBroadsword, 4)
             .AddIngredient(ItemID.Wire, 150)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
 
             CreateRecipe()
@@ -98,6 +99,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
             .AddIngredient(ItemID.LeadBroadsword, 4)
             .AddIngredient(ItemID.Wire, 150)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
 	}

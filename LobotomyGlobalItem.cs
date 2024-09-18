@@ -35,6 +35,10 @@ namespace LobotomyCorp
             {
                 itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Aleph.Censored>(), 4));
             }
+            else if (item.type == ItemID.EyeOfCthulhuBossBag)
+            {
+                itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.He.Syrinx>(), 4));
+            }
             if (item.type == ItemID.Present)
             {
                 itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.He.Christmas>(), 100));

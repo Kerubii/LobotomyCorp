@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LobotomyCorp.Buffs;
+using LobotomyCorp.Items.Aleph;
 using LobotomyCorp.Items.Waw;
+using LobotomyCorp.ModSystems;
+using LobotomyCorp.NPCs.RedMist;
 using LobotomyCorp.PlayerDrawEffects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -46,6 +49,8 @@ namespace LobotomyCorp
         public int statPrudence = 0;
         public int statTemperance = 0;
         public int statJustice = 0;
+
+        public bool RedMistMask = false;
 
         public bool Hopeless = false;
 
@@ -116,6 +121,7 @@ namespace LobotomyCorp
         public int MimicryShellHealth = 0;
         public float MimicryShellDamage = 1f;
         public int MimicryShellDefense = 0;
+        public int MimicryShellTimerMax = 0;
         public bool MimicryHusk = false;
         public int MimicryHuskDeficit = 0;
 
@@ -155,7 +161,7 @@ namespace LobotomyCorp
 
         //Aura Vanity
         public AuraBehavior CurrentAura;
-        public AuraParticle[] AuraParticles = new AuraParticle[100];
+        public AuraParticle[] PlayerParticles = new AuraParticle[100];
 
         public static LobotomyModPlayer ModPlayer(Player Player)
         {
@@ -179,6 +185,8 @@ namespace LobotomyCorp
             BlackShield = false;
             PaleShield = false;
             CooldownShield = false;
+
+            RedMistMask = false;
 
             Hopeless = false;
 
@@ -218,6 +226,10 @@ namespace LobotomyCorp
 
             giftFourthMatchFlame = false;
             MatchstickBurn = false;
+
+            MimicryShell = false;
+            MimicryHusk = false;
+            MimicryHuskDeficit = 0;
 
             if (MagicBulletRequest >= 0 && Player.HeldItem.type != ModContent.ItemType<Items.Ruina.Technology.MagicBulletR>())
                 MagicBulletRequest = -1;
@@ -304,10 +316,10 @@ namespace LobotomyCorp
 
             NihilActive = false;
 
-            for(int i = 0; i < AuraParticles.Length; i++)
+            for(int i = 0; i < PlayerParticles.Length; i++)
             {
-                if (AuraParticles[i] != null && AuraParticles[i].Active)
-                    AuraParticles[i].Active = false;
+                if (PlayerParticles[i] != null && PlayerParticles[i].Active)
+                    PlayerParticles[i].Active = false;
             }
         }
 
@@ -315,6 +327,20 @@ namespace LobotomyCorp
         {
             if (Player.HasBuff<Buffs.NettleClothing>())
                 Player.ClearBuff(ModContent.BuffType<Buffs.NettleClothing>());
+
+            if (Player.HasBuff<TodaysLook>())
+                Player.ClearBuff(ModContent.BuffType<Buffs.TodaysLook>());
+
+            if (Player.HasBuff<PleasureTail>())
+                Player.ClearBuff(ModContent.BuffType<PleasureTail>());
+
+            if (Player.HasBuff<SilentMusic>())
+                Player.ClearBuff(ModContent.BuffType<SilentMusic>());
+
+            if (Player.HasBuff<Buffs.Shell>())
+                Player.ClearBuff(ModContent.BuffType<Buffs.Shell>());
+            if (Player.HasBuff<Buffs.Husk>())
+                Player.ClearBuff(ModContent.BuffType<Buffs.Husk>());
 
             AuraParticle[] AuraParticles = new AuraParticle[100];
         }
@@ -489,13 +515,13 @@ namespace LobotomyCorp
             if (CurrentAura != null)
             {
                 if (Main.timeForVisualEffects % CurrentAura.intensity == 0)
-                    LobotomyAura.GenerateParticle(this, CurrentAura);
+                    LobotomyPlayerParticle.GenerateAuraParticle(this, CurrentAura);
             }
-            for (int i = 0; i < AuraParticles.Length; i++)
+            for (int i = 0; i < PlayerParticles.Length; i++)
             {
-                if (AuraParticles[i] != null && AuraParticles[i].Active)
+                if (PlayerParticles[i] != null && PlayerParticles[i].Active)
                 {
-                    AuraParticles[i].Update(Player, Player.direction, Player.gravDir, (float)Main.timeForVisualEffects);
+                    PlayerParticles[i].Update(Player, Player.direction, Player.gravDir, (float)Main.timeForVisualEffects);
                 }
             }
         }
@@ -1127,6 +1153,15 @@ namespace LobotomyCorp
             }
         }
 
+        /*public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            //MimicryShell Attack Boost
+            if (MimicryShell)
+            {
+                modifiers.SourceDamage += MimicryBonusDamage;
+            }
+        }*/
+
         public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
         {
             if (FaintAromaPetal > 0)
@@ -1298,6 +1333,11 @@ namespace LobotomyCorp
                 }
             }
 
+            if (NPC.AnyNPCs(ModContent.NPCType<RedMist>()))
+            {
+                LobEventFlags.killedByRedMist = true;
+            }
+
             base.Kill(damage, hitDirection, pvp, damageSource);
         }
 
@@ -1320,17 +1360,48 @@ namespace LobotomyCorp
         /// <param name="n"></param>
         public void MimicryWearShell(NPC n)
         {
+            for (int i = 0; i < 30; i++)
+            {
+                Dust.NewDust(Player.position, Player.width, Player.height, DustID.Blood);
+            }
+
             if (Player.HasBuff<Husk>())
             {
                 Player.ClearBuff(ModContent.BuffType<Husk>());
             }
-            int time = Math.Min(n.lifeMax * 2, 60 * 60);
+            int time = Math.Min(n.lifeMax * 30, 300 * 60);
             Player.AddBuff(ModContent.BuffType<Shell>(), time);
             MimicryShell = true;
             MimicryShellDamage = Math.Min(n.damage / 10f, .8f);
             MimicryShellDefense = Math.Min(n.defense, 30);
             MimicryShellHealth = Math.Min((int)(n.lifeMax * 0.1f), 500);
+            MimicryShellTimerMax = time;
         }
+
+        public void MimicryIncreaseShellTime(int Time)
+        {
+            int index = Player.FindBuffIndex(ModContent.BuffType<Shell>());
+            Player.buffTime[index] += Time;
+            if (Player.buffTime[index] > MimicryShellTimerMax)
+                Player.buffTime[index] = MimicryShellTimerMax;
+        }
+
+        public float MimicryShellPercent()
+        {
+            int index = -1;
+            if (Player.HasBuff<Shell>())
+                index = Player.FindBuffIndex(ModContent.BuffType<Shell>());
+            if (index < 0)
+                return 0;
+
+            float percent = (float)Player.buffTime[index] / MimicryShellTimerMax;
+            if (percent > 1f)
+                percent = 1f;
+            return percent;
+        }
+        public int MimicryBonusHealth { get { return (int)(MimicryShellHealth * MimicryShellPercent()); } }
+        public int MimicryBonusDamage { get { return (int)(MimicryShellDamage * MimicryShellPercent()); } }
+        public int MimicryBonusDefense { get { return (int)(MimicryShellDefense * MimicryShellPercent()); } }
 
         public static void PleasureManaConsume(Player player, int cost)
         {

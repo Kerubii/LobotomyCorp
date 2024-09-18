@@ -9,7 +9,7 @@ using LobotomyCorp.Utils;
 
 namespace LobotomyCorp.PlayerDrawEffects
 {
-    public class LobotomyAura : PlayerDrawLayer
+    public class LobotomyPlayerParticle : PlayerDrawLayer
     {
         public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.MountBack);
 
@@ -21,7 +21,7 @@ namespace LobotomyCorp.PlayerDrawEffects
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(drawInfo.drawPlayer);
-            AuraParticle[] particle = modPlayer.AuraParticles;
+            AuraParticle[] particle = modPlayer.PlayerParticles;
             if (particle != null)
             {
                 for (int i = 0; i < particle.Length; i++)
@@ -34,15 +34,29 @@ namespace LobotomyCorp.PlayerDrawEffects
             }
         }
 
-        public static void GenerateParticle(LobotomyModPlayer modPlayer, AuraBehavior auraUsed)
+        public static void GenerateAuraParticle(LobotomyModPlayer modPlayer, AuraBehavior auraUsed)
         {
             Player player = modPlayer.Player;
-            for (int i = 0; i < modPlayer.AuraParticles.Length; i++)
+            for (int i = 0; i < modPlayer.PlayerParticles.Length; i++)
             {
-                AuraParticle particle = modPlayer.AuraParticles[i];
+                AuraParticle particle = modPlayer.PlayerParticles[i];
                 if (particle == null || !particle.Active)
                 {
-                    modPlayer.AuraParticles[i] = new AuraParticle(modPlayer.Player, player.direction, player.gravDir, (float)Main.timeForVisualEffects, auraUsed, i);
+                    modPlayer.PlayerParticles[i] = new AuraParticle(modPlayer.Player, player.direction, player.gravDir, (float)Main.timeForVisualEffects, auraUsed, i);
+                    break;
+                }
+            }
+        }
+
+        public static void GeneratePlayerParticle(LobotomyModPlayer modPlayer, AuraBehavior particleBehavior)
+        {
+            Player player = modPlayer.Player;
+            for (int i = 0; i < modPlayer.PlayerParticles.Length; i++)
+            {
+                AuraParticle particle = modPlayer.PlayerParticles[i];
+                if (particle == null || !particle.Active)
+                {
+                    modPlayer.PlayerParticles[i] = new AuraParticle(modPlayer.Player, player.direction, player.gravDir, (float)Main.timeForVisualEffects, particleBehavior, i);
                     break;
                 }
             }

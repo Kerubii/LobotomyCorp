@@ -170,6 +170,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
                .AddIngredient(ItemID.SoulofLight, 6)
                .AddIngredient(ItemID.Ectoplasm, 8)
                .AddTile<Tiles.BlackBox3>()
+               .AddCondition(RedMistCond)
                .Register();
         }
 

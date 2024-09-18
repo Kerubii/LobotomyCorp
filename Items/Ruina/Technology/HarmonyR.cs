@@ -109,7 +109,8 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			.AddIngredient(ItemID.CarbonGuitar)
 			.AddIngredient(ItemID.Chain, 12)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 		}
 	}
 }

@@ -110,14 +110,16 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			.AddIngredient(ItemID.AdamantiteBar, 5)
 			.AddIngredient(ItemID.FlamingMace)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 
 			CreateRecipe()
 			.AddIngredient(ModContent.ItemType<Regret>())
 			.AddIngredient(ItemID.TitaniumBar, 5)
 			.AddIngredient(ItemID.FlamingMace)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 		}
 	}
 }

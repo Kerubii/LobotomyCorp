@@ -81,6 +81,13 @@ namespace LobotomyCorp.ModSystems
                 3863
             });
             RecipeGroup.RegisterGroup("LobotomyCorp:BossMasks", rec);
+
+            rec = new RecipeGroup(() => "Either Soul of Light or Night", new[]
+            {
+                (int)ItemID.SoulofLight,
+                ItemID.SoulofNight
+            });
+            RecipeGroup.RegisterGroup("LobotomyCorp:DualSoul", rec);
         }
 
         public override void ModifyScreenPosition()

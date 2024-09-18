@@ -13,19 +13,7 @@ namespace LobotomyCorp.Items.Ruina.Art
 {
     public class DaCapoR : SEgoItem
 	{
-        public override bool IsLoadingEnabled(Mod mod)
-        {
-            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
-        }
-
-        public override void SetStaticDefaults() 
-		{
-			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			// Tooltip.SetDefault("\"Bearing the hope to return to dust, it shall go back to the grave with all that desires to live.\"");
-
-        }
-
-		public override void SetDefaults() 
+        public override void SetDefaults() 
 		{
             Item.damage = 240;
 			Item.DamageType = DamageClass.Melee;
@@ -263,6 +251,7 @@ namespace LobotomyCorp.Items.Ruina.Art
             .AddIngredient(ItemID.LightShard)
             .AddIngredient(ItemID.BeetleHusk)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
     }

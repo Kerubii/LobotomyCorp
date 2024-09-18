@@ -16,14 +16,25 @@ Mods: {
 					It's the byproduct of some horrid experiment in a certain laboratory that eventually failed.
 					Inflicts Slow
 					'''
+				/* Tooltip2:
+					'''
+					Splash from the slime creates additional splash when it hits tiles or enemies
+					Splashes now form slimes that sticks to tiles and walls that damages enemies on them
+					''' */
 				DisplayName: 爱慕
 			}
 
 			Amrita: {
 				/* Tooltip:
 					'''
-					A cane used by monks for when they travel away from their temple.
-					It is commonly used to measure the depth of a body of water or to drive animals or insects away.
+					'A cane used by monks for when they travel away from their temple.
+					It is commonly used to measure the depth of a body of water or to drive animals or insects away.'
+					''' */
+				/* Tooltip2:
+					'''
+					Creates sarira, up to 4 while having maximum health
+					Sarira can be hit again to be launched and returns to the owner
+					Sariras are only active while this weapon is held
 					''' */
 				DisplayName: 无量
 			}
@@ -31,8 +42,14 @@ Mods: {
 			Beak: {
 				/* Tooltip:
 					'''
-					As if to prove that size doesn't matter when it comes to force,
-					The weapon has high firepower despite its small size.
+					'As if to prove that size doesn't matter when it comes to force,
+					The weapon has high firepower despite its small size.'
+					''' */
+				/* Tooltip2:
+					'''
+					Firing speed increases when hit for 5 seconds
+					Accuracy is lowered while firing speed is increased
+					80% chance to not consume ammo while firing speed is increased
 					''' */
 				DisplayName: 尖喙
 			}
@@ -43,16 +60,28 @@ Mods: {
 					柔软的棉花填充着这只可爱的泰迪熊。
 					他的身体因为岁月而变得破烂不堪，就如同人们早已失去童真一样。
 					'''
+				/* Tooltip2:
+					'''
+					Right click to grab non boss or miniboss enemies
+					Grabbed enemies are damaged over time and cannot damage you
+					Switching weapons cancels the grab
+					''' */
 				DisplayName: 熊熊抱
 			}
 
 			BlackSwan: {
 				/* Tooltip:
 					'''
-					Believing that it would turn white,
+					'Believing that it would turn white,
 					The black swan wanted to lift the curse by weaving together nettles.
-					All that was left is a worn parasol it once treasured.
+					All that was left is a worn parasol it once treasured.'
 					Small chance to reflect damage taken
+					''' */
+				/* Tooltip2:
+					'''
+					Shoots a shotgun blast of toxic waves
+					Can parry projectiles with perfect timing
+					Reflecting damage taken or parrying allows a follow up attack
 					''' */
 				DisplayName: 黑天鹅
 			}
@@ -60,9 +89,14 @@ Mods: {
 			Censored: {
 				/* Tooltip:
 					'''
-					[CENSORED] has the ability to [CENSORED], but this is a horrendous sight for those watching.
-					Looking at the E.G.O for more than 3 seconds will make you sick.
+					'[CENSORED] has the ability to [CENSORED], but this is a horrendous sight for those watching.
+					Looking at the E.G.O for more than 3 seconds will make you sick.'
 					Heal 40% damage taken
+					''' */
+				/* Tooltip2:
+					'''
+					Reach and size increased
+					Hit enemies take 400 damage per second for 5 seconds when hit
 					''' */
 				DisplayName: ［数据删除］
 			}
@@ -73,16 +107,26 @@ Mods: {
 					花般散落开来，在空中飘过，如同展开的粉扇。映照出余晖，令人眷恋着花落前的景色。
 					春风，夹杂着纷飞的花瓣，吹打在人们的脸庞，却不知为何带着一丝冰冷与痛楚。
 					'''
+				/* Tooltip2:
+					'''
+					Increased Cherry Blossom amount
+					Cherry Blossoms fall on enemies hit by this weapon
+					''' */
 				DisplayName: 落樱
 			}
 
 			Christmas: {
 				/* Tooltip:
 					'''
-					It is patched with heavy leather of unknown origin.
+					'It is patched with heavy leather of unknown origin.
 					The stitches are carefully woven, but for whom or for what, exactly, is unclear.
-					It is not elegant, but you can feel the devotion of its creator.
+					It is not elegant, but you can feel the devotion of its creator.'
 					Can be obtained from Presents
+					''' */
+				/* Tooltip2:
+					'''
+					Additional assortment of holiday projectiles
+					Hit enemies gain 3 random debuffs for 5 seconds
 					''' */
 				DisplayName: 悲惨圣诞
 			}
@@ -90,9 +134,16 @@ Mods: {
 			CobaltScar: {
 				/* Tooltip:
 					'''
-					Once upon a time, these claws would cut open the bellies of numerous creatures and tear apart their guts.
+					'Once upon a time, these claws would cut open the bellies of numerous creatures and tear apart their guts.'
 					Hitting an enemy has a chance of increasing melee damage by 10%
 					50% increased damage while under 50% health
+					''' */
+				/* Tooltip2:
+					'''
+					Creates blood slashes while having no 'Well Fed' buff
+					Killed enemies give 'Well Fed' buff
+					While 'Well Fed', Attacks change to a close ranged heavier strike combo instead
+					Right click to convert 'Well Fed' buff to 'Hunger' buff
 					''' */
 				DisplayName: Cobalt Scar
 			}
@@ -100,11 +151,18 @@ Mods: {
 			CrimsonScar: {
 				/* Tooltip:
 					'''
-					With steel in one hand and gunpowder in the other, there's nothing to fear in this place.
-					It's more important to deliver a decisive strike in blind hatred without hesitation than to hold on to insecure courage.
+					'With steel in one hand and gunpowder in the other, there's nothing to fear in this place.
+					It's more important to deliver a decisive strike in blind hatred without hesitation than to hold on to insecure courage.'
 					Benefits from Ranged damage increases
 					Empowers next Range attack after hitting with a Normal Melee attack and vice versa
 					50% increased damage under 50% health
+					''' */
+				/* Tooltip2:
+					'''
+					All attacks are empowered
+					If attacks are empowered normally, they are further empowered
+					Empowered Scythes creates a rain of Scythes
+					Empowered Shots aims semi randomly consecutively
 					''' */
 				DisplayName: 郁蓝创痕
 			}
@@ -112,32 +170,51 @@ Mods: {
 			Diffraction: {
 				/* Tooltip:
 					'''
-					To see this E.G.O, one must thoroughly concentrate.
-					You can ignore the ridiculous advice that you can see it with your mind.
+					'To see this E.G.O, one must thoroughly concentrate.
+					You can ignore the ridiculous advice that you can see it with your mind.'
 					Randomizes enemy stats on first hit
 					''' */
+				// Tooltip2: Has a random size and damage
 				DisplayName: 虚无衍射体
 			}
 
 			DaCapo: {
 				/* Tooltip:
 					'''
-					A scythe that swings silently and with discipline like a conductor's gestures and baton.
-					If there were a score for this song, it would be one that sings of the apocalypse.
+					'A scythe that swings silently and with discipline like a conductor's gestures and baton.
+					If there were a score for this song, it would be one that sings of the apocalypse.'
+					''' */
+				/* Tooltip2:
+					'''
+					Creates seeking homing notes when hitting or striking the ground
+					Third swing is thrown instead
+					Thrown Da Capo has a damaging radius and returns
 					''' */
 				DisplayName: Da Capo
 			}
 
 			Ecstacy: {
-				// Tooltip: The colorful pattern is vivid, similar to a child's plaything.
+				// Tooltip: "'The colorful pattern is vivid, similar to a child's plaything.'"
+				/* Tooltip2:
+					'''
+					Bubbles dont flow upwards
+					Gain increased movement speed when firing
+					Sboots one extra bubble that does not do damage and stays in the air
+					Right click to dash towards the bubble nearest to the cursor
+					''' */
 				DisplayName: 沉醉
 			}
 
 			Discord: {
 				/* Tooltip:
 					'''
-					A falchion edge shadowed by the world's discord.
-					Every life is trapped in the cycle of reincarnation.
+					'A falchion edge shadowed by the world's discord.
+					Every life is trapped in the cycle of reincarnation.'
+					''' */
+				/* Tooltip2:
+					'''
+					Swings the weapon 360 degrees
+					Pokes the weapon on both sides
 					''' */
 				DisplayName: 不和
 			}
@@ -149,19 +226,34 @@ Mods: {
 					这家残酷的公司甚至不允许人们拥有甜美的梦。
 					这件武器将唤醒那些沉浸在甜美梦境中的人们。
 					'''
+				// Tooltip2: '''Shoots additional slow moving piercing stars					'''
 				DisplayName: 虚空之梦
 			}
 
 			Exuviae: {
 				// Tooltip: The slick sensation when holding this E.G.O may disturb some employees.
+				/* Tooltip2:
+					'''
+					Smoke projectiles linger longer
+					Infects enemies hit
+					Deals more damage to infected enemies
+					Infected enemies shoots parasites to uninfected enemies
+					Infected enemies produce lingering smoke projectiles on death
+					''' */
 				DisplayName: 蜕落之皮
 			}
 
 			FaintAroma: {
 				/* Tooltip:
 					'''
-					Even after the E.G.O was extracted, it still carried the fragrance of the archetype.
-					Simply carrying it gives the illusion that you're standing in a forest in the middle of nowhere.
+					'Even after the E.G.O was extracted, it still carried the fragrance of the archetype.
+					Simply carrying it gives the illusion that you're standing in a forest in the middle of nowhere.'
+					''' */
+				/* Tooltip2:
+					'''
+					Converts Arrows into Full Bloom Arrows
+					Petals home in on the nearest enemy
+					When all 3 petals hit, deals damage to nearby enemies
 					''' */
 				DisplayName: 余香
 			}
@@ -169,8 +261,16 @@ Mods: {
 			FeatherOfHonor: {
 				/* Tooltip:
 					'''
-					The feather strikes with vivid flame. It is not weak, nor faint.
-					The flame pierces the body and melts the frost of the heart.
+					'The feather strikes with vivid flame. It is not weak, nor faint.
+					The flame pierces the body and melts the frost of the heart.'
+					''' */
+				/* Tooltip2:
+					'''
+					Feathers appear while being held
+					Inflicts Oiled
+					Amount of feathers increase per empty minion slot
+					All Feathers fire Simultaneously
+					Right click to make individual Feathers seek an enemy
 					''' */
 				DisplayName: 荣耀之羽
 			}
@@ -178,9 +278,14 @@ Mods: {
 			FourthMatchFlame: {
 				/* Tooltip:
 					'''
-					The fire roars and burns like the first flame.
-					The light of the match will not go out.
+					'The fire roars and burns like the first flame.
+					The light of the match will not go out.'
 					Consumes bullets
+					''' */
+				/* Tooltip2:
+					'''
+					Bigger and stronger explosion
+					Can be charged to create an even bigger explosion
 					''' */
 				DisplayName: 终末之光
 			}
@@ -192,6 +297,7 @@ Mods: {
 					这支长矛经常试图引导握着它的人进入无尽的精神位面，因此持有者必须小心，决不能被
 					其迷惑。
 					'''
+				// Tooltip2: Range increased
 				DisplayName: 彼方的碎片
 			}
 
@@ -202,38 +308,64 @@ Mods: {
 					尖锐的矛冰冷无比，被他刺中的目标甚至会因为寒冷而暂时无法动弹
 					Inflicts Slow
 					'''
+				/* Tooltip2:
+					'''
+					Icicles are faster and bigger
+					Icicles explode to smaller icicles
+					Right click to swing
+					Hit enemies gain up to 3 Icicles
+					''' */
 				DisplayName: 霜之碎片
 			}
 
 			Gaze: {
 				/* Tooltip:
 					'''
-					The gaze from the keyhole is fixed on its target without ever stopping.
-					No one knows what it wanted to peep at so dearly.
+					'The gaze from the keyhole is fixed on its target without ever stopping.
+					No one knows what it wanted to peep at so dearly.'
 					Can cause additional damage over time
 					''' */
+				// Tooltip2: Hits all enemies in direct sight with no knockback
 				DisplayName: 凝视
 			}
 
 			GoldRush: {
 				/* Tooltip:
 					'''
-					The weapon she used to brandish in her prime, before the greed solidified and became what it is now.
-					One can release their primal desires and strike enemies with full force; technical skill is unneeded.
+					'The weapon she used to brandish in her prime, before the greed solidified and became what it is now.
+					One can release their primal desires and strike enemies with full force; technical skill is unneeded.'
+					''' */
+				/* Tooltip2:
+					'''
+					Increased Flurry Intensity
+					Right click to Teleport
+					Right click while channeling to Continously teleport
 					''' */
 				DisplayName: 闪金冲锋
 			}
 
 			GreenStem: {
 				// Tooltip: Those who come in contact die by the deep-seated hatred rather than the sharpness of its tip.
+				/* Tooltip2:
+					'''
+					Creates a random spread of Vines
+					Vines traps hit three times
+					Increased Vine range
+					''' */
 				DisplayName: 绿色枝干
 			}
 
 			GrinderMk4: {
 				/* Tooltip:
 					'''
-					The sharp sawtooth of the grinder makes a clean cut through its enemy.
-					Its operation is simple and straightforward, but that doesn't necessarily make it easy to wield.
+					'The sharp sawtooth of the grinder makes a clean cut through its enemy.
+					Its operation is simple and straightforward, but that doesn't necessarily make it easy to wield.'
+					''' */
+				/* Tooltip2:
+					'''
+					Collides with tiles
+					Moves the player forward when colliding
+					Tiles creates sparks
 					''' */
 				DisplayName: 粉碎机MK4
 			}
@@ -246,15 +378,27 @@ Mods: {
 					而代价是，持有者要献出自己的肉体来使它演奏。
 					30% increased damage when consuming 2% hp while having above 2% maximum health
 					'''
+				/* Tooltip2:
+					'''
+					Health consumption is negated
+					Increased amount of Projectiles
+					Projectiles gain a random behavior
+					Right click to execute an enemy under 10% health and gain a buff
+					''' */
 				DisplayName: 谐奏发射器
 			}
 
 			Horn: {
 				/* Tooltip:
 					'''
-					The green - eyed beauty's favorite flower was the dahlia; "Your love makes me happy."
+					'The green - eyed beauty's favorite flower was the dahlia; "Your love makes me happy."
 					The lady's happiness came to an end with the budding of those unsightly horns.
-					The dahlia's unfulfilled meaning was borne as a seed in this E.G.O, carrying a lingering emotion.
+					The dahlia's unfulfilled meaning was borne as a seed in this E.G.O, carrying a lingering emotion.'
+					''' */
+				/* Tooltip2:
+					'''
+					Throws the spear
+					Right click to charge forwards
 					''' */
 				DisplayName: 犄角
 			}
@@ -262,20 +406,29 @@ Mods: {
 			Hornet: {
 				/* Tooltip:
 					'''
-					The kingdom needed to stay prosperous, and more bees were required for that task.
+					'The kingdom needed to stay prosperous, and more bees were required for that task.
 					The name of that kingdom may go down in history.
 					But who will be there to remember the bees that gave their lives to the cause?
-					The weapon's bullets selectively fly toward threats, so skillful aiming isn't required; all that's needed is the will to hit the target.
+					The weapon's bullets selectively fly toward threats, so skillful aiming isn't required; all that's needed is the will to hit the target.'
 					Bullets are converted to bees
 					''' */
+				// Tooltip2: Bullets are converted to bee bullets instead
 				DisplayName: 黄蜂
 			}
 
 			Harvest: {
 				/* Tooltip:
 					'''
-					The last legacy of the man who sought wisdom.
-					The rake tilled the human brain instead of farmland.
+					'The last legacy of the man who sought wisdom.
+					The rake tilled the human brain instead of farmland.'
+					''' */
+				/* Tooltip2:
+					'''
+					{0} Mana cost
+					Deals additional Magic Damage while having Mana
+					Fires a hook when used while having mana
+					Manasteals 10% of damage dealt
+					Hook detaches when mana reaches full
 					''' */
 				DisplayName: Harvest
 			}
@@ -283,8 +436,14 @@ Mods: {
 			Heaven: {
 				/* Tooltip:
 					'''
-					Just contain it in your sight.
-					As it spreads its wings for an old god, a heaven just for you burrows its way.
+					'Just contain it in your sight.
+					As it spreads its wings for an old god, a heaven just for you burrows its way.'
+					''' */
+				/* Tooltip2:
+					'''
+					Grows additional Branches
+					Right click to throw
+					Creates Branches when hitting a tile
 					''' */
 				DisplayName: 穿刺极乐
 			}
@@ -292,19 +451,26 @@ Mods: {
 			Hypocrisy: {
 				/* Tooltip:
 					'''
-					The tree turned out to be riddled with hypocrisy and deception;
+					'The tree turned out to be riddled with hypocrisy and deception;
 					Those who wear its blessing act in the name of bravery and faith.
-					However, be warned that nature does not know the difference between a blessing and a curse.
+					However, be warned that nature does not know the difference between a blessing and a curse.'
 					Sold by the Dryad after Queen Bee
 					''' */
+				// Tooltip2: Arrows are converted to Great Tree Arrows
 				DisplayName: 伪善
 			}
 
 			InTheNameOfLoveAndHate: {
 				/* Tooltip:
 					'''
-					A magic wand surging with the lovely energy of a magical girl.
-					The holy light can cleanse the body and mind of every villain, and they shall be born anew.
+					'A magic wand surging with the lovely energy of a magical girl.
+					The holy light can cleanse the body and mind of every villain, and they shall be born anew.'
+					''' */
+				/* Tooltip2:
+					'''
+					Increased projectile amount
+					Stars can home in to nearest damaged allies
+					Channel a laser that heals allies and damages enemies
 					''' */
 				DisplayName: 以爱与恨为名
 			}
@@ -312,10 +478,15 @@ Mods: {
 			Justitia: {
 				/* Tooltip:
 					'''
-					It remembers the balance of the Long Bird that never forgot others' sins.
-					This weapon may be able to not only cut flesh but trace of sins as well.
+					'It remembers the balance of the Long Bird that never forgot others' sins.
+					This weapon may be able to not only cut flesh but trace of sins as well.'
 					Attacks hit multiple times
 					Has a chance to perform a special attack
+					''' */
+				/* Tooltip2:
+					'''
+					Increased Range
+					Right click to do Twilight special attack
 					''' */
 				DisplayName: 正义裁决者
 			}
@@ -323,8 +494,14 @@ Mods: {
 			Laetitia: {
 				/* Tooltip:
 					'''
-					The crude design appears to have been made a long time ago.
-					The small accessory remains like the wishes of a child who yearned for happiness.
+					'The crude design appears to have been made a long time ago.
+					The small accessory remains like the wishes of a child who yearned for happiness.'
+					''' */
+				/* Tooltip2:
+					'''
+					Gives Gifts
+					Gifts explode when hit again
+					Gifts turn into explosive friends
 					''' */
 				DisplayName: 蕾蒂希娅
 			}
@@ -332,8 +509,13 @@ Mods: {
 			Lamp: {
 				/* Tooltip:
 					'''
-					Big Bird's eyes gained another in number for every creature it saved.
-					On this weapon, the radiant pride is apparent.
+					'Big Bird's eyes gained another in number for every creature it saved.
+					On this weapon, the radiant pride is apparent.'
+					''' */
+				/* Tooltip2:
+					'''
+					Creates more projectiles while swinging
+					Right click to create a projectile for each enemy on screen
 					''' */
 				DisplayName: 目灯
 			}
@@ -344,6 +526,11 @@ Mods: {
 					发光的躯体能够轻而易举地照亮黑暗，闪烁着的淡绿色荧光也十分适合诱捕那些可怜的无
 					知者。
 					'''
+				/* Tooltip2:
+					'''
+					Hit enemies are consumed by this weapon, healing you
+					Right click to swing the weapon around
+					''' */
 				DisplayName: 诱捕幻灯
 			}
 
@@ -353,14 +540,27 @@ Mods: {
 					这是一把古老的武士刀。
 					就同那盔甲一样，如果这把刀落在了懦夫手里，它便一点威力也没有。
 					'''
+				/* Tooltip2:
+					'''
+					Does extra 10% of the non boss enemy's health as damage
+					Right click for judgement cut
+					''' */
 				DisplayName: 决死之心
 			}
 
 			Lumber: {
 				/* Tooltip:
 					'''
-					A versatile equipment made to cut down trees and people alike.
-					Perhaps sharpening the axe was the one thing it didn't neglect. The blade is always shiny.
+					'A versatile equipment made to cut down trees and people alike.
+					Perhaps sharpening the axe was the one thing it didn't neglect. The blade is always shiny.'
+					Drops a heart on kill
+					''' */
+				/* Tooltip2:
+					'''
+					Extra reach
+					Deals more damage having more health
+					Increased melee speed on low health
+					Grants 'Heartreach' on hit
 					''' */
 				DisplayName: 伐木者
 			}
@@ -368,9 +568,16 @@ Mods: {
 			MagicBullet: {
 				/* Tooltip:
 					'''
-					Though the original's power couldn't be fully extracted, the magic this holds is still potent.
-					The weapon's bullets travel across the corridor, along the horizon.
+					'Though the original's power couldn't be fully extracted, the magic this holds is still potent.
+					The weapon's bullets travel across the corridor, along the horizon.'
 					Pierces through foes and friends alike
+					''' */
+				/* Tooltip2:
+					'''
+					Redirects to an enemy if it misses
+					Inflicts dark flame
+					First hit of each bullets increases damage by 7%
+					Resets on the 7th bullet
 					''' */
 				DisplayName: 魔弹射手
 			}
@@ -378,32 +585,35 @@ Mods: {
 			Mimicry: {
 				/* Tooltip:
 					'''
-					The yearning to imitate the human form is sloppily reflected on the E.G.O.
+					'The yearning to imitate the human form is sloppily reflected on the E.G.O.
 					As if it were a reminder that it should remain a mere desire.
-					It can deliver a powerful downswing that should be impossible for a human.
+					It can deliver a powerful downswing that should be impossible for a human.'
 					Can be charged for 300% increased damage
-					Recovers 25% damage dealt on the first enemy hit on swing
+					Recovers 25% damage dealt on the first enemy hit on swing (Max 40)
 					''' */
+				// Tooltip2: You desire one too don't you? a shell
 				DisplayName: 拟态
 			}
 
 			Moonlight: {
 				/* Tooltip:
 					'''
-					The snake\'s open mouth represents the endless yearning for music.
-					It temporarily invites the user to the world of trance.
+					'The snake\'s open mouth represents the endless yearning for music.
+					It temporarily invites the user to the world of trance.'
 					25% chance to apply Black Shields to nearby allies when used
 					''' */
+				// Tooltip2: ???
 				DisplayName: 伪善
 			}
 
 			OurGalaxy: {
 				/* Tooltip:
 					'''
-					"There's a universe inside a pebble."
+					'"There's a universe inside a pebble."
 					When the child cries, the stars in the galaxy light the void.
-					"In your universe, am I to be found?"
+					"In your universe, am I to be found?"'
 					''' */
+				// Tooltip2: Star projectiles orbit around you
 				DisplayName: 小小银河
 			}
 
@@ -415,6 +625,12 @@ Mods: {
 					At the same time, I am the one who kindled the light to face the world.
 					My loved ones, who now eagerly desire the greater gifts; I will show you the most excellent way.
 					'''
+				/* Tooltip2:
+					'''
+					Can be used in the air
+					Summoned weapons spin after piercing
+					Right click to summon weapons for each enemy on screen
+					''' */
 				DisplayName: 失乐园
 			}
 
@@ -424,6 +640,11 @@ Mods: {
 					唯有理解才能获取知识。
 					通过对这个异想体的细心观测，我们成功提取出了它的核心并将其塑造成一把武器。
 					'''
+				/* Tooltip2:
+					'''
+					Increased range
+					Summons light beams to nearby enemies
+					''' */
 				DisplayName: 忏悔
 			}
 
@@ -434,16 +655,24 @@ Mods: {
 					Can guns really bring peace and love?
 					Can only be used while standing still
 					'''
+				/* Tooltip2:
+					'''
+					Converts bullets to Pink Bullet
+					Right click to switch to Black
+					Black has slower firing speed but increased damage
+					Black converts bullets to Black Bullet
+					''' */
 				DisplayName: Pink
 			}
 
 			Pleasure: {
 				/* Tooltip:
 					'''
-					If you grasp for pleasure you cannot endure, you will end up losing yourself.
+					'If you grasp for pleasure you cannot endure, you will end up losing yourself.
 					When the powder that falls from the thorns becomes known to the world,
-					People may forever sink into the swamp of intoxication.
+					People may forever sink into the swamp of intoxication.'
 					''' */
+				// Tooltip2: ???
 				DisplayName: 因勒癫狂
 			}
 
@@ -454,6 +683,12 @@ Mods: {
 					在这座长有多眼睛的蜘蛛巢中，爬着许多饥肠辘辘却不知满足的后代。
 					   为了在夜间觅食，它的眼睛会发出微光。这把E.G.O武器可以增强持有者的追踪能力。
 					'''
+				/* Tooltip2:
+					'''
+					Grants Hunter buff while held
+					Right click to teleport to an enemy
+					Teleports back after 2 seconds
+					''' */
 				DisplayName: 赤瞳
 			}
 
@@ -464,6 +699,11 @@ Mods: {
 					为了一个更远大的目标，他们放下了道德和尊严，虽不人道，可没人会感到后悔...除了他
 					们。看上去连仁慈的Carmen都默许了这一切。
 					'''
+				/* Tooltip2:
+					'''
+					Normal swing has a second hit
+					Right click to swing the weapon three times consecutively
+					''' */
 				DisplayName: 悔恨
 			}
 
@@ -473,24 +713,32 @@ Mods: {
 					甚至在女孩的双脚被砍断后，舞鞋依旧凭借着难以置信的执念，带着残肢进入了森林。
 					大多数员工都熟悉这双舞鞋曾引发的悲剧往事。    
 					'''
+				// Tooltip2: Grants 'Desire' while held
 				DisplayName: 血之渴望
 			}
 
 			ScreamingWedge: {
 				/* Tooltip:
 					'''
-					Hair has grown on the crossbow as if to express that the woman's dejection will never be forgotten.
-					The sound of the projectile splitting the air is reminiscent of her piercing scream.
+					'Hair has grown on the crossbow as if to express that the woman's dejection will never be forgotten.
+					The sound of the projectile splitting the air is reminiscent of her piercing scream.'
 					''' */
+				// Tooltip2: Arrows are converted to Screaming Arrows
 				DisplayName: 刺耳尖叫
 			}
 
 			Smile: {
 				/* Tooltip:
 					'''
-					It has the pale faces of nameless employees and a giant mouth on it.
-					Upon striking with the weapon, the monstrous mouth opens wide to devour the target, its hunger insatiable.
+					'It has the pale faces of nameless employees and a giant mouth on it.
+					Upon striking with the weapon, the monstrous mouth opens wide to devour the target, its hunger insatiable.'
 					Alternate attack to slam down an enemy or the ground
+					''' */
+				/* Tooltip2:
+					'''
+					Vomits in all directions
+					Killing an enemy vomits projectiles everywhere
+					Alternate attack produces screaming centered on first enemy hit
 					''' */
 				DisplayName: 笑靥
 			}
@@ -501,6 +749,7 @@ Mods: {
 					我想，从有着可爱外表的异想体中提取出来的武器应该不会很厉害吧？
 					好吧，我错了，这只爪子不仅结实耐用，还狠可爱！！
 					'''
+				// Tooltip2: ???
 				DisplayName: 超特么可爱！！！
 			}
 
@@ -510,15 +759,25 @@ Mods: {
 					这把武器由一名十分喜欢皮皮虾的员工提出并提取出来。
 					这是一把带有葡萄紫色涂装的手枪。
 					'''
+				/* Tooltip2:
+					'''
+					Hitting a tile causes a soda geyser to fire to the nearest enemy
+					Either heals 1 hp, restore 20 mana or not consume ammo
+					''' */
 				DisplayName: 美味苏打
 			}
 
 			SolemnLament: {
 				/* Tooltip:
 					'''
-					The somber design is a reminder that not a sliver of frivolity is allowed for the minds of those who mourn.
-					One handgun symbolizes grief for the dead, while the other symbolizes early lament for the living.
+					'The somber design is a reminder that not a sliver of frivolity is allowed for the minds of those who mourn.
+					One handgun symbolizes grief for the dead, while the other symbolizes early lament for the living.'
 					Switches between range and magic depending on the gun used
+					''' */
+				/* Tooltip2:
+					'''
+					Fire rate increased
+					Sometimes converts Ammo into Butterflies
 					''' */
 				DisplayName: 圣宣
 			}
@@ -529,15 +788,21 @@ Mods: {
 					即便是这个异想体的核心已经变成了E.G.O的形式，那种强烈的孤独感也仍旧存在于这把武器上。
 					它射出来的子弹并不会穿透敌人的骨头，反而会留下永久的，孤独的空白。
 					'''
+				// Tooltip2: Hit enemies produce damaging smoke
 				DisplayName: 孤独
 			}
 
 			SoundOfAStar: {
 				/* Tooltip:
 					'''
-					The star shines brighter as our despair gathers.
+					'The star shines brighter as our despair gathers.
 					The weapon's small, evocative sphere fires a warm ray
-					In the light, everything is equal.
+					In the light, everything is equal.'
+					''' */
+				/* Tooltip2:
+					'''
+					Impact radius increased
+					Knockbacks enemies to the center
 					''' */
 				DisplayName: 新星之声
 			}
@@ -545,18 +810,26 @@ Mods: {
 			Spore: {
 				/* Tooltip:
 					'''
-					A spear covered in spores and affection.
-					It lights the employee's heart, shines like a star, and steadily tames them.
+					'A spear covered in spores and affection.
+					It lights the employee's heart, shines like a star, and steadily tames them.'
 					''' */
+				// Tooltip2: ???
 				DisplayName: 荧光菌孢
 			}
 
 			SwordSharpenedWithTears: {
 				/* Tooltip:
 					'''
-					A sword suitable for swift thrusts.
-					Even someone unskilled in dueling can rapidly puncture an enemy using this E.G.O with remarkable agility.
-					Alternate attack to perform a flurry of stabs
+					'A sword suitable for swift thrusts.
+					Even someone unskilled in dueling can rapidly puncture an enemy using this E.G.O with remarkable agility.'
+					Chance to perform a flurry of stabs
+					''' */
+				/* Tooltip2:
+					'''
+					Ignores defense
+					Always performs a flurry of stabs
+					Alternate attack to send flurry of thrown rapiers
+					Cannot be used until all rapiers return or picked up
 					''' */
 				DisplayName: 盈泪之剑
 			}
@@ -568,6 +841,11 @@ Mods: {
 					仿佛一切都毫无意义，那无尽的嚎哭使人精神麻木，无法思考。
 					Can be dropped by Eye of Cthulhu
 					'''
+				/* Tooltip2:
+					'''
+					Increased speed and range
+					Cries around you
+					''' */
 				DisplayName: 泣婴
 			}
 
@@ -577,6 +855,7 @@ Mods: {
 					这件装备上的各种表情都是由布料填塞出来的。
 					人们可能会因为害羞而拒绝展露出自己的面容和表情。
 					'''
+				// Tooltip2: Shoots 1 to 5 bullets
 				DisplayName: 此刻的神情
 			}
 
@@ -586,18 +865,29 @@ Mods: {
 					这是一把屌爆了的洛洛克手枪！能够轻松击落一架直升机！
 					它只能被发型简单，清爽的人士使用...那就是秃子！光头！大吴克！
 					'''
+				/* Tooltip2:
+					'''
+					Hit enemies explodes after a few seconds
+					Explosion damage and radius increased while looking away
+					''' */
 				DisplayName: 谢顶之灾
 			}
 
 			Twilight: {
 				/* Tooltip:
 					'''
-					Just like how the ever-watching eyes...
+					'Just like how the ever-watching eyes...
 					The scale that could measure any and all sin...
 					The beak that could swallow everything, protected the peace of the Black Forest...
-					The wielder of this armament may also bring peace as they did
-					Alternate attack to perform to leap forward and back and slash the target
+					The wielder of this armament may also bring peace as they did'
+					Alternate attack to perform to leap forward and back and slash the target with invincibility frames
 					Alternate attack be used again after 8 seconds while holding this weapon
+					''' */
+				/* Tooltip2:
+					'''
+					Getting hit increases fire rate
+					Creates projectiles when swung
+					Hitting enemies with the alternate attack creates projectiles
 					''' */
 				DisplayName: Twilight
 			}
@@ -608,6 +898,12 @@ Mods: {
 					这把武器闪耀着和精灵们身上相同的，苍白的光。
 					这把武器并不像精灵的羽翼那样轻薄，而要沉重很多。
 					'''
+				/* Tooltip2:
+					'''
+					Sends a fairy to hit an enemy
+					Fairies return to heal you
+					Can send up to three fairies
+					''' */
 				DisplayName: 翅振
 			}
 
@@ -617,6 +913,13 @@ Mods: {
 					沾满血迹的手上握着这把刀，刀刃似乎充盈着流不尽的鲜血。
 					或许是为了减少割腕时的痛苦，刀刃被刻意打磨得锋利无比，能够轻而易举地割断血肉。
 					'''
+				/* Tooltip2:
+					'''
+					Alternate attack to throw
+					Can only be thrown one at a time
+					Sticks to enemies
+					Enemies are periodically hit while stuck
+					''' */
 				DisplayName: 割腕者
 			}
 
@@ -634,6 +937,18 @@ Mods: {
 					Matchlight - 16% increased damage while on fire
 					|Scorching Embers - Sets self on fire every fourth use
 					''' */
+				/* Simplified:
+					'''
+					Every fourth use deals 400% increased damage and sets yourself on fire
+					Right click to explode when the fourth attack is ready
+					16% increased damage while on fire
+					''' */
+				/* PassiveListRework:
+					'''
+					Warmth of a Flame - 400% damage on fourth use
+					Matchlight - 16% increased damage while on fire
+					|Scorching Embers - Alternate attack to set self on fire and explode, taking 20% of your health
+					''' */
 			}
 
 			ForgottenR: {
@@ -646,6 +961,23 @@ Mods: {
 					忘却-右键攻击后抱紧一个拥有标记的敌人，造成持续伤害，结束后丢出敌人，标记的越明显伤害就越高。
 					|抛弃-标记一个敌人后，无法击中除标记敌人外的任何其他敌人
 					'''
+				/* Simplified:
+					'''
+					Hitting an enemy multiple times marks them
+					Hitting a marked enemy increases their mark
+					Cannot hit other enemies while having a mark
+					Marked enemies deal less damage
+					Right click to Hug a marked enemy
+					The Hug deals more damage if the mark is less transparent
+					The Hug is invincible if the mark is flashing
+					''' */
+				/* PassiveListRework:
+					'''
+					Display of Affection - Attacking the same enemy three times in a row marks them with 'Happy Memories'
+					Happy Memories - 1% decreased contact damage to you, up to 40%. Decreases while not using this E.G.O or if the enemy is far away
+					Nostalgic Embrace - Alternate attack to hug an enemy with 'Happy Memories', removing it. become invincible if 'Happy Memories' is max
+					|Unattended - Getting hit by other enemies without mark or projectiles decreases 'Happy Memories'
+					''' */
 			}
 
 			WingbeatR: {
@@ -658,6 +990,22 @@ Mods: {
 					储蓄粮-对精灵照顾的敌人增加15%伤害和20%生命值恢复量。
 					|捕食-你的生命值会缓速流失，击中敌人后暂时停止。
 					'''
+				/* Simplified:
+					'''
+					The first hit restores 10% health of the damage dealt
+					Right click to send a fairy to mark an enemy
+					The marked enemy are healed, but also restores more health when hit
+					The marked enemy is locked in by the attack from this weapon when nearby
+					Holding this weapon decreases your life regeneration
+					Killing an enemy temporarily disables the reduced life regeneration
+					''' */
+				/* PassiveListRework:
+					'''
+					Ravenous Hunger - First enemy hit stores 10% of damage dealt as healing, 5% increased damage when healing is stored
+					Fairies Care - Alternate attack to send a fairy to heal an enemy, Marking and making them easier to hit
+					Prepared Meal - 15% increased damage and 20% increased chances of lifesteal against enemies under 'Fairies Care'
+					|Predation - Healing recieved from Wingbeat is applied slowly over time, stops under Potion sickness. Cannot use Potions while healing
+					''' */
 			}
 
 			HornetR: {
@@ -671,6 +1019,24 @@ Mods: {
 					释放信息素-右键释放信息素，加强你的工蜂30秒，—14防御。活动时不能重复使用。
 					|死亡拥护-你生命值不足25%时，你的工蜂就会对你进行攻击。
 					'''
+				/* Simplified:
+					'''
+					2 Worker bee minions are automatically summoned if no Worker bee minion is alive
+					Worker bee minions last 60 seconds
+					Channel the weapon to go further and do more damage
+					Right click to release spores to empower bees and inflict a debuff to enemies
+					Spored enemies release Worker bee when killed
+					Worker bees turn hostile after reaching 25% health
+					''' */
+				/* PassiveListRework:
+					'''
+					Strike of Retribution - Charge up a forward strike, the distance travelled depends on how long you've charged. Inflicts Spores
+					Loyalty - Alternate attack to summon a 'Worker Bee', If minion slot is full, release 'Pheromones' instead
+					Worker Bee - Takes up 1 minion slot. Strengthens damage and speed under the effects of 'Spores' and prioritizes enemies with 'Spores'
+					Pheromones - Alternate attack releases 'Spores', inflicting it to 'Worker Bees' and nearby enemies. Has a cooldown of 30 seconds
+					Spores - Decreases life regeneration, Reduces defense and creates a temporary 'Worker Bee' on death for 30 seconds (Up to half of Maximum minion slot). 
+					|Embrace of Death - Having less that 25% of your maximum health will turn your 'Worker Bees' hostile
+					''' */
 			}
 
 			GreenStemR: {
@@ -683,6 +1049,13 @@ Mods: {
 					恶意-造成与健康成反比的额外伤害					
 					|破碎生命-葡萄藤活跃时减少伤害减少30%	
 					'''
+				/* PassiveListRework:
+					'''
+					Enroaching Malice - Slowly spread vines around you
+					Vines fraught with Spite - Vines attacks enemies near the spread out vines
+					Malice - Deal extra damage inversely proportional to health value
+					|Crumbling Life - Mana is drained at a certain rate, 'Enroaching Malice' slowly dissapear when Green Stem is not held or with no mana
+					''' */
 			}
 
 			#Technology
@@ -697,6 +1070,14 @@ Mods: {
 					受缚的愤怒-将移动速度转换为额外攻击力加成［转换50%］，在坐骑或矿车上此被动失效。
 					|恐惧-虽然有任何形式的debuff，35%的伤害，移动速度加成无效，-10防御5秒。
 					'''
+				/* PassiveListRework:
+					'''
+					Ends, Begins, Ends - The third succesful attack inflicts 'Metallic Ringing' on the first enemy hit
+					Metallic Ringing - Reduces defense and creates shockwaves when hit
+					Violence - Minimum and maximum damage variance is decreased and increased respectively by 20% and 50%
+					Chained Wrath - Alternate attack to convert increased movement speed to increased damage (50% conversion), Removed while on a mount or minecart
+					|Binding Jacket - 'Chained Wrath' buffs are disabled while having any form of debuff
+					''' */
 			}
 
 			GrinderMk52R: {
@@ -721,6 +1102,13 @@ Mods: {
 					旋律-右键攻击发射一束音波。在有"成瘾"buff时会变味三束。
 					|成瘾-增加12%伤害，提高8%攻击速度，—15防御力，持续流失生命值。
 					'''
+				/* PassiveListRework:
+					'''
+					Harmony of Despair - Continously hitting enemies increases the weapon's damage and hit rate
+					Performance - Alternate attack shoots a soundwave that decreases defense. Shoots three while having 'Musical Addiction'
+					Let's Make Music! - Hit enemies gain 'Musical Addiction' and produces Harmony Notes that gives 'Musical Addiction' when picked up
+					|Musical Addiction - 12% increased damage, 8% increased attack speed. Decreased life regeneration on NPCs
+					''' */
 			}
 
 			SolemnLamentR: {
@@ -733,6 +1121,13 @@ Mods: {
 					救赎之手-子弹对生命值最低的敌人额外造成15%伤害，并生成一只蝴蝶。
 					|哀悼-被击中时一杆枪会失效3秒，3秒内只能失效一杆枪。
 					'''
+				/* PassiveListRework:
+					'''
+					Eternal Rest - The second gun uses the next ammo type in your inventory, it does not shoot otherwise.
+					Tranquility - Alternate attack to transform the bullets into numerous butterflies at a slower rate of fire
+					Hand of Salvation - Bullets deal 15% increased damage and spawn butterflies against enemies with the lowest health
+					|Lament - When an enemy is killed by a butterfly they burst into numerous butterflies, 'Tranquility' is temporarily disabled
+					''' */
 			}
 
 			MagicBulletR: {
@@ -745,6 +1140,13 @@ Mods: {
 					黑焰-在第七次射击后，获得黑焰buff，提升此ego70%的伤害。
 					|第七颗子弹-第七颗子弹只会瞄准城镇npc。如果没npc就瞄队友，没队友就瞄自己。
 					'''
+				/* PassiveListRework:
+					'''
+					Magic Bullet - Each shot has a special damage, target and property. The bullets always hits its mark
+					Request - Right click to Mark a target, The bullets only targets the marked target. Removed when switching items
+					Dark Flame - After the Seventh shot, Gain Dark Flame buff, boosting Magic Bullet's damage by 70%
+					|The Seventh Bullet - The 7th Bullet always targets Town NPCs. If there is none, targets allies. Pierces the user's heart if there are none left
+					''' */
 			}
 
 			#Literature
@@ -759,6 +1161,13 @@ Mods: {
 					社交距离-当受到接触伤害时，根据你当前的表情释放一堵墙。
 					|害羞-不能在没有表情时使用，表情会在3秒后随机改变。
 					'''
+				/* PassiveListRework:
+					'''
+					Look of the Day - While holding the Today's Expression, gain a random Face that provides a buff for 5 seconds if you have none
+					Wavering Feelings - Send out a wall that has special properties depending on 'Look of the Day'
+					Social Distancing - When getting hit by contact damage, release a wall of expression depending on 'Look of the Day'
+					|Shyness - Alternate attack to lock in 'Look of the Day' for 15 seconds, increasing its buffs and debuffs
+					''' */
 			}
 
 			SanguineDesireR: {
@@ -785,6 +1194,14 @@ Mods: {
 					蜘蛛-当这个武器被拿着的时候，蜘蛛会你附近生成，结茧的敌人会周期性的受到蜘蛛的攻击。
 					|警觉性-这个武器目前没有自己的特殊效果。
 					'''
+				/* PassiveListRework:
+					'''
+					Cry Out - Alternate attack to teleport and attack enemies marked by 'Meal' or 'Alertness'
+					Meal - After hitting enemies enough times, Marks them as Meal which inflicts 'Cocoon' if attacked with 'Cry Out'
+					Cocoon - -8 Defense. While Red Eyes is held, periodically attacked by Spiderlings
+					Alertness - Alternate attack to mark nearby enemies if no enemies can be hit by 'Cry Out'
+					|Predator - If 'Cry Out' is used on enemies without 'Meal', 'Cry Out' gains a 10 second cooldown
+					''' */
 			}
 
 			LaetitiaR: {
@@ -798,6 +1215,16 @@ Mods: {
 					朋友-朋友从礼物中炸裂出来并成为一个召唤物，在造成足够的伤害后爆炸。
 					|孤独是可悲的-如果最后一个朋友趋势了，那你就会受到二倍伤害，直到你也趋势或者是有一个新的朋友诞生。
 					'''
+				/* PassiveListRework:
+					'''
+					,
+					Huuuuge Gift!!! - If no enemies have any Gifts, use all Mana to send a Huge Gift that give gifts up to 5 enemies
+					Suprise Gift - Hitting an enemy will mark them with a Gift
+					Funny Prank - After dealing enough indirect damage (with allies or minions) against enemies with Gift. The Gift explodes, spawning a 'Friend'
+					Friend - Temporary minion that occupies no Minion slot, Maximum equal to half of Minion Slots. After dealing enough damage or time, they explode
+					|Being Lonely is Sad - After a 'Friend' explodes, Temporarily gain 10% reduced damage reduction for 5 seconds
+					This Item is incomplete and unobtainable
+					''' */
 			}
 
 			BlackSwanR: {
@@ -811,6 +1238,15 @@ Mods: {
 					完好无损的阳伞-攻击或开伞时，时机准确的情况下可以反弹子弹。
 					|破碎之梦-在没有荨麻的情况下被击中使荨麻之衣失效30秒，增加30%的伤害，并激活大部分荨麻效果。尖叫将延长持续时间6秒。
 					'''
+				/* PassiveListReworked:
+					'''
+					Clothing of Nettle - Regenerate Nettles after 5 seconds while holding Black Swan
+					Nettle - Up to 6, Upgrades Black Swan. Reduces incoming damage by 75% with Thorns effect, Decreases by 1 when hit
+					Shriek of Broken Dreams - While having 4 or more Nettles, Alternate Attack transforms to Shriek which damages enemies around you and consumes a nettle
+					Gooey Waste - Leave a trail of debuffing waste. Spreads sporatically while attacking, or Shrieking
+					Well-worn Parasol - Poking or Swinging Black Swan deflects Projectiles when timed correctly, can be held to deflect for a longer time
+					|Broken Dream - Alternate attacks activates 'Clothing of Nettle'. after taking a hit with no Nettles, cannot gain Clothing of Nettle for 20 seconds
+					''' */
 			}
 
 			#Art
@@ -824,6 +1260,13 @@ Mods: {
 					Enlightenment - True melee, Spears and other allies deal 20% increased damage, Immune to Echoes from the Beyond and Tentacles
 					Tentacles - Hitting enemies decreases their damage resistance to Echoes from the Beyond (from 10% to 400% damage)
 					|Understand - The user deals decreased damage with any projectiles against enemies with Enlightenment
+					''' */
+				/* PassiveListReworked:
+					'''
+					Echoes from the Beyond - Alternate attack to Echo. After 5 seconds, Hit enemies loses 'Tentacles' and inflict 'Enlightenment' for 20 seconds
+					Enlightenment - True melee, Spears and other allies deal 20% increased damage
+					Tentacles - Hitting enemies decreases their damage resistance to 'Echoes from the Beyond' (from 10% to 400% damage)
+					|Understand - Enemies with 'Enlightenment' takes no damage from 'Echoes from the Beyond', Immunity from 'Tentacles'
 					''' */
 			}
 
@@ -849,6 +1292,15 @@ Mods: {
 					Flower Petals - Hitting enemies charges up to 3 petal that dissapears after a short time, enhancing this weapon's attacks and damage
 					Doll Fashioned from the Earth - Negate any negative life regen while a petal is active
 					|Laurel Wreath - 15% increased contact damage per full petals on the user
+					This Item is incomplete and unobtainable
+					''' */
+				/* PassiveListRework:
+					'''
+					Spring's Genesis - Alternate attack lunges forwards, hit enemies gain a 'Laurel Wreath'
+					Magnificent End - Holding Alternate attack while having 3 petals consumes all of it and applies 300% damage to all enemies nearby and removes Laurel Wreath
+					Flower Petals - Hitting enemies charges up to 3 petal that dissapears after a short time, enhancing Faint Aroma's attacks and damage
+					Doll Fashioned from the Earth - Negate any negative life regeneration while a petal is active
+					|Laurel Wreath - 10% increased damage for each full 'Flower Petals' on the targett
 					This Item is incomplete and unobtainable
 					''' */
 			}
@@ -878,6 +1330,14 @@ Mods: {
 					|Al Fine - The Performance never ends, Requires to be in a town to disable
 					Fervent Adoration - After repeating the Performance, all allies and enemies are affected by both buffs and non damaging debuffs
 					''' */
+				/* PassiveListRework:
+					'''
+					Ever-repeating Performance - Alternate attack to start a Performance with each movement inflicting buffs to allies and debuffs against enemies
+					Accelerando - True melee hits enhances this EGO's combo, During Movement 3 and above, further enhances this EGO
+					Finale - During Finale, Fully heal and 5% of the damange done by Da Capo during the peformance is distributed to all enemies being affecte by the Performance. Maximum of 10000% of this weapon's damage
+					|Al Fine - 'Ever-repeating Performance' can only be cancelled during the applause or in a town with no nearby enemies
+					Fervent Adoration - After repeating the Performance, all allies and enemies are affected with boosted buffs and non damaging debuffs
+					''' */
 			}
 
 			#Language
@@ -887,13 +1347,12 @@ Mods: {
 				// DisplayName: Mimicry
 				/* PassiveList:
 					'''
-					GoDdByE - Can be charged and deal up to 1000% increased damage
-					heLLo? - Alternate attack shoots a piercing Projectile and reduces Shell timer
-					Mimic - After killing an enemy with this EGO while not having Shell, Restore 20% of your maximum health and gain Shell
-					Shell - Gain increased stats from a killed enemy, Allows the use of Goodbye and Hello?
-					|Cocoon - When Shell runs out, transform into a Cocoon disabling movement with Life Regeneration and gain Hollow Husk
-					Hollow Husk - Permanently gain a debuff that increases its debuff the longer time you have no Shell
-					This Item is incomplete and unobtainable
+					Mimic - After killing an enemy while having no 'Shell', Restore 20% of your maximum health and gain Shell based on the enemy's health
+					Shell - Enables 'GoDdByE' and increases 'heLLo?' range with 15% increased damage, +10 defense and increased maximum health based on enemy killed
+					GoDdByE - Charge and deal up to 1000% increased damage and gain 'Shell' when hitting its sweetspot, Recovers 1% damage dealt on the first enemy hit (Maximum 5% of health)
+					heLLo? - Alternate attack shoots a piercing Projectile, reducing enemy defense
+					|Cocoon - Shell reduces quickly when not holding this weapon, When 'Shell' runs out, gain 'Hollow Husk'
+					Hollow Husk - Enables 'GoDdByE', -8 Defense. Timer set to 5 seconds while holding this weapon
 					''' */
 			}
 
@@ -990,6 +1449,11 @@ Mods: {
 					Contains an abnormal energy
 					Allows the creation of HE E.G.O
 					''' */
+				/* TooltipCapture:
+					'''
+					Can contain supressed Abnormalities under Qlipoth Detterence
+					Extracts supressed Abnormalities E.G.O
+					''' */
 				// DisplayName: Black Box - Container
 			}
 
@@ -999,6 +1463,11 @@ Mods: {
 					Absorbs an unknown energy around itself
 					Allows the creation of ZAYIN and TETH E.G.O
 					"The Bucket rises from the Well of a person, filled with the water that can only be drawn by that person."
+					''' */
+				/* TooltipBinah:
+					'''
+					Awakens an Arbiter
+					"Try to resist to the very end"
 					''' */
 				// DisplayName: Black Box
 			}
@@ -1013,7 +1482,6 @@ Mods: {
 					'''
 					Awakens the Red Mist
 					"Crush those monstrous bastards."
-					The Boss is highly unfinished I dont recommend fighting it
 					''' */
 				// DisplayName: Disciplinary Shell
 			}
@@ -1054,7 +1522,66 @@ Mods: {
 				// DisplayName: Regret Pants
 				// Tooltip: ""
 			}
+
+			RedMistMask: {
+				// DisplayName: Red Mist Mask
+				/* Tooltip:
+					'''
+					Improves certain E.G.O after defeating certain bosses
+					Improves: Zayin, Teth
+					This item is unfinished
+					''' */
+				// Tooltip2: ", Aleph"
+				/* TooltipCalamity:
+					'''
+					Improves Lobotomy and Realized E.G.O
+					Right click to access specialized crafting
+					Does not need to be equipped
+					''' */
+			}
+
+			SmileR: {
+				// DisplayName: Smile R
+				// Tooltip: ""
+			}
+
+			PEBox: {
+				// DisplayName: PE Box
+				// Tooltip: Right click in the inventory while having an E.G.O in the cursor to acquire a vanity set
+			}
+
+			WingbeatGift: {
+				// DisplayName: Wingbeat Gift
+				// Tooltip: ""
+			}
+
+			WingbeatPants: {
+				// DisplayName: Wingbeat Pants
+				// Tooltip: ""
+			}
+
+			WingbeatSuit: {
+				// DisplayName: Wingbeat Suit
+				// Tooltip: ""
+			}
+
+			SodaGift: {
+				// DisplayName: Soda Gift
+				// Tooltip: ""
+			}
+
+			SodaPants: {
+				// DisplayName: Soda Pants
+				// Tooltip: ""
+			}
+
+			SodaSuit: {
+				// DisplayName: Soda Suit
+				// Tooltip: ""
+			}
 		}
+
+		// LobotomyRedMistRequirement: Supress the Red Mist
 
 		#DONT transfer this to Items it deletes them :V
 		EgoItemTooltip: {
@@ -1625,13 +2152,34 @@ Mods: {
 				// MeltdownWaves1: The waves will rock the shore again.
 				// MeltdownWaves2: You cannot stop the torrent of this world alone.
 				// MeltdownFlight1: Grant the freedom you desire.
-				// MeltdownFlight2: The Wing is still immature.
+				// MeltdownFlight2: Your Wing is still immature.
 				// PauseAttempt1: You cannot stop the grand current with just those hands of yours.
 				// PauseAttempt2: I want you to finish me with your own power.
 				// Wave4: I'll open the door if I must.
 				// Wave5: Let us sink here together.
 				// MeltdownPillar1: Excellent.
 				// MeltdownPillar2: Your immaturity is to blame.
+				// 1Talk1: .........?
+				// 1Talk2: ...What is this?
+				// 1Talk3: Is this another possibility from the River
+				// 1Talk4: Perhaps...
+				// 1Talk5: ...I can sense that you have E.G.O
+				// 1Talk6: Do you have the means to draw from the Well?
+				// 1Talk7: Or have you merely borrowed it from me?
+				// 1Talk8: No matter, If it is your wish to achieve greater heights through E.G.O
+				// 1Talk9: Then prove yourself able
+				// 1Talk10: Maybe I can face your skill with my own eyes in the future
+				// 2Talk1: So you have lost
+				// 2Talk2: That is to be expected
+				// 2Talk3: But I suppose you are not backing down
+				// 2Talk4: Resiliency is a required virtue on handling E.G.O afterall
+				// 3Talk1: Another try I suppose
+				// 4Talk1: So you have surpassed the Red Mist
+				// 4Talk2: You can now tap into a certain future
+				// 4Talk3: Creating more stronger, yet unstable, E.G.O
+				// 4Talk4: Do be careful lest it takes over
+				// 4Talk5: For now, I shall rest
+				// 4Talk6: Until its time for me to test you
 			}
 		}
 
@@ -1952,7 +2500,7 @@ Mods: {
 
 		Projectiles: {
 			// TwilightStrikes.DisplayName: Twilight
-			// TwilightSpecial.DisplayName: Twilightl
+			// TwilightSpecial.DisplayName: Twilight
 			// TwilightSlashes.DisplayName: Twilight
 			// TwilightSlash.DisplayName: Twilight
 			// TwilightEye.DisplayName: Twilight
@@ -1985,17 +2533,17 @@ Mods: {
 			// RegretR.DisplayName: Regret
 			// RedEyesSlash.DisplayName: Red Eyes
 			// OurGalaxyComet.DisplayName: Our Galaxy
-			// NihilSOW.DisplayName: Nihil S O W
-			// NihilQOH.DisplayName: Nihil Q O H
-			// NihilKOGFists.DisplayName: Nihil K O G Fists
-			// NihilKOG.DisplayName: Nihil K O G
-			// NihilKODSwords.DisplayName: Nihil K O D Swords
-			// NihilKOD.DisplayName: Nihil K O D
+			// NihilSOW.DisplayName: Clubs
+			// NihilQOH.DisplayName: Heart
+			// NihilKOGFists.DisplayName: Diamond
+			// NihilKOG.DisplayName: Diamond
+			// NihilKODSwords.DisplayName: Spades
+			// NihilKOD.DisplayName: Spades
 			// MagicBulletSpawner.DisplayName: Magic Bullet
 			// MagicBulletRGun.DisplayName: Magic Bullet
 			// MagicBulletR.DisplayName: Magic Bullet
 			// LifeForADaredevilR.DisplayName: Life For A Daredevil
-			// LifeForADareDevilEffects.DisplayName: Life For A Dare Devil
+			// LifeForADareDevilEffects.DisplayName: Life For A Daredevil
 			// LaetitiaR.DisplayName: Laetitia
 			// LaetitiaFriend.DisplayName: Friend
 			// GrinderMk2Cleaner2.DisplayName: Grinder Mk2 Cleaner
@@ -2107,29 +2655,42 @@ Mods: {
 			// GreenStemTrap.DisplayName: Green Stem
 			// FrostSplinterShard.DisplayName: Frost Splinter
 			// HeavenBranchPlayer.DisplayName: Heaven
-			// GrinderMk4Spark.DisplayName: Grinder Mk4 Spark
+			// GrinderMk4Spark.DisplayName: Sparks
 			// PleasureSpike.DisplayName: Pleasure
 			// SyrinxSound.DisplayName: Syrinx
 			// BlackSwanGlob.DisplayName: Gooey Waste
 			// CrimsonScarScythe.DisplayName: Crimson Scar Sickle
-			// FaintAromaShot.DisplayName: Faint Aroma
-			// HypocrisyHeal.DisplayName: Hypocrisy Heal
-			// GoldRushFlurry.DisplayName: Gold Rush
+			// FaintAromaShot.DisplayName: Faint Aroma Petals
+			// HypocrisyHeal.DisplayName: Hypocrisy Heal Orb
+			// GoldRushFlurry.DisplayName: Gold Rush Flurry
 			// GoldRushHold.DisplayName: Gold Rush Uppercut
-			// DiscordInkShot.DisplayName: Discord Ink Shot
-			// DaCapoMusicSlash.DisplayName: Da Capo Music Slash
-			// DaCapoPerformance.DisplayName: Da Capo Performance
-			// LampProjectile.DisplayName: Lamp Projectile
-			// OurGalaxyHeal.DisplayName: Our Galaxy Heal
-			// FragmentsFromSomewhereProjectile.DisplayName: Fragments From Somewhere Projectile
-			// LifeForADaredevilRAlt.DisplayName: Life For A Daredevil R Alt
-			// LifeForADareDevilEffectsSlashes.DisplayName: Life For A Dare Devil Effects Slashes
-			// DaCapoClef.DisplayName: Da Capo Clef
-			// RedMistMimicryHello.DisplayName: Red Mist Mimicry Hello
-			// RedMistMovement.DisplayName: Red Mist Movement
-			// RedMistNote.DisplayName: Red Mist Note
-			// MeltyLoveSmall.DisplayName: Melty Love Small
-			// AmritaLight.DisplayName: Amrita Light
+			// DiscordInkShot.DisplayName: Discord
+			// DaCapoMusicSlash.DisplayName: Da Capo
+			// DaCapoPerformance.DisplayName: Ever Repeating Performance
+			// LampProjectile.DisplayName: Lamp
+			// OurGalaxyHeal.DisplayName: Our Galaxy
+			// FragmentsFromSomewhereProjectile.DisplayName: Fragments From Somewhere
+			// LifeForADaredevilRAlt.DisplayName: Life For A Daredevil
+			// LifeForADareDevilEffectsSlashes.DisplayName: Life For A Daredevil
+			// DaCapoClef.DisplayName: Da Capo
+			// RedMistMimicryHello.DisplayName: Mimicry
+			// RedMistMovement.DisplayName: Da Capo
+			// RedMistNote.DisplayName: Da Capo
+			// MeltyLoveSmall.DisplayName: Adoration
+			// AmritaLight.DisplayName: Amrita
+			// MimicryR.DisplayName: Mimicry
+			// MimicryREffectSlash.DisplayName: Mimicry
+			// RedMistStrikes.DisplayName: Twilight
+			// MimicryRHello.DisplayName: Hello?
+			// RedMistLampProjectile.DisplayName: Red Mist Lamp Projectile
+			// TwilightTeleport.DisplayName: Twilight Teleport
+			// GoldRushRedMistImpact.DisplayName: Gold Rush Red Mist Impact
+			// SmileBitsFriendly.DisplayName: Smile Bits Friendly
+			// PenitencePlayerSwing.DisplayName: Penitence Player Swing
+			// PenitencePlayerLight.DisplayName: Penitence Player Light
+			// WingbeatFairy2.DisplayName: Wingbeat Fairy2
+			// WingbeatSlash.DisplayName: Wingbeat Slash
+			// SmileRSword.DisplayName: Smile R Sword
 		}
 
 		Buffs: {
@@ -2357,12 +2918,12 @@ Mods: {
 
 			Husk: {
 				// DisplayName: Husk
-				// Description: Mods.LobotomyCorp.Buffs.Husk.Description
+				// Description: -8 Defense, Empty husk
 			}
 
 			Shell: {
 				// DisplayName: Shell
-				// Description: Mods.LobotomyCorp.Buffs.Shell.Description
+				// Description: +10 Defense, You too desire a shell
 			}
 
 			SilentMusic: {
@@ -2390,6 +2951,14 @@ Mods: {
 			// RedMist.DisplayName: Red Mist
 			// WhiteNight.DisplayName: White Night
 			// SmileCorpses.DisplayName: Melted Corpses
+			// SmileBitsBreakable.DisplayName: Smile Bits Breakable
+		}
+
+		BossChecklistIntegration: {
+			RedMist: {
+				// EntryName: Red Mist
+				// SpawnInfo: Place [i:LobotomyCorp/DisciplinaryShell] and right click it, can also be obtained by right clicking [i:LobotomyCorp/BlackBox3] while placed during Hardmode if Red Mist has not been defeated
+			}
 		}
 	}
 }

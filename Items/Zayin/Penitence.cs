@@ -4,6 +4,8 @@ using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Graphics.Effects;
+using LobotomyCorp.Projectiles;
+using static LobotomyCorp.Items.LobItemBase;
 
 namespace LobotomyCorp.Items.Zayin
 {
@@ -31,8 +33,42 @@ namespace LobotomyCorp.Items.Zayin
             Item.rare = ItemRarityID.Green;
             Item.UseSound = LobotomyCorp.WeaponSounds.Mace;
             Item.autoReuse = true;
-
+            Item.shoot = ModContent.ProjectileType<PenitencePlayerSwing>();
             //Item.shoot = 1;
+            EGORiskLevel = RiskLevel.Zayin;
+        }
+
+        public override bool CanShoot(Player player)
+        {
+            return RedMistMaskUpgrade(player);
+        }
+
+        public override bool CanUseItem(Player player)
+        {
+            if (RedMistMaskUpgrade(player))
+                return player.ownedProjectileCounts[ModContent.ProjectileType<PenitencePlayerSwing>()] <= 0;
+            return base.CanUseItem(player);
+        }
+
+        public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
+        {
+            if (RedMistMaskUpgrade(player))
+            {   
+                damage += 3.5f;
+            }
+        }
+
+        public override void ModifyItemScale(Player player, ref float scale)
+        {
+            if (RedMistMaskUpgrade(player))
+            {
+                scale += 0.5f;
+            }
+        }
+
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            base.OnHitNPC(player, target, hit, damageDone);
         }
 
         public override void AddRecipes()

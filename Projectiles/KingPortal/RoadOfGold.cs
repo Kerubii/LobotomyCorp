@@ -29,10 +29,14 @@ namespace LobotomyCorp.Projectiles.KingPortal
 
             Projectile.tileCollide = false;
             Projectile.hostile = true;
-            portalCounter = 0;
+            //Projectile.netImportant = true;
         }
 
-        public int portalCounter = 0;
+        public float portalCounter
+        {
+            get { return Projectile.ai[2]; }
+            set { Projectile.ai[2] = value; }
+        }
         public override void AI() {
             if (Projectile.localAI[0] == 0)
             {
@@ -43,7 +47,6 @@ namespace LobotomyCorp.Projectiles.KingPortal
                 Projectile.scale += 0.3f;
 
             portalCounter++;
-
             if (portalCounter > 30 && Projectile.ai[1] > 0)
             {
                 Vector2 center = Main.LocalPlayer.Center;
@@ -58,6 +61,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), center - new Vector2(400 * dir, 0), new Vector2(-24f * dir, 0), Projectile.type, 0, 0, 0, -1, Projectile.ai[1] - 1);
                     //Main.NewText(Projectile.ai[0]);
                     //Main.NewText(Projectile.ai[1]);
+                    Projectile.netUpdate = true;
                 }
                 else if (Projectile.ai[0] == -3)
                 {
@@ -71,10 +75,12 @@ namespace LobotomyCorp.Projectiles.KingPortal
                     Projectile.ai[0] = Projectile.NewProjectile(Projectile.GetSource_FromThis(), center + norm * (400 * dir), norm * (-24f * dir), Projectile.type, 0, 0, 0, -2, -1);
                     if (Projectile.ai[1] > 1)
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), center - norm * (400 * dir), norm * (-24f * dir), Projectile.type, 0, 0, 0, -3, Projectile.ai[1] - 1);
+
+                    Projectile.netUpdate = true;
                 }
             }
 
-            if (Projectile.ai[0] >= 0 && Projectile.timeLeft > 10)
+            if (Projectile.ai[0] >= 0 && Projectile.timeLeft > 10 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 //Teleport
                 foreach (NPC npc in Main.npc)
@@ -87,6 +93,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
                         npc.spriteDirection = Math.Sign(npc.velocity.X);
                         if (npc.spriteDirection == 0)
                             npc.spriteDirection = 1;
+                        npc.netUpdate = true;
                         otherPortal.timeLeft = 10;
                         otherPortal.netUpdate = true;
                         Projectile.timeLeft = 10;
@@ -105,7 +112,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
                             d.fadeIn = 1.8f;
                         }
 
-                        if (Main.expertMode)
+                        if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
                         {
                             for (int i = -1; i < 2; i += 2)
                             {

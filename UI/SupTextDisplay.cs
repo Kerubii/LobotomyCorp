@@ -244,6 +244,11 @@ namespace LobotomyCorp.UI
             return Language.GetTextValue("Mods.LobotomyCorp.SuppressionTexts." + Sephirah + "." + id);
         }
 
+        public static string GetSephirahTalk(string Sephirah, int id, int id2)
+        {
+            return Language.GetTextValue("Mods.LobotomyCorp.SuppressionTexts." + Sephirah + "." + id + "Talk" + id2);
+        }
+
         /// <summary>
         /// So yeah lol
         /// </summary>
@@ -263,6 +268,13 @@ namespace LobotomyCorp.UI
             {
                 Text[i].active = false;
             }
+        }
+
+        public static bool IsActive(int i)
+        {
+            SuppressionTextSystem System = ModContent.GetInstance<SuppressionTextSystem>();
+            SuppressionText[] Text = System.SupText.Text;
+            return Text[i].active;
         }
     }
 }

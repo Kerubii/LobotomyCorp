@@ -343,14 +343,16 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			.AddIngredient(ItemID.SpiderFang, 8)
 			.AddIngredient(ItemID.CobaltSword)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 
 			CreateRecipe()
 			.AddIngredient(ModContent.ItemType<RedEyes>())
 			.AddIngredient(ItemID.SpiderFang, 8)
 			.AddIngredient(ItemID.PalladiumSword)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 		}
 	}
 }

@@ -107,6 +107,7 @@ namespace LobotomyCorp.Items.Ruina.History
             .AddIngredient(ItemID.BrownString)
             .AddIngredient(ItemID.AncientCloth, 2)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
     }

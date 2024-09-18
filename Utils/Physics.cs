@@ -10,6 +10,7 @@ using Terraria.Graphics.Shaders;
 using Terraria.ID;
 using Terraria.ModLoader;
 using static Terraria.ModLoader.PlayerDrawLayer;
+using Steamworks;
 
 namespace LobotomyCorp.Utils
 {
@@ -111,6 +112,20 @@ namespace LobotomyCorp.Utils
             velocity.Y = (delta.Y - 0.5f * gravity * time * time) / time;
             velocity.X = delta.X / time;
             return velocity;
+        }
+
+        /// <summary>
+        /// Check the distance of angles
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="targetAngle"></param>
+        /// <returns></returns>
+        public static float AngleDistance(float angle1, float angle2)
+        {
+            float pi = (float)Math.PI;
+            float diff = (angle2 - angle1 + pi) % (pi * 2) - pi;
+            return Math.Abs(diff < -pi ? diff + pi * 2 : diff);
         }
     }
     /*

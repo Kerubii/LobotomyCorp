@@ -68,6 +68,7 @@ namespace LobotomyCorp.Items.Ruina.Art
 			   .AddIngredient(ItemID.LifeFruit)
 			   .AddIngredient(ItemID.GreaterHealingPotion, 5)
                .AddTile<Tiles.BlackBox3>()
+               .AddCondition(RedMistCond)
                .Register();
         }
     }

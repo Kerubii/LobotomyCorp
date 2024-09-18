@@ -193,7 +193,7 @@ namespace LobotomyCorp.Projectiles
                 if (Projectile.localAI[0] == 0)
                 {
                     SoundEngine.PlaySound(LobotomyCorp.WeaponSound("greed2").WithPitchOffset(0.2f), Projectile.Center);
-                    DiamondDust(Projectile.Center + new Vector2(10f * Main.player[Projectile.owner].direction, -24f), 10, 5, 10, 1.5f, MathHelper.ToRadians(Projectile.spriteDirection > 0 ? -45 : 45));
+                    DiamondDust(Projectile.Center + new Vector2(10f * Main.player[Projectile.owner].direction, -24f), DustID.GoldCoin, 10, 5, 10, 1.5f, MathHelper.ToRadians(Projectile.spriteDirection > 0 ? -45 : 45));
                     Projectile.localAI[0]++;
                 }
                 for (int i = 0; i < 12; i++)
@@ -225,7 +225,7 @@ namespace LobotomyCorp.Projectiles
                     d.fadeIn = 1.2f;
                     d.velocity = Projectile.velocity;
                 }
-                DiamondDust(target.Center, 5, 8, 8, 1.2f);
+                DiamondDust(target.Center, DustID.GoldCoin, 5, 8, 8, 1.2f);
             }
         }
 
@@ -238,6 +238,9 @@ namespace LobotomyCorp.Projectiles
             if (Projectile.ai[2] < 0)
             {
                 Main.player[Projectile.owner].velocity *= 0.2f;
+
+                float strength = (Projectile.ai[0] / 60f);
+                int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 4, ModContent.ProjectileType<GoldRushFlurry>(), (int)(Projectile.damage * strength / 2), Projectile.knockBack, Projectile.owner);
             }
 
             foreach (NPC n in Main.npc)
@@ -274,7 +277,7 @@ namespace LobotomyCorp.Projectiles
 			return false;
         }
 
-        private void DiamondDust(Vector2 pos, int amount, int x, int y, float fade = 1f, float angle = 0)
+        public static void DiamondDust(Vector2 pos, int type, int amount, int x, int y, float fade = 1f, float angle = 0)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -284,16 +287,16 @@ namespace LobotomyCorp.Projectiles
                 float y1 = y * prog;
                 float y2 = y * (1f - prog);
 
-                Dust d = Dust.NewDustPerfect(pos, DustID.GoldCoin, new Vector2(x1, -y2).RotatedBy(angle));
+                Dust d = Dust.NewDustPerfect(pos, type, new Vector2(x1, -y2).RotatedBy(angle));
                 d.noGravity = true;
                 d.fadeIn = fade;
-                d = Dust.NewDustPerfect(pos, DustID.GoldCoin, new Vector2(-x2, -y1).RotatedBy(angle));
+                d = Dust.NewDustPerfect(pos, type, new Vector2(-x2, -y1).RotatedBy(angle));
                 d.noGravity = true;
                 d.fadeIn = fade;
-                d = Dust.NewDustPerfect(pos, DustID.GoldCoin, new Vector2(-x1, y2).RotatedBy(angle));
+                d = Dust.NewDustPerfect(pos, type, new Vector2(-x1, y2).RotatedBy(angle));
                 d.noGravity = true;
                 d.fadeIn = fade;
-                d = Dust.NewDustPerfect(pos, DustID.GoldCoin, new Vector2(x2, y1).RotatedBy(angle));
+                d = Dust.NewDustPerfect(pos, type, new Vector2(x2, y1).RotatedBy(angle));
                 d.noGravity = true;
                 d.fadeIn = fade;
             }

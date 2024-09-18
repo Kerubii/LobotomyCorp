@@ -81,6 +81,13 @@ namespace LobotomyCorp
 
         public static Dictionary<string, CustomShaderData> LobcorpShaders = new Dictionary<string, CustomShaderData>();
 
+        public static void LookingAt(Vector2 pos, int type = 30)
+        {
+            Dust d = Dust.NewDustPerfect(pos, type);
+            d.noGravity = true;
+            d.velocity *= 0;
+        }
+
         public static void RiskLevelResist(ref int damage, RiskLevel ego, RiskLevel risk)
         {
 

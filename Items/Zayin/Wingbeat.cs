@@ -1,5 +1,11 @@
+using LobotomyCorp.Projectiles;
+using LobotomyCorp.Projectiles.RedMist;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
+using static LobotomyCorp.Items.LobItemBase;
 
 namespace LobotomyCorp.Items.Zayin
 {
@@ -26,6 +32,36 @@ namespace LobotomyCorp.Items.Zayin
             Item.rare = ItemRarityID.Green;
             Item.UseSound = LobotomyCorp.WeaponSounds.Mace;
             Item.autoReuse = true;
+            Item.shoot = ModContent.ProjectileType<WingbeatSlash>();
+            Item.shootSpeed = 14;
+            EGORiskLevel = RiskLevel.Zayin;
+        }
+
+        public override void ModifyWeaponDamage(Player player, ref StatModifier damage)
+        {
+            if (RedMistMaskUpgrade(player))
+                damage += 3.5f;
+        }
+
+        public override bool CanShoot(Player player)
+        {
+            return RedMistMaskUpgrade(player);
+        }
+
+        public override bool Shoot(Player player, EntitySource_ItemUse_WithAmmo source, Vector2 position, Vector2 velocity, int type, int damage, float knockback)
+        {
+            if (RedMistMaskUpgrade(player))
+            {
+                //Soder Shoot//Shoot Wingbeat Fairy, Fairye slashes forward then it sticks to the first enemy hit, releases then comes back
+                //Also creates a wing beat slash projectile
+                type = ModContent.ProjectileType<WingbeatFairy2>();
+                if (player.ownedProjectileCounts[type] < 3)
+                {
+                    int n = Projectile.NewProjectile(player.GetSource_FromThis(), position, velocity * 1.1f, type, damage / 3, knockback, player.whoAmI);
+                }
+                return true;
+            }
+            return false;
         }
 
         public override void AddRecipes()

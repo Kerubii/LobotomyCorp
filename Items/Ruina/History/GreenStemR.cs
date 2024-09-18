@@ -57,6 +57,7 @@ namespace LobotomyCorp.Items.Ruina.History
             .AddIngredient(ItemID.NettleBurst)
             .AddIngredient(ItemID.Vine, 10)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
 	}

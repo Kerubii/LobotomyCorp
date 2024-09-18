@@ -6,11 +6,6 @@ namespace LobotomyCorp.Items.ItemTiles
 {
     public class DisciplinaryShell : ModItem
     {
-        public override bool IsLoadingEnabled(Mod mod)
-        {
-            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
-        }
-
         public override void SetStaticDefaults()
         {
             // DisplayName.SetDefault("Discplinary Shell");
@@ -37,11 +32,10 @@ namespace LobotomyCorp.Items.ItemTiles
         public override void AddRecipes()
         {
             CreateRecipe()
-            .AddIngredient(ItemID.HellstoneBar, 20)
-            .AddIngredient(ItemID.JungleSpores, 8)
-            .AddIngredient(ItemID.Bone, 10)
-            .AddTile(TileID.DemonAltar)
-            .Register();
+               .AddRecipeGroup(RecipeGroupID.IronBar, 10)
+               .AddRecipeGroup("LobotomyCorp:DualSoul", 3)
+               .AddTile(TileID.DemonAltar)
+               .Register();
         }
     }
 }

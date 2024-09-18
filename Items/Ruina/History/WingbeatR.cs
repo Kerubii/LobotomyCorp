@@ -101,6 +101,7 @@ namespace LobotomyCorp.Items.Ruina.History
             .AddIngredient(ItemID.Bell)
             .AddIngredient(ItemID.PixieDust, 25)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
 	}

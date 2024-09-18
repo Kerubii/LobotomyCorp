@@ -158,7 +158,7 @@ namespace LobotomyCorp.Projectiles.Realized
 
             if (owner.ForgottenAffectionResistance == 0.03f)
             {
-                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Teddy_On") with { Volume = 0.5f });
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Teddy_On") with { Volume = 0.5f, MaxInstances = 1 });
             }
 
             Vector2 delta = Projectile.Center - owner.Player.Center;

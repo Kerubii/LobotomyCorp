@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LobotomyCorp.NPCs.RedMist;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Reflection.Metadata;
@@ -113,7 +114,14 @@ namespace LobotomyCorp.Projectiles
                 {
                     float angle = MathHelper.ToRadians(-45f + 90f * (i / (amount - 1f)));
                     Vector2 vel = (delta * velSpeed).RotatedBy(angle);
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel, ModContent.ProjectileType<SmileBits>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    if (Main.rand.NextBool(3))
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel, ModContent.ProjectileType<SmileBits>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    else
+                    {
+                        int n = NPC.NewNPC(Projectile.GetSource_FromThis(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<SmileBitsBreakable>());
+                        Main.npc[n].velocity = vel;
+                        Main.npc[n].netUpdate = true;
+                    }
                 }
             }
             // Random hotgun type
@@ -125,7 +133,14 @@ namespace LobotomyCorp.Projectiles
                 {
                     float speed = velSpeed * Main.rand.NextFloat(0.8f, 1.2f);
                     Vector2 vel = (delta * speed).RotatedByRandom(MathHelper.ToRadians(45));
-                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel, ModContent.ProjectileType<SmileBits>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    if (Main.rand.NextBool(3))
+                        Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, vel, ModContent.ProjectileType<SmileBits>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+                    else
+                    {
+                        int n = NPC.NewNPC(Projectile.GetSource_FromThis(), (int)Projectile.Center.X, (int)Projectile.Center.Y, ModContent.NPCType<SmileBitsBreakable>());
+                        Main.npc[n].velocity = vel;
+                        Main.npc[n].netUpdate = true;
+                    }
                 }
             }
         }
