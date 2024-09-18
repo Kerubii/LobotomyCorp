@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles
 	public class GoldRushPunches : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Ora");
+            // DisplayName.SetDefault("Ora");
         }
 
 		public override void SetDefaults() {
@@ -54,6 +54,11 @@ namespace LobotomyCorp.Projectiles
 				Projectile.ai[0]++;
 			}
 
+			if (Projectile.timeLeft == 4 && Main.myPlayer == Projectile.owner)
+			{
+				int p = Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity, ModContent.ProjectileType<GoldRushFlurry>(), Projectile.damage / 2, Projectile.knockBack, Projectile.owner);
+			}
+
 			Projectile.rotation = Projectile.velocity.ToRotation();
 			if (Projectile.spriteDirection < 0)
 				Projectile.rotation += MathHelper.ToRadians(180);
@@ -67,6 +72,18 @@ namespace LobotomyCorp.Projectiles
         public override bool ShouldUpdatePosition()
         {
             return false;
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+			target.immune[Projectile.owner] = 15;
+        }
+
+        public override bool? CanHitNPC(NPC target)
+        {
+			if (Projectile.localNPCImmunity[target.whoAmI] == 0)
+				return true;
+            return base.CanHitNPC(target);
         }
 
         public override bool PreDraw(ref Color lightColor)

@@ -10,7 +10,7 @@ namespace LobotomyCorp.Projectiles
     public class ParadiseLostBase : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Judgement");
+            // DisplayName.SetDefault("Judgement");
         }
 
         public override void SetDefaults()

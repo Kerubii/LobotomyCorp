@@ -17,7 +17,7 @@ namespace LobotomyCorp.Projectiles.Realized
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Friend!");
+            // DisplayName.SetDefault("Friend!");
         }
 
         public SkeletonBase FSkel;

@@ -1,0 +1,1 @@
+0.8.4 - Fixed Red Mist having coordinate problems causing her to despawn (I wish I didnt spam hotfixes like this)

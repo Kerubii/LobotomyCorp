@@ -11,10 +11,9 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Gooey Waste");
-			Description.SetDefault("Reduced movement speed and Defense");
+			// DisplayName.SetDefault("Gooey Waste");
+			// Description.SetDefault("Reduced movement speed and Defense");
             Main.debuff[Type] = true;
-            BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)
@@ -30,8 +29,8 @@ namespace LobotomyCorp.Buffs
 
         public override void Update(NPC npc, ref int buffIndex)
         {
-            npc.defense -= 20;
-            if (!npc.boss)
+            //npc.defense -= 20;
+            //if (!npc.boss)
 
             if (!Main.rand.NextBool(90))
                 return;

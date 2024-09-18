@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameContent;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
@@ -19,27 +20,41 @@ namespace LobotomyCorp.Tiles
 			TileObjectData.newTile.Origin = new Point16(0, 2);
 			TileObjectData.newTile.CoordinateHeights = new[] { 16, 16, 16 };
 			TileObjectData.addTile(Type);
-			ModTranslation name = CreateMapEntryName();
-			name.SetDefault("Disciplinary Shell");
+			LocalizedText name = CreateMapEntryName();
+			// name.SetDefault("Disciplinary Shell");
 			AddMapEntry(new Color(0, 0, 0), name);
 			DustType = DustID.Blood;
 			TileID.Sets.DisableSmartCursor[Type] = true;
 		}
 
-		public override void KillMultiTile(int i, int j, int frameX, int frameY)
-		{
-			Item.NewItem(new EntitySource_TileBreak(i, j), i * 16, j * 16, 16, 32, ModContent.ItemType<Items.DisciplinaryShell>());
-		}
+        public override bool CanDrop(int i, int j)
+        {
+            int redMistType = ModContent.NPCType<NPCs.RedMist.RedMist>();
+            if (NPC.AnyNPCs(redMistType))
+			{
+				return false;
+			}
+			return base.CanDrop(i, j);
+        }
 
         public override bool RightClick(int i, int j)
         {
 			int redMistType = ModContent.NPCType<NPCs.RedMist.RedMist>();
 			if (!NPC.AnyNPCs(redMistType))
-			{
-				WorldGen.KillTile(i, j);
-
-				NPC.SpawnBoss(i * 16, (j + 1) * 16, redMistType, Main.myPlayer);
-				Gore.NewGore(null, new Vector2(i * 16, j * 16), new Vector2(-1, 0), ModContent.Find<ModGore>("LobotomyCorp/ShellGore").Type);
+            {
+                WorldGen.KillTile(i, j, false, false, true);
+				if (Main.netMode == NetmodeID.MultiplayerClient)
+				{
+                    NPC.SpawnBoss(i * 16, (j + 1) * 16, redMistType, 0);
+					int who = NPC.FindFirstNPC(redMistType);
+                    NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, who);
+                    NetMessage.SendData(MessageID.TileManipulation, -1, -1, null, 0, i, j);
+				}
+				else
+				{
+                    NPC.SpawnBoss(i * 16, (j + 1) * 16, redMistType, 0);
+                }
+                Gore.NewGore(null, new Vector2(i * 16, j * 16), new Vector2(-1, 0), ModContent.Find<ModGore>("LobotomyCorp/ShellGore").Type);
 				Gore.NewGore(null, new Vector2(i * 16, j * 16), new Vector2(1, 0), ModContent.Find<ModGore>("LobotomyCorp/ShellGore2").Type);
 
 				return true;

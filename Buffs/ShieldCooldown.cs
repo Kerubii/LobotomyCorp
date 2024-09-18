@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Breached Shield");
-			Description.SetDefault("Shield recharging");
+			// DisplayName.SetDefault("Breached Shield");
+			// Description.SetDefault("Shield recharging");
 		}
 
         public override void Update(Player player, ref int buffIndex)

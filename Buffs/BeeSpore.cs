@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Spore");
-			Description.SetDefault("Your neck feels itchy");
+			// DisplayName.SetDefault("Spore");
+			// Description.SetDefault("Your neck feels itchy");
 			Main.debuff[Type] = true;
 		}
 		

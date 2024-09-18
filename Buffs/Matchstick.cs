@@ -9,8 +9,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Matchstick");
-			Description.SetDefault("Reduce to ashes...");
+			// DisplayName.SetDefault("Matchstick");
+			// Description.SetDefault("Reduce to ashes...");
             Main.debuff[Type] = true;
             Main.buffNoTimeDisplay[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

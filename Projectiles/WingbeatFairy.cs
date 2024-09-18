@@ -37,7 +37,7 @@ namespace LobotomyCorp.Projectiles
             Projectile.frame = (int)(Projectile.frameCounter / 6);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<Buffs.Fairy>(), 600);
         }
@@ -52,9 +52,9 @@ namespace LobotomyCorp.Projectiles
             SoundEngine.PlaySound(SoundID.NPCHit5, Projectile.Center);
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage = 1;
+            modifiers.SourceDamage.Base = 1;
         }
     }
 }

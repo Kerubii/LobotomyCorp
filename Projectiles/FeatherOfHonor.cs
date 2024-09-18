@@ -99,7 +99,7 @@ namespace LobotomyCorp.Projectiles
             {
                 if (projOwner.whoAmI == Main.myPlayer)
                 {
-                    Items.FeatherOfHonor ModItem = (Items.FeatherOfHonor)projOwner.HeldItem.ModItem;
+                    Items.Waw.FeatherOfHonor ModItem = (Items.Waw.FeatherOfHonor)projOwner.HeldItem.ModItem;
                     if (ModItem.FeatherShoot == 0)
                     {
                         SoundEngine.PlaySound(LobotomyCorp.WeaponSound("Firebird"), Projectile.Center);
@@ -115,6 +115,7 @@ namespace LobotomyCorp.Projectiles
                         Projectile.rotation = Projectile.velocity.ToRotation() + (Projectile.spriteDirection == 1 ? 0 : 3.14f);
 
                         Projectile.ai[1]++;
+                        Projectile.netUpdate = true;
                     }
                 }
             }
@@ -139,9 +140,16 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            target.AddBuff(BuffID.OnFire, 60 * 5);
+        }
+
         public override bool? CanHitNPC(NPC target)
         {
-            return Projectile.ai[1] >= 3;
+            if (Projectile.ai[1] >= 3)
+                return base.CanHitNPC(target);
+            return false;
         }
 
         public override bool PreDraw(ref Color lightColor)

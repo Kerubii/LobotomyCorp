@@ -3,15 +3,17 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using LobotomyCorp.Items.He;
 
 namespace LobotomyCorp.Items.Ruina.Technology
 {
-	public class GrinderMk52R : SEgoItem
+    public class GrinderMk52R : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{
-            DisplayName.SetDefault("Grinder Mk52"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault(GetTooltip());
+            // DisplayName.SetDefault("Grinder Mk52"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+            // Tooltip.SetDefault(GetTooltip());
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
 		}
 
 		public override void SetDefaults() 
@@ -19,7 +21,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
             EgoColor = LobotomyCorp.HeRarity;
 
             Item.damage = 63;
-			Item.DamageType = DamageClass.Melee;
+			Item.DamageType = DamageClass.Summon;
 			Item.width = 40;
 			Item.height = 40;
 			Item.useTime = 20;
@@ -88,6 +90,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
             .AddIngredient(ItemID.IronBroadsword, 4)
             .AddIngredient(ItemID.Wire, 150)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
 
             CreateRecipe()
@@ -96,6 +99,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
             .AddIngredient(ItemID.LeadBroadsword, 4)
             .AddIngredient(ItemID.Wire, 150)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
 	}

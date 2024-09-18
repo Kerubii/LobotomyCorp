@@ -4,24 +4,25 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.Audio;
+using LobotomyCorp.Items.Zayin;
 
 namespace LobotomyCorp.Items.Ruina.History
 {
-	public class WingbeatR : SEgoItem
+    public class WingbeatR : SEgoItem
 	{
         public override void Load()
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                EquipLoader.AddEquipTexture(Mod, "LobotomyCorp/Items/Wingbeat_Hands", EquipType.HandsOn, null, "LobotomyCorp:WingBeatBlades");
+                EquipLoader.AddEquipTexture(Mod, "LobotomyCorp/Items/Ruina/History/Wingbeat_Hands", EquipType.HandsOn, null, "LobotomyCorp:WingBeatBlades");
                 //WingbeatHandOff = EquipLoader.AddEquipTexture(Mod, "LobotomyCorp/Items/Wingbeat_Hands", EquipType.HandsOff);
             }
         }
 
         public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Wingbeat");
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Wingbeat");
+			// Tooltip.SetDefault(GetTooltip());
         }
 
         public override void SetDefaults() 
@@ -100,6 +101,7 @@ namespace LobotomyCorp.Items.Ruina.History
             .AddIngredient(ItemID.Bell)
             .AddIngredient(ItemID.PixieDust, 25)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
 	}

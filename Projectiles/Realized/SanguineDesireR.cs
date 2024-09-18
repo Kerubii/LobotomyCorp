@@ -206,7 +206,7 @@ namespace LobotomyCorp.Projectiles.Realized
             return base.Colliding(projHitbox, targetHitbox);
         }
 
-        public override void ModifyDamageScaling(ref float damageScale)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             int itemTime = Main.player[Projectile.owner].itemAnimation;
             int itemMax = Main.player[Projectile.owner].itemAnimationMax;
@@ -215,16 +215,16 @@ namespace LobotomyCorp.Projectiles.Realized
             {
                 return;
             }
-            damageScale = 0.6f;
+            modifiers.FinalDamage *= 0.6f;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Projectile.ai[0] = -1;
             int maximumDamage = target.damage * 20;
             if (maximumDamage < Projectile.damage * 20)
                 maximumDamage = Projectile.damage * 20;
-            LobotomyGlobalNPC.SanguineDesireApplyBleed(target, damage / 2f, maximumDamage, 60, 600);
+            LobotomyGlobalNPC.SanguineDesireApplyBleed(target, damageDone / 2f, maximumDamage, 60, 600);
 
             int amount = 5 + Main.rand.Next(5);
             for (int i = 0; i < amount; i++)
@@ -427,7 +427,7 @@ namespace LobotomyCorp.Projectiles.Realized
             damageScale = 0.6f;
         }*/
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             float progress = Projectile.ai[1] / ((float)Main.player[Projectile.owner].itemAnimationMax * Projectile.extraUpdates);
             if (0.65f >= progress && progress >= 0.55f)
@@ -437,7 +437,7 @@ namespace LobotomyCorp.Projectiles.Realized
             target.immune[Projectile.owner] = Main.player[Projectile.owner].itemAnimation;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             int amount = (int)(LobotomyGlobalNPC.LNPC(target).SanguineDesireExtensiveBleedAmount / 15);
             if (amount > 30)
@@ -459,9 +459,10 @@ namespace LobotomyCorp.Projectiles.Realized
                 Main.dust[d].noGravity = true;
                 Main.dust[d].fadeIn = 1f + Main.rand.NextFloat(0.4f);
             }
-            LobotomyCorp.ScreenShake(15, amount * 0.5f, 0.05f, true);
-            damage += LobotomyGlobalNPC.SanguineDesireConsumeBleed(target) * 2;
-            base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+            if (Main.myPlayer == Projectile.owner)
+                LobotomyCorp.ScreenShake(15, amount * 0.5f, 0.05f, true);
+            int damage = LobotomyGlobalNPC.SanguineDesireConsumeBleed(target) * 2;
+            modifiers.SourceDamage.Base += damage;
         }
 
         public override bool ShouldUpdatePosition()

@@ -190,20 +190,18 @@ namespace LobotomyCorp.Projectiles.Realized
             return base.CanHitNPC(target);
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
 			if (LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).BlackSwanNettleClothing >= 4 || LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).BlackSwanBrokenDream)
-				damage *= 2;
-			base.ModifyHitNPC(target, ref damage, ref knockback, ref crit, ref hitDirection);
+				modifiers.FinalDamage *= 2;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			if (LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).BlackSwanNettleClothing >= 5 || LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]).BlackSwanBrokenDream)
 			{
 				target.AddBuff(BuffID.Ichor, 300);
 			}
-			base.OnHitNPC(target, damage, knockback, crit);
         }
 
 		public override bool PreDraw(ref Color lightColor)

@@ -65,11 +65,11 @@ namespace LobotomyCorp.Projectiles
             return base.CanHitNPC(target);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			float angle = Main.rand.NextFloat(6.28f);
 			Vector2 velocity = new Vector2(16f, 0f).RotatedBy(angle);
-			Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center - velocity * 15, velocity, ModContent.ProjectileType<Projectiles.TwilightStrikes>(), damage / (int)(4 * 1.5f), 0, Projectile.owner, target.whoAmI, 1);
+			Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center - velocity * 15, velocity, ModContent.ProjectileType<Projectiles.TwilightStrikes>(), hit.Damage / (int)(4 * 1.5f), 0, Projectile.owner, target.whoAmI, 1);
 		}
 
 		public override bool PreDraw(ref Color lightColor)

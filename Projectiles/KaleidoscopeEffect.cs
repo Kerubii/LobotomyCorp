@@ -11,7 +11,7 @@ namespace LobotomyCorp.Projectiles
 	public class KaleidoscopeEffect : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Kaleidoscope of Butterflies");
+            // DisplayName.SetDefault("Kaleidoscope of Butterflies");
             Main.projFrames[Projectile.type] = 3;
         }
 

@@ -1,3 +1,4 @@
+using LobotomyCorp.Items.Waw;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.Audio;
@@ -6,12 +7,12 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.History
 {
-	public class HornetR : SEgoItem
+    public class HornetR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{
-            DisplayName.SetDefault("Hornet");
-            Tooltip.SetDefault(GetTooltip());
+            // DisplayName.SetDefault("Hornet");
+            // Tooltip.SetDefault(GetTooltip());
         }
 
 		public override void SetDefaults() 
@@ -98,6 +99,7 @@ namespace LobotomyCorp.Items.Ruina.History
             .AddIngredient(ItemID.Stinger, 20)
             .AddIngredient(ItemID.VialofVenom, 20)
             .AddTile<Tiles.BlackBox3>()
+            .AddCondition(RedMistCond)
             .Register();
         }
 	}

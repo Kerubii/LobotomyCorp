@@ -11,7 +11,7 @@ namespace LobotomyCorp.Projectiles
 	public class MimicryHello : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Hello?");
+            // DisplayName.SetDefault("Hello?");
         }
 
         public override void SetDefaults()

@@ -8,8 +8,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Qlipoth Disruption");
-			Description.SetDefault("Movement speed is reduced");
+			// DisplayName.SetDefault("Qlipoth Disruption");
+			// Description.SetDefault("Movement speed is reduced");
 		}
 
         public override void Update(Player player, ref int buffIndex)

@@ -1,19 +1,34 @@
 using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
-namespace LobotomyCorp.Config
+namespace LobotomyCorp.Configs
 {
     public class LobotomyConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ClientSide;
 
-        [Header("General Configuration")]
-        [Label("Expanded Realized EGO Tooltips")]
+        [Header("GeneralConfiguration")]
+        //[Label("Expanded Realized EGO Tooltips")]
         [DefaultValue(true)]
         public bool ExtraPassivesShow;
 
-        [Label("Screenshake Enabled")]
+        //[Label("Screenshake Enabled")]
         [DefaultValue(true)]
         public bool ScreenShakeEnabled;
+
+        [DefaultValue(1f)]
+        [Range(0f, 1f)]
+        public float ScreenEffectOpacity;
+    }
+
+    public class LobotomyServerConfig : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ServerSide;
+
+        //[Label("Test Items")]
+        //[Tooltip("Include unfinished items and NPCs. Requires a Reload")]
+        [DefaultValue(false)]
+        [ReloadRequired]
+        public bool TestItemEnable { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using LobotomyCorp.Utils;
 using Terraria.GameContent;
+using System.IO;
 
 namespace LobotomyCorp.Projectiles.Realized
 {
@@ -13,7 +14,7 @@ namespace LobotomyCorp.Projectiles.Realized
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Magic Bullet"); // The English name of the Projectile
+			// DisplayName.SetDefault("Magic Bullet"); // The English name of the Projectile
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 100; // The length of old position to be recorded
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 2; // The recording Mode
 		}
@@ -35,15 +36,21 @@ namespace LobotomyCorp.Projectiles.Realized
 			Projectile.netImportant = true;
 
 			AIType = ProjectileID.Bullet; // Act exactly like default Bullet
+			PlayerTarget = false;
 		}
+
+		public bool PlayerTarget;
 
         public override void AI()
         {
-			LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]);
-			if (modPlayer.MagicBulletNthShot == 6)
+			if (!PlayerTarget)
 			{
-				Projectile.usesLocalNPCImmunity = true;
-				Projectile.localNPCHitCooldown = 15;
+				LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]);
+				if (modPlayer.MagicBulletNthShot == 6)
+				{
+					Projectile.usesLocalNPCImmunity = true;
+					Projectile.localNPCHitCooldown = 15;
+				}
 			}
 
 			Projectile.localAI[0]++;
@@ -58,7 +65,18 @@ namespace LobotomyCorp.Projectiles.Realized
 			//Redirect motherfucker
 			Projectile.ai[1]++;
 			if (Projectile.timeLeft > 150 && Projectile.ai[1] > 15 * Projectile.extraUpdates)
-            {
+			{
+				if (PlayerTarget)
+				{
+					Player p = Main.player[(int)Projectile.ai[0] - 1];
+					if (p.active && !p.dead)
+					{
+						float angle = Terraria.Utils.AngleLerp(Projectile.velocity.ToRotation(), (p.Center - Projectile.Center).ToRotation(), MathHelper.ToRadians(7));
+
+						Projectile.velocity = new Vector2(Projectile.velocity.Length(), 0).RotatedBy(angle);
+					}
+					else Projectile.ai[0] = -1;
+				}
 				if (Projectile.ai[0] > 0)
                 {
 					NPC n = Main.npc[(int)Projectile.ai[0] - 1];
@@ -70,23 +88,22 @@ namespace LobotomyCorp.Projectiles.Realized
 					}
 					else Projectile.ai[0] = -1;
                 }
-				else if (Projectile.ai[0] == 0)
-                {
-					Player p = Main.player[Projectile.owner];
-					if (p.active && !p.dead)
-					{
-						float angle = Terraria.Utils.AngleLerp(Projectile.velocity.ToRotation(), (p.Center - Projectile.Center).ToRotation(), MathHelper.ToRadians(7));
-
-						Projectile.velocity = new Vector2(Projectile.velocity.Length(), 0).RotatedBy(angle);
-					}
-					else Projectile.ai[0] = -1;
-				}
             }
 
 			if (Projectile.ai[0] < 0)
 				Projectile.alpha = Projectile.alpha + 2;
 			if (Projectile.alpha >= 255)
 				Projectile.alpha = 255;
+        }
+
+        public override void SendExtraAI(BinaryWriter writer)
+        {
+			writer.Write(PlayerTarget);
+        }
+
+        public override void ReceiveExtraAI(BinaryReader reader)
+        {
+			PlayerTarget = reader.ReadBoolean();
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -109,7 +126,7 @@ namespace LobotomyCorp.Projectiles.Realized
 			return false;
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(Main.player[Projectile.owner]);
 
@@ -139,10 +156,12 @@ namespace LobotomyCorp.Projectiles.Realized
 
         public override bool CanHitPlayer(Player target)
         {
-            return target.whoAmI == Projectile.owner;
+			if (target.whoAmI != Projectile.ai[0] && Projectile.ai[0] < 0)
+				return false;
+			return base.CanHitPlayer(target);
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
 			Projectile.ai[0] = -1;
 			Projectile.timeLeft = 150;

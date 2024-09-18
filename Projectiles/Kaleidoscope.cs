@@ -11,7 +11,7 @@ namespace LobotomyCorp.Projectiles
 	public class Kaleidoscope : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Kaleidoscope of Butterflies");
+            // DisplayName.SetDefault("Kaleidoscope of Butterflies");
             Main.projFrames[Projectile.type] = 3;
         }
 
@@ -113,7 +113,7 @@ namespace LobotomyCorp.Projectiles
                 Projectile.frameCounter = 0;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             int dustType = 91;
 

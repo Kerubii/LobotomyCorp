@@ -4,15 +4,16 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using LobotomyCorp.Items.Teth;
 
 namespace LobotomyCorp.Items.Ruina.Literature
 {
-	public class TodaysExpressionR : SEgoItem
+    public class TodaysExpressionR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Today's Expression"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Today's Expression"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			// Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 
@@ -73,7 +74,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 		{
 			if (player.altFunctionUse == 2)
 			{
-				mult *= 0.5f;
+				mult *= 2f;
 			}
 		}
 
@@ -104,7 +105,7 @@ namespace LobotomyCorp.Items.Ruina.Literature
 					case 4://Angry
 						velocity *= 2.2f;
 						knockback *= 0f;
-						damage = (int)(damage * 1.5f); 
+						damage = (int)(damage * 1.6f); 
 						break;
 				}
 				if (face == 4)
@@ -125,7 +126,8 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			   .AddIngredient(ItemID.SoulofNight, 8)
 			   .AddRecipeGroup("LobotomyCorp:BossMasks")
 			   .AddTile<Tiles.BlackBox3>()
-			   .Register();
+               .AddCondition(RedMistCond)
+               .Register();
 		}
 	}
 }

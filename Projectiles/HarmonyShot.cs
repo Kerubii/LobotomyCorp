@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Projectiles
@@ -12,13 +13,16 @@ namespace LobotomyCorp.Projectiles
 			Projectile.width = 24;
 			Projectile.height = 24;
 			Projectile.aiStyle = -1;
-			Projectile.penetrate = 1;
+			Projectile.penetrate = 3;
 			Projectile.scale = 1f;
 
             Projectile.alpha = 255;
 			Projectile.DamageType = DamageClass.Magic;
 			Projectile.tileCollide = false;
 			Projectile.friendly = true;
+
+			Projectile.usesLocalNPCImmunity = true;
+			Projectile.localNPCHitCooldown = -1;
 		}
 
 		public override void AI() {
@@ -36,12 +40,31 @@ namespace LobotomyCorp.Projectiles
 			}
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
+		public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+		{
 			for (int i = 0; i < 8; i++)
 			{
 				Main.dust[Dust.NewDust(target.position, target.width, target.height, ModContent.DustType<Misc.Dusts.NoteDust>())].velocity.Y -= 1f;
 			}
+
+            float bounceDistance = 1000;
+			bool hasTarget = false;
+            foreach (NPC n in Main.npc)
+			{
+				float nDist = n.Center.Distance(Projectile.Center);
+				if (n.active && n.CanBeChasedBy(this) && Projectile.localNPCImmunity[n.whoAmI] >= 0 && nDist < bounceDistance)
+				{
+					bounceDistance = nDist;
+					float speed = Projectile.velocity.Length();
+					Projectile.velocity = n.Center - Projectile.Center;
+					Projectile.velocity.Normalize();
+					Projectile.velocity *= speed;
+					hasTarget = true;
+					//TargetPos = n.Center;
+				}
+			}
+			if (!hasTarget)
+				Projectile.Kill();
 		}
     }
 
@@ -92,7 +115,7 @@ namespace LobotomyCorp.Projectiles
 			}
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
 		{
 			foreach (Player p in Main.player)
 			{
@@ -117,10 +140,15 @@ namespace LobotomyCorp.Projectiles
 			for (int i = 0; i < 3; i++)
 			{
 				Vector2 spe = new Vector2(16f, 0).RotatedByRandom(6.28f);
-				Main.item[Item.NewItem(Projectile.GetSource_DropAsItem(), target.getRect(), ModContent.ItemType<Items.Ruina.Technology.HarmonyNote>(), 1, true, 0)].velocity = spe;
-			}
+                int number = Item.NewItem(Projectile.GetSource_DropAsItem(), target.getRect(), ModContent.ItemType<Items.Ruina.Technology.HarmonyNote>(), 1, true, 0);
+                Main.item[number].velocity = spe;
+                if (Main.netMode == 1)
+                {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
+                }
+            }
 
-			for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
 			{
 				Main.dust[Dust.NewDust(target.position, target.width, target.height, ModContent.DustType<Misc.Dusts.NoteDust>())].velocity.Y -= 1f;
 			}

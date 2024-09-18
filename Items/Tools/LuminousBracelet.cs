@@ -5,16 +5,20 @@ using static Terraria.ModLoader.ModContent;
 
 namespace LobotomyCorp.Items.Tools
 {
-    [Autoload(LobotomyCorp.TestMode)]
     public class LuminousBracelet : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
+        }
+
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("");
-            Tooltip.SetDefault("\"This bracelet shall not forgive those who hold greed in their hearts\nThus it must only be worn by those in true need.\"n" +
+            /* Tooltip.SetDefault("\"This bracelet shall not forgive those who hold greed in their hearts\nThus it must only be worn by those in true need.\"n" +
                                "Increases health and life regeneration\n" +
                                "Wearing it having no injuries slowly increases maximum health" +
-							   "When maximum health exceeds 150%, the owner dies from overregeneration");
+							   "When maximum health exceeds 150%, the owner dies from overregeneration"); */
         }
 
         public override void SetDefaults()

@@ -11,7 +11,7 @@ namespace LobotomyCorp.Projectiles
 	public class PenitenceSkull : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Penitence");
+            // DisplayName.SetDefault("Penitence");
         }
 
         public override void SetDefaults()

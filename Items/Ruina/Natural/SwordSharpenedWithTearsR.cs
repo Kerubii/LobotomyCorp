@@ -5,14 +5,18 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Items.Ruina.Natural
 {
-    [Autoload(LobotomyCorp.TestMode)]
     public class SwordSharpenedWithTearsR : SEgoItem
 	{
-		public override void SetStaticDefaults() 
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
+        }
+
+        public override void SetStaticDefaults() 
 		{
 			// DisplayName.SetDefault("Penitence"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault("A complete E.G.O.\n" +
-                               "\"All that remains is the hollow pride of a weathered knight.\"\n");
+			/* Tooltip.SetDefault("A complete E.G.O.\n" +
+                               "\"All that remains is the hollow pride of a weathered knight.\"\n"); */
             
             EgoColor = LobotomyCorp.WawRarity;
 		}

@@ -185,17 +185,12 @@ namespace LobotomyCorp.Projectiles
             return state == 3 || state == 4;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             OnHitDissapear();
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
-        {
-            OnHitDissapear();
-        }
-
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             OnHitDissapear();
         }

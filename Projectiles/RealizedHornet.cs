@@ -181,12 +181,12 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.AddBuff(ModContent.BuffType<Buffs.BeeSpore>(), 120 + (int)(240 * (Projectile.ai[1] / Projectile.ai[0])));
             if (target.life <= 0)
             {
-                LobotomyGlobalNPC.SpawnHornet(target, Projectile.owner, damage, knockback);
+                LobotomyGlobalNPC.SpawnHornet(target, Projectile.owner, hit.Damage, hit.Knockback);
             }
             if (Projectile.ai[0] < 10)
                 return;

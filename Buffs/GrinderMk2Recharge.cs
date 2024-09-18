@@ -11,8 +11,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Recharging");
-			Description.SetDefault("Power recharging");
+			// DisplayName.SetDefault("Recharging");
+			// Description.SetDefault("Power recharging");
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }
@@ -22,7 +22,7 @@ namespace LobotomyCorp.Buffs
             //LobotomyModPlayer.ModPlayer(player).GrinderMk2Recharging = true;
             if (player.buffTime[buffIndex] == 1)
             {
-                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Helper_FullCharge"), player.Center);
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Helper_FullCharge") with { Volume = 0.2f }, player.Center);
             }
         }
     }

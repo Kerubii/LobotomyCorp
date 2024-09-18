@@ -10,15 +10,18 @@ using LobotomyCorp;
 
 namespace LobotomyCorp.NPCs.OneBadManyGood
 {
-    //[AutoloadBossHead]
-    [Autoload(LobotomyCorp.TestMode)]
     class OneBadManyGood : ModNPC
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
+        }
+
         private bool SinsConfessed = false;
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("One Sin and Hundred of Good Deeds");
+            // DisplayName.SetDefault("One Sin and Hundred of Good Deeds");
         }
 
         public override void SetDefaults()
@@ -60,7 +63,7 @@ namespace LobotomyCorp.NPCs.OneBadManyGood
             }
         }
 
-        public override void OnChatButtonClicked(bool firstButton, ref bool shop)
+        public override void OnChatButtonClicked(bool firstButton, ref string shopName)
         {
             if (firstButton)
             {
@@ -76,7 +79,6 @@ namespace LobotomyCorp.NPCs.OneBadManyGood
                 else
                     Main.npcChatText = "You do not know what to confess, It seems to glow brighter.";
             }
-            base.OnChatButtonClicked(firstButton, ref shop);
         }
 
         public override void SetChatButtons(ref string button, ref string button2)

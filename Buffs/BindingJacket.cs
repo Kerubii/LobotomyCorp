@@ -11,8 +11,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
         {
-			DisplayName.SetDefault("Binding Jacket");
-			Description.SetDefault("Why is this place always so dark and cold?");
+			// DisplayName.SetDefault("Binding Jacket");
+			// Description.SetDefault("Why is this place always so dark and cold?");
             Main.debuff[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;
         }

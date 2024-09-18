@@ -27,6 +27,9 @@ namespace LobotomyCorp.Projectiles
             Projectile.DamageType = DamageClass.Melee;
             Projectile.tileCollide = false;
             Projectile.friendly = true;
+
+            Projectile.usesLocalNPCImmunity = true;
+            Projectile.localNPCHitCooldown = -1;
         }
 
         public override void AI()
@@ -73,7 +76,7 @@ namespace LobotomyCorp.Projectiles
             return base.CanHitNPC(target);
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             /*
             if (target.HasBuff(ModContent.BuffType<Buffs.Matchstick>()))
@@ -83,14 +86,8 @@ namespace LobotomyCorp.Projectiles
             target.AddBuff(BuffID.OnFire, 300); 
         }
 
-        public override void OnHitPvp(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
-            /*
-            if (target.HasBuff(ModContent.BuffType<Buffs.Matchstick>()))
-                target.buffTime[target.FindBuffIndex(ModContent.BuffType<Buffs.Matchstick>())] += 300;
-            else
-                target.AddBuff(ModContent.BuffType<Buffs.Matchstick>(), 300);*/
-
             target.AddBuff(BuffID.OnFire, 300);
         }
 

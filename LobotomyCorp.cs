@@ -1,4 +1,6 @@
-using LobotomyCorp.Config;
+using LobotomyCorp.Configs;
+using LobotomyCorp.ModSystems;
+using LobotomyCorp.Projectiles;
 using LobotomyCorp.UI;
 using LobotomyCorp.Utils;
 using Microsoft.Xna.Framework;
@@ -9,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using Terraria;
 using Terraria.Audio;
+using Terraria.Graphics.CameraModifiers;
 using Terraria.Graphics.Effects;
 using Terraria.Graphics.Shaders;
 using Terraria.ID;
@@ -42,6 +45,8 @@ namespace LobotomyCorp
 
         public static Asset<Texture2D> RedShoesGlittering = null;
 
+        public static Asset<Texture2D> Slash2 = null;
+
         public static Color PositivePE => new Color(18, 255, 86);
         public static Color NegativePE => new Color(239, 77, 61);
 
@@ -57,8 +62,6 @@ namespace LobotomyCorp
         public static Color AlephRarity => new Color(255, 1, 0);
 
         public static ModKeybind SynchronizeEGO;
-
-        public const bool TestMode = true;
 
         public class WeaponSounds
         {
@@ -78,6 +81,13 @@ namespace LobotomyCorp
 
         public static Dictionary<string, CustomShaderData> LobcorpShaders = new Dictionary<string, CustomShaderData>();
 
+        public static void LookingAt(Vector2 pos, int type = 30)
+        {
+            Dust d = Dust.NewDustPerfect(pos, type);
+            d.noGravity = true;
+            d.velocity *= 0;
+        }
+
         public static void RiskLevelResist(ref int damage, RiskLevel ego, RiskLevel risk)
         {
 
@@ -85,8 +95,6 @@ namespace LobotomyCorp
 
         public override void Load()
         {
-            SuppressionTextData.Initialize();
-
             if (!Main.dedServ)
             {
                 if (Main.netMode != NetmodeID.Server)
@@ -103,6 +111,8 @@ namespace LobotomyCorp
 
                     RedShoesGlittering = Assets.Request<Texture2D>("Misc/RedShoesGlitter", AssetRequestMode.ImmediateLoad);
 
+                    Slash2 = Assets.Request<Texture2D>("Projectiles/Slash2A", AssetRequestMode.ImmediateLoad);
+
                     Main.QueueMainThreadAction(() =>
                     {
                         PremultiplyTexture(ArcanaSlaveLaser.Value);
@@ -118,21 +128,23 @@ namespace LobotomyCorp
 
                         PremultiplyTexture(RedShoesGlittering.Value);
 
-                        
+                        PremultiplyTexture(Slash2.Value);
                     });
 
                     //Ref<Effect> punishingRef = new Ref<Effect>(GetEffect("Effects/PunishingBird"));
-                    Ref<Effect> TrailRef = new Ref<Effect>(Assets.Request<Effect>("Effects/SwordTrail", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> GlowTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/GlowTrail", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> ArcanaSlaveRef = new Ref<Effect>(Assets.Request<Effect>("Effects/ArcanaSlave", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> FourthMatchFlame = new Ref<Effect>(Assets.Request<Effect>("Effects/FourthMatchFlame", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> GenericTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/GenericTrail", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> BladeTrail = new Ref<Effect>(Assets.Request<Effect>("Effects/BladeTrail", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> BrokenScreen = new Ref<Effect>(Assets.Request<Effect>("Effects/BrokenShader", AssetRequestMode.ImmediateLoad).Value);
-                    Ref<Effect> RedMistEffect = new Ref<Effect>(Assets.Request<Effect>("Effects/OverlayShader", AssetRequestMode.ImmediateLoad).Value);
+                    Asset<Effect> TrailRef = Assets.Request<Effect>("Effects/SwordTrail", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> GlowTrail = Assets.Request<Effect>("Effects/GlowTrail", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> ArcanaSlaveRef = Assets.Request<Effect>("Effects/ArcanaSlave", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> FourthMatchFlame = Assets.Request<Effect>("Effects/FourthMatchFlame", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> GenericTrail = Assets.Request<Effect>("Effects/GenericTrail", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> BladeTrail = Assets.Request<Effect>("Effects/BladeTrail", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> BrokenScreen = Assets.Request<Effect>("Effects/BrokenShader", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> RedMistEffect = Assets.Request<Effect>("Effects/OverlayShader", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> Fragment = Assets.Request<Effect>("Effects/FragmentUniverse", AssetRequestMode.ImmediateLoad);
+                    Asset<Effect> Fragment2 = Assets.Request<Effect>("Effects/FragmentEnlightened", AssetRequestMode.ImmediateLoad);
                     //GameShaders.Misc["Punish"] = new MiscShaderData(punishingRef, "PunishingBird");
 
-                    GameShaders.Misc["LobotomyCorp:Rotate"] = new MiscShaderData(new Ref<Effect>(ArcanaSlaveRef.Value), "ArcanaResize").UseSaturation(0f);
+                    GameShaders.Misc["LobotomyCorp:Rotate"] = new MiscShaderData(ArcanaSlaveRef, "ArcanaResize").UseSaturation(0f);
 
                     ScreenShaderData shaderData = new ScreenShaderData(BrokenScreen, "BrokenScreenShader");
                     shaderData.UseImage(Assets.Request<Texture2D>("Misc/CameraFilterPack_TV_BrokenGlass5", AssetRequestMode.ImmediateLoad).Value, 0, SamplerState.LinearWrap);
@@ -194,6 +206,15 @@ namespace LobotomyCorp
                     shader.UseImage3(this, "Misc/FX_Tex_Noise_Plasma1");
                     LobcorpShaders["RedEyesTrail"] = shader;
 
+                    shader = new CustomShaderData(Fragment, "Fragment");
+                    shader.UseImage1(this, "Misc/PurpleNebula5");
+                    LobcorpShaders["Fragment"] = shader;
+
+                    shader = new CustomShaderData(Fragment2, "FragmentEn");
+                    shader.UseImage1(this, "Misc/PurpleNebula5");
+                    LobcorpShaders["FragmentEnlightened"] = shader;
+                    // Use CustomShaderDate to define the length of the border :3
+
                     WeaponSounds.Axe = WeaponSound("axe", true, 2);
                     WeaponSounds.BowGun = WeaponSound("bowGun");
                     WeaponSounds.Cannon = WeaponSound("cannon");
@@ -212,8 +233,6 @@ namespace LobotomyCorp
 
         public override void Unload()
         {
-            SuppressionTextData.Unload();
-
             ArcanaSlaveLaser = null;
             ArcanaSlaveBackground = null;
 
@@ -222,6 +241,8 @@ namespace LobotomyCorp
             KingPortal3 = null;
 
             MagicBulletBullet = null;
+
+            Slash2 = null;
 
             /*PositivePE = new Color();
             NegativePE = new Color();
@@ -251,6 +272,8 @@ namespace LobotomyCorp
             base.Close();
         }*/
 
+        //General Static stuffs
+
         public static bool LamentValid(NPC t, Projectile p)
         {
             bool valid = true;
@@ -261,7 +284,6 @@ namespace LobotomyCorp
                 if (n.active && !n.dontTakeDamage && !n.friendly && n.life > 0 && n.whoAmI != t.whoAmI && health2 < health && n.chaseable && n.CanBeChasedBy(p) && n.realLife < 0)
                 {
                     valid = false;
-                    //Main.NewText(n.type);
                     break;
                 }
             }
@@ -339,7 +361,7 @@ namespace LobotomyCorp
 
         public static void ScreenShake(int Time, float Intensity, float decay = 0, bool Forced = true)
         {
-            ModContent.GetInstance<LobSystem>().ScreenShake(Time, Intensity, decay, Forced);
+            ModContent.GetInstance<ScreenSystem>().ScreenShake(Time, Intensity, decay, Forced);
         }
     }
 
@@ -422,340 +444,6 @@ namespace LobotomyCorp
             dot = (float)Math.Sin(Vector2.Dot(uv, new Vector2(142.7f * _variability * 0.84f, 421.3f * _variability * 0.2f)));
             float fract2 = dot - (float)Math.Floor(dot);
             return new Vector2(fract, fract2);
-        }
-    }
-
-    class LobSystem : ModSystem
-    {
-        public override void PostUpdateEverything()
-        {
-            if (Filters.Scene["LobotomyCorp:RedMistOverlay"].IsActive() && !NPC.AnyNPCs(ModContent.NPCType<NPCs.RedMist.RedMist>()))
-            {
-                Filters.Scene["LobotomyCorp:RedMistOverlay"].Deactivate();
-            }
-
-            base.PostUpdateEverything();
-        }
-
-        public override void AddRecipeGroups()
-        {
-            RecipeGroup rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "EvilPowder", new[]
-            {
-                (int)ItemID.ViciousPowder,
-                (int)ItemID.VilePowder
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:EvilPowder", rec);
-
-            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Butterflies", new[]
-            {
-                (int)ItemID.JuliaButterfly,
-                ItemID.MonarchButterfly,
-                ItemID.PurpleEmperorButterfly,
-                ItemID.RedAdmiralButterfly,
-                ItemID.SulphurButterfly,
-                ItemID.TreeNymphButterfly,
-                ItemID.UlyssesButterfly,
-                ItemID.ZebraSwallowtailButterfly,
-                ItemID.GoldButterfly
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:Butterflies", rec);
-
-            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Dungeon Lanterns", new[]
-            {
-                (int)ItemID.AlchemyLantern,
-                (int)ItemID.BrassLantern,
-                ItemID.CagedLantern,
-                ItemID.CarriageLantern,
-                ItemID.AlchemyLantern,
-                ItemID.DiablostLamp,
-                ItemID.OilRagSconse
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:DungeonLantern", rec);
-
-            rec = new RecipeGroup(() => Language.GetTextValue("LegacyMisc.37") + " " + "Boss Masks", new[]
-           {
-                (int)ItemID.KingSlimeMask,
-                (int)2112,
-                2103,
-                2111,
-                2108,
-                1281,
-                5109,
-                2105,
-                4959,
-                2113,
-                2106,
-                2107,
-                2109,
-                2110,
-                4784,
-                2588,
-                3372,
-                3373,
-                3864,
-                3865,
-                3863
-            });
-            RecipeGroup.RegisterGroup("LobotomyCorp:BossMasks", rec);
-        }
-
-        public override void ModifyScreenPosition()
-        {
-            if (modifiedCamera)
-            {
-                Main.screenPosition = modifiedScreenPosition;
-                modifiedCamera = false;
-            }
-            
-            if (ScreenShakeTimer > 0)
-            {
-                Main.screenPosition.X += Main.rand.NextFloat(-ScreenShakeIntensity, ScreenShakeIntensity);
-                Main.screenPosition.Y += Main.rand.NextFloat(-ScreenShakeIntensity, ScreenShakeIntensity);
-                ScreenShakeIntensity -= ScreenShakeDecay;
-                ScreenShakeTimer--;
-            }
-            base.ModifyScreenPosition();
-        }
-
-        private int ScreenShakeTimer;
-        private float ScreenShakeIntensity;
-        private float ScreenShakeDecay;
-
-        public void ScreenShake(int Time, float Intensity, float decay = 0, bool Forced = true)
-        {
-            if (!ModContent.GetInstance<LobotomyConfig>().ScreenShakeEnabled || (!Forced && ScreenShakeTimer > 0))
-                return;
-
-            ScreenShakeTimer = Time;
-            ScreenShakeIntensity = Intensity;
-            ScreenShakeDecay = decay;
-        }
-
-        private bool modifiedCamera;
-        private Vector2 modifiedScreenPosition;
-
-        public Vector2 RedEyesSpecialCamera(Vector2 cameraCenter, Vector2? lerpTo = null, float lerp = 0f)
-        {
-            modifiedCamera = true;
-            Vector2 position = cameraCenter + Vector2.UnitY * (Main.player[Main.myPlayer].gfxOffY - 1);
-            if (lerpTo != null)
-            {
-                position = Vector2.Lerp(position, (Vector2)lerpTo, lerp);
-            }
-            modifiedScreenPosition.X = position.X - Main.screenWidth / 2;
-            modifiedScreenPosition.Y = position.Y - Main.screenHeight / 2;
-            Main.SetCameraLerp(0.1f, 15);
-            return position;
-        }
-    }
-
-    class SuppressionTextSystem : ModSystem
-    {
-        internal SupTextDisplay SupText;
-
-        public override void OnWorldLoad()
-        {
-            SupText = new SupTextDisplay();
-        }
-
-        public override void OnWorldUnload()
-        {
-            SupText.Unload();
-        }
-
-        public override void PostUpdateDusts()
-        {
-            SupText.Update();
-        }
-
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
-            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Tile Grid Option"));
-            if (mouseTextIndex != -1)
-            {
-                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                    "LobotomyCorp: Suppression Text",
-                    delegate
-                    {
-                        if (SupText.IsActive())
-                        {
-                            SupText.Draw(Main.spriteBatch);
-                        }
-                        return true;
-                    },
-                    InterfaceScaleType.Game)
-                );
-            }
-
-            base.ModifyInterfaceLayers(layers);
-        }
-    }
-
-    class LobWorkSystem : ModSystem
-    {
-        internal UserInterface LobWork;
-
-        public override void Load()
-        {
-            if (!Main.dedServ)
-            {
-                LobWork = new UserInterface();
-            }
-        }
-
-        public override void Unload()
-        {
-            LobWork = null;
-        }
-
-        public override void UpdateUI(GameTime gameTime)
-        {
-            if (Main.LocalPlayer.controlInv)
-            {
-                LobWork.SetState(new UI.LobWorkUI());
-            }
-            if (LobWork != null)
-            {
-                LobWork.Update(gameTime);
-            }
-        }
-
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
-            int MouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Resource Bars"));
-            if (MouseTextIndex != -1)
-            {
-                layers.Insert(MouseTextIndex, new LegacyGameInterfaceLayer(
-                    "LobotomyCorp: WorkUI",
-                    delegate
-                    {
-                        LobWork.Draw(Main.spriteBatch, new GameTime());
-                        return true;
-                    },
-                    InterfaceScaleType.UI)
-                );
-            }
-        }
-    }
-
-    class LobCustomDraw : ModSystem
-    {
-        private ScreenFilter[] screenFilters = new ScreenFilter[5];
-
-        public static LobCustomDraw Instance()
-        {
-            return ModContent.GetInstance<LobCustomDraw>();
-        }
-
-        public override void OnWorldLoad()
-        {
-            screenFilters = new ScreenFilter[5];
-            for (int i = 0; i < 5; i++)
-            {
-                screenFilters[i] = new ScreenFilter();
-            }
-
-            //ModContent.GetInstance<LobotomyCorp>().Logger.Info("ScreenFilterInitialized");
-        }
-
-        public override void OnWorldUnload()
-        {
-            screenFilters = null;
-
-            //ModContent.GetInstance<LobotomyCorp>().Logger.Info("ScreenFilterDeinitialized");
-        }
-
-        public override void PostUpdateEverything()
-        {
-            foreach (ScreenFilter ol in screenFilters)
-            {
-                if (ol.Active)
-                {
-                    ol.Update();
-                    ol.Active = !ol.DeActive();
-                }
-            }
-        }
-
-        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
-        {
-            int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Interface Logic 1"));
-            if (mouseTextIndex != -1)
-            {
-                layers.Insert(mouseTextIndex, new LegacyGameInterfaceLayer(
-                    "LobotomyCorp: ScreenFilter",
-                    delegate
-                    {
-                        foreach (ScreenFilter filter in screenFilters)
-                        {
-                            if (filter.Active)
-                            {
-                                filter.Draw(Main.spriteBatch);
-                            }
-                        }
-                        return true;
-                    },
-                    InterfaceScaleType.UI)
-                );
-            }
-
-            base.ModifyInterfaceLayers(layers);
-        }
-
-        /// <summary>
-        /// There are 5 Layers for screentextures, Replaces the layer as inteded limitation so as a General rule of thumb, lets say this
-        /// 0-2 Lower Layers, Used as visual effects for players, will occupy a spot inactive, if all slots active replaces preferred layer
-        /// 3   Used by NPCs to provide information, preferably bosses or special npcs
-        /// 4   Special Cases
-        /// Force to replace a specific layer, used for 0-2
-        /// </summary>
-        /// <param name="newLayer"></param>
-        /// <param name="layer"></param>
-        public void AddFilter(ScreenFilter newLayer, int layer = 0, bool force = false)
-        {
-            if (!force && layer < 3)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    if (screenFilters.GetType() == newLayer.GetType())
-                    {
-                        screenFilters[i] = null;
-                        screenFilters[i] = newLayer;
-                        return;
-                    }
-                }
-
-                {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        if (!screenFilters[i].Active)
-                        {
-                            screenFilters[i] = newLayer;
-                            return;
-                        }
-                    }
-                }
-            }
-
-            screenFilters[layer] = newLayer;
-        }
-
-        /// <summary>
-        /// There are 5 Layers for screentextures, Replaces the layer so as a General rule of thumb, lets say this
-        /// 0-2 Lower Layers, Used as visual effects for players, will occupy a spot inactive, if all slots active replaces preferred layer
-        /// 3   Used by NPCs to provide information, preferably bosses or special npcs
-        /// 4   Special Cases
-        /// </summary>
-        /// <param name="layer"></param>
-        /// <returns></returns>
-        public bool IsLayerActive(int layer)
-        {
-            return screenFilters[layer].Active;
-        }
-
-        public override void Unload()
-        {
-            screenFilters = null;
         }
     }
 }

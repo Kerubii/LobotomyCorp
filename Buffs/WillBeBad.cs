@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Blue Moon");
-			Description.SetDefault("10% increased melee damage");
+			// DisplayName.SetDefault("Blue Moon");
+			// Description.SetDefault("10% increased melee damage");
 		}
 
         public override void Update(Player player, ref int buffIndex)

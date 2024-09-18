@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles
 {
     public class JustitiaAlt : ModProjectile
     {
-        public override string Texture => "LobotomyCorp/Items/Justitia";
+        public override string Texture => "LobotomyCorp/Items/Aleph/Justitia";
 
         public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");
@@ -203,10 +203,10 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
-            damage += (int)(target.defense / 2f);
-            knockback *= 0.1f;
+            modifiers.ScalingArmorPenetration += 1f;
+            modifiers.Knockback *= 0.1f;
         }
 
         public override bool? CanHitNPC(NPC target)
@@ -219,7 +219,7 @@ namespace LobotomyCorp.Projectiles
                 return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player projOwner = Main.player[Projectile.owner];
             float progress = 1f - (float)projOwner.itemAnimation / (float)projOwner.itemAnimationMax;

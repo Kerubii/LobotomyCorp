@@ -11,6 +11,7 @@ using Terraria.UI;
 using ReLogic.Graphics;
 using System;
 using Terraria.GameContent;
+using LobotomyCorp.ModSystems;
 
 namespace LobotomyCorp.UI
 {
@@ -176,7 +177,7 @@ namespace LobotomyCorp.UI
                         pos.Y += CombatText.TargetScale;
                         break;
                     default:
-                        if (Main.rand.Next(30) == 0)
+                        if (Main.rand.NextBool(30))
                         {
                             offset.X += Main.rand.NextFloat(-1.0f, 1.0f) * scale;
                             offset.Y += Main.rand.NextFloat(-1.0f, 1.0f) * scale;
@@ -243,6 +244,11 @@ namespace LobotomyCorp.UI
             return Language.GetTextValue("Mods.LobotomyCorp.SuppressionTexts." + Sephirah + "." + id);
         }
 
+        public static string GetSephirahTalk(string Sephirah, int id, int id2)
+        {
+            return Language.GetTextValue("Mods.LobotomyCorp.SuppressionTexts." + Sephirah + "." + id + "Talk" + id2);
+        }
+
         /// <summary>
         /// So yeah lol
         /// </summary>
@@ -262,6 +268,13 @@ namespace LobotomyCorp.UI
             {
                 Text[i].active = false;
             }
+        }
+
+        public static bool IsActive(int i)
+        {
+            SuppressionTextSystem System = ModContent.GetInstance<SuppressionTextSystem>();
+            SuppressionText[] Text = System.SupText.Text;
+            return Text[i].active;
         }
     }
 }

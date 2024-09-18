@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Trauma Shield");
-			Description.SetDefault("Protects the user against projectiles");
+			// DisplayName.SetDefault("Trauma Shield");
+			// Description.SetDefault("Protects the user against projectiles");
 		}
 
         public override void Update(Player player, ref int buffIndex)

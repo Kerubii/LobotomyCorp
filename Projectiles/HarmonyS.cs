@@ -1,10 +1,12 @@
-﻿using LobotomyCorp.Utils;
+﻿using LobotomyCorp.Items.He;
+using LobotomyCorp.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Projectiles
@@ -18,6 +20,7 @@ namespace LobotomyCorp.Projectiles
 			Projectile.penetrate = -1;
 			Projectile.scale = 1f;
             
+
 			Projectile.ownerHitCheck = true;
 			Projectile.DamageType = DamageClass.Melee;
 			Projectile.tileCollide = false;
@@ -31,6 +34,11 @@ namespace LobotomyCorp.Projectiles
 		public override void AI() {
             
             Player player = Main.player[Projectile.owner];
+            if (player.dead || player.itemAnimation <= 0 || player.ItemTimeIsZero)
+            {
+                Projectile.Kill();
+            }
+
             Vector2 mountedCenter = player.RotatedRelativePoint(player.MountedCenter, true);
 
             if (!player.channel) //If Player stops holding m1 slow down the saw and slash infront 
@@ -88,6 +96,12 @@ namespace LobotomyCorp.Projectiles
                 }
             }
 
+            if (Projectile.localAI[0] <= -15)
+            {
+                SoundEngine.PlaySound(SoundID.Item22, Projectile.position);
+                Projectile.localAI[0] = 45 - 15 * (Projectile.ai[0] / 60);
+            }
+
             Projectile.localAI[0]--;
             Projectile.ai[1]--;
         }
@@ -114,7 +128,7 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             foreach (Player p in Main.player)
             {
@@ -122,7 +136,7 @@ namespace LobotomyCorp.Projectiles
                 {
                     LobotomyModPlayer.ModPlayer(p).HarmonyTime += 90;
                     if (LobotomyModPlayer.ModPlayer(p).HarmonyTime > 600)
-                        LobotomyModPlayer.ModPlayer(p).HarmonyTime = 600;
+                        LobotomyModPlayer.ModPlayer(p).HarmonyTime = 600;   
                     p.AddBuff(ModContent.BuffType<Buffs.MusicalAddiction>(), LobotomyModPlayer.ModPlayer(p).HarmonyTime, true);
                 }
             }
@@ -140,7 +154,15 @@ namespace LobotomyCorp.Projectiles
                 Dust.NewDust(target.position, target.width, target.height, 5);
             }
             Vector2 spe = new Vector2(16f, 0).RotatedByRandom(6.28f);
-            Main.item[Item.NewItem(Projectile.GetSource_DropAsItem(),target.getRect(), ModContent.ItemType<Items.Ruina.Technology.HarmonyNote>(), 1, true, 0)].velocity = spe;
+            if (Main.netMode == NetmodeID.SinglePlayer)
+            {
+                int number = Item.NewItem(Projectile.GetSource_DropAsItem(), target.getRect(), ModContent.ItemType<Items.Ruina.Technology.HarmonyNote>(), 1, true, 0);
+                Main.item[number].velocity = spe;
+                if (Main.netMode == 1)
+                {
+                    NetMessage.SendData(MessageID.SyncItem, -1, -1, null, number, 1f);
+                }
+            }
 
             if (Projectile.localAI[0] <= 0)
             {
@@ -159,11 +181,10 @@ namespace LobotomyCorp.Projectiles
                 Projectile.ai[0] += 2f;
         }
 
-        public override void ModifyDamageScaling(ref float damageScale)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (!Main.player[Projectile.owner].channel)
-                damageScale *= 2f;
-            base.ModifyDamageScaling(ref damageScale);
+                modifiers.FinalDamage *= 2f;
         }
     }
 

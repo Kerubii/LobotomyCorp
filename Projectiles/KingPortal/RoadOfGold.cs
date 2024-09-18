@@ -15,7 +15,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
         public override string Texture => "LobotomyCorp/Projectiles/KingPortal/KingPortal1";
 
         public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Road to Happiness");
+            // DisplayName.SetDefault("Road to Happiness");
         }
 
         public override void SetDefaults()
@@ -29,10 +29,14 @@ namespace LobotomyCorp.Projectiles.KingPortal
 
             Projectile.tileCollide = false;
             Projectile.hostile = true;
-            portalCounter = 0;
+            //Projectile.netImportant = true;
         }
 
-        public int portalCounter = 0;
+        public float portalCounter
+        {
+            get { return Projectile.ai[2]; }
+            set { Projectile.ai[2] = value; }
+        }
         public override void AI() {
             if (Projectile.localAI[0] == 0)
             {
@@ -43,7 +47,6 @@ namespace LobotomyCorp.Projectiles.KingPortal
                 Projectile.scale += 0.3f;
 
             portalCounter++;
-
             if (portalCounter > 30 && Projectile.ai[1] > 0)
             {
                 Vector2 center = Main.LocalPlayer.Center;
@@ -58,6 +61,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), center - new Vector2(400 * dir, 0), new Vector2(-24f * dir, 0), Projectile.type, 0, 0, 0, -1, Projectile.ai[1] - 1);
                     //Main.NewText(Projectile.ai[0]);
                     //Main.NewText(Projectile.ai[1]);
+                    Projectile.netUpdate = true;
                 }
                 else if (Projectile.ai[0] == -3)
                 {
@@ -71,11 +75,14 @@ namespace LobotomyCorp.Projectiles.KingPortal
                     Projectile.ai[0] = Projectile.NewProjectile(Projectile.GetSource_FromThis(), center + norm * (400 * dir), norm * (-24f * dir), Projectile.type, 0, 0, 0, -2, -1);
                     if (Projectile.ai[1] > 1)
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), center - norm * (400 * dir), norm * (-24f * dir), Projectile.type, 0, 0, 0, -3, Projectile.ai[1] - 1);
+
+                    Projectile.netUpdate = true;
                 }
             }
 
-            if (Projectile.ai[0] >= 0 && Projectile.timeLeft > 10)
+            if (Projectile.ai[0] >= 0 && Projectile.timeLeft > 10 && Main.netMode != NetmodeID.MultiplayerClient)
             {
+                //Teleport
                 foreach (NPC npc in Main.npc)
                 {
                     if (npc.active && npc.type == ModContent.NPCType<NPCs.RedMist.RedMist>() && Projectile.getRect().Intersects(npc.getRect()))
@@ -86,6 +93,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
                         npc.spriteDirection = Math.Sign(npc.velocity.X);
                         if (npc.spriteDirection == 0)
                             npc.spriteDirection = 1;
+                        npc.netUpdate = true;
                         otherPortal.timeLeft = 10;
                         otherPortal.netUpdate = true;
                         Projectile.timeLeft = 10;
@@ -102,6 +110,16 @@ namespace LobotomyCorp.Projectiles.KingPortal
                             d = Main.dust[Dust.NewDust(otherPortal.Center - Box / 2, (int)Box.X, (int)Box.Y, 87)];
                             d.noGravity = true;
                             d.fadeIn = 1.8f;
+                        }
+
+                        if (Main.expertMode && Main.netMode != NetmodeID.MultiplayerClient)
+                        {
+                            for (int i = -1; i < 2; i += 2)
+                            {
+                                float rot = otherPortal.velocity.ToRotation();
+                                Vector2 vel = new Vector2(4, 6 * i).RotatedBy(rot);
+                                Projectile.NewProjectile(Projectile.GetSource_FromAI(), otherPortal.Center, vel, ModContent.ProjectileType<NPCs.RedMist.GoldRushCrystal>(), 15, 2, -1, rot);
+                            }
                         }
                         break;
                     }
@@ -174,7 +192,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Road of King");
+            // DisplayName.SetDefault("Road of King");
         }
 
         public override void SetDefaults()
@@ -356,6 +374,8 @@ namespace LobotomyCorp.Projectiles.KingPortal
                     //Main.NewText("Teleport RM Success");
                     Projectile.timeLeft = 60;
                     pair.timeLeft = 60;
+
+                    
                     return;
                 }
             }

@@ -5,16 +5,20 @@ using static Terraria.ModLoader.ModContent;
 
 namespace LobotomyCorp.Items.Tools
 {
-    [Autoload(LobotomyCorp.TestMode)]
     public class BehaviorAdjustment : ModItem
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
+        }
+
         public override void SetStaticDefaults()
         {
             //DisplayName.SetDefault("");
-            Tooltip.SetDefault("\"Eventually, intellect loses all meaning as they forget even how to exist.\"\n" +
+            /* Tooltip.SetDefault("\"Eventually, intellect loses all meaning as they forget even how to exist.\"\n" +
                                "18% increased melee speed\n" +
 							   "18% increased movement speed\n" +
-							   "15% decreased damage reduction\n");
+							   "15% decreased damage reduction\n"); */
         }
 
         public override void SetDefaults()

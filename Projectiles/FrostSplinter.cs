@@ -4,6 +4,31 @@ using Terraria.ModLoader;
 
 namespace LobotomyCorp.Projectiles
 {
+	class FrostSplinter : LobcorpSpear
+	{
+        protected override float HoldoutRangeMin => 74;
+        protected override float HoldoutRangeMax => base.HoldoutRangeMax + 32;
+
+        public override void ProjectileSpawn(int duration)
+        {
+            if (Projectile.timeLeft == duration / 2 && Projectile.ai[2] == 0)
+			{
+				Projectile.ai[2]++;
+				Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center, Projectile.velocity * 14, ModContent.ProjectileType<FrostSplinterShard>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+			}
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {	
+			if (Projectile.ai[2] == 0)
+			{
+                Projectile.ai[2]++;
+                Projectile.NewProjectile(Projectile.GetSource_FromThis(), Projectile.Center - Projectile.velocity * 8, Projectile.velocity * 14, ModContent.ProjectileType<FrostSplinterShard>(), Projectile.damage, Projectile.knockBack, Projectile.owner);
+            }
+        }
+    }
+
+	/*
 	public class FrostSplinter : ModProjectile
 	{
 		public override void SetDefaults() {
@@ -72,16 +97,14 @@ namespace LobotomyCorp.Projectiles
 			}
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			target.AddBuff(ModContent.BuffType<Buffs.Slow>(), 180);
-            base.OnHitNPC(target, damage, knockback, crit);
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
 			target.AddBuff(ModContent.BuffType<Buffs.Slow>(), 180);
-			base.OnHitPlayer(target, damage, crit);
         }
-    }
+    }*/
 }

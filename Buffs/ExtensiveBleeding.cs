@@ -7,8 +7,9 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Extensive Bleeding");
-			Description.SetDefault("Using a weapon hurts you");
+			// DisplayName.SetDefault("Extensive Bleeding");
+			// Description.SetDefault("Using a weapon hurts you");
+			Main.debuff[Type] = true;
 		}
 		
 		public override void Update(NPC npc, ref int BuffIndex)

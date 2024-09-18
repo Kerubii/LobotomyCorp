@@ -14,7 +14,7 @@ namespace LobotomyCorp.Projectiles.KingPortal
         public override string Texture => "LobotomyCorp/Projectiles/KingPortal/KingPortal1";
 
         public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Road to Happiness");
+            // DisplayName.SetDefault("Road to Happiness");
         }
 
         public override void SetDefaults()

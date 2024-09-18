@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Physical Intervention Shield");
-			Description.SetDefault("Protects the user against contact damage");
+			// DisplayName.SetDefault("Physical Intervention Shield");
+			// Description.SetDefault("Protects the user against contact damage");
 		}
 
         public override void Update(Player player, ref int buffIndex)

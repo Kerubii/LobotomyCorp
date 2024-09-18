@@ -1,11 +1,11 @@
 ﻿Lobotomy Corporation
 -Adds All, Yes ALL, Lobcorp E.G.O Weapons stuff, from Zayin to Aleph for start of the game to early hardmode
--History and Technology EGO (except for Regret)
+-Various Ruina EGOs
 -Lots of incomplete stuff
 -Not that good for a playthrough, yet
+-HOLY SHIT IS THAT THE RED MIST
 
 -Upcoming
-*The Red Mist Makes Her Return
 *More Library of Ruina E.G.O
 *E.G.O armor sets
 *Actual roaming abnormalities that shows up under certain circumstances
@@ -31,3 +31,7 @@ Special Thanks to
 -晨芸以及杜格无偿的贴图
 
 *别跟其他大型mod一起玩！*出事了别来b站或者Steam下面说，说了也不会理你
+
+Visit the discord to report bugs or feedback
+I keep deleting the discord link, sorry about that
+https://discord.com/invite/audwDVV5Vj

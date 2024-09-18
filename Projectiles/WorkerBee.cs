@@ -561,7 +561,7 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (Projectile.velocity.Y == 0)
             {
@@ -573,11 +573,11 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             if (Main.player[Projectile.owner].HasBuff<Buffs.BoostSpore>())
             {
-                damage += (int)(damage * 0.2f);
+                modifiers.FinalDamage *= 0.2f;
             }
         }
 
@@ -945,7 +945,7 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
-        public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitPlayer(Player target, Player.HurtInfo info)
         {
             if (Projectile.velocity.Y == 0)
             {

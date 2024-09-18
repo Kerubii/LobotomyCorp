@@ -1,78 +1,79 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace LobotomyCorp.Projectiles
 {
 	public class Amrita : ModProjectile
 	{
-		public override void SetDefaults() {
-			Projectile.width = 26;
-			Projectile.height = 26;
-			Projectile.aiStyle = 19;
-			Projectile.penetrate = -1;
-			Projectile.scale = 1.3f;
-			Projectile.alpha = 0;
+        protected virtual float HoldoutRangeMin => 24f;
+        protected virtual float HoldoutRangeMax => 112f;
 
-			Projectile.hide = true;
-			Projectile.ownerHitCheck = true;
-			Projectile.DamageType = DamageClass.Melee;
-			Projectile.tileCollide = false;
-			Projectile.friendly = true;
-		}
+        public override void SetDefaults()
+        {
+            Projectile.CloneDefaults(ProjectileID.Spear); // Clone the default values for a vanilla spear. Spear specific values set for width, height, aiStyle, friendly, penetrate, tileCollide, scale, hide, ownerHitCheck, and melee.
+            Projectile.width = 26;
+            Projectile.height = 26;
+        }
 
-		// In here the AI uses this example, to make the code more organized and readable
-		// Also showcased in ExampleJavelinProjectile.cs
-		public float movementFactor // Change this value to alter how fast the spear moves
-		{
-			get => Projectile.ai[0];
-			set => Projectile.ai[0] = value;
-		}
+        public override bool PreAI()
+        {
+            Player player = Main.player[Projectile.owner]; // Since we access the owner player instance so much, it's useful to create a helper local variable for this
+            int duration = player.itemAnimationMax; // Define the duration the projectile will exist in frames
 
-		// It appears that for this AI, only the ai0 field is used!
-		public override void AI() {
-			// Since we access the owner player instance so much, it's useful to create a helper local variable for this
-			// Sadly, Projectile/ModProjectile does not have its own
-			Player projOwner = Main.player[Projectile.owner];
-			// Here we set some of the Projectile's owner properties, such as held item and itemtime, along with Projectile direction and position based on the player
-			Vector2 ownerMountedCenter = projOwner.RotatedRelativePoint(projOwner.MountedCenter, true);
-			Projectile.direction = projOwner.direction;
-			projOwner.heldProj = Projectile.whoAmI;
-			projOwner.itemTime = projOwner.itemAnimation;
-			Projectile.position.X = ownerMountedCenter.X - (float)(Projectile.width / 2);
-			Projectile.position.Y = ownerMountedCenter.Y - (float)(Projectile.height / 2);
-			// As long as the player isn't frozen, the spear can move
-			if (!projOwner.frozen) {
-				if (movementFactor == 0f) // When initially thrown out, the ai0 will be 0f
-				{
-					movementFactor = 3f; // Make sure the spear moves forward when initially thrown out
-					Projectile.netUpdate = true; // Make sure to netUpdate this spear
-				}
-				if (projOwner.itemAnimation < projOwner.itemAnimationMax / 4) // Somewhere along the item animation, make sure the spear moves back
-				{
-					movementFactor -= 3.8f;
-				}
-				else if (projOwner.itemAnimation > projOwner.itemAnimationMax * 0.75f) // Otherwise, increase the movement factor
+            player.heldProj = Projectile.whoAmI; // Update the player's held projectile id
+
+            // Reset projectile time left if necessary
+            if (Projectile.timeLeft > duration)
+            {
+                Projectile.timeLeft = duration;
+            }
+
+            Projectile.velocity = Vector2.Normalize(Projectile.velocity); // Velocity isn't used in this spear implementation, but we use the field to store the spear's attack direction.
+
+            float QuarterDuration = duration / 4;
+            float progress = 1f;
+
+            // Here 'progress' is set to a value that goes from 0.0 to 1.0 and back during the item use animation.
+            if (Projectile.timeLeft < QuarterDuration)
+            {
+                progress = Projectile.timeLeft / QuarterDuration;
+            }
+            else if (Projectile.timeLeft > QuarterDuration * 3)
+            {
+                progress = (duration - Projectile.timeLeft) / QuarterDuration;
+            }
+
+            if (Projectile.timeLeft == QuarterDuration)
+            {
+                if (Main.myPlayer == Projectile.owner)
                 {
-					movementFactor += 3.8f;
-				}
-			}
-			// Change the spear position based off of the velocity and the movementFactor
-			Projectile.position += Projectile.velocity * movementFactor;
-			// When we reach the end of the animation, we can kill the spear Projectile
-			if (projOwner.itemAnimation == 0) {
-				Projectile.Kill();
-			}
+                    Vector2 velNorm = Vector2.Normalize(Projectile.velocity);
+                    Vector2 projPos = Projectile.Center - velNorm * 11;
+                    Projectile.NewProjectile(Projectile.GetSource_FromThis(), projPos, velNorm * 5, ModContent.ProjectileType<AmritaLight>(), Projectile.damage * 2 / 3, Projectile.knockBack, Projectile.owner);
+                }
+            }
 
-            Projectile.ai[1] += MathHelper.ToRadians(24) * projOwner.direction;
-			// Apply proper rotation, with an offset of 135 degrees due to the sprite's rotation, notice the usage of MathHelper, use this class!
-			// MathHelper.ToRadians(xx degrees here)
-			Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.ToRadians(135f);
-			// Offset by 90 degrees here
-			if (Projectile.spriteDirection == -1) {
-				Projectile.rotation -= MathHelper.ToRadians(90);
-			}
-		}
+            // Move the projectile from the HoldoutRangeMin to the HoldoutRangeMax and back, using SmoothStep for easing the movement
+            Projectile.Center = player.MountedCenter + Vector2.SmoothStep(Projectile.velocity * HoldoutRangeMin, Projectile.velocity * HoldoutRangeMax, progress);
+
+            // Apply proper rotation to the sprite.
+            if (Projectile.spriteDirection == -1)
+            {
+                // If sprite is facing left, rotate 45 degrees
+                Projectile.rotation += MathHelper.ToRadians(45f);
+            }
+            else
+            {
+                // If sprite is facing right, rotate 135 degrees
+                Projectile.rotation += MathHelper.ToRadians(135f);
+            }
+
+            //Head rotation
+            Projectile.localAI[1] += MathHelper.ToRadians(24) * player.direction;
+            return false; // Don't execute vanilla AI.
+        }
     }
 }

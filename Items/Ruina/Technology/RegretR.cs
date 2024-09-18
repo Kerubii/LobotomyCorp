@@ -3,16 +3,28 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using System.Collections.Generic;
+using LobotomyCorp.Items.Teth;
 
 namespace LobotomyCorp.Items.Ruina.Technology
 {
-	//[Autoload(LobotomyCorp.TestMode)]
-	public class RegretR : SEgoItem
+    //[Autoload(LobotomyCorp.TestMode)]
+    public class RegretR : SEgoItem
 	{
-		public override void SetStaticDefaults() 
+        public override void Load()
+        {
+			RegretWhitelist.Add(ModContent.BuffType<Buffs.BindingJacket>());
+        }
+
+        public override void Unload()
+        {
+			RegretWhitelist = null;
+        }
+
+        public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Regret"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Regret"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			// Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 
@@ -49,10 +61,39 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			int bind = ModContent.BuffType<Buffs.BindingJacket>();
 			foreach (int buff in player.buffType)
             {
-				if (buff > 0 && Main.debuff[buff] && buff != bind)
+				if (buff > 0 && Main.debuff[buff] && BindingJacketWhitelist(buff))
                 {
 					player.AddBuff(bind, 300);
                 }
+            }
+        }
+
+		public static List<int> RegretWhitelist = new List<int>();
+
+		private bool BindingJacketWhitelist(int buff)
+        {
+			switch(buff)
+            {
+				case BuffID.PotionSickness:
+				case BuffID.ManaSickness:
+				case BuffID.Werewolf:
+				case BuffID.Merfolk:
+				case BuffID.WaterCandle:
+				case BuffID.Campfire:
+				case BuffID.StarInBottle:
+				case BuffID.HeartLamp:
+				case BuffID.MonsterBanner:
+				case BuffID.Sunflower:
+				case BuffID.PeaceCandle:
+				case BuffID.NoBuilding:
+                case BuffID.CatBast:
+				case BuffID.BrainOfConfusionBuff:
+				case BuffID.NeutralHunger:
+					return false;
+				default:
+					if (RegretWhitelist.Contains(buff))
+						return false;
+					return true;
             }
         }
 
@@ -69,14 +110,16 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			.AddIngredient(ItemID.AdamantiteBar, 5)
 			.AddIngredient(ItemID.FlamingMace)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 
 			CreateRecipe()
 			.AddIngredient(ModContent.ItemType<Regret>())
 			.AddIngredient(ItemID.TitaniumBar, 5)
 			.AddIngredient(ItemID.FlamingMace)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 		}
 	}
 }

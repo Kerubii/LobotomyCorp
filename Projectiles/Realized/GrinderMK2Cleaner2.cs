@@ -15,7 +15,7 @@ namespace LobotomyCorp.Projectiles.Realized
     {
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Cleaning Tools");
+            // DisplayName.SetDefault("Cleaning Tools");
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 15;
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
         }
@@ -29,7 +29,7 @@ namespace LobotomyCorp.Projectiles.Realized
             Projectile.scale = 1f;
             Projectile.timeLeft = 1000;
 
-            Projectile.DamageType = DamageClass.Melee;
+            Projectile.DamageType = DamageClass.Summon;
             Projectile.tileCollide = false;
             Projectile.friendly = true;
 
@@ -50,10 +50,22 @@ namespace LobotomyCorp.Projectiles.Realized
 
         private Vector2 HitboxExtension => new Vector2(Projectile.width / 2, 0).RotatedBy(Projectile.rotation);
 
+        private bool CanAttack(Player player, LobotomyModPlayer modPlayer, Item heldItem)
+        {
+            if (player.altFunctionUse != 2 && heldItem.type == ModContent.ItemType<Items.Ruina.Technology.GrinderMk52R>() && ((Items.Ruina.Technology.GrinderMk52R)heldItem.ModItem).GrinderWeaponOrder == order)
+                return true;
+
+            if (modPlayer.GrinderMk2AttackCooldown <= 0 && Main.rand.NextBool(10) && modPlayer.GrinderMk2AttackRandom == order && player.itemAnimation == player.itemAnimationMax - 1)
+                return true;
+
+            return false;
+        }
+
         public override void AI()
         {
             Player player = Main.player[Projectile.owner];
             LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
+            LobotomyDashPlayer dashPlayer = player.GetModPlayer<LobotomyDashPlayer>();
 
             //Add Movespeed Buff
             int BuffType = ModContent.BuffType<Buffs.GrinderMk52Activated>();
@@ -79,17 +91,19 @@ namespace LobotomyCorp.Projectiles.Realized
 
             Item heldItem = player.HeldItem;
             if (Projectile.owner == Main.myPlayer &&
-                heldItem.type == ModContent.ItemType<Items.Ruina.Technology.GrinderMk52R>() &&
                 Projectile.ai[1] <= 0)
             {
-                if (player.altFunctionUse != 2 && player.itemAnimation > player.itemAnimation / 2 &&((Items.Ruina.Technology.GrinderMk52R)heldItem.ModItem).GrinderWeaponOrder == order)
+                if (CanAttack(player, modPlayer, heldItem) && player.itemAnimation > player.itemAnimation / 2)
                 {
                     ChangeBatteryValue(-8, false);
                     Projectile.ai[1] = AttackSwingTime;
 
                     AttackRotation = (Main.MouseWorld - player.Center).ToRotation() + Main.rand.NextFloat(-0.08f, 0.08f);
+
+                    modPlayer.GrinderMk2AttackCooldown = 60 * 2;
+                    modPlayer.GrinderMk2AttackRandom = Main.rand.Next(4);
                 }
-                else if (player.altFunctionUse == 2 && player.itemAnimation > 0)
+                else if (player.altFunctionUse == 2 && heldItem.type == ModContent.ItemType<Items.Ruina.Technology.GrinderMk52R>() && player.itemAnimation > 0)
                 {
                     float playerAnimation = (float)player.itemAnimation / player.itemAnimationMax;
                     /*if ((order == 0 && playerAnimation > 0.75f) ||
@@ -106,12 +120,12 @@ namespace LobotomyCorp.Projectiles.Realized
                         if (order % 2 != 0)
                             angle += 90;
                         AttackRotation = (Main.MouseWorld - player.Center).ToRotation() + MathHelper.ToRadians(angle);
-                        modPlayer.GrinderMk2Dash = 0;
+                        dashPlayer.DashTimer = 0;
                     }
                 }
             }
 
-            bool IsDashing = modPlayer.GrinderMk2Dash > 0;
+            bool IsDashing = dashPlayer.DashTimer > 0;
             //When the player is slashing
             if (Projectile.ai[1] > 0)
             {
@@ -151,7 +165,7 @@ namespace LobotomyCorp.Projectiles.Realized
                         Main.dust[d].velocity = new Vector2(2, 0).RotatedBy(AttackRotation);
                     }
 
-                    if (Main.rand.Next(15) == 0)
+                    if (Main.rand.NextBool(15))
                     {
                         Vector2 dustSpeed = Projectile.velocity * -1;
                         dustSpeed.Normalize();
@@ -165,7 +179,7 @@ namespace LobotomyCorp.Projectiles.Realized
             //When the player is dashing
             else if (IsDashing)
             {
-                Vector2 offset = new Vector2(45 * dirX, 45 * dirY).RotatedBy(MathHelper.ToRadians(modPlayer.GrinderMk2Dash * 22 * -player.direction));
+                Vector2 offset = new Vector2(45 * dirX, 45 * dirY).RotatedBy(MathHelper.ToRadians(dashPlayer.DashTimer * 22 * -player.direction));
                 targetPos = ownerMountedCenter + offset;
                 speed = 48;
                 ChangeBatteryValue(-2);
@@ -300,7 +314,7 @@ namespace LobotomyCorp.Projectiles.Realized
             return false;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             Player player = Main.player[Projectile.owner];
             LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(player);
@@ -353,7 +367,7 @@ namespace LobotomyCorp.Projectiles.Realized
                 dir = player.direction;
 
             //7/3, 41
-            Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/GrinderMk2Arm").Value;
+            Texture2D texture = Mod.Assets.Request<Texture2D>("Projectiles/Realized/GrinderMk2Arm").Value;
             Vector2 pos = ownerMountedCenter - Main.screenPosition;
             Vector2 origin = new Vector2(texture.Width / 2, 5);
             Rectangle frame = texture.Frame();
@@ -366,7 +380,7 @@ namespace LobotomyCorp.Projectiles.Realized
 
             texture = TextureAssets.Projectile[Projectile.type].Value;
             if (order < 3 && order > 0)
-                texture = Mod.Assets.Request<Texture2D>("Projectiles/GrinderMk2Cleaner").Value;
+                texture = Mod.Assets.Request<Texture2D>("Projectiles/Realized/GrinderMk2Cleaner").Value;
 
             pos = Projectile.Center - Main.screenPosition;
             origin = texture.Size() / 2;
@@ -412,7 +426,7 @@ namespace LobotomyCorp.Projectiles.Realized
             if (order > 0)
                 return false;
 
-            texture = Mod.Assets.Request<Texture2D>("Projectiles/GrinderMk2Battery").Value;
+            texture = Mod.Assets.Request<Texture2D>("Projectiles/Realized/GrinderMk2Battery").Value;
             ownerMountedCenter.Y -= 48;
             pos = ownerMountedCenter - Main.screenPosition;
             origin = texture.Size() / 2;
@@ -420,7 +434,7 @@ namespace LobotomyCorp.Projectiles.Realized
             lightColor = Lighting.GetColor((int)ownerMountedCenter.X / 16, (int)ownerMountedCenter.Y / 16);
             Main.EntitySpriteDraw(texture, pos, new Rectangle?(frame), lightColor, 0, origin, Projectile.scale, SpriteEffects.None, 0);
 
-            texture = Mod.Assets.Request<Texture2D>("Projectiles/GrinderMk2Bar").Value;
+            texture = Mod.Assets.Request<Texture2D>("Projectiles/Realized/GrinderMk2Bar").Value;
             LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(player);
             int frameY = (int)((ModPlayer.GrinderMk2BatteryMax - (float)ModPlayer.GrinderMk2Battery) / ((float)ModPlayer.GrinderMk2BatteryMax / 5)) * texture.Height / 6;
             if (ModPlayer.GrinderMk2Battery < ModPlayer.GrinderMk2BatteryMax / 5 && ModPlayer.GrinderMk2Battery % 30 < 15)

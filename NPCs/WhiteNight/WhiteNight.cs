@@ -4,18 +4,21 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using LobotomyCorp;
 using Terraria.GameContent.ItemDropRules;
 
 namespace LobotomyCorp.NPCs.WhiteNight
 {
     //[AutoloadBossHead]
-    [Autoload(LobotomyCorp.TestMode)]
     class WhiteNight : ModNPC
     {
+        public override bool IsLoadingEnabled(Mod mod)
+        {
+            return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
+        }
+
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("WhiteNight");
+            // DisplayName.SetDefault("WhiteNight");
             Main.npcFrameCount[NPC.type] = 4;
         }
 
@@ -56,19 +59,9 @@ namespace LobotomyCorp.NPCs.WhiteNight
             }
         }
 
-        public override void ModifyHitByItem(Player player, Item item, ref int damage, ref float knockback, ref bool crit)
-        {
-            base.ModifyHitByItem(player, item, ref damage, ref knockback, ref crit);
-        }
-
-        public override void ModifyHitByProjectile(Projectile Projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
-            base.ModifyHitByProjectile(Projectile, ref damage, ref knockback, ref crit, ref hitDirection);
-        }
-
         public override void ModifyNPCLoot(NPCLoot npcLoot)
         {
-            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.ParadiseLost>()));
+            npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<Items.Aleph.ParadiseLost>()));
         }
 
         public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)

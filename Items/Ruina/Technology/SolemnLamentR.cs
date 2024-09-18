@@ -9,10 +9,11 @@ using Terraria.ModLoader.IO;
 using LobotomyCorp.Utils;
 using ReLogic.Content;
 using Terraria.Audio;
+using LobotomyCorp.Items.Waw;
 
 namespace LobotomyCorp.Items.Ruina.Technology
 {
-	public class SolemnLamentR : SEgoItem
+    public class SolemnLamentR : SEgoItem
 	{
         public static Texture2D screenWhiteHit;
         public static Texture2D screenBlackHit;
@@ -34,8 +35,9 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
         public override void SetStaticDefaults() 
 		{
-            DisplayName.SetDefault("Solemn Lament"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-            Tooltip.SetDefault(GetTooltip());
+            // DisplayName.SetDefault("Solemn Lament"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+            // Tooltip.SetDefault(GetTooltip());
+            ItemID.Sets.ItemsThatAllowRepeatedRightClick[Item.type] = true;
         }
 
 		public override void SetDefaults() 
@@ -78,7 +80,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
 
             Item.UseSound = SoundID.Item11;
             PerfectSwitch = false;
-            if (player.itemTime > 6)
+            if (player.itemTime > 8)
                 PerfectSwitch = true;
 
             if (player.altFunctionUse == 2)
@@ -87,7 +89,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
                 lobItem.CustomTexture = Mod.Assets.Request<Texture2D>("Items/Ruina/Technology/SolemnLamentS1").Value;
                 modPlayer(player).SolemnSwitch = true;
                 if (PerfectSwitch)
-                    Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_Black");
+                    Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_Black") with { Volume = 0.2f};
                 return modPlayer(player).SolemnLamentDisable != 2;
             }
             else if (modPlayer(player).SolemnSwitch || player.itemTime == 0)
@@ -96,7 +98,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
                 lobItem.CustomTexture = Mod.Assets.Request<Texture2D>("Items/Ruina/Technology/SolemnLamentS2").Value;
                 modPlayer(player).SolemnSwitch = false;
                 if (PerfectSwitch)
-                    Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_White");
+                    Item.UseSound = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_White") with { Volume = 0.2f };
                 return modPlayer(player).SolemnLamentDisable != 1;
             }
             return false;
@@ -168,6 +170,7 @@ namespace LobotomyCorp.Items.Ruina.Technology
                .AddIngredient(ItemID.SoulofLight, 6)
                .AddIngredient(ItemID.Ectoplasm, 8)
                .AddTile<Tiles.BlackBox3>()
+               .AddCondition(RedMistCond)
                .Register();
         }
 
@@ -302,6 +305,12 @@ namespace LobotomyCorp.Items.Ruina.Technology
             ammo.active = false;
             ammo.TurnToAir();
         }
+
+        public override void HoldItem(Player player)
+        {
+            player.scope = false;
+        }
+
         /*public override bool PreDrawInInventory(SpriteBatch spriteBatch, Vector2 position, Rectangle frame, Color drawColor, Color ItemColor, Vector2 origin, float scale)
         {
             Texture2D texture = Mod.Assets.Request<Texture2D>("LobotomyCorp/Items/SolemnLamentS");
@@ -324,6 +333,11 @@ namespace LobotomyCorp.Items.Ruina.Technology
             if (Time > 10)
             Opacity -= 0.1f;
         }
+
+        public override bool DeActive()
+        {
+            return Opacity <= 0;
+        }
     }
 
     class SolemnLamentBlack : ScreenFilter
@@ -339,6 +353,11 @@ namespace LobotomyCorp.Items.Ruina.Technology
             Time++;
             if (Time > 10)
                 Opacity -= 0.1f;
+        }
+
+        public override bool DeActive()
+        {
+            return Opacity <= 0;
         }
     }
 }

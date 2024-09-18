@@ -7,8 +7,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Erosion Shield");
-			Description.SetDefault("Protects the user against projectile and contact damage");
+			// DisplayName.SetDefault("Erosion Shield");
+			// Description.SetDefault("Protects the user against projectile and contact damage");
 		}
 
         public override void Update(Player player, ref int buffIndex)

@@ -8,6 +8,7 @@ using LobotomyCorp.Utils;
 using Terraria.GameContent;
 using System.Collections.Generic;
 using Terraria.Audio;
+using LobotomyCorp.ModSystems;
 
 namespace LobotomyCorp.Projectiles.Realized
 {
@@ -15,7 +16,7 @@ namespace LobotomyCorp.Projectiles.Realized
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Spiderbud, Spiderbud, does whatever a Spiderbud does");
+			// DisplayName.SetDefault("Spiderbud, Spiderbud, does whatever a Spiderbud does");
 		}
 
 		public override void SetDefaults()
@@ -98,14 +99,14 @@ namespace LobotomyCorp.Projectiles.Realized
             {
 				if (Projectile.ai[0] < 30)
 				{
-					ModContent.GetInstance<LobSystem>().RedEyesSpecialCamera(Camera);
+					ModContent.GetInstance<ScreenSystem>().RedEyesSpecialCamera(Camera);
 				}
 				else 
 				{
 					if (Projectile.ai[1] > 0)
-						Camera = ModContent.GetInstance<LobSystem>().RedEyesSpecialCamera(Camera, new Vector2(owner.Center.X,Main.npc[(int)Projectile.ai[1] - 1].Center.Y), 0.2f);
+						Camera = ModContent.GetInstance<ScreenSystem>().RedEyesSpecialCamera(Camera, new Vector2(owner.Center.X,Main.npc[(int)Projectile.ai[1] - 1].Center.Y), 0.2f);
 					else
-						ModContent.GetInstance<LobSystem>().RedEyesSpecialCamera(Camera);
+						ModContent.GetInstance<ScreenSystem>().RedEyesSpecialCamera(Camera);
 				}
 			}
 
@@ -153,21 +154,20 @@ namespace LobotomyCorp.Projectiles.Realized
 			}
         }
 
-        public override void Kill(int timeLeft)
+        public override void OnKill(int timeLeft)
         {
-			Player owner = Main.player[Projectile.owner];
-			if (Collision.SolidCollision(owner.position, owner.width, owner.height))
-			{
-				owner.Center = initialPosition;
-				for (int i = 0; i < 16; i++)
-				{
-					int d = Dust.NewDust(owner.position, owner.width, owner.head, DustID.Wraith);
-					Main.dust[d].noGravity = true;
-					Main.dust[d].fadeIn = 1.5f;
-				}
-			}
-			owner.immuneNoBlink = false;
-            base.Kill(timeLeft);
+            Player owner = Main.player[Projectile.owner];
+            if (Collision.SolidCollision(owner.position, owner.width, owner.height))
+            {
+                owner.Center = initialPosition;
+                for (int i = 0; i < 16; i++)
+                {
+                    int d = Dust.NewDust(owner.position, owner.width, owner.head, DustID.Wraith);
+                    Main.dust[d].noGravity = true;
+                    Main.dust[d].fadeIn = 1.5f;
+                }
+            }
+            owner.immuneNoBlink = false;
         }
 
         public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjectiles, List<int> overPlayers, List<int> overWiresUI)

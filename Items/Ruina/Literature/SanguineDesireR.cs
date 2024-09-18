@@ -4,17 +4,18 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using LobotomyCorp.Items.He;
 
 namespace LobotomyCorp.Items.Ruina.Literature
 {
-	public class SanguineDesireR : SEgoItem
+    public class SanguineDesireR : SEgoItem
 	{
 		private int GlitterTimer = 0;
 
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Sanguine Desire"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Sanguine Desire"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			// Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 
@@ -95,21 +96,21 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			.AddIngredient(ItemID.SoulofFright, 3)
 			.AddIngredient(ItemID.AdamantiteWaraxe)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 
 			CreateRecipe()
 			.AddIngredient(ModContent.ItemType<SanguineDesire>())
 			.AddIngredient(ItemID.SoulofFright, 3)
 			.AddIngredient(ItemID.TitaniumWaraxe)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 		}
 
-        public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
+        public override void OnHitNPC(Player player, NPC target, NPC.HitInfo hit, int damageDone)
         {
 			LobotomyGlobalNPC.SanguineDesireApplyBleed(target, 0.8f, target.damage * 3, 60, 600);
-
-            base.OnHitNPC(player, target, damage, knockBack, crit);
         }
 
         /// <summary>

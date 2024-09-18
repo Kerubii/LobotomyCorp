@@ -6,11 +6,13 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Localization;
 using Terraria.Audio;
-using LobotomyCorp.Config;
+using LobotomyCorp.Configs;
+using log4net.Util;
+using Steamworks;
 
 namespace LobotomyCorp.Items
 {
-	public abstract class SEgoItem : ModItem
+    public abstract class SEgoItem : ModItem
 	{
         //public override bool CloneNewInstances => true;
 
@@ -29,7 +31,7 @@ namespace LobotomyCorp.Items
 
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault(GetTooltip());
+            // Tooltip.SetDefault(GetTooltip());
         }
 
         public sealed override bool CanUseItem(Player player)
@@ -41,6 +43,10 @@ namespace LobotomyCorp.Items
 
         public sealed override void ModifyTooltips(List<TooltipLine> tooltips)
         {
+            var RealizedEGOTooltip = new TooltipLine(Mod, "PositivePassive", $"{Language.GetTextValue("Mods.LobotomyCorp.EgoItemTooltip.RealizedEgo")}"){ OverrideColor = Color.Lerp(Color.Yellow, Color.Cyan, 0.5f + 0.5f * (float)Math.Sin(6.28f * (Main.timeForVisualEffects % 120 / 120f))) };
+            int index = tooltips.FindIndex(x => x.Mod == "Terraria" && x.Name == "Tooltip0");
+            tooltips.Insert(index, RealizedEGOTooltip);
+
             bool ExtraShow = ModContent.GetInstance<LobotomyConfig>().ExtraPassivesShow;
             //int tooltipIndex = tooltips.IndexOf()
             var Passive = new TooltipLine(Mod, "PositivePassive", $"{PassiveInitialize(ExtraShow)}"
@@ -101,7 +107,7 @@ namespace LobotomyCorp.Items
 
         public string ItemName()
         {
-            return Name.Remove(Name.Length - 1);
+            return Name;//.Remove(Name.Length - 1);
         }
 
         public string GetTooltip()
@@ -111,18 +117,70 @@ namespace LobotomyCorp.Items
 
         public virtual string GetPassiveList()
         {
-            string key = "Mods.LobotomyCorp.EgoItemTooltip." + ItemName() + ".PassiveList";
+            string key = "Mods.LobotomyCorp.Items." + ItemName() + ".PassiveList";
             string list = Language.GetTextValue(key);
             if (list == key)
                 list = PassiveText;
             return list;
+        }
+
+        public static Condition RedMistCond = new Condition("Mods.LobotomyCorp.LobotomyRedMistRequirement", () => ModSystems.LobEventFlags.downedRedMist);
+    }
+
+    public abstract class LobItemBase : ModItem
+    {
+        public RiskLevel EGORiskLevel;
+
+        public bool RedMistMaskUpgrade(Player player)
+        {
+            if (LobotomyModPlayer.ModPlayer(player).RedMistMask)
+            {
+                switch (EGORiskLevel)
+                {
+                    case RiskLevel.Zayin:
+                    case RiskLevel.Teth:
+                        return true;
+                    case RiskLevel.He:
+                        if (NPC.downedMechBossAny) return true;
+                        break;
+                    case RiskLevel.Waw:
+                        if (NPC.downedPlantBoss) return true;
+                        break;
+                    case RiskLevel.Aleph:
+                        if (NPC.downedGolemBoss) return true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Return Base to keep Red Mist Mask Upgrade tooltip :) 
+        /// </summary>
+        /// <param name="tooltips"></param>
+        public virtual void LobModifyTooltips(List<TooltipLine> tooltips)
+        {
+            if (RedMistMaskUpgrade(Main.LocalPlayer))
+            {
+                string text = Language.GetTextValue("Mods.LobotomyCorp.Items." + Name + ".Tooltip2");
+                TooltipLine tooltip2 = new TooltipLine(Mod, "RedMistMask", text);
+                tooltip2.OverrideColor = Color.Maroon;
+                tooltips.Add(tooltip2);
+            }
+        }
+
+        public sealed override void ModifyTooltips(List<TooltipLine> tooltips)
+        {
+            LobModifyTooltips(tooltips);
         }
     }
 
     /// <summary>
     /// Use useStyle = 15 to use the light animation :)
     /// </summary>
-    public abstract class LobCorpLight : ModItem
+    public abstract class LobCorpLight : LobItemBase
     {
         public sealed override void UseStyle(Player player, Rectangle heldItemFrame)
         {
@@ -160,7 +218,6 @@ namespace LobotomyCorp.Items
             rotation = Math.Clamp(rotation, -180, 180);
             rotation = MathHelper.ToRadians(rotation);
             float x = (float)Math.Cos(rotation) * direction;
-            //Main.NewText(x);
             float y = (float)Math.Sin(rotation);
 
             Vector2 location = new Vector2();
@@ -347,7 +404,6 @@ namespace LobotomyCorp.Items
             rotation = Math.Clamp(rotation, -180, 180);
             rotation = MathHelper.ToRadians(rotation);
             float x = (float)Math.Cos(rotation) * direction;
-            //Main.NewText(x);
             float y = (float)Math.Sin(rotation);
             
             if (y < 0)
@@ -441,6 +497,7 @@ namespace LobotomyCorp.Items
         /// <summary>
         /// Use when overriding UseItem since its there :(, shouldn't really be used... unless
         /// Put it on UseStyleAlt
+        /// Im really angry they dont let you change this when you actually hit the fucking doods
         /// </summary>
         /// <param name="player"></param>
         public static void ResetPlayerAttackCooldown(Player player, double percent = 0.1)
@@ -448,6 +505,48 @@ namespace LobotomyCorp.Items
             int cooldown = Math.Max(1, (int)(player.itemAnimationMax * percent));
             if (player.attackCD > cooldown)
                 player.attackCD = cooldown;
+        }
+
+        /// <summary>
+        /// Changes IFrames, also changes AttackCooldown
+        /// Put it on UseStyleAlt or HoldItem maybe...
+        /// Jank, might cause problems
+        /// Im really angry they dont let you change this when you actually hit the fucking doods
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="target"></param>
+        /// <param name=""></param>
+        public static void ResetPlayerImmuneHit(Player player, ref int target, int immuneLimit, double percent = 0.1)
+        {
+            NPC npc = Main.npc[target];
+            if (player.itemAnimation > immuneLimit)
+            {
+                player.SetMeleeHitCooldown(target, player.itemAnimation - immuneLimit);// player.itemAnimation - immuneLimit);
+                //npc.immune[player.whoAmI] = player.itemAnimation - immuneLimit;
+            }
+
+            target = -1;
+            ResetPlayerAttackCooldown(player, percent);
+        }
+
+        /// <summary>
+        /// ResetPlayerMeleeCooldown, but as a number
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="target"></param>
+        /// <param name="immuneLimit"></param>
+        /// <param name="percent"></param>
+        public static void SetPlayerMeleeCooldown(Player player, ref int target, int immuneTime, double percent = 0.1)
+        {
+            NPC npc = Main.npc[target];
+            if (player.itemAnimation > immuneTime)
+            {
+                player.SetMeleeHitCooldown(target, 0);// player.itemAnimation - immuneLimit);
+                //npc.immune[player.whoAmI] = immuneTime;
+            }
+
+            target = -1;
+            ResetPlayerAttackCooldown(player, percent);
         }
 
         public virtual bool? UseItemAlt(Player player)
@@ -492,7 +591,7 @@ namespace LobotomyCorp.Items
     /// <summary>
     /// Use useStyle = 15 to use the animation :)
     /// </summary>
-    public abstract class LobCorpHeavy : ModItem
+    public abstract class LobCorpHeavy : LobItemBase
     {
         public SoundStyle? SwingSound = null;
 

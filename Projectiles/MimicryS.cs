@@ -122,19 +122,18 @@ namespace LobotomyCorp.Projectiles
             }
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player projOwner = Main.player[Projectile.owner];
-            damage = Main.DamageVar(projOwner.GetWeaponDamage(projOwner.HeldItem));
             if (projOwner.itemAnimation <= 19 && projOwner.itemAnimation > 15)
             {
                 Projectile.NewProjectile(Projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<MimicrySEffect>(), 0, 0, Projectile.owner, Projectile.direction);
-                damage = (damage * 3);
+                modifiers.FinalDamage *= 3;
                 target.immune[Projectile.owner] = projOwner.itemAnimation;
             }
             else if (projOwner.itemAnimation > 22)
             {
-                knockback = 0.2f;
+                modifiers.Knockback.Base = 0.2f;
                 target.immune[Projectile.owner] = projOwner.itemAnimation - 20;
             }
         }

@@ -5,15 +5,16 @@ using Terraria.ModLoader;
 using Terraria.Audio;
 using Terraria.DataStructures;
 using System;
+using LobotomyCorp.Items.Waw;
 
 namespace LobotomyCorp.Items.Ruina.Literature
 {
-	public class BlackSwanR : SEgoItem
+    public class BlackSwanR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Black Swan"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Black Swan"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			// Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 
@@ -128,7 +129,8 @@ namespace LobotomyCorp.Items.Ruina.Literature
 			.AddIngredient(ItemID.Feather, 8)
 			.AddIngredient(ItemID.Ectoplasm, 2)
 			.AddTile<Tiles.BlackBox3>()
-			.Register();
+            .AddCondition(RedMistCond)
+            .Register();
 		}
 	}
 }

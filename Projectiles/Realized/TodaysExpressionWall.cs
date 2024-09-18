@@ -15,7 +15,7 @@ namespace LobotomyCorp.Projectiles.Realized
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("What the fuck do you want from me?"); // The English name of the Projectile
+			// DisplayName.SetDefault("What the fuck do you want from me?"); // The English name of the Projectile
 			Main.projFrames[Projectile.type] = 2;
 			ProjectileID.Sets.TrailCacheLength[Projectile.type] = 6;
 			ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
@@ -111,7 +111,7 @@ namespace LobotomyCorp.Projectiles.Realized
 				Projectile.alpha = 0;
         }
 
-        public override void ModifyDamageScaling(ref float damageScale)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
 			float Distance = (Projectile.Center - Main.player[Projectile.owner].Center).Length();
 			float damageBonus = 0f;
@@ -119,18 +119,7 @@ namespace LobotomyCorp.Projectiles.Realized
 				damageBonus = (Distance - 80) / 500;
 			if (damageBonus > 0.5f)
 				damageBonus = 0.5f;
-			damageScale += damageBonus;
-            base.ModifyDamageScaling(ref damageScale);
-        }
-
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
-        {
-			/*if (Projectile.ai[0] == 4)
-				SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/Shy_Strong_Atk") with { Volume = 0.5f }, target.position);
-			else
-				SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/Shy_Atk") with { Volume = 0.5f , PitchVariance = 0.2f}, target.position);*/
-
-			base.OnHitNPC(target, damage, knockback, crit);
+			modifiers.FinalDamage += damageBonus;
         }
 
         public override bool PreDraw(ref Color lightColor)

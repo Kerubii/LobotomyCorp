@@ -5,6 +5,9 @@ using Terraria;
 using Terraria.Audio;
 using Terraria.ModLoader;
 using LobotomyCorp.Utils;
+using LobotomyCorp.ModSystems;
+using LobotomyCorp.Projectiles;
+using LobotomyCorp.Items.Waw;
 
 namespace LobotomyCorp
 {
@@ -16,6 +19,8 @@ namespace LobotomyCorp
         public byte Lament = 0;
 
         public bool BlackSwanReflected = false;
+        public bool CrimsonScarBullet = false;
+        public bool HypocrisyArrow = false;
 
         public override bool PreAI(Projectile projectile)
         {
@@ -34,7 +39,7 @@ namespace LobotomyCorp
             return base.PreAI(projectile);
         }
 
-        public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {
             if (projectile.owner == Main.myPlayer && Lament > 0 && LobotomyCorp.LamentValid(target, projectile) && target.CanBeChasedBy(projectile))
             {
@@ -52,6 +57,7 @@ namespace LobotomyCorp
                 SoundStyle ding = new SoundStyle("LobotomyCorp/Sounds/Item/ButterFlyMan_StongAtk_Black");
                 int dustType = 91;
                 ScreenFilter screenFilter = new Items.Ruina.Technology.SolemnLamentWhite();
+                ScreenFilter screenFilter2 = new Items.Ruina.Technology.SolemnLamentBlack();
 
                 if (Lament == 1)
                 {
@@ -59,12 +65,13 @@ namespace LobotomyCorp
                     dustType = 109;
 
                     screenFilter = new Items.Ruina.Technology.SolemnLamentBlack();
+                    screenFilter2 = new Items.Ruina.Technology.SolemnLamentWhite();
                 }
                 ding.Volume = 0.5f;
                 //SoundEngine.PlaySound(ding, target.Center);
 
-                if (projectile.owner == Main.myPlayer)
-                    LobCustomDraw.Instance().AddFilter(screenFilter);
+                if (projectile.owner == Main.myPlayer && !LobCustomDraw.Instance().ContainsFilter(screenFilter2))
+                    LobCustomDraw.Instance().AddFilter(screenFilter, 0, false, false);
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -85,24 +92,33 @@ namespace LobotomyCorp
                     }
                 }
             }
+        
+            if (CrimsonScarBullet)
+            {
+                LobotomyModPlayer.ModPlayer(Main.player[projectile.owner]).CrimsonScarEmpower = 1;
+            }
+
+            if (projectile.owner == Main.myPlayer)
+            {
+                if (HypocrisyArrow)
+                {
+                    int heal = (int)(damageDone * 0.1f);
+                    Projectile.NewProjectile(projectile.GetSource_FromThis(), target.Center, Vector2.Zero, ModContent.ProjectileType<HypocrisyHeal>(), 0, 0, projectile.owner, projectile.owner, heal);
+                }
+            }
         }
 
-        public override void ModifyDamageScaling(Projectile projectile, ref float damageScale)
+        public override void ModifyHitNPC(Projectile projectile, NPC target, ref NPC.HitModifiers modifiers)
         {
             if (projectile.owner >= 0 && projectile.owner < Main.maxPlayers)
             {
                 LobotomyModPlayer modPlayer = LobotomyModPlayer.ModPlayer(Main.player[projectile.owner]); 
                 if (modPlayer.TodaysExpressionActive)
-                    damageScale *= modPlayer.TodaysExpressionDamage();
+                    modifiers.FinalDamage *= modPlayer.TodaysExpressionDamage();
             }
-            base.ModifyDamageScaling(projectile, ref damageScale);
-        }
-
-        public override void ModifyHitNPC(Projectile projectile, NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
-        {
             if (Lament > 0 && LobotomyCorp.LamentValid(target, projectile) && target.CanBeChasedBy(projectile))
             {
-                damage = (int)(damage * 1.15f);
+                modifiers.FinalDamage *= 1.15f;
             }
         }
 

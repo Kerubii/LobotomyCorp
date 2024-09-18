@@ -15,7 +15,7 @@ namespace LobotomyCorp.Projectiles.Realized
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Red Eyes");
+			// DisplayName.SetDefault("Red Eyes");
 		}
 
 		public override void SetDefaults()
@@ -44,7 +44,7 @@ namespace LobotomyCorp.Projectiles.Realized
 
 			float progress = owner.itemAnimation / (float)owner.itemAnimationMax;
 
-			if (progress < 0.1f)
+			if (owner.itemAnimation == 1)
 				Projectile.Kill();
         }
 
@@ -79,7 +79,7 @@ namespace LobotomyCorp.Projectiles.Realized
             return base.CanHitNPC(target);
         }
 
-        public override void ModifyDamageScaling(ref float damageScale)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
 			if (Projectile.ai[0] == 1)
 			{
@@ -89,12 +89,12 @@ namespace LobotomyCorp.Projectiles.Realized
 				{
 					prog = 1f - (prog - 0.5f) / 0.5f;
 					prog = (float)Math.Sin(3.14f * prog);
-					damageScale = 1f - 0.4f * prog;
+					modifiers.FinalDamage += 0.4f * prog;
 				}
 			}
 		}
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			target.immune[Projectile.owner] = Main.player[Projectile.owner].itemAnimation;
 			Main.player[Projectile.owner].attackCD = (int)(Main.player[Projectile.owner].itemAnimationMax * 0.2f);
@@ -120,8 +120,6 @@ namespace LobotomyCorp.Projectiles.Realized
 				Dust d = Dust.NewDustPerfect(target.Center, DustID.Wraith, speed.RotatedBy(Main.rand.NextFloat(-0.5f, 0.5f)), 0, default, Main.rand.NextFloat(1f, 2f));
 				d.noGravity = true;
             }
-
-			base.OnHitNPC(target, damage, knockback, crit);
         }
 
         public override bool PreDraw(ref Color lightColor)

@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles
 {
 	public class DaCapo : ModProjectile
 	{
-        public override string Texture => "LobotomyCorp/Items/DaCapo";
+        public override string Texture => "LobotomyCorp/Items/Aleph/DaCapo";
 
         public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");
@@ -64,7 +64,7 @@ namespace LobotomyCorp.Projectiles
                 if (Projectile.ai[1] < 2)
                 {
                     Projectile.ai[1] = 2;
-                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/silent2_2") with { Volume = 0.5f });
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/silent2_2") with { Volume = 0.25f });
                     if (Main.myPlayer == Projectile.owner)
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction);
                 }
@@ -77,7 +77,7 @@ namespace LobotomyCorp.Projectiles
                 if (Projectile.ai[1] < 3)
                 {
                     Projectile.ai[1] = 3;
-                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/silent2_3") with { Volume = 0.5f });
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/LWeapons/silent2_3") with { Volume = 0.25f });
                     if (Main.myPlayer == Projectile.owner)
                         Projectile.NewProjectile(Projectile.GetSource_FromThis(), ownerMountedCenter, Projectile.velocity * 8f, ModContent.ProjectileType<FirstMovement>(), Projectile.damage * 4 / 5, Projectile.knockBack * 0.2f, Projectile.owner, Main.rand.NextFloat(1f, 5.5f) * projOwner.direction * -1);
                 }
@@ -102,15 +102,15 @@ namespace LobotomyCorp.Projectiles
             return false;
         }
 
-        public override void ModifyHitNPC(NPC target, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
         {
             Player projOwner = Main.player[Projectile.owner];
-            damage = (int)(damage * 1.2f);
+            modifiers.FinalDamage *= 1.2f;
             if (projOwner.itemAnimation > projOwner.itemAnimationMax / 3)
-                knockback *= 0.1f;
+                modifiers.Knockback *= 0.1f;
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
             target.immune[Projectile.owner] = (Main.player[Projectile.owner].itemAnimation % Main.player[Projectile.owner].itemAnimationMax /3);
             if (target.immune[Projectile.owner] <= 5)

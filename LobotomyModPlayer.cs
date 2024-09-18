@@ -1,6 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using LobotomyCorp.Buffs;
+using LobotomyCorp.Items.Aleph;
+using LobotomyCorp.Items.Waw;
+using LobotomyCorp.ModSystems;
+using LobotomyCorp.NPCs.RedMist;
+using LobotomyCorp.PlayerDrawEffects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Content;
@@ -19,6 +25,9 @@ namespace LobotomyCorp
     {
         public int SynchronizedEGO = -1;
         public bool Desync = false;
+
+        public int AttackComboOrder = 0;
+        public int AttackComboOrderCooldown = 0;
 
         public int HeavyWeaponHelper = 0;
         public float ChargeWeaponHelper = 0;
@@ -41,6 +50,8 @@ namespace LobotomyCorp
         public int statTemperance = 0;
         public int statJustice = 0;
 
+        public bool RedMistMask = false;
+
         public bool Hopeless = false;
 
         public int BeakParry = 0;
@@ -52,6 +63,15 @@ namespace LobotomyCorp
         public float BlackSwanNettleClothing = 0;
         public static int BlackSwanNettleClothingMax = 6;
         public bool BlackSwanBrokenDream = false;
+
+        /// <summary>
+        /// Use 1 to empower Melee, Use 2 to empower Range
+        /// </summary>
+        public int CrimsonScarEmpower = 0;
+
+        public int DaCapoSilentMusicPhase = 0;
+        public bool DaCapoSilentMusic = false;
+        public int DaCapoTotalDamage = 0;
 
         public float FaintAromaPetal = 0;
         public int FaintAromaPetalMax = 60;
@@ -70,6 +90,7 @@ namespace LobotomyCorp
         public int MatchstickBurnTime = 0;
 
         public bool PleasureDebuff = false;
+        public bool PleasureTail = false;
 
         public int RegretShockwave = 0;
         public bool RegretChainedWrath = false;
@@ -80,6 +101,13 @@ namespace LobotomyCorp
         public int GrinderMk2BatteryMax = 1400;
         public int GrinderMk2Battery = 1400;
         public bool GrinderMk2Recharging = false;
+        public int GrinderMk2AttackCooldown = 0;
+        public int GrinderMk2AttackRandom = 0;
+
+        public int LifeForADareDevilGift = 0;
+        public bool LifeForADareDevilGiftActive = false;
+        public bool LifeForADareDevilCounterStance = false;
+        public int LifeForADareDevilCounterArea = 0;
 
         public int LoveAndHateHysteria = 0;
 
@@ -89,8 +117,19 @@ namespace LobotomyCorp
         public int MagicBulletRequest = -1;
         public bool MagicBulletDarkFlame = false;
 
+        public bool MimicryShell = false;
+        public int MimicryShellHealth = 0;
+        public float MimicryShellDamage = 1f;
+        public int MimicryShellDefense = 0;
+        public int MimicryShellTimerMax = 0;
+        public bool MimicryHusk = false;
+        public int MimicryHuskDeficit = 0;
+
         public bool NihilActive = false;
         public int NihilMode = 0;
+
+        public bool OurGalaxyStone = false;
+        public int OurGalaxyOwner = -1;
 
         public bool RedEyesAlerted = false;
         public float RedEyesOpacity = 0f;
@@ -99,6 +138,7 @@ namespace LobotomyCorp
         public bool SmileDebuff = false;
 
         public bool SolemnSwitch = false;
+        public int SolemnLamentDisableDamage = 0;
         public int SolemnLamentDisable = 0;
         public int SolemnLamentCooldown = 0;
 
@@ -119,6 +159,10 @@ namespace LobotomyCorp
         private bool forcePlayerVelocity = false;
         private Vector2 forcePlayerVelocityValue;
 
+        //Aura Vanity
+        public AuraBehavior CurrentAura;
+        public AuraParticle[] PlayerParticles = new AuraParticle[100];
+
         public static LobotomyModPlayer ModPlayer(Player Player)
         {
             return Player.GetModPlayer<LobotomyModPlayer>();
@@ -134,11 +178,15 @@ namespace LobotomyCorp
             if (Player.itemAnimation == 0)
                 ChargeWeaponHelper = 0;
 
+            ResetAttackCombo();
+
             RedShield = false;
             WhiteShield = false;
             BlackShield = false;
             PaleShield = false;
             CooldownShield = false;
+
+            RedMistMask = false;
 
             Hopeless = false;
 
@@ -164,10 +212,24 @@ namespace LobotomyCorp
                 }
             }
 
+            DaCapoSilentMusic = false;
+
             GrinderMk2Active = false;
+            if (GrinderMk2AttackCooldown > 0)
+                GrinderMk2AttackCooldown--;
+
+            if (LifeForADareDevilGift > 0)
+            {
+                LifeForADareDevilGift--;
+            }
+            LifeForADareDevilGiftActive = false;
 
             giftFourthMatchFlame = false;
             MatchstickBurn = false;
+
+            MimicryShell = false;
+            MimicryHusk = false;
+            MimicryHuskDeficit = 0;
 
             if (MagicBulletRequest >= 0 && Player.HeldItem.type != ModContent.ItemType<Items.Ruina.Technology.MagicBulletR>())
                 MagicBulletRequest = -1;
@@ -175,7 +237,13 @@ namespace LobotomyCorp
 
             NihilActive = false;
 
+            if (!OurGalaxyStone)
+                OurGalaxyOwner = -1;
+            OurGalaxyStone = false;
+
             PleasureDebuff = false;
+
+            PleasureTail = false;
 
             RegretChainedWrath = false;
             RegretBinded = false;
@@ -202,9 +270,20 @@ namespace LobotomyCorp
             WristCutterScars = false;
 
             //RemoveMaxFallSpeed = false;
+
+            CurrentAura = null;
         }
 
-        public override void OnRespawn(Player player)
+        private void ResetAttackCombo()
+        {
+            if (AttackComboOrderCooldown <= 0)
+            {
+                AttackComboOrder = 0; return;
+            }
+            AttackComboOrderCooldown--;
+        }
+
+        public override void OnRespawn()
         {
             ForgottenAffection = -1;
             ForgottenAffectionResistance = 0;
@@ -222,18 +301,48 @@ namespace LobotomyCorp
 
             GrinderMk2Recharging = false;
 
+
             HarmonyTime = 0;
             HarmonyAddiction = false;
+
+            LifeForADareDevilGift = 0;
+            LifeForADareDevilCounterStance = false;
+            
             LuminousGreed = 0;
+
+            SolemnLamentDisable = 0;
+
             FaintAromaPetal = 0;
 
             NihilActive = false;
+
+            for(int i = 0; i < PlayerParticles.Length; i++)
+            {
+                if (PlayerParticles[i] != null && PlayerParticles[i].Active)
+                    PlayerParticles[i].Active = false;
+            }
         }
 
-        public override void OnEnterWorld(Player player)
+        public override void OnEnterWorld()
         {
-            if (player.HasBuff<Buffs.NettleClothing>())
-                player.ClearBuff(ModContent.BuffType<Buffs.NettleClothing>());
+            if (Player.HasBuff<Buffs.NettleClothing>())
+                Player.ClearBuff(ModContent.BuffType<Buffs.NettleClothing>());
+
+            if (Player.HasBuff<TodaysLook>())
+                Player.ClearBuff(ModContent.BuffType<Buffs.TodaysLook>());
+
+            if (Player.HasBuff<PleasureTail>())
+                Player.ClearBuff(ModContent.BuffType<PleasureTail>());
+
+            if (Player.HasBuff<SilentMusic>())
+                Player.ClearBuff(ModContent.BuffType<SilentMusic>());
+
+            if (Player.HasBuff<Buffs.Shell>())
+                Player.ClearBuff(ModContent.BuffType<Buffs.Shell>());
+            if (Player.HasBuff<Buffs.Husk>())
+                Player.ClearBuff(ModContent.BuffType<Buffs.Husk>());
+
+            AuraParticle[] AuraParticles = new AuraParticle[100];
         }
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
@@ -242,8 +351,8 @@ namespace LobotomyCorp
             {
                 return new[]
                 {
-                    new Item(ModContent.ItemType<Items.BlackBox>()),
-                    new Item(ModContent.ItemType<Items.Penitence>())
+                    new Item(ModContent.ItemType<Items.ItemTiles.BlackBox>()),
+                    new Item(ModContent.ItemType<Items.Zayin.Penitence>())
                 };
             }
             return Enumerable.Empty<Item>();
@@ -365,16 +474,30 @@ namespace LobotomyCorp
             {
                 Player.statDefense -= 15;
             }
-        }   
+        }
+
+        public override void PostUpdateBuffs()
+        {
+            if (PleasureTail)
+            {
+                Player.manaRegenBuff = false;
+                if (Player.manaRegenBonus > 0)
+                    Player.manaRegenBonus = 0;
+                Player.manaRegenBonus = -10;
+                Player.manaRegenDelayBonus = 0;
+                Player.wingAccRunSpeed += 0.15f;
+            }
+        }
 
         public override void PostUpdateMiscEffects()
         {
+            /*
             if (Player.pulley)
                 DashMovement();
             else if (Player.grappling[0] == -1 && !Player.tongued)
             {
                 DashMovement();
-            }
+            }*/
 
             if (RegretBinded)
             {
@@ -386,6 +509,30 @@ namespace LobotomyCorp
                 RegretChainedWrath = true;
                 //Main.NewText("test");
                 Player.moveSpeed = 1f;
+            }
+
+            //Aura Effects
+            if (CurrentAura != null)
+            {
+                if (Main.timeForVisualEffects % CurrentAura.intensity == 0)
+                    LobotomyPlayerParticle.GenerateAuraParticle(this, CurrentAura);
+            }
+            for (int i = 0; i < PlayerParticles.Length; i++)
+            {
+                if (PlayerParticles[i] != null && PlayerParticles[i].Active)
+                {
+                    PlayerParticles[i].Update(Player, Player.direction, Player.gravDir, (float)Main.timeForVisualEffects);
+                }
+            }
+        }
+
+        public override void PostUpdateEquips()
+        {
+            if (TodaysExpressionActive && TodaysExpressionFace == 4)//If Angry, set def to 0
+            {
+                Player.statDefense -= 30;
+                if (Player.statDefense > 0)
+                    Player.statDefense *= 0;
             }
         }
 
@@ -430,7 +577,7 @@ namespace LobotomyCorp
                     {
                         Player.dashTime++;
                     }
-                    if (Player.controlRight && Player.releaseRight)
+                    if (Player.controlRight && Player.releaseRight && Player.doubleTapCardinalTimer[2] < 15)
                     {
                         if (Player.dashTime > 0)
                         {
@@ -444,7 +591,7 @@ namespace LobotomyCorp
                             Player.dashTime = 15;
                         }
                     }
-                    else if (Player.controlLeft && Player.releaseLeft)
+                    else if (Player.controlLeft && Player.releaseLeft && Player.doubleTapCardinalTimer[3] < 15)
                     {
                         if (Player.dashTime < 0)
                         {
@@ -543,8 +690,32 @@ namespace LobotomyCorp
 
         public override void UpdateLifeRegen()
         {
+            if (OurGalaxyStone && !(Player.HasBuff(BuffID.PotionSickness) || Player.potionDelay > 0))
+            {
+                int value = 5 + 5 * OurGalaxyStoneAllies();
+                if (value > 30)
+                    value = 30;
+                Player.lifeRegen += value;
+            }
+
             if (FaintAromaPetal > 0 && Player.lifeRegen < 0)
                 Player.lifeRegen = 0;
+        }
+
+        private int OurGalaxyStoneAllies()
+        {
+            int count = 0;
+            foreach (Player p in Main.player)
+            {
+                if (p.whoAmI != Player.whoAmI && p.team == Player.team && !p.dead)
+                {
+                    LobotomyModPlayer modPlayer = ModPlayer(p);
+                    if (modPlayer.OurGalaxyStone && modPlayer.OurGalaxyOwner == OurGalaxyOwner)
+                        count++;
+                }
+            }
+
+            return count;
         }
 
         public override bool PreItemCheck()
@@ -556,7 +727,14 @@ namespace LobotomyCorp
             return base.PreItemCheck();
         }
 
-        public override void OnHitByNPC(NPC npc, int damage, bool crit)
+        public override void GetHealMana(Item item, bool quickHeal, ref int healValue)
+        {
+            if (PleasureTail)
+                healValue = 0;
+            base.GetHealMana(item, quickHeal, ref healValue);
+        }
+
+        public override void OnHitByNPC(NPC npc, Player.HurtInfo hurtInfo)
         {
             /*if (Player.HeldItem.type == ModContent.ItemType<Items.BeakS>())
             {
@@ -570,17 +748,21 @@ namespace LobotomyCorp
                 BeakPunish = 180;
                 LobotomyGlobalNPC.LNPC(npc).BeakTarget = 180;
             }*/
-            if (BlackSwanParryChance > 0 && Main.rand.Next(100) < BlackSwanParryChance)
+            if (Player.HeldItem.type == ModContent.ItemType<BlackSwan>() && Main.rand.Next(100) < 10)
             {
-                Player.ApplyDamageToNPC(npc, damage, 0, Player.direction, false);
+                Player.ApplyDamageToNPC(npc, hurtInfo.Damage, 0, Player.direction, false);
             }
         }
 
-        private void OnHitSolemnLament()
+        private void OnHitSolemnLament(double damage)
         {
             if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentR>())
             {
-                Player.AddBuff(ModContent.BuffType<Buffs.Lament>(), 180);
+                SolemnLamentDisableDamage += (int)damage;
+                if (SolemnLamentDisableDamage < Player.statLifeMax2 * 0.25f)
+                    return;
+                SolemnLamentDisableDamage = 0;
+                Player.AddBuff(ModContent.BuffType<Buffs.Lament>(), 300);
                 if (SolemnLamentDisable == 0)
                     SolemnLamentDisable = Main.rand.Next(2) + 1;
             }
@@ -604,42 +786,89 @@ namespace LobotomyCorp
             base.DrawEffects(drawInfo, ref r, ref g, ref b, ref a, ref fullBright);
         }
 
-        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource, ref int cooldownCounter)
+        public override bool ImmuneTo(PlayerDeathReason damageSource, int cooldownCounter, bool dodgeable)
+        {
+            if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.LifeForADaredevilR>() && LifeForADareDevilCounterStance)
+            {
+                if (Player.channel)
+                {
+                    LifeForADareDevilCounterStance = false;
+                    Player.channel = false;
+                    /*
+                    foreach (Projectile p in Main.projectile)
+                    {
+                        if (p.type == ModContent.ProjectileType<Projectiles.Realized.LifeForADaredevilR>() && p.owner == Player.whoAmI)
+                        {
+                            p.Kill();
+                            break;
+                        }
+                    }*/
+                }
+                else
+                {
+                    Player.itemAnimation = Player.itemAnimationMax / 2;
+                    Player.itemTime = Player.itemAnimationMax / 2;
+                    LifeForADaredevilCounterAttack(Player.HeldItem.damage);
+                    LifeForADareDevilGift = 1800;
+                    Player.AddBuff(ModContent.BuffType<Buffs.InspiredBravery>(), 10);
+                    return false;
+                }
+            }
+
+            return base.ImmuneTo(damageSource, cooldownCounter, dodgeable);
+        }
+
+        public override bool FreeDodge(Player.HurtInfo info)
+        {
+            // Pleasure has a bonus chance to dodge Projectiles when no enemies are near or a boss is active, should NOT prevent contact damage
+            if (PleasureTail && info.Dodgeable && info.DamageSource.SourceProjectileType > 0 && Main.rand.NextFloat(1f) < PleasureDodgeChance())
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector2 velocity = new Vector2(4, 0).RotatedBy(6.28f * i / 8f);
+                    Gore.NewGore(Player.GetSource_FromThis(), Player.MountedCenter, velocity, 331, Main.rand.NextFloat(0.9f, 1.1f));
+                }
+                Player.immune = true;
+                Player.AddImmuneTime(ImmunityCooldownID.General, 45);
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Art/Porccu_Nodmg") with { Volume = 0.5f }, Player.Center);
+                return true;
+            }
+            return base.FreeDodge(info);
+        }
+
+        private float PleasureDodgeChance()
+        {
+            // Default Dodge Chance
+            float dodge = .2f;
+
+            // If a boss is alive at any point in time, Dodge chance is normal
+            if (Main.CurrentFrameFlags.AnyActiveBossNPC)
+                return dodge;
+
+
+            // When an enemy is near, reduce chance to dodge which range from 80% to 20% (20% is impossible since they need to be inside you)
+            // 15 Tiles?
+            float maxDist = 15 * 16;
+            float distance = maxDist;
+            foreach (NPC n in Main.npc)
+            {
+                if (n.active && !n.friendly)
+                {
+                    float npcDist = n.Center.Distance(Player.Center);
+                    if (npcDist < distance)
+                    {
+                        distance = npcDist;
+                    }
+                }
+            }
+            dodge += (0.8f - dodge) * distance / maxDist;
+
+            return dodge;
+        }
+
+        public override bool ConsumableDodge(Player.HurtInfo info)
         {
             bool takeDamage = true;
-
-            if (damageSource.SourceNPCIndex >= 0)
-            {
-                if (RedShield || BlackShield && !Player.immune)
-                {
-                    damage = ShieldDamage(damage);
-                    if (damage <= 0)
-                        return false;
-                }
-            }
-
-            if (damageSource.SourceProjectileIndex >= 0)
-            {
-                if (WhiteShield || BlackShield && !Player.immune)
-                {
-                    damage = ShieldDamage(damage);
-                    if (damage <= 0)
-                        return false;
-                }
-            }
-
-            if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.History.ForgottenR>() && damageSource.SourceNPCIndex == ForgottenAffection)
-            {
-                damage = damage - (int)(damage * ForgottenAffectionResistance);
-                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Teddy_Guard") with { Volume = 0.5f }, Player.Center);
-                playSound = false;
-            }
-
-            if (Player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GreenStemArea>()] >= 1)
-            {
-                damage += (int)(damage * 0.3f);
-            }
-
             //Black Swan Nettle Damage Reduction
             if (BlackSwanNettleClothing > 0)
             {
@@ -662,7 +891,7 @@ namespace LobotomyCorp
                         Dust.NewDustPerfect(Player.MountedCenter, dustType, dustVel, 0, default, 1.5f).noGravity = true;
                     }
 
-                    int reflectDamage = damage;
+                    int reflectDamage = info.Damage;
 
                     if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Literature.BlackSwanR>())
                     {
@@ -678,17 +907,181 @@ namespace LobotomyCorp
                         }
                     }
 
-                    if (damageSource.SourceNPCIndex >= 0)
-                    {                        
-                        Player.ApplyDamageToNPC(Main.npc[damageSource.SourceNPCIndex], reflectDamage, 0f, Player.direction, false);
+                    if (info.DamageSource.SourceNPCIndex >= 0)
+                    {
+                        Player.ApplyDamageToNPC(Main.npc[info.DamageSource.SourceNPCIndex], reflectDamage, 0f, Player.direction, false);
                     }
                     if (!takeDamage)
                         return takeDamage;
-                    damage = (int)(damage * 0.25f);
+                    info.Damage = (int)(info.Damage * 0.25f);
                 }
             }
 
-            return base.PreHurt(pvp, quiet, ref damage, ref hitDirection, ref crit, ref customDamage, ref playSound, ref genGore, ref damageSource, ref cooldownCounter);
+            return base.ConsumableDodge(info);
+        }
+
+        public override void OnHurt(Player.HurtInfo info)
+        {
+            if (info.DamageSource.SourceNPCIndex >= 0)
+            {
+                if (RedShield || BlackShield && !Player.immune)
+                {
+                    info.Damage = ShieldDamage(info.Damage);
+                }
+            }
+
+            if (info.DamageSource.SourceProjectileLocalIndex >= 0)
+            {
+                if (WhiteShield || BlackShield && !Player.immune)
+                {
+                    info.Damage = ShieldDamage(info.Damage);
+                }
+            }
+
+            if (PleasureTail)
+            {
+                float lifePercent = (float)info.Damage * 2 / Player.statLifeMax2;
+                int manaLost = (int)(lifePercent * Player.statManaMax2);
+                int max = info.Damage * 2;
+                if (manaLost < max)
+                {
+                    manaLost = max;
+                }
+
+                //Main.NewText(manaLost);
+                if (!Player.CheckMana(manaLost, true, true))
+                {
+                    Player.statMana = Player.statManaMax2;
+                    int damage = Player.statLifeMax2 / 2;
+                    Player.statLife -= damage;
+                    CombatText.NewText(Player.getRect(), CombatText.DamagedHostile, damage, true);
+                    SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Art/Porccu_Special") with { Volume = 0.5f }, Player.Center);
+                }
+                else
+                {
+                    Player.manaRegenDelay = 900;
+                }
+            }
+        }
+
+        public override void ModifyHurt(ref Player.HurtModifiers modifiers)
+        {
+            if (Player.HeldItem.type == ModContent.ItemType<Items.Ruina.History.ForgottenR>() && modifiers.DamageSource.SourceNPCIndex == ForgottenAffection)
+            {
+                modifiers.FinalDamage -= ForgottenAffectionResistance;
+                SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Teddy_Guard") with { Volume = 0.5f }, Player.Center);
+                modifiers.DisableSound();
+            }            
+
+            if (Player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.GreenStemArea>()] >= 1)
+            {
+                modifiers.FinalDamage += 0.3f;
+            }
+
+            if (PleasureTail)
+            {
+                modifiers.FinalDamage *= 0.33f;
+            }
+        }
+
+        public void LifeForADaredevilCounterAttack(int damage)
+        {
+            SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Armor_HeadOff"), Player.position);
+
+            int Distance = 16 * 20;//Radius
+            //Additional Damage
+            int diff = Player.statLifeMax2 - Player.statLife;
+            damage += (int)Player.GetDamage(DamageClass.Melee).ApplyTo(diff);
+
+            foreach (Projectile p in Main.projectile)
+            {
+                if (p.active && p.hostile && !p.netImportant && p.damage > 0)
+                {
+                    if (p.Center.Distance(Player.Center) < Distance)
+                    {
+                        LifeForADareDevilPierceEffect(Player, p.Center, p.width, p.height);
+                        p.Kill();
+                    }
+                }
+            }
+
+            Dictionary<int, int> SegmentList = new Dictionary<int, int>();
+            float dmgMult = 1f;
+            bool NearNPC = false;
+
+            if (LifeForADareDevilGift < 1200)
+                dmgMult += .15f;
+            else
+                dmgMult += 0.1f;
+            foreach (NPC n in Main.npc)
+            {
+                if (n.active && !n.friendly)
+                {
+                    float npcDist = Distance * (n.boss ? 2 : 1);
+                    bool segmentLimit = false;
+                    if (n.realLife > -1 && SegmentList.ContainsKey(n.realLife) && SegmentList[n.realLife] > 5)
+                    {
+                        segmentLimit = true;
+                    }
+                    float distance = n.Center.Distance(Player.Center);
+                    float extra = + (n.width > n.height ? n.width / 2 : n.height / 2);
+                    if (distance < npcDist + extra && !segmentLimit)
+                    {
+                        if (distance < 30 + (n.width > n.height ? n.width / 2 : n.height / 2))
+                            NearNPC = true;
+                        int x = Math.Sign(Player.position.X - n.position.X) * -1;
+                        LifeForADareDevilPierceEffect(Player, n.Center, n.width, n.height);
+                        int hitDamage = (int)(damage * dmgMult);
+                        Player.ApplyDamageToNPC(n, hitDamage, 8f, x, true);
+                        n.immune[Player.whoAmI] = 15;
+                        if (LifeForADareDevilGift <= 1200)
+                        {
+                            int slashes = 2;
+                            if (LifeForADareDevilGift <= 600)
+                                slashes += 2;
+                            Projectile.NewProjectile(Player.GetSource_FromThis(), Player.position, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LifeForADareDevilEffectsSlashes>(), hitDamage, 0, Player.whoAmI, 60, slashes, n.whoAmI);
+                        }
+                        if (n.realLife > -1)
+                        {
+                            if (SegmentList.ContainsKey(n.realLife))
+                            {
+                                SegmentList[n.realLife]++;
+                            }
+                            else
+                            {
+                                SegmentList.Add(n.realLife, 1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            float scale = 1f + 1.5f * (1f - Player.statLife / (float)Player.statLifeMax2);
+            if (Main.myPlayer == Player.whoAmI)
+                Projectile.NewProjectile(Player.GetSource_FromThis(), Player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LifeForADareDevilEffects>(), 0, 0, Player.whoAmI, scale, Player.direction);
+
+            Player.immune = true;
+            Player.immuneTime = 45;
+            if (NearNPC)
+                Player.immuneTime += 45;
+            //Player.immuneNoBlink = true;
+            LifeForADareDevilCounterStance = false;
+        }
+
+        public static void LifeForADareDevilPierceEffect(Player Player, Vector2 pos, int width, int height)
+        {
+            if (height > width)
+                width = height;
+
+            if (width < 16)
+                width = 16;
+
+            float scale = 1f + 1.5f * (1f - Player.statLife / (float)Player.statLifeMax2);
+
+            if (Main.myPlayer == Player.whoAmI)
+            {
+                Projectile.NewProjectile(Player.GetSource_FromThis(), pos, Vector2.Zero, ModContent.ProjectileType<Projectiles.Realized.LifeForADareDevilEffects>(), 0, 0, Player.whoAmI, -Main.rand.NextFloat(6.28f), width * scale);
+            }
         }
 
         /// <summary>
@@ -704,15 +1097,15 @@ namespace LobotomyCorp
             return BlackSwanNettleClothing >= NettleAmount;
         }
 
-        public override void PostHurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit, int cooldownCounter)
+        public override void PostHurt(Player.HurtInfo info)
         {
-            OnHitSolemnLament();
+            OnHitSolemnLament(info.Damage);
 
             int heldItem = Player.HeldItem.type;
-            if (heldItem == ModContent.ItemType<Items.Censored>())
+            if (heldItem == ModContent.ItemType<Items.Aleph.Censored>())
             {
-                float healing = (float)damage * 0.4f;
-                if (damage > 1)
+                float healing = (float)info.Damage * 0.4f;
+                if (info.Damage > 1)
                 {
                     Player.statLife += (int)healing;
                     Player.HealEffect((int)healing);
@@ -728,24 +1121,24 @@ namespace LobotomyCorp
                     case 0://Happy
                         velocityMult *= 0.1f;
                         knockback *= 3f;
-                        projDamage = (int)(damage * 0.05f);
+                        projDamage = (int)(info.Damage * 0.05f);
                         break;
                     case 1://Smile
                         velocityMult *= 0.4f;
                         knockback *= 2f;
-                        projDamage = (int)(damage * 0.5f);
+                        projDamage = (int)(info.Damage * 0.5f);
                         break;
                     default://Neutral
                         break;
                     case 3://Sad
                         velocityMult *= 1.5f;
                         knockback *= 0.5f;
-                        projDamage = (int)(damage * 1.1f);
+                        projDamage = (int)(info.Damage * 1.1f);
                         break;
                     case 4://Angry
                         velocityMult *= 2.2f;
                         knockback *= 0f;
-                        projDamage = (int)(damage * 1.5f);
+                        projDamage = (int)(info.Damage * 1.5f);
                         break;
                 }
                 
@@ -758,19 +1151,25 @@ namespace LobotomyCorp
 
                 SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Literature/Shy_Strong_Guard") with { Volume = 0.5f }, Player.position);
             }
-
-
-            base.PostHurt(pvp, quiet, damage, hitDirection, crit, cooldownCounter);
         }
 
-        public override void ModifyHitByNPC(NPC npc, ref int damage, ref bool crit)
+        /*public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            //MimicryShell Attack Boost
+            if (MimicryShell)
+            {
+                modifiers.SourceDamage += MimicryBonusDamage;
+            }
+        }*/
+
+        public override void ModifyHitByNPC(NPC npc, ref Player.HurtModifiers modifiers)
         {
             if (FaintAromaPetal > 0)
             {
                 if (FaintAromaPetal < FaintAromaPetalMax)
-                    damage = (int)(damage * (1.1f + ((float)FaintAromaPetal / (float)FaintAromaPetalMax)));
+                    modifiers.FinalDamage *= (1.1f + ((float)FaintAromaPetal / (float)FaintAromaPetalMax));
                 else
-                    damage = (int)(damage * 1.2f);
+                    modifiers.FinalDamage *= 1.2f;
             }
         }
 
@@ -805,7 +1204,9 @@ namespace LobotomyCorp
             Player.AddBuff(BuffID.OnFire, 120);
             if (Main.myPlayer == Player.whoAmI && forced)// || (Main.rand.Next(100) == 0 && (Player.statLife == Player.statLifeMax2 || (float)(Player.statLife / (float)Player.statLifeMax2) < 0.25f)))
             {
-                Projectile.NewProjectile(Player.GetSource_Misc("ItemUse_FourthMatchFlameExplosion"), Player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.FourthMatchFlameSelfExplosion>(), 500, 10f, Player.whoAmI);
+                int i = Projectile.NewProjectile(Player.GetSource_Misc("ItemUse_FourthMatchFlameExplosion"), Player.Center, Vector2.Zero, ModContent.ProjectileType<Projectiles.FourthMatchFlameSelfExplosion>(), 1600, 10f, Player.whoAmI);
+
+                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, i);
             }
         }
 
@@ -820,15 +1221,15 @@ namespace LobotomyCorp
             switch (TodaysExpressionFace)
             {
                 case 0://Happy
-                    return 0.25f;
+                    return Buffs.TodaysLook.TODAYDAMAGEHAPPY;
                 case 1://Smile
-                    return 0.5f;
+                    return Buffs.TodaysLook.TODAYDAMAGESMILE;
                 default://Neutral
-                    return 1f;
+                    return Buffs.TodaysLook.TODAYDAMAGENEUTRAL;
                 case 3://Sad
-                    return 1.2f;
+                    return Buffs.TodaysLook.TODAYDAMAGESAD;
                 case 4://Angry
-                    return 1.5f;
+                    return Buffs.TodaysLook.TODAYDAMAGEANGRY;
             }
         }
 
@@ -851,35 +1252,6 @@ namespace LobotomyCorp
 
                 SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/BlackSwan_Revive") with { Volume = 0.1f }, Player.Center);
             }
-        }
-
-        public void BlackSwanNettleRemove(int val)
-        {
-            BlackSwanNettleClothing = (int)Math.Floor(BlackSwanNettleClothing - val);
-        }
-
-        public bool NihilCheckActive()
-        {
-            bool checkActive = false;
-
-            for (int slot = 0; slot < Main.InventorySlotsTotal; slot++)
-            {
-                if (!Player.inventory[slot].IsAir && Player.inventory[slot].type != ModContent.ItemType<Items.Ruina.Natural.NihilR>())
-                {
-                    checkActive = true;
-                }
-            }
-
-            for (int slot = 0; slot < 8 + Player.extraAccessorySlots; slot++)
-            {
-                if (!Player.armor[slot].IsAir && Player.armor[slot].type != ModContent.ItemType<Items.Ruina.Natural.NihilR>())
-                {
-                    checkActive = true;
-                }
-            }
-
-            NihilActive = checkActive;
-            return NihilActive;
         }
 
         /*
@@ -945,6 +1317,27 @@ namespace LobotomyCorp
 
         public override void Kill(double damage, int hitDirection, bool pvp, PlayerDeathReason damageSource)
         {
+            if (OurGalaxyStone)
+            {
+                foreach (Player p in Main.player)
+                {
+                    if (p.whoAmI != Player.whoAmI && p.team == Player.team && !p.dead)
+                    {
+                        LobotomyModPlayer modPlayer = ModPlayer(p);
+                        if (modPlayer.OurGalaxyStone && modPlayer.OurGalaxyOwner == OurGalaxyOwner)
+                        {
+                            damageSource.SourceCustomReason = p.name + "'s friends has died";
+                            p.KillMe(damageSource, p.statLifeMax2 * 4, 1);
+                        }
+                    }
+                }
+            }
+
+            if (NPC.AnyNPCs(ModContent.NPCType<RedMist>()))
+            {
+                LobEventFlags.killedByRedMist = true;
+            }
+
             base.Kill(damage, hitDirection, pvp, damageSource);
         }
 
@@ -960,9 +1353,103 @@ namespace LobotomyCorp
                 return x * (1 - progress) + x2 * progress;
         }
 
+        #region R EGO STUFF
         /// <summary>
-		/// Apply the RWBP shields use the buffs.
-		/// </summary>
+        /// Soft Limits are HP = 500, Damage = 50%, Defense = 30
+        /// </summary>
+        /// <param name="n"></param>
+        public void MimicryWearShell(NPC n)
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                Dust.NewDust(Player.position, Player.width, Player.height, DustID.Blood);
+            }
+
+            if (Player.HasBuff<Husk>())
+            {
+                Player.ClearBuff(ModContent.BuffType<Husk>());
+            }
+            int time = Math.Min(n.lifeMax * 30, 300 * 60);
+            Player.AddBuff(ModContent.BuffType<Shell>(), time);
+            MimicryShell = true;
+            MimicryShellDamage = Math.Min(n.damage / 10f, .8f);
+            MimicryShellDefense = Math.Min(n.defense, 30);
+            MimicryShellHealth = Math.Min((int)(n.lifeMax * 0.1f), 500);
+            MimicryShellTimerMax = time;
+        }
+
+        public void MimicryIncreaseShellTime(int Time)
+        {
+            int index = Player.FindBuffIndex(ModContent.BuffType<Shell>());
+            Player.buffTime[index] += Time;
+            if (Player.buffTime[index] > MimicryShellTimerMax)
+                Player.buffTime[index] = MimicryShellTimerMax;
+        }
+
+        public float MimicryShellPercent()
+        {
+            int index = -1;
+            if (Player.HasBuff<Shell>())
+                index = Player.FindBuffIndex(ModContent.BuffType<Shell>());
+            if (index < 0)
+                return 0;
+
+            float percent = (float)Player.buffTime[index] / MimicryShellTimerMax;
+            if (percent > 1f)
+                percent = 1f;
+            return percent;
+        }
+        public int MimicryBonusHealth { get { return (int)(MimicryShellHealth * MimicryShellPercent()); } }
+        public int MimicryBonusDamage { get { return (int)(MimicryShellDamage * MimicryShellPercent()); } }
+        public int MimicryBonusDefense { get { return (int)(MimicryShellDefense * MimicryShellPercent()); } }
+
+        public static void PleasureManaConsume(Player player, int cost)
+        {
+            bool Mana = player.CheckMana(Main.LocalPlayer.statManaMax2 / 5, true, true);
+
+            if (!Mana)
+            {
+                player.statMana = player.statManaMax2;
+                player.ManaEffect(player.statManaMax2);
+                player.statLife -= player.statLifeMax / 2;
+                player.HealEffect(-player.statLifeMax / 2);
+            }
+        }
+
+        public void BlackSwanNettleRemove(int val)
+        {
+            BlackSwanNettleClothing = (int)Math.Floor(BlackSwanNettleClothing - val);
+        }
+
+        public bool NihilCheckActive()
+        {
+            bool checkActive = false;
+
+            for (int slot = 0; slot < Main.InventorySlotsTotal; slot++)
+            {
+                if (!Player.inventory[slot].IsAir && Player.inventory[slot].type != ModContent.ItemType<Items.Ruina.Natural.NihilR>())
+                {
+                    checkActive = true;
+                }
+            }
+
+            for (int slot = 0; slot < 8 + Player.extraAccessorySlots; slot++)
+            {
+                if (!Player.armor[slot].IsAir && Player.armor[slot].type != ModContent.ItemType<Items.Ruina.Natural.NihilR>())
+                {
+                    checkActive = true;
+                }
+            }
+
+            NihilActive = checkActive;
+            return NihilActive;
+        }
+        #endregion
+
+        #region SHIELD STUFF
+        /// <summary>
+        /// Apply the RWBP shields, use the buff IDs.
+        /// </summary>
         public void ApplyShield(int type, int time, int shieldHP, bool forceApply = false)
         {
             if (!forceApply && ShieldActive)
@@ -1082,420 +1569,7 @@ namespace LobotomyCorp
             else
                 shakeIntensity = 0;
         }
-    }
 
-    public class DrawLobWeaponFront : PlayerDrawLayer
-    {
-        public override Position GetDefaultPosition() => new BeforeParent(PlayerDrawLayers.HeldItem);
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
-        {
-            Player player = drawInfo.drawPlayer;
-            return player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentR>() || player.HeldItem.type == ModContent.ItemType<Items.ParadiseLost>();
-        }
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player Player = drawInfo.drawPlayer;
-            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType< Items.Ruina.Technology.SolemnLamentR >())
-            {
-                LobotomyGlobalItem item = Player.HeldItem.GetGlobalItem<LobotomyGlobalItem>();
-
-                if (!item.CustomDraw)
-                    return;
-
-                Texture2D texture = Mod.Assets.Request<Texture2D>("Items/Ruina/Technology/SolemnLamentS2").Value;
-
-                Color color = Lighting.GetColor((int)(Player.Center.X / 16f), (int)(Player.Center.Y / 16f));
-
-                Vector2 position = drawInfo.ItemLocation - Main.screenPosition;
-                Vector2 origin = new Vector2(Player.direction == 1 ? 0 : texture.Width, texture.Height);
-                float rot = Player.itemRotation;
-
-                if (Player.HeldItem.useStyle == 5)
-                {
-                    Vector2 textureCenter = new Vector2((float)(texture.Width / 2f), (float)(texture.Height / 2f));
-
-                    float num = 10f;
-                    Vector2 result = textureCenter;
-                    result.X = num;
-                    ItemLoader.HoldoutOffset(Player.gravDir, Player.HeldItem.type, ref result);
-
-
-                    Vector2 PlayerItemPos = result;
-
-                    int x = (int)PlayerItemPos.X;
-                    textureCenter.Y = PlayerItemPos.Y;
-                    origin = new Vector2(-x, texture.Height / 2);
-                    if (Player.direction == -1)
-                    {
-                        origin = new Vector2(texture.Width + x, texture.Height / 2);
-                    }
-                    position.X += textureCenter.X + (Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch ? -6 : 0) * Player.direction; ;
-                    position.Y += textureCenter.Y;
-
-                    if (Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch)
-                    {
-                        rot -= MathHelper.ToRadians(30 + 75 * (1 - (float)Player.itemAnimation / (float)Player.itemAnimationMax)) * Player.direction;
-                    }
-                }
-
-                drawInfo.DrawDataCache.Add(
-                    new DrawData(
-                        texture, //pass our glowmask's texture
-                        position, //pass the position we should be drawing at from the PlayerDrawInfo we pass into this method. Always use this and not Player.itemLocation.
-                        texture.Frame(), //our source rectangle should be the entire frame of our texture. If our mask was animated it would be the current frame of the animation.
-                        color, //since we want our glowmask to glow, we tell it to draw with Color.White. This will make it ignore all lighting
-                        rot, //the rotation of the Player's item based on how they used it. This allows our glowmask to rotate with swingng swords or guns pointing in a direction.
-                        origin, //the origin that our mask rotates about. This needs to be adjusted based on the Player's direction, thus the ternary expression.
-                        Player.HeldItem.scale, //scales our mask to match the item's scale
-                        drawInfo.playerEffect, //the PlayerDrawInfo that was passed to this will tell us if we need to flip the sprite or not.
-                        0 //we dont need to worry about the layer depth here
-                    ));
-            }
-
-            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType<Items.ParadiseLost>())
-            {
-                Texture2D tex = TextureAssets.Item[Player.HeldItem.type].Value;
-
-                float OffsetY = -46;
-                Vector2 position = Player.MountedCenter - Main.screenPosition + new Vector2(5 * Player.direction, OffsetY + Player.gfxOffY);
-                Vector2 origin = new Vector2(23, 65);
-                if (Player.direction < 0)
-                    origin.X = 39;
-
-
-                Color color = Lighting.GetColor((int)(Player.Center.X / 16f), (int)(Player.Center.Y / 16f));
-
-                drawInfo.DrawDataCache.Add(
-                    new DrawData(
-                        tex,
-                        position,
-                        tex.Frame(),
-                        color,
-                        MathHelper.ToRadians(-30 * Player.direction),
-                        tex.Size() / 2,
-                        Player.HeldItem.scale,
-                        drawInfo.playerEffect,
-                        0
-                    ));
-            }
-        }
-    }
-
-    public class DrawLobWeaponBack : PlayerDrawLayer
-    {
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.BackAcc);
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player Player = drawInfo.drawPlayer;
-            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Technology.SolemnLamentR>())
-            {
-                LobotomyGlobalItem item = Player.HeldItem.GetGlobalItem<LobotomyGlobalItem>();
-
-                if (!item.CustomDraw)
-                    return;
-
-                Texture2D texture = Mod.Assets.Request<Texture2D>("Items/Ruina/Technology/SolemnLamentS1").Value;
-
-                Color color = Lighting.GetColor((int)(Player.Center.X / 16f), (int)(Player.Center.Y / 16f));
-
-                Vector2 position = drawInfo.ItemLocation - Main.screenPosition;
-                Vector2 origin = new Vector2(Player.direction == 1 ? 0 : texture.Width, texture.Height);
-                float rot = Player.itemRotation;
-
-                if (Player.HeldItem.useStyle == 5)
-                {
-                    Vector2 textureCenter = new Vector2((float)(texture.Width / 2f), (float)(texture.Height / 2f));
-
-                    float num = 10f;
-                    Vector2 result = textureCenter;
-                    result.X = num;
-                    ItemLoader.HoldoutOffset(Player.gravDir, Player.HeldItem.type, ref result);
-
-                    /*if (Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch)
-                    {
-                        Player.itemRotation -= MathHelper.ToRadians(45) * Player.direction;
-                        rot += MathHelper.ToRadians(45) * Player.direction;
-                    }*/
-
-                    Vector2 PlayerItemPos = result;
-
-                    int x = (int)PlayerItemPos.X;
-                    textureCenter.Y = PlayerItemPos.Y;
-                    origin = new Vector2(-x, texture.Height / 2);
-                    if (Player.direction == -1)
-                    {
-                        origin = new Vector2(texture.Width + x, texture.Height / 2);
-                    }
-                    position.X += textureCenter.X + (!Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch ? 6 : 3) * Player.direction;
-                    position.Y += textureCenter.Y;
-
-                    if (!Player.GetModPlayer<LobotomyModPlayer>().SolemnSwitch)
-                    {
-                        rot -= MathHelper.ToRadians(30 + 75 * (1 - (float)Player.itemAnimation/(float)Player.itemAnimationMax)) * Player.direction;
-                    }
-                }
-
-                drawInfo.DrawDataCache.Add(
-                    new DrawData(
-                        texture, //pass our glowmask's texture
-                        position, //pass the position we should be drawing at from the PlayerDrawInfo we pass into this method. Always use this and not Player.itemLocation.
-                        texture.Frame(), //our source rectangle should be the entire frame of our texture. If our mask was animated it would be the current frame of the animation.
-                        color, //since we want our glowmask to glow, we tell it to draw with Color.White. This will make it ignore all lighting
-                        rot, //the rotation of the Player's item based on how they used it. This allows our glowmask to rotate with swingng swords or guns pointing in a direction.
-                        origin, //the origin that our mask rotates about. This needs to be adjusted based on the Player's direction, thus the ternary expression.
-                        Player.HeldItem.scale, //scales our mask to match the item's scale
-                        drawInfo.playerEffect, //the PlayerDrawInfo that was passed to this will tell us if we need to flip the sprite or not.
-                        0 //we dont need to worry about the layer depth here
-                    ));
-            }
-
-            if (!Player.HeldItem.IsAir && Player.itemAnimation != 0 && Player.HeldItem.type == ModContent.ItemType<Items.Ruina.Art.FaintAromaS>() && Player.heldProj > -1 && Main.projectile[Player.heldProj].type == ModContent.ProjectileType<Projectiles.FaintAromaS>() )
-            {
-                Projectile projectile = Main.projectile[Player.heldProj];
-                
-                Texture2D tex = TextureAssets.Projectile[projectile.type].Value;
-                float rot = projectile.ai[1];
-                Vector2 ownerMountedCenter = Player.RotatedRelativePoint(Player.MountedCenter, true) + new Vector2(8, 0).RotatedBy(rot);
-                Vector2 position = ownerMountedCenter - Main.screenPosition;
-                position.X += 8f * Player.direction;
-                Vector2 origin = new Vector2(2, 42);
-
-                drawInfo.DrawDataCache.Add(
-                    new DrawData(tex, position, tex.Frame(), Lighting.GetColor((int)Player.position.X/16, (int)Player.position.Y/16), rot + MathHelper.ToRadians(45), origin, projectile.scale * 1.2f, 0, 0));
-            }
-        }
-    }
-
-    public class DrawFrontMiscellaneous : PlayerDrawLayer
-    {
-        private static Asset<Texture2D> AlriunePetal;
-        private static Asset<Texture2D> MusicalAddiction;
-        private static Asset<Texture2D> TodaysLook;
-        private static Asset<Texture2D> BlackSwan;
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
-        {
-            LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(drawInfo.drawPlayer);
-            return !drawInfo.drawPlayer.dead && (
-                ModPlayer.FaintAromaPetal > 0 || 
-                ModPlayer.HarmonyAddiction || 
-                ModPlayer.TodaysExpressionActive ||
-                ModPlayer.BlackSwanNettleClothing > 0);
-        }
-
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FrontAccFront);
-
-        public override void Load()
-        {
-            AlriunePetal = Mod.Assets.Request<Texture2D>("Misc/AlriunePetal");
-            MusicalAddiction = Mod.Assets.Request<Texture2D>("Misc/MusicalAddiction");
-            TodaysLook = Mod.Assets.Request<Texture2D>("Misc/TodaysExpression");
-            BlackSwan = Mod.Assets.Request<Texture2D>("Misc/Nettle");
-        }
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            /*
-            if (AlriunePetal == null)
-            {
-                AlriunePetal = Mod.Assets.Request<Texture2D>("Misc/AlriunePetal");
-            }
-            if ()*/
-
-            Player Player = drawInfo.drawPlayer;
-            LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(Player);
-            if (ModPlayer.FaintAromaPetal > 0)
-            {
-                for (int i = 0; i < 3; i++)
-                {
-                    if (ModPlayer.FaintAromaPetal <= ModPlayer.FaintAromaPetalMax * i)
-                        continue;
-
-                    Texture2D texture = AlriunePetal.Value;
-                    int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
-                    int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y);
-
-                    float rot = 0f;
-                    if (i == 1)
-                        rot += 90;
-                    else if (i == 2)
-                        rot += 45;
-                    Vector2 Offset = new Vector2(-24 * Player.direction, 0).RotatedBy(MathHelper.ToRadians(rot * Player.direction));
-                    Offset.Y -= 14;
-
-                    rot = MathHelper.ToRadians(rot * Player.direction + (Player.direction == 1 ? 0 : 180)) - MathHelper.ToRadians(135);
-
-                    float alpha = Terraria.Utils.GetLerpValue(0, 1f, ((ModPlayer.FaintAromaPetal - ModPlayer.FaintAromaPetalMax * i) / ModPlayer.FaintAromaPetalMax));
-                    Color color = Lighting.GetColor((int)(Player.position.X / 16), (int)(Player.position.Y / 16)) * alpha;
-
-                    DrawData data = new DrawData(texture, new Vector2(drawX, drawY) + Offset, null, color, rot, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
-                    drawInfo.DrawDataCache.Add(data);
-                }
-            }
-
-            if (ModPlayer.HarmonyAddiction)
-            {
-                Texture2D texture = MusicalAddiction.Value;
-                int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X) + Main.rand.Next(2);
-                int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y) - 32;
-
-                Color color = Color.White;
-
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), null, color, 0, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
-                drawInfo.DrawDataCache.Add(data);
-            }
-
-            if (ModPlayer.TodaysExpressionActive)
-            {
-                Texture2D texture = TodaysLook.Value;
-                int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y) - 56;
-
-                Color color = Color.White;
-
-                float scale = 0.75f;
-                if (ModPlayer.TodaysExpressionTimer < 60)
-                {
-                    float prog = ModPlayer.TodaysExpressionTimer / 60f;
-                    float amount = 0.1f * (float)Math.Sin((3f * Math.PI) * prog);
-                    if (amount < 0)
-                        amount *= -1;
-
-                    scale += amount;
-                }
-                DrawData data = new DrawData(texture, new Vector2(drawX, drawY), texture.Frame(5, 1, ModPlayer.TodaysExpressionFace), color, 0, new Vector2(texture.Width / 10f, texture.Height / 2f), scale, 0, 0);
-                drawInfo.DrawDataCache.Add(data);
-
-                int timer = ModPlayer.TodaysExpressionTimerMax - 30;
-                if (ModPlayer.TodaysExpressionTimer > timer)
-                {
-                    float prog = (ModPlayer.TodaysExpressionTimer - timer) / 30f;
-
-                    scale += 0.25f * (float)Math.Sin(1.57f * (1f - prog));
-                    float opacity = prog;
-                    data = new DrawData(texture, new Vector2(drawX, drawY), texture.Frame(5, 1, ModPlayer.TodaysExpressionFace), color * opacity, 0, new Vector2(texture.Width / 10f, texture.Height / 2f), scale, 0, 0);
-                    drawInfo.DrawDataCache.Add(data);
-                }
-            }
-        
-            if (ModPlayer.BlackSwanNettleClothing > 0)
-            {
-                float clothing = ModPlayer.BlackSwanNettleClothing;
-                int currentActive = (int)Math.Ceiling(clothing);
-                Texture2D texture = BlackSwan.Value;
-                int drawX = (int)(drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X);
-                int drawY = (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y);
-                for (int i = 0; i < currentActive; i++)
-                {
-                    Vector2 pos = new Vector2(drawX, drawY) + new Vector2(30 + 3 * (float)Math.Sin(MathHelper.ToRadians(5 * (float)Main.timeForVisualEffects)), 0).RotatedBy(MathHelper.ToRadians(120 + 60 * i));
-
-                    float rotation = (float)Math.Atan2(pos.Y - drawY, pos.X - drawX) + 2.35619f;
-
-                    Color color = Color.White;
-                    if (clothing - i < 1f)
-                    {
-                        float opacity = clothing - i / 1f;
-                        color *= 0.5f * opacity;
-                    }
-
-                    DrawData data = new DrawData(texture, pos, null, color, rotation, new Vector2(texture.Width / 2f, texture.Height / 2f), 1f, 0, 0);
-                    drawInfo.DrawDataCache.Add(data);
-                }
-            }
-        }
-    }
-
-    public class LobShields : PlayerDrawLayer
-    {
-        public static Asset<Texture2D> RedShield;
-        public static Asset<Texture2D> WhiteShield;
-        public static Asset<Texture2D> BlackShield;
-        public static Asset<Texture2D> PaleShield;
-
-        public override void Load()
-        {
-            if (!Main.dedServ)
-            {
-                WhiteShield = Mod.Assets.Request<Texture2D>("Misc/BulletShield/WhiteShield");
-                RedShield = Mod.Assets.Request<Texture2D>("Misc/BulletShield/RedShield");
-                BlackShield = Mod.Assets.Request<Texture2D>("Misc/BulletShield/BlackShield");
-                PaleShield = Mod.Assets.Request<Texture2D>("Misc/BulletShield/PaleShield");
-
-                Main.QueueMainThreadAction(() =>
-                {
-                    LobotomyCorp.PremultiplyTexture(RedShield.Value);
-                    LobotomyCorp.PremultiplyTexture(WhiteShield.Value);
-                    LobotomyCorp.PremultiplyTexture(BlackShield.Value);
-                    LobotomyCorp.PremultiplyTexture(PaleShield.Value);
-                });
-            }
-        }
-
-        public override void Unload()
-        {
-            WhiteShield = null;
-            RedShield = null;
-            BlackShield = null;
-            PaleShield = null;
-        }
-
-        public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
-        {
-            LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(drawInfo.drawPlayer);
-            return ModPlayer.ShieldActive;
-        }
-
-        public override Position GetDefaultPosition() => new AfterParent(PlayerDrawLayers.FrontAccFront);
-
-        protected override void Draw(ref PlayerDrawSet drawInfo)
-        {
-            Player Player = drawInfo.drawPlayer;
-            LobotomyModPlayer ModPlayer = LobotomyModPlayer.ModPlayer(Player);
-
-            Texture2D shieldTex = RedShield.Value;
-            if (ModPlayer.WhiteShield)
-                shieldTex = WhiteShield.Value;
-            if (ModPlayer.BlackShield)
-                shieldTex = BlackShield.Value;
-            if (ModPlayer.PaleShield)
-                shieldTex = PaleShield.Value;
-
-            //Current Shield state
-            bool broken = ModPlayer.ShieldAnim <= 60;
-
-            //Static positions etc
-            Rectangle frame = new Rectangle(0, shieldTex.Height / 2 * broken.ToInt(), shieldTex.Width, shieldTex.Height / 2);
-            Vector2 origin = frame.Size() / 2;
-            Vector2 drawPos = new Vector2((drawInfo.Position.X + Player.width / 2f - Main.screenPosition.X), (int)(drawInfo.Position.Y + Player.height / 2f - Main.screenPosition.Y));
-
-            //Shield%
-            float shieldHealth = ((float)ModPlayer.ShieldHP / (float)ModPlayer.ShieldHPMax);
-            //Color - Become less visible the lower the health
-            float colorOpacity = 0.6f + 0.2f * shieldHealth;
-            if (broken)
-                colorOpacity = 0.4f + 0.2f * shieldHealth;
-            Color color = Color.White * colorOpacity;
-            color = Player.GetImmuneAlpha(color, drawInfo.shadow);
-            color.A = (byte)(color.A * 0.7f);
-
-            //Scale - slowly beating, shrinks a bit when damaged
-            float progress = ((float)ModPlayer.ShieldAnim - (broken ? 0 : 60)) / 60f;
-            float scale = 0.8f + 0.2f * shieldHealth + 0.05f * (float)Math.Sin(2f * (float)Math.PI * progress);
-
-            DrawData data = new DrawData(
-                shieldTex,
-                drawPos,
-                frame,
-                color,
-                0f,
-                origin,
-                scale,
-                0,
-                0);
-            drawInfo.DrawDataCache.Add(data);
-        }
+        #endregion
     }
 }

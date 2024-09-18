@@ -36,7 +36,7 @@ namespace LobotomyCorp.Projectiles.Realized
 
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("ANYTHING YOU SAY?");
+            // DisplayName.SetDefault("ANYTHING YOU SAY?");
         }
 
         public override void SetDefaults()
@@ -100,9 +100,24 @@ namespace LobotomyCorp.Projectiles.Realized
                     damage = (int)(damage * 1.7f);
                 //WHY IS ITS TRAIL OFFSETTED SO MUCH???
                 Vector2 offset = Projectile.velocity * 2;
-                int p = Projectile.NewProjectile(Main.player[Projectile.owner].GetSource_FromThis(), Projectile.Center - offset, Projectile.velocity, ModContent.ProjectileType<MagicBulletR>(), damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]);
-                Main.projectile[p].friendly = Projectile.friendly;
-                Main.projectile[p].hostile = Projectile.hostile;
+                if (Projectile.ai[0] > 0 && Projectile.owner == Main.myPlayer)
+                {
+                    int p = Projectile.NewProjectile(Main.player[Projectile.owner].GetSource_FromThis(), Projectile.Center - offset, Projectile.velocity, ModContent.ProjectileType<MagicBulletR>(), damage, Projectile.knockBack, Projectile.owner, Projectile.ai[0]);
+                    Main.projectile[p].friendly = Projectile.friendly;
+                    Main.projectile[p].hostile = Projectile.hostile;
+                    Main.projectile[p].netUpdate = true;
+                }
+                else if (Main.netMode != NetmodeID.MultiplayerClient)
+                {
+                    int p = Projectile.NewProjectile(Main.player[Projectile.owner].GetSource_FromThis(), Projectile.Center - offset, Projectile.velocity, ModContent.ProjectileType<MagicBulletR>(), damage, Projectile.knockBack, 255, Projectile.owner + 1);
+                    if (Main.projectile[p].ModProjectile is MagicBulletR)
+                    {
+                        ((MagicBulletR)Main.projectile[p].ModProjectile).PlayerTarget = true;
+                    }
+                    Main.projectile[p].friendly = Projectile.friendly;
+                    Main.projectile[p].hostile = Projectile.hostile;
+                    Main.projectile[p].netUpdate = true;
+                }
             }
 
             Projectile.rotation += 0.1f;

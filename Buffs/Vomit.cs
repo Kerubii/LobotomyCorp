@@ -9,8 +9,8 @@ namespace LobotomyCorp.Buffs
 	{
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Vomit");
-			Description.SetDefault("Decreased life regeneration");
+			// DisplayName.SetDefault("Vomit");
+			// Description.SetDefault("Decreased life regeneration");
             Main.debuff[Type] = true;
             //Main.buffNoTimeDisplay[Type] = true;
             BuffID.Sets.NurseCannotRemoveDebuff[Type] = true;

@@ -7,13 +7,17 @@ using Terraria.DataStructures;
 
 namespace LobotomyCorp.Items.Ruina.Literature
 {
-	[Autoload(LobotomyCorp.TestMode)]
-	public class LaetitiaR : SEgoItem
+    public class LaetitiaR : SEgoItem
 	{
+		public override bool IsLoadingEnabled(Mod mod)
+		{
+			return ModContent.GetInstance<Configs.LobotomyServerConfig>().TestItemEnable;
+		}
+
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Laetitia"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Laetitia"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			// Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 

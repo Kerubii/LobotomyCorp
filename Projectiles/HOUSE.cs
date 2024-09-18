@@ -12,7 +12,7 @@ namespace LobotomyCorp.Projectiles
 	public class HOUSE : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("ROADA HOME DA");
+            // DisplayName.SetDefault("ROADA HOME DA");
             ProjectileID.Sets.TrailingMode[Projectile.type] = 2;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 13;
         }

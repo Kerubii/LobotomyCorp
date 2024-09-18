@@ -13,7 +13,7 @@ namespace LobotomyCorp.Projectiles
 	public class GreenStemVine : ModProjectile
 	{
 		public override void SetStaticDefaults() {
-            DisplayName.SetDefault("Green Stem");
+            // DisplayName.SetDefault("Green Stem");
 			Main.projFrames[Projectile.type] = 3;
         }
 

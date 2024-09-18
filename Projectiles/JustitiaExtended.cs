@@ -17,13 +17,13 @@ namespace LobotomyCorp.Projectiles
         {
             if (Main.netMode != NetmodeID.Server)
             {
-                BrightTexture1 = ModContent.Request<Texture2D>("LobotomyCorp/Projectiles/JustitiaExtendedEdge", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-                BrightTexture2 = ModContent.Request<Texture2D>("LobotomyCorp/Projectiles/JustitiaExtendedEdgeFlip", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+                JustitiaProjectile = ModContent.Request<Texture2D>("LobotomyCorp/Projectiles/JustitiaExtendedEdge", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+                JustitiaProjectileFlip = ModContent.Request<Texture2D>("LobotomyCorp/Projectiles/JustitiaExtendedEdgeFlip", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
 
                 Main.QueueMainThreadAction(() =>
                 {
-                    LobotomyCorp.PremultiplyTexture(BrightTexture1);
-                    LobotomyCorp.PremultiplyTexture(BrightTexture2);
+                    LobotomyCorp.PremultiplyTexture(JustitiaProjectile);
+                    LobotomyCorp.PremultiplyTexture(JustitiaProjectileFlip);
                 });
             }
             base.Load();
@@ -31,12 +31,19 @@ namespace LobotomyCorp.Projectiles
 
         public override void Unload()
         {
-            BrightTexture1 = null;
-            BrightTexture2 = null;
+            JustitiaProjectile = null;
+            JustitiaProjectileFlip = null;
         }
 
-        private static Texture2D BrightTexture1;
-        private static Texture2D BrightTexture2;
+        private static Texture2D JustitiaProjectile;
+        private static Texture2D JustitiaProjectileFlip;
+
+        public static Texture2D JustitiaTexture(bool flip)
+        {
+            if (flip)
+                return JustitiaProjectileFlip;
+            return JustitiaProjectile;
+        }
 
         public override void SetStaticDefaults() {
             //DisplayName.SetDefault("Spear");
@@ -46,7 +53,7 @@ namespace LobotomyCorp.Projectiles
 
         public override void SetDefaults() {
             Projectile.width = 40;
-            Projectile.height = 120;
+            Projectile.height = 140;
             Projectile.aiStyle = -1;
             Projectile.penetrate = -1;
             Projectile.alpha = 0;
@@ -96,9 +103,9 @@ namespace LobotomyCorp.Projectiles
             if (Math.Abs(Projectile.velocity.Y) > Math.Abs(Projectile.velocity.X))
             {
                 hitbox.X -= 40;
-                hitbox.Width += 40;
-                hitbox.Y += 40;
-                hitbox.Height -= 40;
+                hitbox.Width += 100;
+                hitbox.Y += 60;
+                hitbox.Height -= 60;
             }
         }
 
@@ -110,6 +117,17 @@ namespace LobotomyCorp.Projectiles
                     int d = Dust.NewDust(Projectile.position - Vector2.UnitY * 30, Projectile.width, Projectile.height + 30, DustID.MagicMirror);
                     Main.dust[d].noGravity = true;
                 }
+        }
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            target.immune[Projectile.owner] = 3;
+        }
+
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers)
+        {
+            modifiers.ScalingArmorPenetration += 1f;
+            base.ModifyHitNPC(target, ref modifiers);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -139,9 +157,9 @@ namespace LobotomyCorp.Projectiles
             {
                 float opacity = (Projectile.alpha - 85) / 170f;
                 if (Projectile.ai[0] == 0 || Projectile.ai[0] == 1)
-                    Main.EntitySpriteDraw(BrightTexture1, position, frame, Color.White * opacity, Projectile.rotation, origin, Projectile.scale, spriteEffect, 0);
+                    Main.EntitySpriteDraw(JustitiaProjectile, position, frame, Color.White * opacity, Projectile.rotation, origin, Projectile.scale, spriteEffect, 0);
                 if (Projectile.ai[0] == 0 || Projectile.ai[0] == 2)
-                    Main.EntitySpriteDraw(BrightTexture2, position, frame, Color.White * opacity, Projectile.rotation, origin, Projectile.scale, spriteEffect, 0);
+                    Main.EntitySpriteDraw(JustitiaProjectileFlip, position, frame, Color.White * opacity, Projectile.rotation, origin, Projectile.scale, spriteEffect, 0);
             }
 
             return false;

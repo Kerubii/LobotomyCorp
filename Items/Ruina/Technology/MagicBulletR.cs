@@ -3,15 +3,16 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using LobotomyCorp.Items.Waw;
 
 namespace LobotomyCorp.Items.Ruina.Technology
 {
-	public class MagicBulletR : SEgoItem
+    public class MagicBulletR : SEgoItem
 	{
 		public override void SetStaticDefaults() 
 		{
-			DisplayName.SetDefault("Magic Bullet"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
-			Tooltip.SetDefault(GetTooltip());
+			// DisplayName.SetDefault("Magic Bullet"); // By default, capitalization in classnames will damage spaces to the display name. You can customize the display name here by uncommenting this line.
+			// Tooltip.SetDefault(GetTooltip());
 		}
 
 		public override void SetDefaults() 
@@ -72,10 +73,16 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			Vector2 compareTo = Main.MouseWorld;
 			foreach (NPC n in Main.npc)
 			{
-				if (n.active && !n.friendly && !n.dontTakeDamage && n.Center.Distance(compareTo) < distance)// && n.CanBeChasedBy(this))
+				if (n.active)
 				{
-					distance = n.Center.Distance(compareTo);
-					target = n.whoAmI;
+					float targetDist = n.Center.Distance(compareTo);
+					if (n.friendly)
+						targetDist += 80;
+					if (!n.dontTakeDamage && targetDist < distance)// && n.CanBeChasedBy(this))
+					{
+						distance = targetDist;
+						target = n.whoAmI;
+					}
 				}
 			}
 
@@ -90,7 +97,8 @@ namespace LobotomyCorp.Items.Ruina.Technology
 			   .AddIngredient(ItemID.SoulofSight, 2)
 			   .AddIngredient(ItemID.Teleporter, 2)
 			   .AddTile<Tiles.BlackBox3>()
-			   .Register();
+               .AddCondition(RedMistCond)
+               .Register();
 		}
 	}
 }

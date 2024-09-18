@@ -8,6 +8,7 @@ using LobotomyCorp.Utils;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria.GameContent;
 using Terraria.Graphics.Effects;
+using static Humanizer.In;
 
 namespace LobotomyCorp.Projectiles.Realized
 {
@@ -38,7 +39,8 @@ namespace LobotomyCorp.Projectiles.Realized
             {
 				Projectile.ai[0]++;
 				SoundEngine.PlaySound(new SoundStyle("LobotomyCorp/Sounds/Item/Abandoned_Strong_Vert") with { Volume = 0.2f }, Projectile.Center);
-				LobotomyCorp.ScreenShake(15, 8f, 0.1f);
+                if (Main.myPlayer == Projectile.owner)
+                    LobotomyCorp.ScreenShake(15, 8f, 0.1f);
 				if (Main.netMode != NetmodeID.Server)
 				{
 					int xdir = Main.rand.NextBool(2) ? -1 : 1;
@@ -57,22 +59,20 @@ namespace LobotomyCorp.Projectiles.Realized
 			}
         }
 
-        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
 			if (target.whoAmI == (int)Projectile.ai[1])
 				target.AddBuff(ModContent.BuffType<Buffs.MetallicRinging>(), 480);
-            base.OnHitNPC(target, damage, knockback, crit);
         }
 
-        public override void Kill(int timeLeft)
-		{
-			if (Main.netMode != NetmodeID.Server && Filters.Scene["LobotomyCorp:BrokenScreen"].IsActive())
-			{
-				Filters.Scene["LobotomyCorp:BrokenScreen"].Opacity = 0;
-				Filters.Scene["LobotomyCorp:BrokenScreen"].Deactivate();
-			}
-			base.Kill(timeLeft);
-		}
+        public override void OnKill(int timeLeft)
+        {
+            if (Main.netMode != NetmodeID.Server && Filters.Scene["LobotomyCorp:BrokenScreen"].IsActive())
+            {
+                Filters.Scene["LobotomyCorp:BrokenScreen"].Opacity = 0;
+                Filters.Scene["LobotomyCorp:BrokenScreen"].Deactivate();
+            }
+        }
 
         public override bool PreDraw(ref Color lightColor)
         {
